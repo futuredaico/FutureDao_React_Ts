@@ -8,6 +8,7 @@ import { injectIntl } from 'react-intl';
 import CreateProject from './createproject';
 import UpdateProject from './updateproject';
 import { IProjectProps } from './interface/project.interface';
+import Button from '@/components/Button';
 
 @inject('project', 'createproject')
 @observer
@@ -30,6 +31,9 @@ class Project extends React.Component<IProjectProps, any> {
             name: "删除项目"
         },
     ]
+    public state = {
+        showDeletProject: false
+    }
     public render()
     {
         return (
@@ -65,6 +69,20 @@ class Project extends React.Component<IProjectProps, any> {
                         this.props.project.menuNum === 2 && <UpdateProject {...this.props} />
                     }
                 </div>
+                {
+                    this.state.showDeletProject && (
+                        <div className="delete-people-wrapper">
+                            <div className="delete-content">
+                                <div className="delete-text">删除项目将清除所有相关数据是否继续？</div>
+                                <div className="delete-btn">
+                                    <Button text="取消" btnColor="white-btn" onClick={this.handleShowDeleteProject} />
+                                    <Button text="确认" onClick={this.handleCheckDelete} />
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
             </div>
         );
     }
@@ -72,6 +90,18 @@ class Project extends React.Component<IProjectProps, any> {
     private mapUnderline = (item) =>
     {
         this.props.project.menuNum = item.key
+        if(item.key === 4){
+            this.handleShowDeleteProject();
+        }
+    }
+    private handleShowDeleteProject = () => {
+        this.setState({
+            showDeletProject:!this.state.showDeletProject
+        })
+    }
+    private handleCheckDelete = () => {
+        // todo
+        this.handleShowDeleteProject();
     }
 }
 

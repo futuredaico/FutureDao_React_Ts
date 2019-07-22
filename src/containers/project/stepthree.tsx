@@ -14,6 +14,7 @@ class StepThree extends React.Component<any, any> {
   public state = {
     identityValue: 0,
     showAdd: false, // 是否显示添加成员弹框
+    showDelete: false // 是否显示删除成员弹框
   }
   // 下拉筛选
   private identityOptions = [
@@ -59,7 +60,7 @@ class StepThree extends React.Component<any, any> {
                 />
               </span>
               <span className="table-td">
-                <Button text="删除" btnSize="sm-btn" btnColor="red-btn" />
+                <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete} />
               </span>
             </li>
           </ul>
@@ -124,6 +125,20 @@ class StepThree extends React.Component<any, any> {
             </div>
           )
         }
+        {
+          this.state.showDelete && (
+            <div className="delete-people-wrapper">
+              <div className="delete-content">
+                <div className="delete-text">确认将 XXX 移除团队？</div>
+                <div className="delete-btn">
+                  <Button text="取消" btnColor="white-btn" onClick={this.handleShowDelete} />
+                  <Button text="确认" onClick={this.handleCheckDelete} />
+                </div>
+              </div>
+            </div>
+          )
+        }
+
       </div>
     );
   }
@@ -135,11 +150,24 @@ class StepThree extends React.Component<any, any> {
       identityValue: item.id
     })
   }
+  // 打开新增成员弹框
   private handleShowAddBox = () =>
   {
     this.setState({
       showAdd: !this.state.showAdd
     })
+  }
+  // 打开删除成员弹框
+  private handleShowDelete = () =>
+  {
+    this.setState({
+      showDelete: !this.state.showDelete
+    })
+  }
+  // 确认删除
+  private handleCheckDelete = () =>
+  {
+    this.handleShowDelete();
   }
 
 }

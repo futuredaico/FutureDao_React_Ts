@@ -44,7 +44,7 @@ class StepTwo extends React.Component<any, any> {
             showUploadList={false}
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             beforeUpload={this.beforeUpload}
-            // onChange={this.handleChangeImg}
+          // onChange={this.handleChangeImg}
           >
             {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
           </Upload>
@@ -68,53 +68,38 @@ class StepTwo extends React.Component<any, any> {
     );
   }
   // 限制图片上传大小与格式
-private beforeUpload(file:RcFile)
-{
-  if(file.size / 1024 / 1024 < 3) {
+  private beforeUpload(file: RcFile)
+  {
+    if (file.size / 1024 / 1024 < 3)
+    {
+      return false;
+    }
+    // todo commonStore
+    const res = commonStore.uploadFile(file);
+    if (res)
+    {
+      this.setState({
+        imageUrl: res['url']
+      })
+    }
     return false;
   }
-  const res = commonStore.uploadFile(file);
-  if(res) {
-    this.setState({
-      imageUrl:res['url']
-    })
-  }
-  return false;
-}
-  // 更换图片上传
-  // private handleChangeImg = info =>
-  // {
-  //   if (info.file.status === 'uploading')
-  //   {
-  //     this.setState({ loading: true });
-  //     return;
-  //   }
-  //   if (info.file.status === 'done')
-  //   {
-  //     // Get this url from response in real world.
-  //     getBase64(info.file.originFileObj, imageUrl =>
-  //       this.setState({
-  //         imageUrl,
-  //         loading: false,
-  //       }),
-  //     );
-  //   }
-  // };
   // 文本框的输入
   private onChangeEditorValue = (value: any) =>
   {
-    
-      // todo
-      const text = value.toText()
-      if (text !== "")
-      {
-          this.setState({
-              editorString: BraftEditor.createEditorState(value),
-              projectDetails: text
-          },()=>{
-            console.log(this.state.editorString)
-          })
-      }
+
+    // todo
+    const text = value.toText()
+    if (text !== "")
+    {
+      this.setState({
+        editorString: BraftEditor.createEditorState(value),
+        projectDetails: text
+      }, () =>
+        {
+          console.log(this.state.editorString)
+        })
+    }
   }
 }
 

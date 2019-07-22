@@ -17,6 +17,10 @@ export default [
   //   ]
   // },
   {
+    component: asyncComponent(()=> import('../containers/projectinfo')),
+    path:'/projectinfo'
+  },
+  {
     component: asyncComponent(()=> import('../containers/project')),
     path:'/createproject'
   },

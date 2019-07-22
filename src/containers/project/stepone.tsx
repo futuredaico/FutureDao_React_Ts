@@ -5,30 +5,12 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import { Input, Upload, Icon, message } from 'antd';
+import { Input, Upload, Icon } from 'antd';
 import Select from '@/components/select';
 import Button from '@/components/Button';
-function getBase64(img, callback)
-{
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-// 限制图片上传大小与格式
-function beforeUpload(file)
-{
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG)
-  {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M)
-  {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
+import { RcFile } from 'antd/lib/upload';
+import commonStore from '@/store/common';
+
 
 @observer
 class StepOne extends React.Component<any, any> {
@@ -105,8 +87,8 @@ class StepOne extends React.Component<any, any> {
             className="avatar-uploader"
             showUploadList={false}
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={this.handleChangeImg}
+            beforeUpload={this.beforeUpload}
+            // onChange={this.handleChangeImg}
           >
             {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
           </Upload>
@@ -133,25 +115,23 @@ class StepOne extends React.Component<any, any> {
       selectValue: item.id
     })
   }
-  // 更换图片上传
-  private handleChangeImg = info =>
+  // 限制图片上传大小与格式
+  private beforeUpload(file: RcFile)
   {
-    if (info.file.status === 'uploading')
+    if (file.size / 1024 / 1024 < 3)
     {
-      this.setState({ loading: true });
-      return;
+      return false;
     }
-    if (info.file.status === 'done')
+    // todo commonStore
+    const res = commonStore.uploadFile(file);
+    if (res)
     {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        }),
-      );
+      this.setState({
+        imageUrl: res['url']
+      })
     }
-  };
+    return false;
+  }
   private handleGetLength = (e) =>
   {
     console.log(e.target.value)

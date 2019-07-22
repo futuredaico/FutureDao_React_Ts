@@ -151,7 +151,7 @@ class Home extends React.Component<any, any> {
   // 跳转到项目详情页todo
   private handleToProjectInfo = (id) =>
   {
-    this.props.history.push('/project/' + id);
+    this.props.history.push('/projectinfo/' + id);
   }
   // 分页
   private handleChangePage = (index:number) => {
