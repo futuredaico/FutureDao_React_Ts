@@ -1,0 +1,114 @@
+.index-page{
+  width: 100%;  
+  box-sizing: border-box;
+  padding: 50px 0 90px 0;
+  min-height: 709px;
+  .index-banner-box{ 
+    .swiper-wrapper{
+      .text-content{
+        img{
+          width: 100%;
+        }
+      }
+    }
+  }
+  .index-content-wrapper{
+    width: 1080px;
+    margin: 0 auto;
+    .home-title{
+      border-bottom:1px solid @bg-e5;
+      padding-bottom: 15px;
+      .home-text{
+        font-weight: 600;
+        font-size: 22px;       
+      }      
+    }
+    .home-list-wrapper{           
+      .home-list-ul{
+        .home-list-li{
+          width: 255px;
+          height: 326px;
+          margin-right: 20px;
+          margin-top: 30px;          
+          box-sizing: border-box;
+          background: #FFFFFF;
+          border-radius: 5px;
+          display: inline-block;
+          vertical-align: top;
+          .home-smallbox{
+            width: 100%;
+            .home-img{
+              img{
+                width: 100%;
+                height: 159px;
+                border-radius: 5px 5px 0 0;
+              }
+            }
+            .home-des{
+              padding: 10px 15px;
+              .sbox-title{
+                font-weight: 600;
+                font-size: 16px;                
+                line-height: 22px;     
+                height: 44px;
+                overflow: hidden;
+                text-overflow: ellipsis; 
+                display: -webkit-box;
+                -webkit-line-clamp: 2; // （行数）
+                -webkit-box-orient: vertical; 
+                margin-bottom: 5px;
+              }              
+              .sbox-asset{
+                margin-top: 28px;
+                font-size: 14px;
+                .sbox-line{
+                  margin-bottom: 15px;
+                  .sbox-line-left{
+                    display: inline-block;
+                    color: @t-purple;                 
+                  }
+                  .sbox-line-right{
+                    float: right;
+                    font-size: 12px;
+                  }                  
+                }
+              }
+              .sbox-doing{
+                margin-top: 20px;
+                font-size: 14px;
+                color: #333333;
+                .slide-box{
+                  width: 225px !important;
+                  max-width: 225px !important;
+                }
+                .sbox-toptext{
+                  font-size: 14px;
+                  color: @t-purple;
+                  display: inline-block;
+                }
+                .sbox-topright{
+                  font-size: 12px;
+                  float: right;
+                  margin-top: -49px;
+                }
+              }
+            }
+          }
+          &:hover{
+            box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
+          }
+          &:nth-of-type(4n){
+            margin-right: 0;
+          }
+        }
+      }
+      .home-page-warpper{
+        text-align: center;
+        margin-top: 50px;
+      }
+    }
+  }
+}
+@media (max-width:1280px){
+  
+}
