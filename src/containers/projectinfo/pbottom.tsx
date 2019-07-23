@@ -5,13 +5,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import Transation from './transation'
-import Manager from './manager';
+import ProjectDetail from './detail'
+import UpdateList from './updatelist';
+import RightTeam from './rightteam';
+import UpdateInfo from './updateinfo'
+import { IProjectInfoProps } from './interface/projectinfo.interface';
+
 @observer
-class Pbottom extends React.Component<any, any> {
-    public state = {
-        underLineNum: 2
-    }
+class Pbottom extends React.Component<IProjectInfoProps, any> {
     public menuOne = [
         {
             id: 1,
@@ -30,37 +31,61 @@ class Pbottom extends React.Component<any, any> {
     {
         return (
             <div className="project-bottom">
-                <div className="pbottom-title">
-                    <ul className="title-ul">
-                        {
-                            this.menuOne.map((item, index) =>
+                <div className="pbottom-wrapper">
+                    <div className="pbottom-title">
+                        <ul className="title-ul">
                             {
-                                return (
-                                    <li className={this.state.underLineNum === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
-                                        {item.name}
-                                    </li>
-                                )
-                            })
+                                this.menuOne.map((item, index) =>
+                                {
+                                    return (
+                                        <li className={this.props.projectinfo.menuNum === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
+                                            {
+                                                item.id === 2 ? <a href="#message">{item.name}</a> : item.name
+                                            }
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                    <div className="pbottom-content">
+                        {
+                            this.props.projectinfo.isShowUpdateInfo && <UpdateInfo {...this.props} />
                         }
-                    </ul>
+                        {
+                            !this.props.projectinfo.isShowUpdateInfo && (
+                                <>
+                                    <div className="pbottom-left">
+                                        {
+                                            this.props.projectinfo.menuNum !== 3 && <ProjectDetail {...this.props} />
+                                        }
+                                        {
+                                            this.props.projectinfo.menuNum === 3 && <UpdateList {...this.props} />
+                                        }
+                                    </div>
+                                    <div className="pbottom-right">
+                                        <RightTeam />
+                                    </div>
+                                </>
+                            )
+                        }
+
+                    </div>
                 </div>
-                <div className="pbottom-content">
-                    {
-                        this.state.underLineNum === 2 && <Transation {...this.props} />
-                    }
-                    {
-                        this.state.underLineNum === 3 && <Manager {...this.props}  />
-                    }
-                </div>
+
             </div>
         );
     }
     // 菜单选择
     private mapUnderline = (item) =>
     {
-        this.setState({
-            underLineNum: item.id
-        })
+
+        if (item.id === 2)
+        {
+            // todo
+            window.location.hash = 'message'
+        }
+        this.props.projectinfo.menuNum = item.id
     }
 }
 export default injectIntl(Pbottom);
