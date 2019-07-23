@@ -1,5 +1,5 @@
 /**
- * 详细信息
+ * 发布更新
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
