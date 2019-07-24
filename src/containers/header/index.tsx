@@ -49,7 +49,7 @@ export default class Header extends React.Component<IProps, any>{
                         </div>
                         <div className="people-list">
                           <ul className="people-ul">
-                            <li className="people-li"><Link to="/personalcenter">个人中心</Link></li>
+                            <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
                             <li className="people-li">我的项目</li>
                             <li className="people-li">退出账号</li>
                           </ul>
@@ -75,6 +75,12 @@ export default class Header extends React.Component<IProps, any>{
     this.setState({
       showManger: !this.state.showManger
     })
+  }
+
+  // 进入个人中心
+  private handleToPersonal = () => {
+    this.handleToShow();
+    this.props.history.push('/personalcenter')
   }
 }
 // export default injectIntl(Header);

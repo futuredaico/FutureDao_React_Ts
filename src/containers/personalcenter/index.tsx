@@ -25,7 +25,7 @@ class PersonalCenter extends React.Component<any, any> {
         }
     ]
     public state = {
-        personalMenu: 2
+        personalMenu: 1
     }
     public render()
     {

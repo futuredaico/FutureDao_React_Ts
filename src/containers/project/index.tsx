@@ -75,7 +75,7 @@ class Project extends React.Component<IProjectProps, any> {
                             <div className="delete-content">
                                 <div className="delete-text">删除项目将清除所有相关数据是否继续？</div>
                                 <div className="delete-btn">
-                                    <Button text="取消" btnColor="white-btn" onClick={this.handleShowDeleteProject} />
+                                    <Button text="取消" btnColor="red-btn" onClick={this.handleShowDeleteProject} />
                                     <Button text="确认" onClick={this.handleCheckDelete} />
                                 </div>
                             </div>

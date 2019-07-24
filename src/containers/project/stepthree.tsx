@@ -131,7 +131,7 @@ class StepThree extends React.Component<any, any> {
               <div className="delete-content">
                 <div className="delete-text">确认将 XXX 移除团队？</div>
                 <div className="delete-btn">
-                  <Button text="取消" btnColor="white-btn" onClick={this.handleShowDelete} />
+                  <Button text="取消" btnColor="red-btn" onClick={this.handleShowDelete} />
                   <Button text="确认" onClick={this.handleCheckDelete} />
                 </div>
               </div>
