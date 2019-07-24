@@ -6,16 +6,36 @@ export default [
   //   component: asyncComponent(() => import('../containers/address/addressinfo')),
   //   path: '/address/:address',
   // },
-  // {
-  //   component: asyncComponent(() => import('../containers/myaccount/layout')),
-  //   path: '/myaccount',
-  //   children:[
-  //     {
-  //       component: asyncComponent(() => import('../containers/myaccount/setting')),
-  //       path: '/myaccount/setting',
-  //     },
-  //   ]
-  // },
+  {
+    component: asyncComponent(() => import('../containers/emailpage/invite')),
+    path: '/inviteteam',
+  },
+  {
+    component: asyncComponent(() => import('../containers/emailpage')),
+    path: '/email',
+  },
+  {
+    component: asyncComponent(() => import('../containers/login')),
+    path: '/load',
+    children:[
+      {
+        component: asyncComponent(() => import('../containers/login/forget')),
+        path: '/load/forgetpwd',
+      },
+      {
+        component: asyncComponent(() => import('../containers/login/password')),
+        path: '/load/pwdupdate',
+      },
+      {
+        component: asyncComponent(() => import('../containers/login/signin')),
+        path: '/load/signin',
+      },
+      {
+        component: asyncComponent(() => import('../containers/login/login')),
+        path: '/load/login',
+      },
+    ]
+  },
   {
     component: asyncComponent(()=> import('../containers/personalcenter')),
     path:'/personalcenter'

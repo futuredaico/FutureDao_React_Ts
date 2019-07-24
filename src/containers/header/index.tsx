@@ -36,7 +36,7 @@ export default class Header extends React.Component<IProps, any>{
           <div className="header-right">
             <ul>
               <li>
-                  <span className="point-login">登陆 | 注册</span>
+                  <span className="point-login" onClick={this.handleToLogin}>登陆 | </span>  <span className="point-login" onClick={this.handleToSignin}>注册</span>  
               </li>
               <li>
                 <div className="people-login">
@@ -65,11 +65,16 @@ export default class Header extends React.Component<IProps, any>{
       </header>
     );
   }
-  // 登录与登出
-  // private onGoLogin = () =>
-  // {
-  //   this.props.common.login();
-  // }
+  // 登录
+  private handleToLogin = () =>
+  {
+    this.props.history.push('/load/login');
+  }
+  // 注册
+  private handleToSignin = () =>
+  {
+    this.props.history.push('/load/signin');
+  }
   private handleToShow = () =>
   {
     this.setState({

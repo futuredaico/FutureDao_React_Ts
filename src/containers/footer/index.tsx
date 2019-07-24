@@ -24,6 +24,9 @@ export default class Footer extends React.Component<IProps, any>
     }
     public render()
     {
+        // return (
+        //    <div/>
+        // )
         return (
             <footer>
                 <div className="footer-wrapper">

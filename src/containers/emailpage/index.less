@@ -1,0 +1,94 @@
+.emailcheck-container{
+    // border: 1px solid red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%,50%);
+    -webkit-transform: translate(-50%,50%);
+    -ms-transform: translate(-50%,50%);
+    transform: translate(-50%,50%);
+    text-align: center;
+    width: 4rem;
+    min-width: 400px;
+    // margin: 0 auto;
+    font-size: 16px;
+    .success-email{
+        .success-icon{
+            width: 100px;
+            height: 114px;
+            margin-bottom: 25px;
+        }
+        .addr-p{
+            margin-bottom: 20px;
+        }
+        .to-icon{
+            width: 20px;
+            height: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .back-home{
+            display: block;
+            margin-top: 60px;
+            color: #FF7C5C;
+            text-decoration: underline;
+        }
+    }
+    .fail-email{
+        .fail-icon{
+            width: 100px;
+            height: 100px;
+            margin-bottom: 25px;
+        }
+    }
+}
+.invite-container{
+    height: -webkit-fill-available;
+    background: #fff;
+    position: relative;
+    .invite-box{
+        width: 750px;
+        height: 380px;
+        background: @bg-f6;
+        border-radius: 3px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -moz-transform: translate(-50%,-50%);
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        text-align: center;
+        font-size: 16px;
+        .invite-p{
+            margin-top: 110px;
+            height: 100px;
+            margin-bottom: 50px;
+            .invite-img{
+                width: 30px;
+                height: 30px;
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+        }
+        .red-btn{
+            margin-right: 20px;
+        }
+        .next-box{
+            .next-img{
+                width: 40px;
+                height: 40px;
+                margin-top: 80px;
+                margin-bottom: 50px;
+            }
+            p{
+                margin-bottom: 80px;
+            }
+            a{
+                color: @t-purple !important;
+                font-size: 16px;
+                text-decoration: underline;                
+            }
+        }
+    }
+}
