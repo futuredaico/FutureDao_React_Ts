@@ -9,49 +9,42 @@ import * as Api from './api/common.api';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
-class Common implements ICommonStore
-{
+class Common implements ICommonStore {
 
   @observable public language: string = lang;  // 当前语言
   @observable public message: any | null = null;// 当前显示内容
   @observable public network: 'TestNet' | 'MainNet' = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'TestNet' : 'MainNet';  // 当前网络
   @observable public address: string = ''; // 当前地址
+  @observable public footer: boolean = true;
 
   // 初始化语言
-  @action public initLanguage = () =>
-  {
+  @action public initLanguage = () => {
     const sessionLanguage = sessionStorage.getItem('language');
-    if (sessionLanguage)
-    {
+    if (sessionLanguage) {
       this.language = sessionLanguage;
     }
-    if (this.language === 'zh')
-    {
+    if (this.language === 'zh') {
       this.message = zh_CN;
       return;
     }
     this.message = en_US;
   }
   // 设置语言
-  @action public setLanguage = (msg: string) =>
-  {
-    if (msg === 'zh')
-    {
+  @action public setLanguage = (msg: string) => {
+    if (msg === 'zh') {
       this.message = zh_CN;
       this.language = 'zh'
-    } else
-    {
+    } else {
       this.message = en_US;
       this.language = 'en'
     }
   }
 
-  @action public uploadFile = async (file:RcFile) =>
-  {
+  @action public uploadFile = async (file: RcFile) => {
     // todo
     try {
       return await Api.uploadFile(file);
-    }catch(e) {
+    } catch (e) {
       return false;
     }
   }

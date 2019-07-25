@@ -5,10 +5,11 @@ export interface ICommonStore {
   message: any,
   network: string,
   address: string, // 当前地址
-  uploadFile:(file:RcFile)=>void
+  footer: boolean;
+  uploadFile: (file: RcFile) => void
 }
-export interface ICommonProps{
-  common:ICommonStore
+export interface ICommonProps {
+  common: ICommonStore
 }
 export interface IExtendsEditorProps {
   onHandleChangeSource: (content: string) => Promise<boolean>,

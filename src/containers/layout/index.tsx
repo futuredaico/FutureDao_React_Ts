@@ -22,17 +22,14 @@ export default class LayoutIndex extends React.Component<any, any> {
     lang: store.language === 'en' ? 'en' : 'zh', // zh为中，en为英
   }
   // 切换语言
-  public onChangeLanguage = (lang: string) =>
-  {
-    if (lang === "zh")
-    {
+  public onChangeLanguage = (lang: string) => {
+    if (lang === "zh") {
       store.setLanguage('zh');
       sessionStorage.setItem('language', 'zh');
       this.setState({
         lang: 'zh'
       })
-    } else
-    {
+    } else {
       store.setLanguage('en');
       sessionStorage.setItem('language', 'en');
       this.setState({
@@ -40,8 +37,16 @@ export default class LayoutIndex extends React.Component<any, any> {
       })
     }
   }
-  public render()
-  {
+  public componentDidMount() {
+    // 初始化先匹配一次
+    this.onMapping();
+    // listen 路由改变，重新匹配一次
+    this.context.router.history.listen(() => {
+      this.onMapping();
+    });
+  }
+
+  public render() {
     return (
       <div className="layout-container">
         <ScrollToTop>
@@ -53,7 +58,7 @@ export default class LayoutIndex extends React.Component<any, any> {
           <div className="layout-main">
             {this.props.children}
           </div>
-          <Footer 
+          <Footer
             // locale={this.state.lang === 'en' ? en_US.header : zh_CN.header}
             common={CommonStore}
             onChangeLanguage={this.onChangeLanguage}
@@ -61,5 +66,13 @@ export default class LayoutIndex extends React.Component<any, any> {
         </ScrollToTop>
       </div>
     );
+  }
+
+  private onMapping() {
+    if (/load/.test(location.pathname)) {
+      CommonStore.footer = false;
+      return;
+    }
+    CommonStore.footer = true;
   }
 }
