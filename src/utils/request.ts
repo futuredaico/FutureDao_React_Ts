@@ -10,7 +10,7 @@ interface IOpts {
 
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
-const baseUrl: string = "https://apiwallet.nel.group/api/" + network;
+const baseUrl: string = "https://apidao.nel.group/api/" + network;
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 

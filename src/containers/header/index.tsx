@@ -29,41 +29,57 @@ export default class Header extends React.Component<IProps, any>{
             <ul>
               <li><Link to="/">发现项目</Link></li>
               <li>
-                <Link to="/createproject">创建项目</Link>
+                <a href="javascript:;" onClick={this.handleToCreateProject}>创建项目</a>
               </li>
             </ul>
           </div>
           <div className="header-right">
             <ul>
-              <li>
-                  <span className="point-login" onClick={this.handleToLogin}>登陆 | </span>  <span className="point-login" onClick={this.handleToSignin}>注册</span>  
-              </li>
-              <li>
-                <div className="people-login">
-                  <img src={require('@/img/h5.png')} alt="" className="people-img" onClick={this.handleToShow} />
-                  {
-                    this.state.showManger && (
-                      <div className="people-manager">
-                        <div className="people-trangle">
-                          <div className="trangle" />
-                        </div>
-                        <div className="people-list">
-                          <ul className="people-ul">
-                            <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
-                            <li className="people-li">我的项目</li>
-                            <li className="people-li">退出账号</li>
-                          </ul>
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
-              </li>
+              {
+                (!this.props.common.userInfo) && (
+                  <li>
+                    <span className="point-login" onClick={this.handleToLogin}>登陆 | </span>  <span className="point-login" onClick={this.handleToSignin}>注册</span>
+                  </li>
+                )
+              }
+              {
+                (this.props.common.userInfo) && (
+                  <li>
+                    <div className="people-login">
+                      <img src={this.props.common.userInfo.headIconUrl} alt="" className="people-img" onClick={this.handleToShow} />
+                      {
+                        this.state.showManger && (
+                          <div className="people-manager">
+                            <div className="people-trangle">
+                              <div className="trangle" />
+                            </div>
+                            <div className="people-list">
+                              <ul className="people-ul">
+                                <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
+                                <li className="people-li">我的项目</li>
+                                <li className="people-li" onClick={this.handleToLogout} >退出账号</li>
+                              </ul>
+                            </div>
+                          </div>
+                        )
+                      }
+                    </div>
+                  </li>
+                )
+              }
             </ul>
           </div>
         </div>
       </header>
     );
+  }
+  // 创建项目
+  private handleToCreateProject = ()=>{
+    if(this.props.common.userInfo){
+      this.props.history.push('/createproject');
+    }else{
+      this.handleToLogin();
+    }
   }
   // 登录
   private handleToLogin = () =>
@@ -75,6 +91,7 @@ export default class Header extends React.Component<IProps, any>{
   {
     this.props.history.push('/load/signin');
   }
+
   private handleToShow = () =>
   {
     this.setState({
@@ -86,6 +103,10 @@ export default class Header extends React.Component<IProps, any>{
   private handleToPersonal = () => {
     this.handleToShow();
     this.props.history.push('/personalcenter')
+  }
+  // 退出登录
+  private handleToLogout = () => {
+    // todo
   }
 }
 // export default injectIntl(Header);

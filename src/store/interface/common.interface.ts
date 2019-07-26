@@ -1,20 +1,53 @@
 import { RcFile } from "antd/lib/upload";
 
-export interface ICommonStore {
+export interface ICommonStore
+{
   language: string,
   message: any,
   network: string,
-  address: string, // 当前地址
+  userInfo:IUserInfo|null, 
+  token:string,
+  userId:string,
   footer: boolean;
-  uploadFile: (file: RcFile) => void
+  uploadFile: (file: RcFile) => void,
+  loginFutureDao:(email: string, pwd: string) => Promise<boolean>,
+  logoutFutureDao:()=>void,
+  getLoginStatus:()=>void,
 }
-export interface ICommonProps {
+export interface ICommonProps
+{
   common: ICommonStore
 }
-export interface IExtendsEditorProps {
+export interface IExtendsEditorProps
+{
   onHandleChangeSource: (content: string) => Promise<boolean>,
 }
-export interface IUploadResult {
+export interface IUploadResult
+{
   fileName: string,
   fileUrl: string,
+}
+
+export enum CodeType
+{
+  success = "00000",              // 请求返回正常
+  invalidUsername = "10200",      // 不合法用户名
+  usernameHasRegisted = "10201",  // 用户名已注册
+  invalidEmail = "10202",         // 不合法的邮箱
+  emailHasRegisted = "10203",     // 邮箱已注册
+  invalidPasswordLen = "10204",   // 不合法的密码
+  passwordError = "10205",        // 密码错误
+  invalidVerifyCode = "10206",    // 不合法的验证码
+  invalidLoginInfo = "10207",     // 无效的登录信息(即用户名/邮箱/密码错误)
+  notFindUserInfo = "10208",      // 没有找到用户信息
+  invalidAccessToken = "10209",   // 无效token
+  expireAccessToken = "10210",    // token过期
+  headIconNotUpload = "10211",    // 头像未上传
+}
+
+export interface IUserInfo {
+  username:string,
+  email:string,
+  headIconUrl:string,
+  brief:string
 }

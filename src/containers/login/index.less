@@ -73,10 +73,23 @@
     padding: 0 40px;
     .ant-input{
         height: 44px;
-        margin-bottom: 30px;
+        margin-bottom: 30px;        
     }
+    .ant-input-affix-wrapper{
+        .ant-input-suffix{
+            position: absolute;
+            top:23px;
+            right: 12px;
+        }
+    }
+    
     .red-input{
-        border: 1px solid #F25151;
+        border: 1px solid @bg-f25;
+    }
+    .red-password{
+        .ant-input{
+            border: 1px solid @bg-f25;
+        }
     }
     .normal-button{
         width: 100%;
@@ -99,11 +112,6 @@
             text-decoration: underline;
         }
     }
-}
-.signin-wrapper{
-    .gray-text-wrapper{
-        margin-top: 20px;
-    }
     label{
         position: relative;
         .err-msg{
@@ -118,8 +126,12 @@
                 margin-top: -2px;        
             }
         }
+    } 
+}
+.signin-wrapper{
+    .gray-text-wrapper{
+        margin-top: 20px;
     }
-    
 }
 .forget-wrapper{    
     .normal-button{

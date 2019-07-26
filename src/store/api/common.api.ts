@@ -10,3 +10,37 @@ export const uploadFile = (file:RcFile)=>{
   }
   return request(opts)
 }
+
+/**
+ * 获取用户信息
+ * @param userId 用户Id
+ * @param token 令牌
+ */
+export const getUserInfo = (userId:string,token:string) =>
+{
+    const opts = {
+        method: 'getUserInfo',
+        params: [
+          userId,
+          token
+        ]
+    }
+    return request(opts);
+}
+
+/**
+ * 登录
+ * @param email 邮箱
+ * @param pwd 密码
+ */
+export const login = (email: string, pwd: string) =>
+{
+    const opts = {
+        method: 'login',
+        params: [
+            email,
+            pwd
+        ]
+    }
+    return request(opts);
+}

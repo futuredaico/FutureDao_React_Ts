@@ -2,15 +2,16 @@
  * 个人中心
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
 import classnames from 'classnames';
-
+import { IPersonEditProps } from './interface/personedit.interface';
+@inject('person','common')
 @observer
-class PersonalEidt extends React.Component<any, any> {
+class PersonalEidt extends React.Component<IPersonEditProps, any> {
     public state = {
         isEditDes: false, // 个人简介
         isEditEmail: false, // 邮箱
