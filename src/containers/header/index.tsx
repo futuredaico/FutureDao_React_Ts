@@ -46,7 +46,7 @@ export default class Header extends React.Component<IProps, any>{
                 (this.props.common.userInfo) && (
                   <li>
                     <div className="people-login">
-                      <img src={this.props.common.userInfo.headIconUrl} alt="" className="people-img" onClick={this.handleToShow} />
+                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_','')} alt="" className="people-img" onClick={this.handleToShow} />
                       {
                         this.state.showManger && (
                           <div className="people-manager">

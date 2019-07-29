@@ -60,15 +60,17 @@ export const modifyPassword = (userId: string,token:string,pwd:string,newpwd:str
  * @param userId 用户ID
  * @param token 
  * @param email 新邮箱
+ * @param pwd 密码
  */
-export const modifyEmail = (userId: string,token:string,email:string) =>
+export const modifyEmail = (userId: string,token:string,email:string,pwd:string) =>
 {
     const opts = {
         method: 'modifyEmail',
         params: [
             userId,
             token,
-            email
+            email,
+            pwd
         ]
     }
     return request(opts);

@@ -4,6 +4,7 @@ import { en_US, zh_CN } from '@/language';
 import { ICommonStore, CodeType, IUserInfo } from './interface/common.interface';
 import { RcFile } from 'antd/lib/upload';
 import * as Api from './api/common.api';
+import { notification } from 'antd';
 // import web3Tool from '@/utils/web3Tool';
 // import { ICommonStore } from './interface/common.interface';
 
@@ -48,7 +49,7 @@ class Common implements ICommonStore
       this.language = 'en'
     }
   }
-
+  // 上传图片，视频
   @action public uploadFile = async (file: RcFile) =>
   {
     // todo
@@ -126,6 +127,15 @@ class Common implements ICommonStore
       this.getUserInfo();
     }
   }
+
+  // 提示弹框
+  @action public openNotificationWithIcon = (type:string,message:string,des:string) => {
+    notification[type]({
+      message: message,
+      description:
+        des,
+    });
+  };
 }
 
 // 外部使用require

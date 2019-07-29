@@ -9,10 +9,12 @@ export interface ICommonStore
   token:string,
   userId:string,
   footer: boolean;
-  uploadFile: (file: RcFile) => void,
+  uploadFile: (file: RcFile) => Promise<boolean>,
   loginFutureDao:(email: string, pwd: string) => Promise<boolean>,
   logoutFutureDao:()=>void,
   getLoginStatus:()=>void,
+  getUserInfo:()=>void,
+  openNotificationWithIcon:(type:string,message:string,des:string)=>void
 }
 export interface ICommonProps
 {

@@ -25,7 +25,8 @@ export default class EmailCheck extends React.Component {
     public render()
     {
         return (
-            <div className="emailcheck-container">
+            <div className="email-wrapper">
+                <div className="emailcheck-container">
                 {/* {
                     this.props.setting.verifyResult === '0000' && ( */}
                         <div className="success-email">
@@ -44,6 +45,8 @@ export default class EmailCheck extends React.Component {
                     )
                 } */}
             </div>
+            </div>
+            
         )
     }
 

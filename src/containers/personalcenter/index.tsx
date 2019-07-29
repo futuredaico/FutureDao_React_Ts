@@ -2,14 +2,15 @@
  * 个人中心
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import PersonEdit from './personedit';
 import MyProject from './myproject';
-
+import { IPersonProps } from './interface/personedit.interface';
+@inject('personedit','common')
 @observer
-class PersonalCenter extends React.Component<any, any> {
+class PersonalCenter extends React.Component<IPersonProps, any> {
     public menuList = [
         {
             key: 1,

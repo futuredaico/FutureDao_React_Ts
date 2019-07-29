@@ -1,10 +1,14 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/person.api';
+import {checkEmail} from '../../login/api/login.api';
 import { CodeType } from '@/store/interface/common.interface';
 import common from '@/store/common';
 class PersonEdit
 {
-    @observable public forgetEmailCode = '';
+    @observable public newEmailCode = '';  // 邮箱显示错误码提示
+    @observable public newPwdCode = '';   //  密码修改错误码显示
+
+    
     /**
      * 修改用户头像
      */
@@ -74,10 +78,12 @@ class PersonEdit
             result = await Api.modifyPassword(common.userId, common.token, pwd, newPwd);
         } catch (e)
         {
+            this.newPwdCode = '';
             return false;
         }
         if (result[0].resultCode !== CodeType.success)
         {
+            this.newPwdCode = result[0].resultCode;
             return false
         }
         return true;
@@ -85,14 +91,15 @@ class PersonEdit
     /**
      * 修改邮件
      */
-    @action public updateUserEmail = async (email: string) =>
+    @action public updateUserEmail = async (email: string,pwd:string) =>
     {
         let result: any = [];
         try
         {
-            result = await Api.modifyEmail(common.userId, common.token, email);
+            result = await Api.modifyEmail(common.userId, common.token, email,pwd);
         } catch (e)
         {
+            this.newEmailCode = '';
             return false;
         }
         if (result[0].resultCode === CodeType.success)
@@ -107,7 +114,29 @@ class PersonEdit
             }
         } else
         {
-            return false
+            this.newEmailCode = result[0].resultCode;
+            return false 
+        }
+        return true;
+    }
+    /**
+     * 检测邮箱
+     */
+    @action public checkEmail = async (email: string) =>
+    {
+        let result: any = [];
+        try
+        {
+            result = await checkEmail(email);
+        } catch (e)
+        {
+            this.newEmailCode = '';
+            return false;
+        }
+        if (result[0].resultCode !== CodeType.success)
+        {
+            this.newEmailCode = result[0].resultCode;
+            return false           
         }
         return true;
     }

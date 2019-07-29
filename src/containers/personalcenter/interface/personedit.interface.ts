@@ -4,16 +4,18 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 export interface IPersonEditStore
 {
-  forgetEmailCode: string,
+  newEmailCode: string,
+  newPwdCode:string,
   updateUserImg:(imgStr: string) =>Promise<boolean>,
   updateUserBrief:(str: string) =>Promise<boolean>,
   updatePwd:(pwd: string, newPwd: string)=>Promise<boolean>,
-  updateUserEmail:(email: string)=>Promise<boolean>,
+  updateUserEmail:(email: string,pwd:string)=>Promise<boolean>,
+  checkEmail:(email: string)=>Promise<boolean>,
 }
 
-export interface IPersonEditProps  extends RouteComponentProps
+export interface IPersonProps  extends RouteComponentProps
 {
-  person: IPersonEditStore,
+  personedit: IPersonEditStore,
   common:ICommonStore,
   intl: any
 }
