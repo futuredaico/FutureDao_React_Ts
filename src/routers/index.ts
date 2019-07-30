@@ -46,7 +46,7 @@ export default [
   },
   {
     component: asyncComponent(()=> import('../containers/project')),
-    path:'/createproject'
+    path:'/createproject/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/notfound')),

@@ -10,7 +10,7 @@ import UpdateProject from './updateproject';
 import { IProjectProps } from './interface/project.interface';
 import Button from '@/components/Button';
 
-@inject('project', 'createproject')
+@inject('project', 'createproject','common')
 @observer
 class Project extends React.Component<IProjectProps, any> {
     public menuList = [
@@ -32,8 +32,9 @@ class Project extends React.Component<IProjectProps, any> {
         },
     ]
     public state = {
-        showDeletProject: false
+        showDeletProject: false,
     }
+    
     public render()
     {
         return (

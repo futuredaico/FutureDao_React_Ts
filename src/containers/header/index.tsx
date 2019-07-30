@@ -76,7 +76,7 @@ export default class Header extends React.Component<IProps, any>{
   // 创建项目
   private handleToCreateProject = ()=>{
     if(this.props.common.userInfo){
-      this.props.history.push('/createproject');
+      this.props.history.push('/createproject/create');
     }else{
       this.handleToLogin();
     }

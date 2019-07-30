@@ -45,6 +45,10 @@ export enum CodeType
   invalidAccessToken = "10209",   // 无效token
   expireAccessToken = "10210",    // token过期
   headIconNotUpload = "10211",    // 头像未上传
+  RepeatProjNameOrProjTitle = "10212", // 重复的项目名称或项目标题
+  HaveNotPermissionModifyProj = "10213", // 没有权限修改项目
+  HaveNotPermissionInviteMember = "10214",// 没有权限邀请成员
+  UserNotRegistered = "10215", // 邀请用户未注册
 }
 
 export interface IUserInfo {

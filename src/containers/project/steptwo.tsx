@@ -11,15 +11,16 @@ import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import commonStore from '@/store/common';
 import { RcFile } from 'antd/lib/upload';
-
-
+import { ICreateProjectProps } from './interface/createproject.interface';
 
 @observer
-class StepTwo extends React.Component<any, any> {
+class StepTwo extends React.Component<ICreateProjectProps, any> {
   public state = {
     imageUrl: null,
     loading: false,
-    editorString: '', // 文本编辑内容
+    projDetail: '', // 文本编辑内容
+    projectDetails:'',
+    detailEnter:false,
   };
   public render()
   {
@@ -57,12 +58,16 @@ class StepTwo extends React.Component<any, any> {
           <div style={{ width: 750, height: 374 }}>
             <Editor
               onChange={this.onChangeEditorValue}
-              value={this.state.editorString}
+              value={this.state.projDetail}
+              className={this.state.detailEnter?"err-active":''}
             />
+            {
+            this.state.detailEnter && <span className="err-span">填写本栏信息</span>
+            }
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存并继续" btnSize="bg-btn" />
+          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} />
         </div>
       </div >
     );
@@ -93,13 +98,61 @@ class StepTwo extends React.Component<any, any> {
     if (text !== "")
     {
       this.setState({
-        editorString: BraftEditor.createEditorState(value),
-        projectDetails: text
+        projDetail: BraftEditor.createEditorState(value).toHTML(),
+        projectDetails: text,
+        detailEnter:false
       }, () =>
         {
-          console.log(this.state.editorString)
+          console.log(this.state.projectDetails)
         })
     }
+  }
+  private handleToSaveDetail= async ()=>{
+    //
+    const res = this.checkInputStatus();
+    if (!res)
+    {
+      return
+    }
+    // 区分是新建项目还是管理项目
+    const params = this.props.match.params;
+    const purpose = params["purpose"];
+    if (purpose === 'create')
+    {
+      const content:string[]=[
+        this.props.common.userId,
+        this.props.common.token,
+        // this.createContent.projId,
+        "daff2aed2b0647b351e24384e2086314",
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',// todo 暂时没有
+        this.state.projDetail,
+        '',
+        '',
+        ''
+      ]
+      const creatResult = await this.props.createproject.modifyProject(content);
+      if (creatResult)
+      {
+        this.props.createproject.step = 3;
+        this.props.createproject.stepOneStatus = 2;
+        this.props.createproject.stepTwoStatus = 2;
+        this.props.createproject.stepThreeStatus = 1;
+        window.scrollTo(0, 0)
+        this.props.history.push('/createproject/'+this.props.createproject.createContent.projId)
+      }
+
+    }
+  }
+  private checkInputStatus = ()=>{
+    if(!this.state.projDetail){
+      return false
+    }
+    return true
   }
 }
 
