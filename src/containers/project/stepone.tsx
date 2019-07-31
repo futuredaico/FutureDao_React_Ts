@@ -17,12 +17,12 @@ import { ICreateProjectProps } from './interface/createproject.interface';
 class StepOne extends React.Component<ICreateProjectProps, any> {
 
   public state = {
-    nameValue: '', // 项目名称
-    titleValue: '', // 项目标题
-    typeValue: 'game', // 项目类型
+    nameValue: this.props.createproject.createContent.projName, // 项目名称
+    titleValue: this.props.createproject.createContent.projTitle, // 项目标题
+    typeValue: this.props.createproject.createContent.projType, // 项目类型
     imageUrl: null,  // 封面
     loading: false,
-    textareaValue: '', // 项目简介
+    textareaValue: this.props.createproject.createContent.projBrief, // 项目简介
     textareaNum: 0, // 项目简介统计
     nameEnter: false,
     titleEnter: false,
@@ -88,7 +88,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
           <span className="tips-text">（ 为你的项目进行归类 ）</span>
         </div>
         <div className="inline-enter">
-          <Select defaultValue='game' options={this.mydeityOptions} text='' onCallback={this.onSelletCallback} />
+          <Select options={this.mydeityOptions} text='' onCallback={this.onSelletCallback} defaultValue={this.state.typeValue} />
         </div>
         <div className="inline-title">
           <strong>项目封面</strong>&nbsp;
@@ -191,8 +191,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     }
     // 区分是新建项目还是管理项目
     const params = this.props.match.params;
-    const purpose = params["purpose"];
-    if (purpose === 'create')
+    const projectId = params["projectId"];
+    if (projectId === 'create')
     {
       this.props.createproject.createContent = {
         projId: '',
@@ -212,11 +212,29 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       {
         this.props.createproject.step = 2;
         this.props.createproject.stepOneStatus = 2;
-        this.props.createproject.stepTwoStatus = 1;
+        this.props.createproject.stepTwoStatus = 3;
         this.props.createproject.stepThreeStatus = 3;
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        this.props.history.push('/createproject/'+this.props.createproject.createContent.projId);
       }
-
+    }else{
+      const content: string[] = [
+        this.props.common.userId,
+        this.props.common.token,
+        this.props.createproject.createContent.projId,
+        this.state.nameValue,
+        this.state.titleValue,
+        this.state.typeValue,
+        'https://futuredao.oss-cn-hangzhou.aliyuncs.com/default.jpg',
+        this.state.textareaValue,
+        '',
+        '',
+        '',
+        '',
+        ''
+      ]
+      const creatResult = await this.props.createproject.modifyProject(content);
+      console.log(creatResult)
     }
   }
   // 检查填写情况

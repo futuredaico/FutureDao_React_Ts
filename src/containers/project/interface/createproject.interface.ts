@@ -7,9 +7,15 @@ export interface ICreateProjectStore {
   stepTwoStatus:number,
   stepThreeStatus:number,
   createContent:ICreateContent,
+  searchList:IMemberList[],
+  teamList:ITeamList[],
   createProject:()=>Promise<boolean>,
   modifyProject:(params:string[])=>Promise<boolean>,
   getProject: (projId:string)=>Promise<boolean>,
+  getTeamList:()=>Promise<boolean>,
+  searchMemberList:(memberEmail:string)=>Promise<boolean>,
+  inviteMember:(memberId:string)=>Promise<boolean>,
+  modifyMemberRole:(memberId:string,role:string)=>Promise<boolean>
 }
 
 
@@ -31,4 +37,18 @@ export interface ICreateContent {
   connectEmail:string,
   officialWeb:string,  
   community:string,
+}
+
+export interface IMemberList {
+  userId:string,
+  username:string,
+  email:string,
+  headIconUrl:string
+}
+
+export interface ITeamList {
+  username:string,
+  headIconUrl:string,
+  role:string,// admin或member
+  authenticationState:string // not为未认证，person为个人认证，company为企业认证
 }

@@ -40,3 +40,66 @@ export const getProj = (userId:string,token:string,projId:string) =>
     }
     return request(opts);
 }
+/**
+ * 查询成员
+ * @param userId 用户ID
+ * @param token token
+ * @param memberEmail 成员邮箱 
+ * @param page 当前页码
+ * @param pageSize 每页显示条数
+ */
+export const searchMember = (userId:string,token:string,memberEmail:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'queryMember',
+        params: [userId,token,memberEmail,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 邀请成员
+ * @param userId 用户id
+ * @param token 
+ * @param memberId 成员id
+ * @param projId 项目id
+ */
+export const inviteMember = (userId:string,token:string,memberId:string,projId:string) =>
+{
+    const opts = {
+        method: 'inviteMember',
+        params: [userId,token,memberId,projId]
+    }
+    return request(opts);
+}
+/**
+ * 获取成员列表
+ * @param userId 用户id
+ * @param token 
+ * @param projId 项目id
+ * @param page 
+ * @param pageSize 
+ */
+export const getMember = (userId:string,token:string,projId:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'queryProjTeam',
+        params: [userId,token,projId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 修改成员角色
+ * @param userId 用户id
+ * @param token 
+ * @param projId 项目id 
+ * @param userid 成员id
+ * @param role 成员角色
+ */
+export const modifyRole = (userId:string,token:string,projId:string,memberId:string,role:string) =>
+{
+    const opts = {
+        method: 'modifyUserRole',
+        params: [userId,token,projId,memberId,role]
+    }
+    return request(opts);
+}

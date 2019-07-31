@@ -28,7 +28,7 @@ class Login extends React.Component<ILoginProps, any> {
             <div className="normal-wrapper">
                 <Input placeholder="邮箱" value={this.state.loginEmail} onChange={this.handleOnChangeLoginEmail} />
                 <label htmlFor="loginpwd">
-                    <Input.Password placeholder="登陆密码" value={this.state.loginPwd} onChange={this.handleOnChangeLoginPwd} />
+                    <Input.Password placeholder="登陆密码" value={this.state.loginPwd} onChange={this.handleOnChangeLoginPwd} onPressEnter={this.handleToLogin} />
                     {
                         this.state.loginErr && (
                             <span className="err-msg">
@@ -39,7 +39,6 @@ class Login extends React.Component<ILoginProps, any> {
                     }
 
                 </label>
-
                 <Button text="登陆" onClick={this.handleToLogin} />
                 <div className="gray-text-wrapper">
                     <span className="gray-text" onClick={this.handleForget} >忘记密码?</span><br />
@@ -53,7 +52,7 @@ class Login extends React.Component<ILoginProps, any> {
     {
         this.setState({
             loginEmail: ev.target.value,
-            loginErr:false
+            loginErr: false
         })
     }
     // 密码输入
@@ -61,20 +60,21 @@ class Login extends React.Component<ILoginProps, any> {
     {
         this.setState({
             loginPwd: ev.target.value,
-            loginErr:false
+            loginErr: false
         })
     }
     // 登录
     private handleToLogin = async () =>
     {
-        if(!this.state.loginEmail||!this.state.loginPwd){
+        if (!this.state.loginEmail || !this.state.loginPwd)
+        {
             return
         }
         const res = await this.props.common.loginFutureDao(this.state.loginEmail, this.state.loginPwd);
         if (!res)
         {
             this.setState({
-                loginErr:true
+                loginErr: true
             })
             return
         }

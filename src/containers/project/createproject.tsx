@@ -26,7 +26,7 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
         const params = this.props.match.params;
         const projectId =params["projectId"];
         if(projectId!=='create'){
-            this.props.createproject.getProject(projectId)
+            this.props.createproject.getProject(projectId);            
         }
     }
     public render()

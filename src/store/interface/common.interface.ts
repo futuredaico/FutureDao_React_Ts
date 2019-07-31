@@ -5,16 +5,16 @@ export interface ICommonStore
   language: string,
   message: any,
   network: string,
-  userInfo:IUserInfo|null, 
-  token:string,
-  userId:string,
-  footer: boolean;
+  userInfo: IUserInfo | null,
+  token: string,
+  userId: string,
+  footer: boolean,
   uploadFile: (file: RcFile) => Promise<boolean>,
-  loginFutureDao:(email: string, pwd: string) => Promise<boolean>,
-  logoutFutureDao:()=>void,
-  getLoginStatus:()=>void,
-  getUserInfo:()=>void,
-  openNotificationWithIcon:(type:string,message:string,des:string)=>void
+  loginFutureDao: (email: string, pwd: string) => Promise<boolean>,
+  logoutFutureDao: () => void,
+  getLoginStatus: () => void,
+  getUserInfo: () => void,
+  openNotificationWithIcon: (type: string, message: string, des: string) => void
 }
 export interface ICommonProps
 {
@@ -48,12 +48,36 @@ export enum CodeType
   RepeatProjNameOrProjTitle = "10212", // 重复的项目名称或项目标题
   HaveNotPermissionModifyProj = "10213", // 没有权限修改项目
   HaveNotPermissionInviteMember = "10214",// 没有权限邀请成员
-  UserNotRegistered = "10215", // 邀请用户未注册
+  UserNotRegistered = "10215", // 不合法的用户id
+  HaveNotPermissionCreateUpdate = "10216", // 没有权限创建项目更新
+  HaveNotPermissionQueryProjInfo = "10217", // 没有权限查看项目信息
+  HaveNotPermissionModifyTeamRole = "10218", // 没有权限修改成员角色
 }
 
-export interface IUserInfo {
-  username:string,
-  email:string,
-  headIconUrl:string,
-  brief:string
+export interface IUserInfo
+{
+  username: string,
+  email: string,
+  headIconUrl: string,
+  brief: string
+}
+
+export enum ProjectState
+{
+  Readying = "reading",  // 准备中
+  IdeaPub = "ideapub",   // 创意发布
+  CrowdFunding = "crowdfunding",  // 众筹中
+  Trading = "trading",       // 交易中
+  ClearUp = "clearup",       // 清退
+}
+
+export enum ProjSubState
+{
+  // 一级/二级关系
+  // * 准备中: 无状态/审核中/审核失败
+  // * 众筹中: 无状态/预热中 
+  Init = "init",          // 初始状态: 无状态
+  Auditing = "auditing",      // 审核中
+  AuditFailed = "auditfailed",   // 审核失败
+  Preheating = "preheating",    // 预热中
 }

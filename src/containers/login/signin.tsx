@@ -154,7 +154,8 @@ class SignIn extends React.Component<ISignInProps, any> {
         const res = await this.props.signin.registerUser(this.state.usernameValue,this.state.emailValue,this.state.pwdValue);
         // todo 登录
         if(res){
-            this.props.common.loginFutureDao(this.state.emailValue,this.state.pwdValue)
+            this.props.common.loginFutureDao(this.state.emailValue,this.state.pwdValue);
+            this.props.history.push('/')
         }        
     }
 }

@@ -7,67 +7,22 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
-import Select from '@/components/select';
+import EditTeam from './editteam';
+import { ICreateProjectProps } from './interface/createproject.interface';
 
 @observer
-class StepThree extends React.Component<any, any> {
+class StepThree extends React.Component<ICreateProjectProps, any> {
   public state = {
-    identityValue: 0,
-    showAdd: false, // 是否显示添加成员弹框
-    showDelete: false // 是否显示删除成员弹框
+    emailInput:this.props.createproject.createContent.connectEmail,
+    webInput:this.props.createproject.createContent.officialWeb,
+    communityInput:this.props.createproject.createContent.community,
+    emailEnter:0,
   }
-  // 下拉筛选
-  private identityOptions = [
-    {
-      id: '0',
-      name: '管理',
-    },
-    {
-      id: '1',
-      name: '成员',
-    }
-  ]
   public render()
   {
     return (
       <div className="stepthree-page">
-        <div className="inline-title">
-          <strong>团队成员</strong>&nbsp;&nbsp;
-          <span className="tips-text">（ 暂未接受邀请的成员信息不会对外公示 ）</span>
-        </div>
-        <div className="inline-enter">
-          <ul className="inline-table">
-            <li className="table-li">
-              <span className="table-th">头像/名称</span>
-              <span className="table-th">认证状态</span>
-              <span className="table-th">身份</span>
-              <span className="table-th">管理</span>
-            </li>
-            <li className="table-li">
-              <span className="table-td">
-                <img src={require("@/img/h5.png")} alt="" className="people-img" />
-                XXXXX
-              </span>
-              {/* <span className="table-td">个人认证</span> */}
-              <span className="table-td gray-color">未认证</span>
-              {/* <span className="table-td admin-color">管理</span> */}
-              <span className="table-td">
-                <Select
-                  defaultValue='0'
-                  options={this.identityOptions}
-                  text=''
-                  onCallback={this.onSelletCallback}
-                />
-              </span>
-              <span className="table-td">
-                <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete} />
-              </span>
-            </li>
-          </ul>
-        </div>
-        <div className="inline-enter-btn">
-          <Button text="+ 邀请新成员" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
-        </div>
+        <EditTeam {...this.props} />
         <div className="inline-title">
           <strong>联系方式</strong>
         </div>
@@ -77,99 +32,102 @@ class StepThree extends React.Component<any, any> {
               邮箱&nbsp;<span className="red-type">*</span>
             </div>
             <div className="form-right">
-              <Input placeholder="Basic usage" />
+              <Input className={this.state.emailEnter!==0?'err-active':''} maxLength={40} value={this.state.emailInput} onChange={this.handleToEmailChange} />
+              {
+                this.state.emailEnter===1 && <span className="err-span">请输入正确的格式</span>
+              }
+              {
+                this.state.emailEnter===2 && <span className="err-span">填写本栏信息</span>
+              }
             </div>
           </div>
           <div className="inline-form">
             <div className="form-left">官网</div>
             <div className="form-right">
-              <Input placeholder="Basic usage" />
+              <Input maxLength={40} value={this.state.webInput} onChange={this.handleToWebChange} />
             </div>
           </div>
           <div className="inline-form">
             <div className="form-left">社区</div>
             <div className="form-right">
-              <Input placeholder="Basic usage" />
+              <Input maxLength={40} value={this.state.communityInput} onChange={this.handleToCommunChange} />
             </div>
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存" btnSize="bg-btn" />
+          <Button text="保存" btnSize="bg-btn" onClick={this.handleToSaveStepThree} />
         </div>
-        {
-          this.state.showAdd && (
-            <div className="invite-people-wrapper">
-              <div className="invite-content">
-                <div className="close-icon" onClick={this.handleShowAddBox}>
-                  <img src={require("@/img/close.png")} alt="" />
-                </div>
-                <div className="invite-title">邀请成员加入项目</div>
-                <div className="invite-input">
-                  {/* 补充邮箱 */}
-                  <Input placeholder="Basic usage" />
-                  <div className="invite-select-list">
-                    <ul>
-                      <li>
-                        <img src={require('@/img/h5.png')} alt="" />
-                        <span className="name-text">XXXXX</span>
-                        <span>xxx@nel.group</span>
-                      </li>
-                      {/* <li>
-                    <span className="nodata-text">未找到该用户</span>
-                  </li> */}
-                    </ul>
-                  </div>
-                </div>
-                <Button text="邀请" btnSize="bg-btn" />
-              </div>
-            </div>
-          )
-        }
-        {
-          this.state.showDelete && (
-            <div className="delete-people-wrapper">
-              <div className="delete-content">
-                <div className="delete-text">确认将 XXX 移除团队？</div>
-                <div className="delete-btn">
-                  <Button text="取消" btnColor="red-btn" onClick={this.handleShowDelete} />
-                  <Button text="确认" onClick={this.handleCheckDelete} />
-                </div>
-              </div>
-            </div>
-          )
-        }
-
       </div>
     );
   }
-  // 下拉框选择
-  private onSelletCallback = (item) =>
-  {
-    // todo
+  // 邮箱输入
+  private handleToEmailChange = (ev:React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
-      identityValue: item.id
+      emailInput:ev.target.value.trim(),
+      emailEnter:0
     })
-  }
-  // 打开新增成员弹框
-  private handleShowAddBox = () =>
-  {
-    this.setState({
-      showAdd: !this.state.showAdd
-    })
-  }
-  // 打开删除成员弹框
-  private handleShowDelete = () =>
-  {
-    this.setState({
-      showDelete: !this.state.showDelete
-    })
-  }
-  // 确认删除
-  private handleCheckDelete = () =>
-  {
-    this.handleShowDelete();
+    this.checkEmail(ev.target.value.trim())
   }
 
+  private handleToWebChange = (ev:React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      webInput:ev.target.value.trim()
+    })
+  }
+  private handleToCommunChange = (ev:React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      communityInput:ev.target.value.trim()
+    })
+  }
+  private handleToSaveStepThree = async ()=>{
+    const res = this.checkInputStatus();
+    if (!res)
+    {
+      return
+    }
+
+    const content: string[] = [
+      this.props.common.userId,
+      this.props.common.token,
+      this.props.createproject.createContent.projId,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      this.state.emailInput,
+      this.state.webInput,
+      this.state.communityInput
+    ]
+    const creatResult = await this.props.createproject.modifyProject(content);
+    console.log(creatResult)
+  }
+  private checkInputStatus = () =>
+  {
+    if (!this.state.emailInput)
+    {
+      this.setState({
+        emailEnter:2
+      })
+      return false
+    }
+    return true
+  }
+  // 邮箱验证
+  private checkEmail = (str:string) => {
+    const re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,10}$/; 
+    if (re.test(str)) {
+      this.setState({
+        emailEnter:0
+      })
+    } else {
+      this.setState({
+        emailEnter:1
+      })
+    }
+  }
 }
 
 export default injectIntl(StepThree);

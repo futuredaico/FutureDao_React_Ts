@@ -16,11 +16,11 @@ import { ICreateProjectProps } from './interface/createproject.interface';
 @observer
 class StepTwo extends React.Component<ICreateProjectProps, any> {
   public state = {
-    imageUrl: null,
+    imageUrl: this.props.createproject.createContent.videoBriefUrl,
     loading: false,
-    projDetail: '', // 文本编辑内容
-    projectDetails:'',
-    detailEnter:false,
+    projDetail: this.props.createproject.createContent.projDetail, // 文本编辑内容
+    projectDetails: this.props.createproject.createContent.projDetail,
+    detailEnter: false,
   };
   public render()
   {
@@ -58,11 +58,11 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
           <div style={{ width: 750, height: 374 }}>
             <Editor
               onChange={this.onChangeEditorValue}
-              value={this.state.projDetail}
-              className={this.state.detailEnter?"err-active":''}
+              value={this.state.projectDetails}
+              className={this.state.detailEnter ? "err-active" : ''}
             />
             {
-            this.state.detailEnter && <span className="err-span">填写本栏信息</span>
+              this.state.detailEnter && <span className="err-span">填写本栏信息</span>
             }
           </div>
         </div>
@@ -99,57 +99,49 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     {
       this.setState({
         projDetail: BraftEditor.createEditorState(value).toHTML(),
-        projectDetails: text,
-        detailEnter:false
-      }, () =>
-        {
-          console.log(this.state.projectDetails)
-        })
+        projectDetails: BraftEditor.createEditorState(value),
+        detailEnter: false
+      })
     }
   }
-  private handleToSaveDetail= async ()=>{
+  private handleToSaveDetail = async () =>
+  {
     //
     const res = this.checkInputStatus();
     if (!res)
     {
       return
     }
-    // 区分是新建项目还是管理项目
-    const params = this.props.match.params;
-    const purpose = params["purpose"];
-    if (purpose === 'create')
-    {
-      const content:string[]=[
-        this.props.common.userId,
-        this.props.common.token,
-        // this.createContent.projId,
-        "daff2aed2b0647b351e24384e2086314",
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',// todo 暂时没有
-        this.state.projDetail,
-        '',
-        '',
-        ''
-      ]
-      const creatResult = await this.props.createproject.modifyProject(content);
-      if (creatResult)
-      {
-        this.props.createproject.step = 3;
-        this.props.createproject.stepOneStatus = 2;
-        this.props.createproject.stepTwoStatus = 2;
-        this.props.createproject.stepThreeStatus = 1;
-        window.scrollTo(0, 0)
-        this.props.history.push('/createproject/'+this.props.createproject.createContent.projId)
-      }
 
+    const content: string[] = [
+      this.props.common.userId,
+      this.props.common.token,
+      this.props.createproject.createContent.projId,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',// todo 暂时没有
+      this.state.projDetail,
+      '',
+      '',
+      ''
+    ]
+    const creatResult = await this.props.createproject.modifyProject(content);
+    if (creatResult)
+    {
+      this.props.createproject.step = 3;
+      this.props.createproject.stepOneStatus = 2;
+      this.props.createproject.stepTwoStatus = 2;
+      this.props.createproject.stepThreeStatus = 1;
+      window.scrollTo(0, 0)
     }
   }
-  private checkInputStatus = ()=>{
-    if(!this.state.projDetail){
+  private checkInputStatus = () =>
+  {
+    if (!this.state.projDetail)
+    {
       return false
     }
     return true
