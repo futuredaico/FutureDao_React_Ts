@@ -10,14 +10,25 @@ import { Input } from 'antd';
 import Select from '@/components/select';
 import { ICreateProjectProps, ITeamList, IMemberList } from './interface/createproject.interface'
 
+type Identity = 'admin' | 'member';
+interface IState {
+    identityValue: Identity,
+    showAdd: boolean, // 是否显示添加成员弹框
+    showDelete: boolean, // 是否显示删除成员弹框
+    inviteStr: string, // 想要邀请人的邮箱
+    isSearching: boolean,// 是否正在搜索
+    selectMember: IMemberList | null // 已经选择的成员
+}
+
 @observer
-class CreateProject extends React.Component<ICreateProjectProps, any> {
-    public state = {
+class CreateProject extends React.Component<ICreateProjectProps, IState> {
+    public state: IState = {
         identityValue: 'admin',
         showAdd: false, // 是否显示添加成员弹框
         showDelete: false, // 是否显示删除成员弹框
         inviteStr: '', // 想要邀请人的邮箱
         isSearching: false,// 是否正在搜索
+        selectMember: null // 已经选择的成员
     }
     // 下拉筛选
     private identityOptions = [
@@ -30,13 +41,11 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
             name: '成员',
         }
     ]
-    public componentDidMount()
-    {
+    public componentDidMount() {
         // 区分是新建项目还是管理项目
         this.props.createproject.getTeamList();
     }
-    public render()
-    {
+    public render() {
         // const oneClassName = classnames('step-tab',
         //     { 'edit-tab': this.props.createproject.step === 1 },
         //     { 'success-tab': this.props.createproject.stepOneStatus === 2 }
@@ -57,12 +66,11 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
                             <span className="table-th">管理</span>
                         </li>
                         {
-                            this.props.createproject.teamList.map((item: ITeamList, index) =>
-                            {
+                            this.props.createproject.teamList.map((item: ITeamList, index) => {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
-                                            <img src={item.headIconUrl.replace('temp_','')} alt="" className="people-img" />
+                                            <img src={item.headIconUrl.replace('temp_', '')} alt="" className="people-img" />
                                             <span className="peo-name">{item.username}</span>
                                         </span>
                                         {
@@ -119,11 +127,10 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
                                                         )
                                                     }
                                                     {
-                                                        this.props.createproject.searchList.length > 0 && this.props.createproject.searchList.map((item: IMemberList, index) =>
-                                                        {
+                                                        this.props.createproject.searchList.length > 0 && this.props.createproject.searchList.map((item: IMemberList, index) => {
                                                             return (
-                                                                <li key={index}>
-                                                                    <img src={item.headIconUrl.replace('temp_','')} alt="" />
+                                                                <li key={index} onClick={this.handleSelectUser.bind(this, item)}>
+                                                                    <img src={item.headIconUrl.replace('temp_', '')} alt="" />
                                                                     <span className="name-text">{item.username}</span>
                                                                     <span>{item.email}</span>
                                                                 </li>
@@ -135,7 +142,7 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
                                         )
                                     }
                                 </div>
-                                <Button text="邀请" btnSize="bg-btn" />
+                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} />
                             </div>
                         </div>
                     )
@@ -156,53 +163,64 @@ class CreateProject extends React.Component<ICreateProjectProps, any> {
             </>
         );
     }
+    private handleSelectUser = (item: IMemberList) => {
+        this.setState({
+            inviteStr: item.email,
+            isSearching: false,
+            selectMember: item
+        })
+    }
+
+    private handleInviteMemeber = () => {
+        if (!this.state.selectMember) {
+            return false;
+        }
+
+        this.props.createproject.inviteMember(this.state.selectMember.userId)
+
+        return true;
+    }
     // 邀请成员输入
-    private handleToEmailSearch = (ev: React.ChangeEvent<HTMLInputElement>) =>
-    {
+    private handleToEmailSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
         //
         this.setState({
             inviteStr: ev.target.value.trim(),
             isSearching: true
         })
-        if (!ev.target.value)
-        {
+        if (!ev.target.value) {
             this.setState({
                 isSearching: false
             })
-        } else
-        {
+        } else {
             this.searchMember(ev.target.value.trim());
         }
     }
-    private searchMember = (email: string) =>
-    {
+    private searchMember = (email: string) => {
         this.props.createproject.searchMemberList(email)
     }
     // 下拉框选择
-    private onSelletCallback = (item: ITeamList) =>
-    {
+    private onSelletCallback = (item: ITeamList, opt: any) => {
+        console.log(item);
+        console.log(opt)
         // todo
         // this.setState({
         //     identityValue: item.id
         // })
     }
     // 打开新增成员弹框
-    private handleShowAddBox = () =>
-    {
+    private handleShowAddBox = () => {
         this.setState({
             showAdd: !this.state.showAdd
         })
     }
     // 打开删除成员弹框
-    private handleShowDelete = () =>
-    {
+    private handleShowDelete = () => {
         this.setState({
             showDelete: !this.state.showDelete
         })
     }
     // 确认删除
-    private handleCheckDelete = () =>
-    {
+    private handleCheckDelete = () => {
         this.handleShowDelete();
     }
 }

@@ -19,11 +19,10 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     imageUrl: this.props.createproject.createContent.videoBriefUrl,
     loading: false,
     projDetail: this.props.createproject.createContent.projDetail, // 文本编辑内容
-    projectDetails: this.props.createproject.createContent.projDetail,
+    projectDetails: BraftEditor.createEditorState(this.props.createproject.createContent.projDetail),
     detailEnter: false,
   };
-  public render()
-  {
+  public render() {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -32,6 +31,8 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       </div>
     );
     const imageUrl = this.state.imageUrl;
+
+    console.log(this.props.createproject.createContent.projDetail)
     return (
       <div className="steptwo-page">
         <div className="inline-title">
@@ -73,16 +74,13 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     );
   }
   // 限制图片上传大小与格式
-  private beforeUpload(file: RcFile)
-  {
-    if (file.size / 1024 / 1024 < 3)
-    {
+  private beforeUpload(file: RcFile) {
+    if (file.size / 1024 / 1024 < 3) {
       return false;
     }
     // todo commonStore
     const res = commonStore.uploadFile(file);
-    if (res)
-    {
+    if (res) {
       this.setState({
         imageUrl: res['url']
       })
@@ -90,13 +88,11 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     return false;
   }
   // 文本框的输入
-  private onChangeEditorValue = (value: any) =>
-  {
+  private onChangeEditorValue = (value: any) => {
 
     // todo
     const text = value.toText()
-    if (text !== "")
-    {
+    if (text !== "") {
       this.setState({
         projDetail: BraftEditor.createEditorState(value).toHTML(),
         projectDetails: BraftEditor.createEditorState(value),
@@ -104,12 +100,10 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       })
     }
   }
-  private handleToSaveDetail = async () =>
-  {
+  private handleToSaveDetail = async () => {
     //
     const res = this.checkInputStatus();
-    if (!res)
-    {
+    if (!res) {
       return
     }
 
@@ -129,8 +123,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       ''
     ]
     const creatResult = await this.props.createproject.modifyProject(content);
-    if (creatResult)
-    {
+    if (creatResult) {
       this.props.createproject.step = 3;
       this.props.createproject.stepOneStatus = 2;
       this.props.createproject.stepTwoStatus = 2;
@@ -138,10 +131,8 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       window.scrollTo(0, 0)
     }
   }
-  private checkInputStatus = () =>
-  {
-    if (!this.state.projDetail)
-    {
+  private checkInputStatus = () => {
+    if (!this.state.projDetail) {
       return false
     }
     return true
