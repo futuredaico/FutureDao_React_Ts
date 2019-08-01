@@ -37,6 +37,9 @@ export interface ICreateContent {
   connectEmail:string,
   officialWeb:string,  
   community:string,
+  projState:string,
+  projSubState:string,
+  role:string
 }
 
 export interface IMemberList {
@@ -47,6 +50,7 @@ export interface IMemberList {
 }
 
 export interface ITeamList {
+  userId:string,
   username:string,
   headIconUrl:string,
   role:string,// admin或member

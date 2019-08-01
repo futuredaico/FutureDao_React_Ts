@@ -48,6 +48,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       name: '其他',
     }
   ]
+
   public render()
   {
     const uploadButton = (
@@ -122,7 +123,12 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
           }
         </div>
         <div className="inline-btn">
-          <Button text="创建项目并继续" btnSize="bg-btn" onClick={this.handleToCreateProject} />
+          <Button
+            text="创建项目并继续"
+            btnSize="bg-btn"
+            onClick={this.handleToCreateProject}
+            btnColor={(!this.state.nameValue||!this.state.titleValue||!this.state.textareaValue)?'gray-btn':''}
+          />
         </div>
       </div >
     );
@@ -205,7 +211,10 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         projDetail: '',
         connectEmail: '',
         officialWeb: '',
-        community: ''
+        community: '',
+        projState: 'reading',
+        projSubState: 'init',
+        role:'admin'
       }
       const crestResult = await this.props.createproject.createProject();
       if (crestResult)
@@ -215,9 +224,10 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.createproject.stepTwoStatus = 3;
         this.props.createproject.stepThreeStatus = 3;
         window.scrollTo(0, 0);
-        this.props.history.push('/createproject/'+this.props.createproject.createContent.projId);
+        this.props.history.push('/createproject/' + this.props.createproject.createContent.projId);
       }
-    }else{
+    } else
+    {
       const content: string[] = [
         this.props.common.userId,
         this.props.common.token,

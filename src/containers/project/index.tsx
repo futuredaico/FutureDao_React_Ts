@@ -9,54 +9,51 @@ import CreateProject from './createproject';
 import UpdateProject from './updateproject';
 import { IProjectProps } from './interface/project.interface';
 import Button from '@/components/Button';
+import classnames from 'classnames';
+import { ProjectState, ProjSubState } from '@/store/interface/common.interface';
 
-@inject('project', 'createproject','common')
+@inject('project', 'createproject', 'common', 'updateproject')
 @observer
 class Project extends React.Component<IProjectProps, any> {
-    public menuList = [
-        {
-            key: 1,
-            name: "编辑项目资料",
-        },
-        {
-            key: 2,
-            name: "发布更新"
-        },
-        {
-            key: 3,
-            name: "启动融资"
-        },
-        {
-            key: 4,
-            name: "删除项目"
-        },
-    ]
+
     public state = {
         showDeletProject: false,
     }
-    
+
+    public componentDidMount(){
+        console.log(this.props.createproject.createContent)
+    }
     public render()
     {
+        const createClassName = classnames('menu-li',
+            { 'li-active': this.props.project.menuNum === 1 ? true : false }
+        );
+        const updateClassName = classnames('menu-li',
+            { 'li-active': this.props.project.menuNum === 2 ? true : false },
+            { 'li-notallow': (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing) ? true : false }
+        );
+        const beginClassName = classnames('menu-li',
+            { 'li-active': this.props.project.menuNum === 3 ? true : false },
+            { 'li-notallow': true }
+        );
+        const deleteClassName = classnames('menu-li',
+            { 'li-active': this.props.project.menuNum === 4 },
+            { 'li-notallow': this.props.createproject.createContent.role!=='admin'  ? true : false}
+        );
         return (
             <div className="create-page">
                 {this.props.createproject.step !== 1 && (
                     <div className="create-left-menu">
                         <div className="left-menu-title">
-                            <h2 className="h2-title">我是项目名称</h2>
-                            <img src={require("@/img/back.png")} alt="" className="back-img" />
+                            <h2 className="h2-title">我是项目名称 <img src={require("@/img/back.png")} alt="" className="back-img" onClick={this.handleGoBackPersonMenager} /></h2>
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
-                                {
-                                    this.menuList.map((item, index) =>
-                                    {
-                                        return (
-                                            <li className={this.props.project.menuNum === item.key ? "menu-li li-active" : "menu-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
-                                                {item.name}
-                                            </li>
-                                        )
-                                    })
-                                }
+                                <li className={createClassName} onClick={this.mapUnderline.bind(this, 1)}>编辑项目资料</li>
+                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, 2)}>发布更新</li>
+                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, 3)}>启动融资</li>
+                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, 4)}>删除项目</li>
+
                             </ul>
                         </div>
                     </div>
@@ -88,21 +85,43 @@ class Project extends React.Component<IProjectProps, any> {
         );
     }
     // 菜单选择
-    private mapUnderline = (item) =>
+    private mapUnderline = (num: number) =>
     {
-        this.props.project.menuNum = item.key
-        if(item.key === 4){
-            this.handleShowDeleteProject();
+        if (num === 2 && (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing))
+        {
+            return false;
         }
+        if (num === 3)
+        {
+            return false;
+        }
+        if(num===4&&this.props.createproject.createContent.role!=='admin'){
+            return false
+        }else if (num === 4)
+        {
+            this.handleShowDeleteProject();
+            return true;
+        }
+        this.props.project.menuNum = num
+        return true;
     }
-    private handleShowDeleteProject = () => {
+    // 显示删除项目弹框
+    private handleShowDeleteProject = () =>
+    {
         this.setState({
-            showDeletProject:!this.state.showDeletProject
+            showDeletProject: !this.state.showDeletProject
         })
     }
-    private handleCheckDelete = () => {
+    // 确认删除
+    private handleCheckDelete = () =>
+    {
         // todo
         this.handleShowDeleteProject();
+    }
+    // 跳到我的项目-管理中页面
+    private handleGoBackPersonMenager = () =>
+    {
+        this.props.history.push('/personalcenter')
     }
 }
 

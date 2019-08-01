@@ -103,3 +103,11 @@ export const modifyRole = (userId:string,token:string,projId:string,memberId:str
     }
     return request(opts);
 }
+export const sendUpdate = (userId:string,token:string,projId:string,updateTitle:string,updateDetail:string) =>
+{
+    const opts = {
+        method: 'createUpdate',
+        params: [userId,token,projId,updateTitle,updateDetail]
+    }
+    return request(opts);
+}

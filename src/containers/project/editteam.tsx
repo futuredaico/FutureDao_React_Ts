@@ -7,45 +7,67 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
-import Select from '@/components/select';
+// import Select from '@/components/select';
 import { ICreateProjectProps, ITeamList, IMemberList } from './interface/createproject.interface'
 
 type Identity = 'admin' | 'member';
-interface IState {
+interface IState
+{
     identityValue: Identity,
     showAdd: boolean, // 是否显示添加成员弹框
     showDelete: boolean, // 是否显示删除成员弹框
     inviteStr: string, // 想要邀请人的邮箱
     isSearching: boolean,// 是否正在搜索
     selectMember: IMemberList | null // 已经选择的成员
+    isCanInvite: boolean, // 是否可以邀请成员
 }
 
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public state: IState = {
         identityValue: 'admin',
-        showAdd: false, // 是否显示添加成员弹框
-        showDelete: false, // 是否显示删除成员弹框
-        inviteStr: '', // 想要邀请人的邮箱
-        isSearching: false,// 是否正在搜索
-        selectMember: null // 已经选择的成员
+        showAdd: false,
+        showDelete: false,
+        inviteStr: '',
+        isSearching: false,
+        selectMember: null,
+        isCanInvite: false
     }
     // 下拉筛选
-    private identityOptions = [
-        {
-            id: 'admin',
-            name: '管理',
-        },
-        {
-            id: 'member',
-            name: '成员',
-        }
-    ]
-    public componentDidMount() {
+    // private identityOptions = [
+    //     {
+    //         id: 'admin',
+    //         name: '管理',
+    //     },
+    //     {
+    //         id: 'member',
+    //         name: '成员',
+    //     }
+    // ]
+    public async componentDidMount()
+    {
         // 区分是新建项目还是管理项目
-        this.props.createproject.getTeamList();
+        await this.props.createproject.getTeamList();
+        this.props.createproject.teamList.forEach((item: ITeamList, index) =>
+        {
+            if (item.userId === this.props.common.userId)
+            {
+                if (item.role === 'admin')
+                {
+                    this.setState({
+                        isCanInvite: true
+                    })
+                } else
+                {
+                    this.setState({
+                        isCanInvite: false
+                    })
+                }
+            }
+        })
     }
-    public render() {
+    public render()
+    {
         // const oneClassName = classnames('step-tab',
         //     { 'edit-tab': this.props.createproject.step === 1 },
         //     { 'success-tab': this.props.createproject.stepOneStatus === 2 }
@@ -66,7 +88,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                             <span className="table-th">管理</span>
                         </li>
                         {
-                            this.props.createproject.teamList.map((item: ITeamList, index) => {
+                            this.props.createproject.teamList.map((item: ITeamList, index) =>
+                            {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
@@ -82,28 +105,46 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         {
                                             item.authenticationState === 'company' && <span className="table-td gray-color">企业认证</span>
                                         }
-
-                                        {/* <span className="table-td admin-color">管理</span> */}
-                                        <span className="table-td">
+                                        {
+                                            item.role === 'admin' ? (
+                                                <>
+                                                    <span className="table-td admin-color">管理</span>
+                                                    <span className="table-td" />
+                                                </>
+                                            )
+                                                : (
+                                                    <>
+                                                        <span className="table-td">成员</span>
+                                                        <span className="table-td">
+                                                            {
+                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete} />
+                                                            }                                                            
+                                                        </span>
+                                                    </>
+                                                )
+                                        }
+                                        {/* <span className="table-td">
                                             <Select
                                                 defaultValue={item.role}
                                                 options={this.identityOptions}
                                                 text=''
                                                 onCallback={this.onSelletCallback.bind(this, item)}
                                             />
-                                        </span>
-                                        <span className="table-td">
-                                            <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete} />
-                                        </span>
+                                        </span> */}
                                     </li>
                                 )
                             })
                         }
                     </ul>
                 </div>
-                <div className="inline-enter-btn">
-                    <Button text="+ 邀请新成员" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
-                </div>
+                {
+                    this.state.isCanInvite && (
+                        <div className="inline-enter-btn">
+                            <Button text="+ 邀请新成员" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
+                        </div>
+                    )
+                }
+
                 {
                     this.state.showAdd && (
                         <div className="invite-people-wrapper">
@@ -127,7 +168,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                         )
                                                     }
                                                     {
-                                                        this.props.createproject.searchList.length > 0 && this.props.createproject.searchList.map((item: IMemberList, index) => {
+                                                        this.props.createproject.searchList.length > 0 && this.props.createproject.searchList.map((item: IMemberList, index) =>
+                                                        {
                                                             return (
                                                                 <li key={index} onClick={this.handleSelectUser.bind(this, item)}>
                                                                     <img src={item.headIconUrl.replace('temp_', '')} alt="" />
@@ -163,7 +205,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             </>
         );
     }
-    private handleSelectUser = (item: IMemberList) => {
+    private handleSelectUser = (item: IMemberList) =>
+    {
         this.setState({
             inviteStr: item.email,
             isSearching: false,
@@ -171,56 +214,67 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         })
     }
 
-    private handleInviteMemeber = () => {
-        if (!this.state.selectMember) {
+    private handleInviteMemeber = () =>
+    {
+        if (!this.state.selectMember)
+        {
             return false;
         }
 
-        this.props.createproject.inviteMember(this.state.selectMember.userId)
-
+        this.props.createproject.inviteMember(this.state.selectMember.userId);
         return true;
     }
     // 邀请成员输入
-    private handleToEmailSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    private handleToEmailSearch = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
         //
         this.setState({
             inviteStr: ev.target.value.trim(),
             isSearching: true
         })
-        if (!ev.target.value) {
+        if (!ev.target.value)
+        {
             this.setState({
                 isSearching: false
             })
-        } else {
+        } else
+        {
             this.searchMember(ev.target.value.trim());
         }
     }
-    private searchMember = (email: string) => {
+    private searchMember = (email: string) =>
+    {
         this.props.createproject.searchMemberList(email)
     }
     // 下拉框选择
-    private onSelletCallback = (item: ITeamList, opt: any) => {
-        console.log(item);
-        console.log(opt)
-        // todo
-        // this.setState({
-        //     identityValue: item.id
-        // })
-    }
+    // private onSelletCallback = (item: ITeamList, opt: any) => {
+    //     console.log(item);
+    //     console.log(opt)
+    //     // todo
+    //     // this.setState({
+    //     //     identityValue: item.id
+    //     // })
+    // }
     // 打开新增成员弹框
-    private handleShowAddBox = () => {
+    private handleShowAddBox = () =>
+    {
         this.setState({
-            showAdd: !this.state.showAdd
+            showAdd: !this.state.showAdd,
+            inviteStr: '',
+            isSearching: false,
+            selectMember: null
         })
     }
     // 打开删除成员弹框
-    private handleShowDelete = () => {
+    private handleShowDelete = () =>
+    {
         this.setState({
             showDelete: !this.state.showDelete
         })
     }
     // 确认删除
-    private handleCheckDelete = () => {
+    private handleCheckDelete = () =>
+    {
         this.handleShowDelete();
     }
 }

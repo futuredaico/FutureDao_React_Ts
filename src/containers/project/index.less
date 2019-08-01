@@ -1,6 +1,7 @@
 .create-page{
     background: #fff;
     display: flex;
+    min-height: 688px;
     .create-left-menu{        
         width: 300px;
         background: @bg-f6;
@@ -11,7 +12,7 @@
             .back-img{
                 float: right; 
                 width: 20px;
-                margin-top: -45px;              
+                margin-top: 15px;              
             }
         }
         .left-menu-list{
@@ -22,12 +23,17 @@
                     height: 54px;
                     line-height: 54px;
                     padding-left: 30px;
+                    cursor: pointer;
                     &.li-active{
                         color: #333;
                         background:@bg-fd;
                     }
                     &:last-child{
                         color: @t-f13;
+                    }
+                    &.li-notallow{
+                        color: @t-b2;
+                        cursor: not-allowed;
                     }
                 }
             }
@@ -232,6 +238,7 @@
                         height: 30px;
                         margin-right: 10px;
                         vertical-align: middle;
+                        border-radius: 50%;
                     }
                     .peo-name{
                         vertical-align: middle;

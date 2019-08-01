@@ -20,7 +20,10 @@ class CreateProject
     projDetail: '',
     connectEmail: '',
     officialWeb: '',
-    community: ''
+    community: '',
+    projState:'reading',
+    projSubState:'init',
+    role:''
   }
   @observable public searchList:IMemberList[] = []; // 查询成员列表
   @observable public teamList:ITeamList[] = []; // 项目成员列表
@@ -100,7 +103,7 @@ class CreateProject
     {
       return false
     }
-    this.createContent = result[0].data[0];
+    this.createContent = result[0].data;
     this.stepOneStatus=2;
     this.stepTwoStatus=3;
     this.stepThreeStatus=3;
