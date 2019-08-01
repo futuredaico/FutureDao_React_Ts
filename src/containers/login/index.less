@@ -1,162 +1,190 @@
+.load-page {
+  background: #fff;
+  width: 100%;
+  /* autoprefixer: off */
+  height: -webkit-fill-available;
+  position: relative;
 
-.load-page{
-    background: #fff;
-    width: 100%;
-    height: -webkit-fill-available;
-    position: relative;
-    .load-box{
-        width: 870px;
-        height: 500px;
-        background: #FFFFFF;
-        box-shadow: 0 0 30px 0 rgba(217,217,217,0.50);
-        border-radius: 5px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        z-index: 5;
-        margin-left: -435px;
-        margin-top: -250px;
-        .load-img{
-            width:333px;
-            height: 500px;
-            display: inline-block;
-            vertical-align: top;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .load-content{
-            display: inline-block;
-            vertical-align: top;
-            width: 537px;
-            .future-logo{
-                margin: 0 auto;
-                width: 162px;
-                margin-top: 60px;
-                margin-bottom: 60px;
-                img{
-                    height: 30px;
-                }
-            }
-        }
-    }
-    .bg-img{
-        width: 580px;
-        height: 580px;
-        background: url('../../img/blocks.png') no-repeat;
-        background-size: cover;
-    }
-    .bg1{        
-        position: fixed;
-        top: -150px;
-        left: -80px;
-        z-index: 1;
-        transform: rotateZ(25deg);
-    }
-    .bg2{        
-        position: fixed;
-        bottom: -230px;
-        left: -25px;
-        z-index: 1;
-        transform: rotateZ(-30deg);
-    }
-    .bg3{        
-        position: fixed;
-        bottom: -60px;
-        right: -190px;
-        z-index: 1;
-        transform: rotateZ(25deg);
-    }
-}
-.normal-wrapper{
-    padding: 0 40px;
-    .ant-input{
-        height: 44px;
-        margin-bottom: 30px;        
-    }
-    .ant-input-affix-wrapper{
-        .ant-input-suffix{
-            position: absolute;
-            top:23px;
-            right: 12px;
-        }
-    }
-    
-    .red-input{
-        border: 1px solid @bg-f25;
-    }
-    .red-password{
-        .ant-input{
-            border: 1px solid @bg-f25;
-        }
-    }
-    .normal-button{
+  .load-box {
+    width: 870px;
+    height: 500px;
+    background: #FFFFFF;
+    box-shadow: 0 0 30px 0 rgba(217, 217, 217, 0.50);
+    border-radius: 5px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    margin-left: -435px;
+    margin-top: -250px;
+
+    .load-img {
+      width: 333px;
+      height: 500px;
+      display: inline-block;
+      vertical-align: top;
+
+      img {
         width: 100%;
-        height: 44px;
-        line-height: 44px;
-        margin-top: 20px;
+        height: 100%;
+      }
     }
-    .gray-text-wrapper{
-        margin-top: 70px;
-        text-align: center;
-    }
-    .gray-text{
-        font-size: 12px;
-        color: @t-9b !important;
-        display: inline-block;
-        margin-bottom: 10px;
-        cursor: pointer;
-        &:hover{
-            color: @t-purple !important;
-            text-decoration: underline;
+
+    .load-content {
+      display: inline-block;
+      vertical-align: top;
+      width: 537px;
+
+      .future-logo {
+        margin: 0 auto;
+        width: 162px;
+        margin-top: 60px;
+        margin-bottom: 60px;
+
+        img {
+          height: 30px;
         }
+      }
     }
-    label{
-        position: relative;
-        .err-msg{
-            color: @t-b2;
-            font-size: 12px;
-            position: absolute;
-            top: 35px;
-            left: 15px;
-            img{
-                width: 14px;
-                margin-right: 5px;   
-                margin-top: -2px;        
-            }
-        }
-    } 
+  }
+
+  .bg-img {
+    width: 580px;
+    height: 580px;
+    background: url('../../img/blocks.png') no-repeat;
+    background-size: cover;
+  }
+
+  .bg1 {
+    position: fixed;
+    top: -150px;
+    left: -80px;
+    z-index: 1;
+    transform: rotateZ(25deg);
+  }
+
+  .bg2 {
+    position: fixed;
+    bottom: -230px;
+    left: -25px;
+    z-index: 1;
+    transform: rotateZ(-30deg);
+  }
+
+  .bg3 {
+    position: fixed;
+    bottom: -60px;
+    right: -190px;
+    z-index: 1;
+    transform: rotateZ(25deg);
+  }
 }
-.signin-wrapper{
-    .gray-text-wrapper{
-        margin-top: 20px;
+
+.normal-wrapper {
+  padding: 0 40px;
+
+  .ant-input {
+    height: 44px;
+    margin-bottom: 30px;
+  }
+
+  .ant-input-affix-wrapper {
+    .ant-input-suffix {
+      position: absolute;
+      top: 23px;
+      right: 12px;
     }
+  }
+
+  .red-input {
+    border: 1px solid @bg-f25;
+  }
+
+  .red-password {
+    .ant-input {
+      border: 1px solid @bg-f25;
+    }
+  }
+
+  .normal-button {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    margin-top: 20px;
+  }
+
+  .gray-text-wrapper {
+    margin-top: 70px;
+    text-align: center;
+  }
+
+  .gray-text {
+    font-size: 12px;
+    color: @t-9b  !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: @t-purple  !important;
+      text-decoration: underline;
+    }
+  }
+
+  label {
+    position: relative;
+
+    .err-msg {
+      color: @t-b2;
+      font-size: 12px;
+      position: absolute;
+      top: 35px;
+      left: 15px;
+
+      img {
+        width: 14px;
+        margin-right: 5px;
+        margin-top: -2px;
+      }
+    }
+  }
 }
-.forget-wrapper{    
-    .normal-button{
-        margin-top: 30px;
+
+.signin-wrapper {
+  .gray-text-wrapper {
+    margin-top: 20px;
+  }
+}
+
+.forget-wrapper {
+  .normal-button {
+    margin-top: 30px;
+  }
+
+  .red-btn {
+    margin-top: 20px;
+  }
+
+  .forget-tips {
+    background: @bg-f6;
+    border-radius: 3px;
+    font-size: 14px;
+    color: @t-b2;
+    line-height: 20px;
+    padding: 30px 15px;
+    margin-bottom: 20px;
+
+    p {
+      margin-bottom: 0;
+
+      &:first-child {
+        margin-bottom: 15px;
+      }
+
+      a {
+        text-decoration: underline;
+        color: @t-purple  !important;
+      }
     }
-    .red-btn{
-        margin-top: 20px;
-    }
-    .forget-tips{
-        background: @bg-f6;
-        border-radius: 3px;
-        font-size: 14px;
-        color: @t-b2;
-        line-height: 20px;
-        padding: 30px 15px;
-        margin-bottom: 20px;
-        p{
-            margin-bottom: 0;
-            &:first-child{
-                margin-bottom: 15px;
-            }
-            a{
-                text-decoration: underline;
-                color: @t-purple !important;
-            }
-        }
-    }
+  }
 }
