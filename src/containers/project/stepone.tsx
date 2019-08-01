@@ -49,8 +49,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     }
   ]
 
-  public render()
-  {
+  public render() {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -127,15 +126,14 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
             text="创建项目并继续"
             btnSize="bg-btn"
             onClick={this.handleToCreateProject}
-            btnColor={(!this.state.nameValue||!this.state.titleValue||!this.state.textareaValue)?'gray-btn':''}
+            btnColor={(!this.state.nameValue || !this.state.titleValue || !this.state.textareaValue) ? 'gray-btn' : ''}
           />
         </div>
       </div >
     );
   }
   // 项目名称
-  private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     //
     this.setState({
       nameValue: ev.target.value,
@@ -143,8 +141,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 项目标题
-  private handleToChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleToChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     //
     this.setState({
       titleValue: ev.target.value,
@@ -152,24 +149,20 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 下拉框选择
-  private onSelletCallback = (item) =>
-  {
+  private onSelletCallback = (item) => {
     // todo
     this.setState({
       typeValue: item.id
     })
   }
   // 限制图片上传大小与格式
-  private beforeUpload(file: RcFile)
-  {
-    if (file.size / 1024 / 1024 < 3)
-    {
+  private beforeUpload(file: RcFile) {
+    if (file.size / 1024 / 1024 < 3) {
       return false;
     }
     // todo commonStore
     const res = commonStore.uploadFile(file);
-    if (res)
-    {
+    if (res) {
       this.setState({
         imageUrl: res['url'],
         imgEnter: false
@@ -178,8 +171,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     return false;
   }
   // 获取项目简介的输入字数
-  private handleGetLength = (e) =>
-  {
+  private handleGetLength = (e) => {
     const str = e.target.value;
     this.setState({
       textareaValue: str,
@@ -188,18 +180,14 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 创建项目
-  private handleToCreateProject = async () =>
-  {
+  private handleToCreateProject = async () => {
     const res = this.checkInputStatus();
-    if (!res)
-    {
+    if (!res) {
       return
     }
     // 区分是新建项目还是管理项目
-    const params = this.props.match.params;
-    const projectId = params["projectId"];
-    if (projectId === 'create')
-    {
+    const projectId = this.props.match.params.projectId;
+    if (!projectId) {
       this.props.createproject.createContent = {
         projId: '',
         projName: this.state.nameValue,
@@ -214,20 +202,18 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         community: '',
         projState: 'reading',
         projSubState: 'init',
-        role:'admin'
+        role: 'admin'
       }
       const crestResult = await this.props.createproject.createProject();
-      if (crestResult)
-      {
+      if (crestResult) {
         this.props.createproject.step = 2;
         this.props.createproject.stepOneStatus = 2;
         this.props.createproject.stepTwoStatus = 3;
         this.props.createproject.stepThreeStatus = 3;
         window.scrollTo(0, 0);
-        this.props.history.push('/createproject/' + this.props.createproject.createContent.projId);
+        this.props.history.push('/project/' + this.props.createproject.createContent.projId);
       }
-    } else
-    {
+    } else {
       const content: string[] = [
         this.props.common.userId,
         this.props.common.token,
@@ -248,10 +234,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     }
   }
   // 检查填写情况
-  private checkInputStatus = () =>
-  {
-    if (!this.state.nameValue)
-    {
+  private checkInputStatus = () => {
+    if (!this.state.nameValue) {
       this.setState({
         nameEnter: true
       })
@@ -259,8 +243,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.titleValue)
-    {
+    if (!this.state.titleValue) {
       this.setState({
         titleEnter: true
       })
@@ -273,8 +256,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     //   })
     //   return false
     // }
-    if (!this.state.textareaValue)
-    {
+    if (!this.state.textareaValue) {
       this.setState({
         textareaEnter: true
       })

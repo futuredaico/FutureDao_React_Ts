@@ -16,18 +16,17 @@ import { ProjSubState } from '@/store/interface/common.interface';
 @inject('createproject', 'common')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps> {
-    public componentDidMount()
-    {
+    public state = {
+        isEdit: !!this.props.match.params.projectId
+    }
+    public componentDidMount() {
         // 区分是新建项目还是管理项目
-        const params = this.props.match.params;
-        const projectId = params["projectId"];
-        if (projectId !== 'create')
-        {
+        const projectId = this.props.match.params.projectId;
+        if (projectId) {
             this.props.createproject.getProject(projectId);
         }
     }
-    public componentWillMount()
-    {
+    public componentWillMount() {
         this.props.createproject.createContent = {
             projId: '',
             projName: '',
@@ -42,11 +41,17 @@ class CreateProject extends React.Component<ICreateProjectProps> {
             community: '',
             projState: 'reading',
             projSubState: 'init',
-            role:''
+            role: ''
         }
+        this.props.createproject.step = 1;
+        this.props.createproject.stepOneStatus = 1;
+        this.props.createproject.stepTwoStatus = 0;
+        this.props.createproject.stepThreeStatus = 0;
     }
-    public render()
-    {
+    public render() {
+        if (this.state.isEdit && !this.props.createproject.createContent.projId) {
+            return null;
+        }
         const oneClassName = classnames('step-tab',
             { 'edit-tab': this.props.createproject.step === 1 ? true : false },
             { 'success-tab': this.props.createproject.stepOneStatus === 2 ? true : false }
@@ -84,6 +89,7 @@ class CreateProject extends React.Component<ICreateProjectProps> {
                         <span className="step-span">团队信息</span>
                     </div>
                 </div>
+
                 {this.props.createproject.step === 1 && <StepOne {...this.props} />}
                 {this.props.createproject.step === 2 && <StepTwo {...this.props} />}
                 {this.props.createproject.step === 3 && <StepThree {...this.props} />}
@@ -91,19 +97,14 @@ class CreateProject extends React.Component<ICreateProjectProps> {
         );
     }
     // 编辑步骤
-    private handleEditStep = (number: number) =>
-    {
-        if (number === 2)
-        {
-            if (this.props.createproject.stepTwoStatus === 0)
-            {
+    private handleEditStep = (number: number) => {
+        if (number === 2) {
+            if (this.props.createproject.stepTwoStatus === 0) {
                 return
             }
         }
-        else if (number === 3)
-        {
-            if (this.props.createproject.stepThreeStatus === 0)
-            {
+        else if (number === 3) {
+            if (this.props.createproject.stepThreeStatus === 0) {
                 return
             }
         }

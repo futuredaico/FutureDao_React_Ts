@@ -1,7 +1,7 @@
 import asyncComponent from '@/components/asyncComponent';
 // import redirectComponent from '@/components/redirectComponent';
 
-export default [  
+export default [
   // {
   //   component: asyncComponent(() => import('../containers/address/addressinfo')),
   //   path: '/address/:address',
@@ -17,7 +17,7 @@ export default [
   {
     component: asyncComponent(() => import('../containers/login')),
     path: '/load',
-    children:[
+    children: [
       {
         component: asyncComponent(() => import('../containers/login/forget')),
         path: '/load/forgetpwd',
@@ -37,16 +37,30 @@ export default [
     ]
   },
   {
-    component: asyncComponent(()=> import('../containers/personalcenter')),
-    path:'/personalcenter'
+    component: asyncComponent(() => import('../containers/personalcenter')),
+    path: '/personalcenter',
+    // children:[
+    //   {
+    //     path:'/personalcenter/userinfo',
+    //     component: asyncComponent(() => import('../containers/personalcenter')),
+    //   },
+    //   {
+    //     path:'/personalcenter/myproject',
+    //     component: asyncComponent(() => import('../containers/personalcenter')),
+    //   }
+    // ]
   },
   {
-    component: asyncComponent(()=> import('../containers/projectinfo')),
-    path:'/projectinfo'
+    component: asyncComponent(() => import('../containers/projectinfo')),
+    path: '/projectinfo'
   },
   {
-    component: asyncComponent(()=> import('../containers/project')),
-    path:'/createproject/:projectId'
+    component: asyncComponent(() => import('../containers/project')),
+    path: '/project/:projectId'
+  },
+  {
+    component: asyncComponent(() => import('../containers/project')),
+    path: '/project'
   },
   {
     component: asyncComponent(() => import('../containers/notfound')),

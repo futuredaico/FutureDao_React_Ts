@@ -4,14 +4,14 @@ import { ICommonStore } from "@/store/interface/common.interface";
 import { IUpdateProjectStore } from "./updateproject.interface";
 
 export interface IProjectStore {
-    menuNum:number
-  }
-  
-  
-  export interface IProjectProps extends RouteComponentProps{
-    project:IProjectStore,
-    createproject:ICreateProjectStore,
-    common:ICommonStore,
-    updateproject:IUpdateProjectStore,
-    intl:any
-  }
+  menuNum: number
+}
+
+
+export interface IProjectProps extends RouteComponentProps<{ projectId: string }> {
+  project: IProjectStore,
+  createproject: ICreateProjectStore,
+  common: ICommonStore,
+  updateproject: IUpdateProjectStore,
+  intl: any
+}

@@ -8,8 +8,7 @@ import './index.less';
 import { observer } from 'mobx-react';
 import { ICommonStore } from '@/store/interface/common.interface';
 
-interface IProps
-{
+interface IProps {
   history: History,
   // locale: any,
   common: ICommonStore,
@@ -19,13 +18,12 @@ export default class Header extends React.Component<IProps, any>{
   public state = {
     showManger: false
   }
-  public render()
-  {
+  public render() {
     return (
       <header className="header-wrap header-shadow">
         <div className="header-box">
           <div className="header-menu">
-            <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>            
+            <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
               <li><Link to="/">发现项目</Link></li>
               <li>
@@ -46,7 +44,7 @@ export default class Header extends React.Component<IProps, any>{
                 (this.props.common.userInfo) && (
                   <li>
                     <div className="people-login">
-                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_','')} alt="" className="people-img" onClick={this.handleToShow} />
+                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_', '')} alt="" className="people-img" onClick={this.handleToShow} />
                       {
                         this.state.showManger && (
                           <div className="people-manager">
@@ -74,26 +72,23 @@ export default class Header extends React.Component<IProps, any>{
     );
   }
   // 创建项目
-  private handleToCreateProject = ()=>{
-    if(this.props.common.userInfo){
-      this.props.history.push('/createproject/create');
-    }else{
+  private handleToCreateProject = () => {
+    if (this.props.common.userInfo) {
+      this.props.history.push('/project');
+    } else {
       this.handleToLogin();
     }
   }
   // 登录
-  private handleToLogin = () =>
-  {
+  private handleToLogin = () => {
     this.props.history.push('/load/login');
   }
   // 注册
-  private handleToSignin = () =>
-  {
+  private handleToSignin = () => {
     this.props.history.push('/load/signin');
   }
 
-  private handleToShow = () =>
-  {
+  private handleToShow = () => {
     this.setState({
       showManger: !this.state.showManger
     })
