@@ -1,27 +1,38 @@
 /**
- * 邮箱验证
+ * 成员邀请验证
  */
 import * as React from 'react';
-// import Button from '@/components/Button';
 import './index.less';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { getQueryString } from '@/utils/function'
 import Button from '@/components/Button';
+import { IEmailCheckProps } from './interface/emailcheck.interface';
 
-
+// interface IState
+// {
+//     username: string,
+//     email: string,
+//     projId:string,
+//     code: string,
+//     verifyRes: string | null,
+//     invateStep:number
+// }
+@inject('emailcheck')
 @observer
-export default class EmailCheck extends React.Component
+export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
 {
     public state = {
-        addr: getQueryString('addr') || '',
+        username: getQueryString('username') || '',
         email: getQueryString('email') || '',
-        code: getQueryString('code') || '',
+        projId:getQueryString('projId')|| '',
+        verifyCode: getQueryString('verifyCode') || '',
+        verifyRes:null,
         invateStep: 0 // 默认，1为同意，2为拒绝
     }
-    // public componentDidMount()
-    // {
-    //     this.props.setting.verifyEmail(this.state.addr, this.state.email, this.state.code)
-    // }
+    public componentDidMount()
+    {
+        this.props.emailcheck.getProInfo(this.state.projId);
+    }
     public render()
     {
         return (
@@ -31,10 +42,10 @@ export default class EmailCheck extends React.Component
                         this.state.invateStep === 0 && (
                             <>
                                 <div className="invite-p">
-                                    <img src={require('@/img/h5.png')} alt="" className="invite-img" />
-                                    <strong>XXXXX</strong>
+                                    <img src={this.props.emailcheck.proInfo?this.props.emailcheck.proInfo.adminHeadIconUrl.replace('temp_',''):''} alt="" className="invite-img" />
+                                    <strong>{this.props.emailcheck.proInfo&&this.props.emailcheck.proInfo.adminUsername}</strong>
                                     <span>邀请你加入项目</span>
-                                    <strong>项目名称</strong>
+                                    <strong>{this.props.emailcheck.proInfo&&this.props.emailcheck.proInfo.projName}</strong>
                                     <span>的团队</span>
                                 </div>
                                 <Button text="拒绝" btnColor="red-btn" onClick={this.handleRefuse} />
@@ -64,16 +75,28 @@ export default class EmailCheck extends React.Component
             </div>
         )
     }
+    // 拒绝
     private handleRefuse = () =>
     {
+        if(!this.state.projId){
+            return false;
+        }
+        this.props.emailcheck.verifyInvify(this.state.username,this.state.email,this.state.projId,this.state.verifyCode,'0')
         this.setState({
             invateStep: 2
         })
+        return true;
     }
+    // 同意
     private handleAgree = () =>
     {
+        if(!this.state.projId){
+            return false;
+        }
+        this.props.emailcheck.verifyInvify(this.state.username,this.state.email,this.state.projId,this.state.verifyCode,'1')
         this.setState({
             invateStep: 1
         })
+        return true;
     }
 }

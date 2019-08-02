@@ -9,6 +9,7 @@ export interface ICommonStore
   token: string,
   userId: string,
   footer: boolean,
+  isVerifyEmail:boolean,
   uploadFile: (file: RcFile) => Promise<boolean>,
   loginFutureDao: (email: string, pwd: string) => Promise<boolean>,
   logoutFutureDao: () => void,
@@ -53,13 +54,19 @@ export enum CodeType
   HaveNotPermissionQueryProjInfo = "10217", // 没有权限查看项目信息
   HaveNotPermissionModifyTeamRole = "10218", // 没有权限修改成员角色
 }
-
+export enum EmailVerify{
+  detailStringEmailNotVerify = "10219",   // 邮箱未验证
+  detailStringEmailVerifying = "10220",   // 邮箱验证中
+  detailStringEmailVerifySucc = "10221", // 邮箱验证成功 
+  detailStringEmailVerifyFail = "10222", // 邮箱验证失败
+}
 export interface IUserInfo
 {
   username: string,
   email: string,
-  headIconUrl: string,
-  brief: string
+  headIconUrl: string, // 头像
+  brief: string,  // 个人简介
+  emailVerifyState:string, // 邮箱验证状态
 }
 
 export enum ProjectState

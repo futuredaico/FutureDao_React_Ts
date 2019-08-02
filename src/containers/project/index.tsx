@@ -19,10 +19,6 @@ class Project extends React.Component<IProjectProps, any> {
     public state = {
         showDeletProject: false,
     }
-
-    public componentDidMount(){
-        console.log(this.props.createproject.createContent)
-    }
     public render()
     {
         const createClassName = classnames('menu-li',

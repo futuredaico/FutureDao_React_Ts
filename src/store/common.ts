@@ -1,12 +1,10 @@
 // 存储全局变量
 import { observable, action } from 'mobx';
 import { en_US, zh_CN } from '@/language';
-import { ICommonStore, CodeType, IUserInfo } from './interface/common.interface';
+import { ICommonStore, CodeType, IUserInfo, EmailVerify } from './interface/common.interface';
 import { RcFile } from 'antd/lib/upload';
 import * as Api from './api/common.api';
 import { notification } from 'antd';
-// import web3Tool from '@/utils/web3Tool';
-// import { ICommonStore } from './interface/common.interface';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
@@ -20,6 +18,7 @@ class Common implements ICommonStore
   @observable public userInfo: IUserInfo|null = null; // 当前邮箱
   @observable public userId: string = ''; // 用户id
   @observable public token: string = ''; // 登录token
+  @observable public isVerifyEmail:boolean = false; // 是否验证过邮箱
 
   // 初始化语言
   @action public initLanguage = () =>
@@ -90,12 +89,14 @@ class Common implements ICommonStore
   {
     this.clearUserInfo();
     sessionStorage.clear();
+    window.location.href="/"
   }
   // 清空用户信息
   @action public clearUserInfo = () => {
     this.userInfo = null;
     this.userId = '';
     this.token = '';
+    this.isVerifyEmail = false;    
   }
   // 获取用户的基本信息
   @action public getUserInfo = async ()=>{
@@ -109,7 +110,12 @@ class Common implements ICommonStore
         }
         if (result[0].resultCode === CodeType.success)
         {
-            this.userInfo = result[0].data
+            this.userInfo = result[0].data;
+            if(result[0].data.emailVerifyState!==EmailVerify.detailStringEmailVerifySucc){
+              this.isVerifyEmail=true;
+            }else{
+              this.isVerifyEmail= false;
+            }
         }else{
           return false
         }
@@ -128,7 +134,7 @@ class Common implements ICommonStore
     }
   }
 
-  // 提示弹框
+  // 右上角提示弹框4.5秒消失
   @action public openNotificationWithIcon = (type:string,message:string,des:string) => {
     notification[type]({
       message: message,

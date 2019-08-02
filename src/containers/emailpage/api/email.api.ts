@@ -17,7 +17,7 @@ export const verifyRegister = (username: string, email: string, code: string) =>
     return request(opts);
 }
 /**
- * 
+ * 邀请成员
  * @param username 用户名
  * @param email 邮箱
  * @param projId 项目ID
@@ -34,6 +34,19 @@ export const verifyInvite = (username: string, email: string, projId:string,code
             projId,
             code,
             res
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 获取项目的一些信息
+ */
+export const getProInfo = ( projId:string) =>
+{
+    const opts = {
+        method: 'getProjInfo',
+        params: [
+            projId
         ]
     }
     return request(opts);

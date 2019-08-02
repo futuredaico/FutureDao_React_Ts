@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import Header from '@/containers/header';
 // import { zh_CN, en_US } from '@/language';
-import store from '@/store/common';
 import CommonStore from '@/store/common';
 import ScrollToTop from '@/components/scrolltotop';
 import './index.less';
@@ -19,18 +18,18 @@ export default class LayoutIndex extends React.Component<any, any> {
     }).isRequired
   }
   public state = {
-    lang: store.language === 'en' ? 'en' : 'zh', // zh为中，en为英
+    lang: CommonStore.language === 'en' ? 'en' : 'zh', // zh为中，en为英
   }
   // 切换语言
   public onChangeLanguage = (lang: string) => {
     if (lang === "zh") {
-      store.setLanguage('zh');
+      CommonStore.setLanguage('zh');
       sessionStorage.setItem('language', 'zh');
       this.setState({
         lang: 'zh'
       })
     } else {
-      store.setLanguage('en');
+      CommonStore.setLanguage('en');
       sessionStorage.setItem('language', 'en');
       this.setState({
         lang: 'en'
@@ -56,6 +55,7 @@ export default class LayoutIndex extends React.Component<any, any> {
             common={CommonStore}
           />
           <div className="layout-main">
+            {CommonStore.isVerifyEmail&&<div className="verify-wrapper">小提示：  我们需要验证你的电子邮件地址。请点击我们发送的邮件里的链接。  <strong className="send-email">重新发送</strong></div>}
             {this.props.children}
           </div>
           <Footer

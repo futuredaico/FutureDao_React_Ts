@@ -184,7 +184,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         )
                                     }
                                 </div>
-                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} />
+                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember?'gray-btn':''} />
                             </div>
                         </div>
                     )
@@ -205,6 +205,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             </>
         );
     }
+    // 选中成员
     private handleSelectUser = (item: IMemberList) =>
     {
         this.setState({
@@ -213,7 +214,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             selectMember: item
         })
     }
-
+    // 发送邀请
     private handleInviteMemeber = () =>
     {
         if (!this.state.selectMember)
@@ -222,6 +223,9 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         }
 
         this.props.createproject.inviteMember(this.state.selectMember.userId);
+        this.handleShowAddBox();
+        this.props.common.openNotificationWithIcon('success', '操作成功', '邀请邮件已发出。');
+        
         return true;
     }
     // 邀请成员输入
@@ -230,7 +234,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         //
         this.setState({
             inviteStr: ev.target.value.trim(),
-            isSearching: true
+            isSearching: true,
+            selectMember:null
         })
         if (!ev.target.value)
         {
@@ -242,6 +247,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             this.searchMember(ev.target.value.trim());
         }
     }
+    // 搜索成员
     private searchMember = (email: string) =>
     {
         this.props.createproject.searchMemberList(email)

@@ -44,9 +44,9 @@ export default class Header extends React.Component<IProps, any>{
                 (this.props.common.userInfo) && (
                   <li>
                     <div className="people-login">
-                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_', '')} alt="" className="people-img" onClick={this.handleToShow} />
-                      {
-                        this.state.showManger && (
+                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_', '')} alt="" className="people-img"  />
+                      {/* {
+                        this.state.showManger && ( */}
                           <div className="people-manager">
                             <div className="people-trangle">
                               <div className="trangle" />
@@ -59,8 +59,8 @@ export default class Header extends React.Component<IProps, any>{
                               </ul>
                             </div>
                           </div>
-                        )
-                      }
+                        {/* )
+                      } */}
                     </div>
                   </li>
                 )
@@ -88,20 +88,21 @@ export default class Header extends React.Component<IProps, any>{
     this.props.history.push('/load/signin');
   }
 
-  private handleToShow = () => {
-    this.setState({
-      showManger: !this.state.showManger
-    })
-  }
+  // private handleToShow = () => {
+  //   this.setState({
+  //     showManger: !this.state.showManger
+  //   })
+  // }
 
   // 进入个人中心
   private handleToPersonal = () => {
-    this.handleToShow();
+    // this.handleToShow();
     this.props.history.push('/personalcenter')
   }
   // 退出登录
   private handleToLogout = () => {
     // todo
+    this.props.common.logoutFutureDao();
   }
 }
 // export default injectIntl(Header);

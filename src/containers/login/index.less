@@ -86,6 +86,9 @@
   .ant-input {
     height: 44px;
     margin-bottom: 30px;
+    &:read-only{
+      background: @bg-f6;
+    }
   }
 
   .ant-input-affix-wrapper {
@@ -133,10 +136,10 @@
 
   label {
     position: relative;
-
     .err-msg {
       color: @t-b2;
       font-size: 12px;
+      line-height: 14px;
       position: absolute;
       top: 35px;
       left: 15px;
@@ -144,7 +147,6 @@
       img {
         width: 14px;
         margin-right: 5px;
-        margin-top: -2px;
       }
     }
   }

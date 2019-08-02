@@ -10,7 +10,7 @@ import Button from '@/components/Button';
 import { CodeType } from '@/store/interface/common.interface';
 import { IForgetProps } from './interface/forget.interface';
 // import Button from '@/components/Button';
-@inject('forget')
+@inject('forget','common')
 @observer
 class ForgetPwd extends React.Component<IForgetProps, any> {
     public state = {
