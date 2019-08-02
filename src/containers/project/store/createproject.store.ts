@@ -181,15 +181,15 @@ class CreateProject
     return true;
   }
   /**
-   * 修改成员角色
+   * 删除成员
    */
-  @action public modifyMemberRole = async (memberId:string,role:string) =>
+  @action public deleteMember = async (memberId:string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.modifyRole(common.userId,common.token,this.createContent.projId,memberId,role);
+      result = await Api.deleteMember(common.userId,common.token,this.createContent.projId,memberId);
     } catch (e)
     {
       return false;

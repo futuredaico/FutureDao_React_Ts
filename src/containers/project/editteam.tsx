@@ -20,6 +20,7 @@ interface IState
     isSearching: boolean,// 是否正在搜索
     selectMember: IMemberList | null // 已经选择的成员
     isCanInvite: boolean, // 是否可以邀请成员
+    deleteMember:IMemberList | null // 选择要删除的成员
 }
 
 @observer
@@ -31,7 +32,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         inviteStr: '',
         isSearching: false,
         selectMember: null,
-        isCanInvite: false
+        isCanInvite: false,
+        deleteMember:null
     }
     // 下拉筛选
     // private identityOptions = [
@@ -46,9 +48,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     // ]
     public async componentDidMount()
     {
-        // 区分是新建项目还是管理项目
         await this.props.createproject.getTeamList();
-        this.props.createproject.teamList.forEach((item: ITeamList, index) =>
+        this.props.createproject.teamList.forEach((item: ITeamList) =>
         {
             if (item.userId === this.props.common.userId)
             {
@@ -117,7 +118,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                         <span className="table-td">成员</span>
                                                         <span className="table-td">
                                                             {
-                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete} />
+                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this,item)} />
                                                             }                                                            
                                                         </span>
                                                     </>
@@ -195,7 +196,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                             <div className="delete-content">
                                 <div className="delete-text">确认将 XXX 移除团队？</div>
                                 <div className="delete-btn">
-                                    <Button text="取消" btnColor="red-btn" onClick={this.handleShowDelete} />
+                                    <Button text="取消" btnColor="red-btn" onClick={this.handleCancelDelete} />
                                     <Button text="确认" onClick={this.handleCheckDelete} />
                                 </div>
                             </div>
@@ -261,6 +262,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     //     //     identityValue: item.id
     //     // })
     // }
+
     // 打开新增成员弹框
     private handleShowAddBox = () =>
     {
@@ -272,16 +274,29 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         })
     }
     // 打开删除成员弹框
-    private handleShowDelete = () =>
+    private handleShowDelete = (item:IMemberList) =>
     {
         this.setState({
-            showDelete: !this.state.showDelete
+            showDelete: !this.state.showDelete,
+            deleteMember:item
+        })
+    }
+    private handleCancelDelete = () =>{
+        this.setState({
+            showDelete: !this.state.showDelete,
+            deleteMember:null
         })
     }
     // 确认删除
-    private handleCheckDelete = () =>
+    private handleCheckDelete =async () =>
     {
-        this.handleShowDelete();
+        if(!this.state.deleteMember){
+            return false;
+        }
+        await this.props.createproject.deleteMember(this.state.deleteMember.userId);
+        this.handleCancelDelete();
+        this.props.createproject.getTeamList();
+        return true;
     }
 }
 

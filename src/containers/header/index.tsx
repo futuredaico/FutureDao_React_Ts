@@ -54,7 +54,7 @@ export default class Header extends React.Component<IProps, any>{
                             <div className="people-list">
                               <ul className="people-ul">
                                 <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
-                                <li className="people-li">我的项目</li>
+                                <li className="people-li" onClick={this.handleToMyProject}>我的项目</li>
                                 <li className="people-li" onClick={this.handleToLogout} >退出账号</li>
                               </ul>
                             </div>
@@ -97,7 +97,12 @@ export default class Header extends React.Component<IProps, any>{
   // 进入个人中心
   private handleToPersonal = () => {
     // this.handleToShow();
-    this.props.history.push('/personalcenter')
+    this.props.history.push('/personalcenter/userinfo')
+  }
+  // 进入我的项目
+  private handleToMyProject = () => {
+    // this.handleToShow();
+    this.props.history.push('/personalcenter/myproject')
   }
   // 退出登录
   private handleToLogout = () => {

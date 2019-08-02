@@ -17,7 +17,7 @@ import { IEmailCheckProps } from './interface/emailcheck.interface';
 //     verifyRes: string | null,
 //     invateStep:number
 // }
-@inject('emailcheck')
+@inject('emailcheck','common')
 @observer
 export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
 {
@@ -57,8 +57,8 @@ export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
                         this.state.invateStep === 1 && (
                             <div className="next-box">
                                 <img src={require('@/img/bigyes.png')} alt="" className="next-img" />
-                                <p>你已成功加入项目 <strong>项目名称</strong></p>
-                                <a href="/personalcenter">前往查看</a>
+                                <p>你已成功加入项目 <strong>{this.props.emailcheck.proInfo&&this.props.emailcheck.proInfo.projName}</strong></p>
+                                <span onClick={this.handleToGoMyProject}>前往查看</span>
                             </div>
                         )
                     }
@@ -98,5 +98,13 @@ export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
             invateStep: 1
         })
         return true;
+    }
+    // 进入我的项目
+    private handleToGoMyProject = ()=>{
+        if(this.props.common.userInfo){
+            this.props.history.push('/personalcenter')
+        }else{
+            this.props.history.push('/load/login')
+        }
     }
 }

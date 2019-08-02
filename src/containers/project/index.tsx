@@ -117,7 +117,7 @@ class Project extends React.Component<IProjectProps, any> {
     // 跳到我的项目-管理中页面
     private handleGoBackPersonMenager = () =>
     {
-        this.props.history.push('/personalcenter')
+        this.props.history.push('/personalcenter/myproject');
     }
 }
 

@@ -39,16 +39,16 @@ export default [
   {
     component: asyncComponent(() => import('../containers/personalcenter')),
     path: '/personalcenter',
-    // children:[
-    //   {
-    //     path:'/personalcenter/userinfo',
-    //     component: asyncComponent(() => import('../containers/personalcenter')),
-    //   },
-    //   {
-    //     path:'/personalcenter/myproject',
-    //     component: asyncComponent(() => import('../containers/personalcenter')),
-    //   }
-    // ]
+    children:[
+      {
+        path:'/personalcenter/myproject',
+        component: asyncComponent(() => import('../containers/personalcenter/myproject')),
+      },
+      {
+        path:'/personalcenter/userinfo',
+        component: asyncComponent(() => import('../containers/personalcenter/personedit')),
+      }
+    ]
   },
   {
     component: asyncComponent(() => import('../containers/projectinfo')),

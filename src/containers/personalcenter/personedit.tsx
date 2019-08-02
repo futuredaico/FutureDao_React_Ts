@@ -2,7 +2,7 @@
  * 个人中心
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import { IPersonProps } from './interface/personedit.interface';
 import { CodeType } from '@/store/interface/common.interface';
 import { RcFile } from 'antd/lib/upload';
-
+@inject('personedit', 'common')
 @observer
 class PersonalEidt extends React.Component<IPersonProps, any> {
     public state = {

@@ -14,7 +14,7 @@ interface IState
     code: string,
     verifyRes: string | null,
 }
-@inject('emailcheck')
+@inject('emailcheck','common')
 @observer
 export default class EmailCheck extends React.Component<IEmailCheckProps, IState> {
     public state = {

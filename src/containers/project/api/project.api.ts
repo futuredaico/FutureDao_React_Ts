@@ -103,11 +103,34 @@ export const modifyRole = (userId:string,token:string,projId:string,memberId:str
     }
     return request(opts);
 }
+/**
+ * 发布更新
+ * @param userId 用户Id
+ * @param token 访问令牌
+ * @param projId 项目id
+ * @param updateTitle 发布更新标题
+ * @param updateDetail 发布更新内容
+ */
 export const sendUpdate = (userId:string,token:string,projId:string,updateTitle:string,updateDetail:string) =>
 {
     const opts = {
         method: 'createUpdate',
         params: [userId,token,projId,updateTitle,updateDetail]
+    }
+    return request(opts);
+}
+/**
+ * 
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param projId 项目id
+ * @param memberId 成员id
+ */
+export const deleteMember = (userId:string,token:string,projId:string,memberId:string) =>
+{
+    const opts = {
+        method: 'deleteProjTeam',
+        params: [userId,token,projId,memberId]
     }
     return request(opts);
 }
