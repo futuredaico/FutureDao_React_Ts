@@ -134,3 +134,18 @@ export const deleteMember = (userId:string,token:string,projId:string,memberId:s
     }
     return request(opts);
 }
+
+/**
+ * 删除项目
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const deleteProject = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'deleteProj',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}

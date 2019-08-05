@@ -111,8 +111,14 @@ class Project extends React.Component<IProjectProps, any> {
     // 确认删除
     private handleCheckDelete = () =>
     {
-        // todo
+        const projectId = this.props.match.params.projectId;
+        if (projectId) {
+            this.props.project.deleteMember(projectId);
+        }else{
+            return false;
+        }
         this.handleShowDeleteProject();
+        return true;
     }
     // 跳到我的项目-管理中页面
     private handleGoBackPersonMenager = () =>

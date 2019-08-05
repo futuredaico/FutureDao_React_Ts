@@ -4,7 +4,8 @@ import { ICommonStore } from "@/store/interface/common.interface";
 import { IUpdateProjectStore } from "./updateproject.interface";
 
 export interface IProjectStore {
-  menuNum: number
+  menuNum: number,
+  deleteMember:(projId:string)=>Promise<boolean>
 }
 
 
