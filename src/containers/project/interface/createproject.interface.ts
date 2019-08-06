@@ -15,7 +15,8 @@ export interface ICreateProjectStore {
   getTeamList: () => Promise<boolean>,
   searchMemberList: (memberEmail: string) => Promise<boolean>,
   inviteMember: (memberId: string) => Promise<boolean>,
-  deleteMember: (memberId: string) => Promise<boolean>
+  deleteMember: (memberId: string) => Promise<boolean>,
+  commitProjectAudit:() => Promise<boolean>,
 }
 
 

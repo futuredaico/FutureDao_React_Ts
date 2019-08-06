@@ -101,3 +101,10 @@ export enum ProjSubState
   AuditFailed = "auditfailed",   // 审核失败
   Preheating = "preheating",    // 预热中
 }
+export enum ProjType
+{
+  GAME = "game",  // 游戏
+  COMIC = "comic", // 动漫
+  MOVIE = "movie", // 电影
+  OTHER = "other", // 其他
+}

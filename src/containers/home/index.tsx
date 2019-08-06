@@ -2,80 +2,26 @@
  * 主页布局
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
-import Slider from '@/components/slider';
+// import Slider from '@/components/slider';
 import { Pagination } from 'antd';
-// import Toast from '@/components/Toast';
-
+import { IHomeProps, IProjList } from './interface/home.interface';
+import { ProjType } from '@/store/interface/common.interface';
+@inject('home')
 @observer
-class Home extends React.Component<any, any> {
-  public dataList = [
-    {
-      hash: 'tu1',
-      voteHash: '',
-      title: 'BIG GAME! "V fight white warrior"',
-      imgIcon: require('@/img/tu1.png'),
-      name: 'James D.',
-      
-      governPrice: '100000',
-      storePrice: '200000',
-      buyIn: 100,
-      saleOut: 80,
-      isUp: true,
-      upDown: '10',
-      isStop: true,
-      crowdFundMoney: '1000',
-      remaining: '12'
-    },
-    {
-      hash: 'tu1',
-      voteHash: '',
-      title: "在线涂鸦工具《 Thank God！Let's Paint》办公解压轻巧sdfgsdfgsdgsdffg",
-      imgIcon: require('@/img/tu3.png'),          
-      governPrice: '100000',
-      storePrice: '200000',
-      buyIn: 100,
-      saleOut: 80,
-      isUp: true,
-      upDown: '10',
-      isStop: true,
-      crowdFundMoney: '1000',
-      remaining: '12'
-    },
-    {
-      hash: 'tu1',
-      voteHash: '',
-      title: 'BIG GAME! "V fight white warrior在线涂鸦工具《 Thank God！Let',
-      imgIcon: require('@/img/tu5.png'),          
-      governPrice: '100000',
-      storePrice: '200000',
-      buyIn: 100,
-      saleOut: 80,
-      isUp: true,
-      upDown: '10',
-      isStop: true,
-      crowdFundMoney: '1000',
-      remaining: '12'
-    },
-    {
-      hash: 'tu1',
-      voteHash: '',
-      title: 'BIG GAME! "V fight white warrior"',
-      imgIcon: require('@/img/tu6.png'),          
-      governPrice: '100000',
-      storePrice: '200000',
-      buyIn: 100,
-      saleOut: 80,
-      isUp: true,
-      upDown: '10',
-      isStop: true,
-      crowdFundMoney: '1000',
-      remaining: '12'
-    }
-  ]
+class Home extends React.Component<IHomeProps, any> {
+  public componentDidMount()
+  {
+    this.props.home.getProjList();
+  }
+  public componentWillUnmount(){
+    this.props.home.projList =[];
+    this.props.home.projListCount = 0;
+    this.props.home.projListPage = 1;
+  }
   public render()
   {
     return (
@@ -102,36 +48,36 @@ class Home extends React.Component<any, any> {
           <div className="home-list-wrapper">
             <ul className="home-list-ul">
               {
-                this.dataList.length > 0 && this.dataList.map((item, index) =>
+                this.props.home.projListCount > 0 && this.props.home.projList.map((item: IProjList, index) =>
                 {
                   return (
-                    <li className="home-list-li" key={index} onClick={this.handleToProjectInfo.bind(this, item.hash)}>
+                    <li className="home-list-li" key={index} onClick={this.handleToProjectInfo.bind(this, item.projId)}>
                       <div className="home-smallbox">
                         <div className="home-img">
-                          <img src={item.imgIcon} alt="" />
+                          <img src={item.projConverUrl} alt="" />
                         </div>
                         <div className="home-des">
-                          <div className="sbox-title">{item.title}</div>
+                          <div className="sbox-title">{item.projTitle}</div>
                           <div className="sbox-card">
-                            <Card text="游戏" colortype="c-green" />
+                            <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
                           </div>
-                          {/* <div className="sbox-asset">                            
-                            <div className="sbox-line">
+                          <div className="sbox-asset">                            
+                            {/* <div className="sbox-line">
                               <div className="sbox-line-left">已售出 3427股</div>
                               <div className="sbox-line-right">1120 人参与</div>                              
-                            </div>
+                            </div> */}
                             <div className="sbox-line">
-                              <div className="sbox-line-left">255人 看好</div>
+                              <div className="sbox-line-left">{item.supportCount}人 看好</div>
                             </div>
-                            <div className="sbox-line">
+                            {/* <div className="sbox-line">
                               <div className="sbox-line-left">5天后开启众筹</div>                             
-                            </div>
-                          </div> */}
+                            </div> */}
+                          </div>
                           <div className="sbox-doing">
-                            <div className="sbox-toptext">300 ETH</div>
+                            {/* <div className="sbox-toptext">300 ETH</div> */}
                             {/* toThousands(parseFloat(parseFloat(item.storePrice).toFixed(4)).toString()) */}
-                            <Slider rate={300} />
-                            <div className="sbox-topright">1120 支持者</div>
+                            {/* <Slider rate={300} /> */}
+                            {/* <div className="sbox-topright">{item.supportCount} 支持者</div> */}
                           </div>
                         </div>
                       </div>
@@ -141,7 +87,7 @@ class Home extends React.Component<any, any> {
               }
             </ul>
             <div className="home-page-warpper">
-              <Pagination showQuickJumper={true} defaultCurrent={1} total={50} onChange={this.handleChangePage} />
+              <Pagination showQuickJumper={true} defaultCurrent={1} total={this.props.home.projListCount} onChange={this.handleChangePage} />
             </div>
           </div>
         </div>
@@ -154,10 +100,25 @@ class Home extends React.Component<any, any> {
     this.props.history.push('/projectinfo/' + id);
   }
   // 分页
-  private handleChangePage = (index:number) => {
+  private handleChangePage = (index: number) =>
+  {
     console.log(index)
+    this.props.home.projListPage = index;
+    this.props.home.getProjList();
     // todo
   }
-}
+  private handleDiffType =(type:string)=>{
+    //
+    if(type === ProjType.GAME){
+      return '游戏'
+    }else if(type === ProjType.COMIC){
+      return '动漫'
+    }else if(type === ProjType.MOVIE){
+      return '电影'
+    }else {
+      return '其他'
+    }
+  }
+} 
 
 export default injectIntl(Home);

@@ -1,5 +1,12 @@
 import request from 'utils/request';
-
+export const getProjInfo = (projId:string,userId:string) =>
+{
+    const opts = {
+        method: 'queryProjDetail',
+        params: [projId,userId]
+    }
+    return request(opts);
+}
 /**
  * 删除项目的更新
  * @param userId 用户ID
@@ -13,7 +20,6 @@ export const deleteUpdate = (userId:string,token:string,projId:string,proUpdateI
         method: 'deleteUpdate',
         params: [userId,token,projId,proUpdateId]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -31,7 +37,6 @@ export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateI
         method: 'modifyUpdate',
         params: [userId,token,projId,proUpdateId,title,detail]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -47,6 +52,5 @@ export const getUpdateInfoById = (userId:string,token:string,projId:string,proUp
         method: 'queryUpdate',
         params: [userId,token,projId,proUpdateId]
     }
-    console.log(opts.params)
     return request(opts);
 }

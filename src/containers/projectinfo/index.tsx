@@ -12,30 +12,54 @@ import { IProjectInfoProps } from './interface/projectinfo.interface';
 @inject('projectinfo')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, any> {
+    public componentDidMount()
+    {
+        const projectId = this.props.match.params.projectId;
+        if (projectId)
+        {
+            this.props.projectinfo.getProjInfo(projectId);
+        }
+    }
     public render()
     {
+        if (!this.props.projectinfo.projInfo)
+        {
+            return null;
+        }
         return (
             <div className="projectinfo-page">
                 <div className="project-top">
-                    <h2>恐怖游戏！《 DO SOME THING GREAT》发起众筹！</h2>
-                    <p className="title-p">好巧，真有这么个黑客朋友，不过，这人名字有点。。。颓。。。他叫残废。看看，这迷人的自拍。。不知道，先上图会不会影响大家听故事啊？</p>
+                    <h2>{this.props.projectinfo.projInfo.projTitle}</h2>
+                    <p className="title-p">{this.props.projectinfo.projInfo.projBrief}</p>
                     <div className="ptop-left">
                         <div className="ptop-img">
-                            <img src={require('@/img/tu2.png')} alt="" />
+                            <img src={this.props.projectinfo.projInfo.projConverUrl} alt="" />
                         </div>
                     </div>
                     <div className="ptop-right">
                         <div className="right-big-text">
-                            <span className="big-gray-text">4321</span> 人看好
+                            <span className="big-gray-text">{this.props.projectinfo.projInfo.supportCount}</span> 人看好
                         </div>
                         <p className="gray-text">
                             这个项目只是发布了创意，还没有启动融资，如果你看好这个创意，点击下面的”看好“，给作者一点鼓励吧。
                         </p>
                         <div className="do-like">
-                            <Button text="看好" />
+                            <Button text={this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"} btnColor={this.props.projectinfo.projInfo.isSupport ? 'gray-btn' : ''} />
                             <div className="dolike-wrapper">
-                                <img src={require("@/img/like.png")} alt="" />
-                                <span>关注</span>
+                                {
+                                    this.props.projectinfo.projInfo.isStar? (
+                                        <>
+                                            <img src={require("@/img/like2.png")} alt="" />
+                                            <span className="dolike-text">已关注</span>
+                                        </>
+                                    )
+                                    :(
+                                        <>
+                                            <div className="no-dolike" />
+                                            <span>关注</span>
+                                        </>
+                                    )
+                                }
                             </div>
                         </div>
                         <div className="ptop-share">

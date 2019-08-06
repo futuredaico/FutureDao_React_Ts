@@ -12,6 +12,7 @@ import Button from '@/components/Button';
 import commonStore from '@/store/common';
 import { RcFile } from 'antd/lib/upload';
 import { ICreateProjectProps } from './interface/createproject.interface';
+import { ProjSubState } from '@/store/interface/common.interface';
 
 @observer
 class StepTwo extends React.Component<ICreateProjectProps, any> {
@@ -100,8 +101,13 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       })
     }
   }
+  // 保存并提交
   private handleToSaveDetail = async () => {
     //
+    if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+      this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
+      return false;
+    }
     const res = this.checkInputStatus();
     if (!res) {
       return
@@ -130,7 +136,9 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.createproject.stepThreeStatus = 1;
       window.scrollTo(0, 0)
     }
+    return true;
   }
+  // 校验必填参数是否填写了
   private checkInputStatus = () => {
     if (!this.state.projDetail) {
       return false

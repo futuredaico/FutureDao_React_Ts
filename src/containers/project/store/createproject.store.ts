@@ -186,10 +186,26 @@ class CreateProject
   @action public deleteMember = async (memberId:string) =>
   {
     let result: any = [];
-
     try
     {
       result = await Api.deleteMember(common.userId,common.token,this.createContent.projId,memberId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    return true;
+  }
+
+  @action public commitProjectAudit = async ()=>{
+    let result: any = [];
+
+    try
+    {
+      result = await Api.commitProject(common.userId,common.token,this.createContent.projId);
     } catch (e)
     {
       return false;

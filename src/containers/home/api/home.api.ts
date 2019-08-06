@@ -1,15 +1,14 @@
 import request from 'utils/request';
 
 /**
- * 查询资产
- * @param str 输入的内容
+ * 获取项目列表
+ * @param page 当前页
+ * @param pageSize 每页显示条数
  */
-export const searchSomething = (str:string)=>{
+export const getProjList = (page:number,pageSize:number)=>{
   const opts = {
-    method:'fuzzysearchasset',
-    params:[
-      str
-    ]
+    method:'queryProjList',
+    params:[page,pageSize]
   }
   return request(opts)
 }

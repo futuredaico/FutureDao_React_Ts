@@ -11,6 +11,7 @@ import Button from '@/components/Button';
 import { RcFile } from 'antd/lib/upload';
 import commonStore from '@/store/common';
 import { ICreateProjectProps } from './interface/createproject.interface';
+import { ProjSubState } from '@/store/interface/common.interface';
 
 
 @observer
@@ -214,6 +215,10 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.history.push('/project/' + this.props.createproject.createContent.projId);
       }
     } else {
+      if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+        this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
+        return false;
+      }
       const content: string[] = [
         this.props.common.userId,
         this.props.common.token,
@@ -232,6 +237,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       const creatResult = await this.props.createproject.modifyProject(content);
       console.log(creatResult)
     }
+    return true;
   }
   // 检查填写情况
   private checkInputStatus = () => {

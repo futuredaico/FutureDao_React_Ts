@@ -49,10 +49,30 @@
                     float: right;
                     font-size: 14px;
                     color: @t-9b;
+                    cursor: pointer;
                     img{
                         width: 30px;
                         margin-right: 10px;
                         vertical-align: middle;
+                    }                    
+                    .dolike-text{
+                        color: @t-fa9;
+                    }
+                    .no-dolike{
+                        width: 30px;
+                        height: 30px;
+                        margin-right: 10px;
+                        vertical-align: middle;
+                        background: url('../../img/like.png') no-repeat;
+                        background-size: cover;
+                        display: inline-block;
+                    }
+                    &:hover{
+                        color: @t-fa9;
+                        .no-dolike{
+                            background: url('../../img/like2.png') no-repeat;
+                            background-size: cover;
+                        }
                     }
                 }
             }

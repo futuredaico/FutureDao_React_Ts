@@ -7,22 +7,25 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
-// import RightTable from './transright';
+import { IProjectInfoProps } from './interface/projectinfo.interface';
 // import * as formatTime from '@/utils/formatTime';
 @observer
-class ProjectDetail extends React.Component<any, any> {
+class ProjectDetail extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
         underBottom: 1
     }
     public render()
     {
+        if(!this.props.projectinfo.projInfo){
+            return null;
+        }
         return (
             <>
                 <div className="projectdetail-wrapper">
                     <h3>项目详情</h3>
-                    <p className="detail-p">当然知道，我以前养过一条中华田园犬，特别聪明。有一次我放学我爸来接我，来的很早，让她在车里待着，她就一直不出声的坐在地上，后来我爸把她放出来，她自己跑到树坑尿尿，憋了一下午都没上厕所。我放学之后抱着她想让她坐在椅子上。</p>
-                    <img src={require('@/img/tu2.png')} alt="" className="detail-img" />
+                    <p className="detail-p">{this.props.projectinfo.projInfo.projDetail}</p>                    
+                    {/* <img src={require('@/img/tu2.png')} alt="" className="detail-img" /> */}
                 </div>
                 <div className="message-wrapper" id="message">
                     <h3>留言</h3>

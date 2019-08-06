@@ -149,3 +149,17 @@ export const deleteProject = (userId:string,token:string,projId:string) =>
     }
     return request(opts);
 }
+/**
+ * 提交项目审核
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const commitProject = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'commitProjAudit',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}

@@ -52,7 +52,7 @@ export default [
   },
   {
     component: asyncComponent(() => import('../containers/projectinfo')),
-    path: '/projectinfo'
+    path: '/projectinfo/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/project')),

@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import { Input } from 'antd';
 import EditTeam from './editteam';
 import { ICreateProjectProps } from './interface/createproject.interface';
+import { ProjSubState } from '@/store/interface/common.interface';
 
 @observer
 class StepThree extends React.Component<ICreateProjectProps, any> {
@@ -69,21 +70,27 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
     })
     this.checkEmail(ev.target.value.trim())
   }
-
+  // 官网的输入
   private handleToWebChange = (ev: React.ChangeEvent<HTMLInputElement>) =>
   {
     this.setState({
       webInput: ev.target.value.trim()
     })
   }
+  // 论坛的输入
   private handleToCommunChange = (ev: React.ChangeEvent<HTMLInputElement>) =>
   {
     this.setState({
       communityInput: ev.target.value.trim()
     })
   }
+  // 保存并提交
   private handleToSaveStepThree = async () =>
   {
+    if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+      this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
+      return false;
+    }
     const res = this.checkInputStatus();
     if (!res)
     {
@@ -114,7 +121,9 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
     {
       this.props.common.openNotificationWithIcon('error', '操作失败', '保存失败');
     }
+    return true
   }
+  // 校验必填参数是否填写了
   private checkInputStatus = () =>
   {
     if (!this.state.emailInput)
