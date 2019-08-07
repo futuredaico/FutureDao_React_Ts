@@ -41,7 +41,7 @@ class Project extends React.Component<IProjectProps, any> {
                 {this.props.createproject.step !== 1 && (
                     <div className="create-left-menu">
                         <div className="left-menu-title">
-                            <h2 className="h2-title">我是项目名称 <img src={require("@/img/back.png")} alt="" className="back-img" onClick={this.handleGoBackPersonMenager} /></h2>
+                            <h2 className="h2-title">{!!this.props.createproject.createContent.projTitle?this.props.createproject.createContent.projTitle:'项目名称'} <img src={require("@/img/back.png")} alt="" className="back-img" onClick={this.handleGoBackPersonMenager} /></h2>
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">

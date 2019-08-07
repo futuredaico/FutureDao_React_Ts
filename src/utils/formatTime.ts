@@ -107,3 +107,57 @@ export const onCountDown = () =>
   const str = hour+':'+minute+':'+second;
   return str;
 }
+// 计算时间差值
+export const computeTime = function (time: number, locale: string)
+{
+  // const date1 = '2015/05/01 00:00:00';  // 开始时间
+  const nowTime = new Date().getTime();    // 当前时间
+  const dateTimer = formatUnixTime(time.toString());
+  const endTime = new Date(dateTimer).getTime(); // 结束时间
+  const differ = nowTime - endTime;   // 时间差的毫秒数    
+
+  // 计算出相差天数
+  const days = Math.floor(differ / (24 * 3600 * 1000))
+  if (days > 0)
+  {
+    if (locale === 'en'){
+      return days + ' days ago'
+    }
+    return days + '天前更新'
+  }
+  // 计算出小时数
+  const leave1 = differ % (24 * 3600 * 1000)    // 计算天数后剩余的毫秒数
+  const hours = Math.floor(leave1 / (3600 * 1000));
+  if (hours > 0)
+  {
+    if (locale === 'en'){
+      return hours + ' hours ago'
+    }
+    return hours + '小时前更新'
+  }
+  // 计算相差分钟数
+  const leave2 = leave1 % (3600 * 1000)        // 计算小时数后剩余的毫秒数
+  const minutes = Math.floor(leave2 / (60 * 1000));
+  if (minutes > 5)
+  {
+    if (locale === 'en'){
+      return minutes + ' minutes ago'
+    }
+    return minutes + '分钟前更新'
+  }
+  // 计算相差秒数
+  // const leave3 = leave2 % (60 * 1000)      // 计算分钟数后剩余的毫秒数
+  // const seconds = Math.round(leave3 / 1000)
+  // if (seconds > 0)
+  // {
+  //   if (locale === 'en'){
+  //     return seconds + ' seconds ago'
+  //   }
+  //   return seconds + '秒前'
+  // }
+  
+  if (locale === 'en'){
+    return 'Just now'
+  }
+  return '刚刚'
+}

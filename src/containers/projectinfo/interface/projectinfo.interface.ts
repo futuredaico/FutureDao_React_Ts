@@ -3,7 +3,16 @@ export interface IProjectInfoStore {
     menuNum:number,
     isShowUpdateInfo:boolean,
     projInfo:IProjectInfo|null,
-    getProjInfo:(projId:string)=>Promise<boolean>
+    projId:string,
+    projUpdateList:IProjectUpdate[],
+    projTeamList:IProjectTeam[],
+    updateInfo:IProjectUpdate|null
+    getProjInfo:(projId:string)=>Promise<boolean>,
+    startAttention:()=>Promise<boolean>,
+    cancelAttention:()=>Promise<boolean>,
+    startSupport:()=>Promise<boolean>,
+    getUpdateData:()=>Promise<boolean>,
+    getTeamData:()=>Promise<boolean>,
   }
   
   
@@ -22,4 +31,18 @@ export interface IProjectInfoStore {
     supportCount:number,
     isSupport:boolean,
     isStar:boolean
+  }
+
+  export interface IProjectUpdate{
+    updateId:string,
+    updateTitle:string,
+    updateDetail:string,
+    lastUpdateTime:number,
+    discussCount:number,
+    zanCount:number
+  }
+  export interface IProjectTeam{
+    username:string,
+    headIconUrl:string,
+    brief:string
   }

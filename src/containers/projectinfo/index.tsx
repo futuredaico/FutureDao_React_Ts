@@ -15,10 +15,18 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     public componentDidMount()
     {
         const projectId = this.props.match.params.projectId;
+        this.props.projectinfo.projId = projectId;
         if (projectId)
         {
             this.props.projectinfo.getProjInfo(projectId);
         }
+    }
+    public componentWillUnmount()
+    {
+        this.props.projectinfo.projId = '';
+        this.props.projectinfo.menuNum = 1;
+        this.props.projectinfo.isShowUpdateInfo = false;
+        this.props.projectinfo.projInfo = null;
     }
     public render()
     {
@@ -44,21 +52,25 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                             这个项目只是发布了创意，还没有启动融资，如果你看好这个创意，点击下面的”看好“，给作者一点鼓励吧。
                         </p>
                         <div className="do-like">
-                            <Button text={this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"} btnColor={this.props.projectinfo.projInfo.isSupport ? 'gray-btn' : ''} />
-                            <div className="dolike-wrapper">
+                            <Button
+                                text={this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"}
+                                btnColor={this.props.projectinfo.projInfo.isSupport ? 'gray-btn' : ''}
+                                onClick={this.handleToStartSupport}
+                            />
+                            <div className="dolike-wrapper" onClick={this.handleToAttention}>
                                 {
-                                    this.props.projectinfo.projInfo.isStar? (
+                                    this.props.projectinfo.projInfo.isStar ? (
                                         <>
                                             <img src={require("@/img/like2.png")} alt="" />
                                             <span className="dolike-text">已关注</span>
                                         </>
                                     )
-                                    :(
-                                        <>
-                                            <div className="no-dolike" />
-                                            <span>关注</span>
-                                        </>
-                                    )
+                                        : (
+                                            <>
+                                                <div className="no-dolike" />
+                                                <span>关注</span>
+                                            </>
+                                        )
                                 }
                             </div>
                         </div>
@@ -76,6 +88,32 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                 <Pbottom {...this.props} />
             </div>
         );
+    }
+    private handleToAttention = () =>
+    {
+        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo)
+        {
+            return false;
+        }
+        if (this.props.projectinfo.projInfo.isStar)
+        {
+            this.props.projectinfo.cancelAttention();
+        } else
+        {
+            this.props.projectinfo.startAttention();
+        }
+        this.props.projectinfo.projInfo.isStar = !this.props.projectinfo.projInfo.isStar
+        return true;
+    }
+    private handleToStartSupport = async () =>
+    {
+        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo||this.props.projectinfo.projInfo.isSupport)
+        {
+            return false;
+        }
+        const res = await this.props.projectinfo.startSupport();
+        this.props.projectinfo.projInfo.isSupport = res;
+        return true;
     }
 }
 export default injectIntl(ProjectInfo)

@@ -87,7 +87,7 @@ class Home extends React.Component<IHomeProps, any> {
               }
             </ul>
             <div className="home-page-warpper">
-              <Pagination showQuickJumper={true} defaultCurrent={1} total={this.props.home.projListCount} onChange={this.handleChangePage} />
+              <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.home.projListPageSize} total={this.props.home.projListCount} onChange={this.handleChangePage} />
             </div>
           </div>
         </div>
@@ -107,6 +107,7 @@ class Home extends React.Component<IHomeProps, any> {
     this.props.home.getProjList();
     // todo
   }
+  // 区分项目类别
   private handleDiffType =(type:string)=>{
     //
     if(type === ProjType.GAME){

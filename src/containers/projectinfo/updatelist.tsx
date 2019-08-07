@@ -5,46 +5,40 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import { IProjectInfoProps } from './interface/projectinfo.interface';
+import { IProjectInfoProps, IProjectUpdate } from './interface/projectinfo.interface';
+import * as formatTime from 'utils/formatTime';
 
 @observer
 class UpdateList extends React.Component<IProjectInfoProps, any> {
+    public componentDidMount(){
+        this.props.projectinfo.getUpdateData();
+    }
     public render()
     {
         return (
             <div className="updatelist-wrapper">
-                <div className="updatelist-list" onClick={this.handleToInfo}>
-                    <h3>Alpha版本已完成，即将开启测试</h3>
-                    <p className="updatelist-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-                    <span className="time-tips">12月31日</span>
-                    <div className="right-other">
-                        <span>评论：12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>赞：12</span>
-                    </div>
-                </div>
-                <div className="updatelist-list">
-                    <h3>Alpha版本已完成，即将开启测试</h3>
-                    <p className="updatelist-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-                    <span className="time-tips">12月31日</span>
-                    <div className="right-other">
-                        <span>评论：12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>赞：12</span>
-                    </div>
-                </div>
-                <div className="updatelist-list">
-                    <h3>Alpha版本已完成，即将开启测试</h3>
-                    <p className="updatelist-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-                    <span className="time-tips">12月31日</span>
-                    <div className="right-other">
-                        <span>评论：12</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>赞：12</span>
-                    </div>
-                </div>
+                {
+                    this.props.projectinfo.projUpdateList.length > 0 && this.props.projectinfo.projUpdateList.map((item: IProjectUpdate, index: number) =>
+                    {
+                        return (
+                            <div className="updatelist-list" onClick={this.handleToInfo.bind(this,item)} key={index}>
+                            <h3>{item.updateTitle}</h3>
+                            <p className="updatelist-p">{item.updateDetail}</p>
+                            <span className="time-tips">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
+                            <div className="right-other">
+                                <span>评论：{item.discussCount}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span>赞：{item.zanCount}</span>
+                            </div>
+                        </div>
+                        )
+                    })
+                }
             </div>
         );
     }   
-    private handleToInfo = ()=>{
+    private handleToInfo = (item:IProjectUpdate)=>{
         this.props.projectinfo.isShowUpdateInfo = true;
+        this.props.projectinfo.updateInfo = item;
     }
 }
 
