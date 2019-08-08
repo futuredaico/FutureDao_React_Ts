@@ -8,6 +8,7 @@ class ProjectInfo {
   @observable public isShowUpdateInfo = false;
   @observable public projInfo:IProjectInfo|null = null;
   @observable public projId:string = '';
+  @observable public projUpdateCount:number = 0;
   @observable public projUpdateList:IProjectUpdate[] = [];
   @observable public projTeamList:IProjectTeam[] = [];
   @observable public updateInfo:IProjectUpdate|null = null;
@@ -111,6 +112,7 @@ class ProjectInfo {
     {
       return false
     }
+    this.projUpdateCount = result[0].data.count;
     this.projUpdateList = result[0].data.list;
     return true;
   }

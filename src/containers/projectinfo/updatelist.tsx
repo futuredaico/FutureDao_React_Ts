@@ -10,7 +10,8 @@ import * as formatTime from 'utils/formatTime';
 
 @observer
 class UpdateList extends React.Component<IProjectInfoProps, any> {
-    public componentDidMount(){
+    public componentDidMount()
+    {
         this.props.projectinfo.getUpdateData();
     }
     public render()
@@ -21,22 +22,23 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
                     this.props.projectinfo.projUpdateList.length > 0 && this.props.projectinfo.projUpdateList.map((item: IProjectUpdate, index: number) =>
                     {
                         return (
-                            <div className="updatelist-list" onClick={this.handleToInfo.bind(this,item)} key={index}>
-                            <h3>{item.updateTitle}</h3>
-                            <p className="updatelist-p">{item.updateDetail}</p>
-                            <span className="time-tips">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
-                            <div className="right-other">
-                                <span>评论：{item.discussCount}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div className="updatelist-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
+                                <h3>{item.updateTitle}</h3>
+                                <p className="updatelist-p">{item.updateDetail}</p>
+                                <span className="time-tips">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
+                                <div className="right-other">
+                                    <span>评论：{item.discussCount}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span>赞：{item.zanCount}</span>
+                                </div>
                             </div>
-                        </div>
                         )
                     })
                 }
             </div>
         );
-    }   
-    private handleToInfo = (item:IProjectUpdate)=>{
+    }
+    private handleToInfo = (item: IProjectUpdate) =>
+    {
         this.props.projectinfo.isShowUpdateInfo = true;
         this.props.projectinfo.updateInfo = item;
     }

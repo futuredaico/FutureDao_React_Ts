@@ -24,7 +24,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             <>
                 <div className="projectdetail-wrapper">
                     <h3>项目详情</h3>
-                    <p className="detail-p">{this.props.projectinfo.projInfo.projDetail}</p>                    
+                    {/* <p>{this.props.projectinfo.projInfo.projDetail}</p> */}
+                    <div className="detail-p" dangerouslySetInnerHTML={{'__html': this.props.projectinfo.projInfo.projDetail}} />           
                     {/* <img src={require('@/img/tu2.png')} alt="" className="detail-img" /> */}
                 </div>
                 <div className="message-wrapper" id="message">

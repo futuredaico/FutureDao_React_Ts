@@ -4,9 +4,10 @@ export interface IProjectInfoStore {
     isShowUpdateInfo:boolean,
     projInfo:IProjectInfo|null,
     projId:string,
+    projUpdateCount:number
     projUpdateList:IProjectUpdate[],
     projTeamList:IProjectTeam[],
-    updateInfo:IProjectUpdate|null
+    updateInfo:IProjectUpdate|null,
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,

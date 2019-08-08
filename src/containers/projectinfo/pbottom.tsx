@@ -28,7 +28,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
     },
     {
       id: 3,
-      name: '更新 12'
+      name: '更新'
     }
   ]
   private pBottomTitle: React.RefObject<HTMLDivElement> = React.createRef();
@@ -37,8 +37,8 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
     // console.log(this.pBottomTitle.current);
     if (this.pBottomTitle && this.pBottomTitle.current) {
       const refTop = this.pBottomTitle && this.pBottomTitle.current ? this.pBottomTitle.current.offsetTop : 0;
-      this.onScrollFn.bind(this, refTop)
-      window.addEventListener('scroll', this.onScrollFn.bind(this, refTop), false)
+      this.onScrollFn.bind(this, refTop);
+      window.addEventListener('scroll', this.onScrollFn.bind(this, refTop), false);
     }
   }
 
@@ -57,7 +57,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                   return (
                     <li className={this.props.projectinfo.menuNum === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
                       {
-                        item.id === 2 ? <a href="#message">{item.name}</a> : item.name
+                        item.id === 2 ? <a href="#message">{item.name}</a> : item.name+' ' +this.handleNumCount(item.id)
                       }
                     </li>
                   )
@@ -102,7 +102,13 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
     }
     this.props.projectinfo.menuNum = item.id
   }
-
+  private handleNumCount = (id:number)=>{
+    if(id===3){
+      return this.props.projectinfo.projUpdateCount
+    }else{
+      return ''
+    }
+  }
   private onScrollFn(refTop: number) {
     // console.log(refTop);
     const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;

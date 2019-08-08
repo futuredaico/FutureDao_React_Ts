@@ -43,9 +43,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                             {
                                 return (
                                     <li className={this.state.projectMenuNum === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
-                                        {item.name}&nbsp;&nbsp;
-                                        {this.state.projectMenuNum === 1 && this.props.myproject.attentionCount}
-                                        {this.state.projectMenuNum === 2 && this.props.myproject.manageCount}
+                                        {item.name}&nbsp;&nbsp;{this.handleCountNumber(item.id)}                                        
                                     </li>
                                 )
                             })
@@ -68,12 +66,12 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                                     <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
                                                 </div>
                                                 <div className="project-status">
-                                                    {item.projState === ProjectState.Readying && <span>准备中</span>}
-                                                    {item.projState === ProjectState.IdeaPub && <span>创意发布</span>}
-                                                    {item.projState === ProjectState.CrowdFunding && <span>众筹中</span>}
-                                                    {item.projState === ProjectState.Trading && <span>交易中</span>}
-                                                    {item.projState === ProjectState.ClearUp && <span>清退</span>}
-                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}更新</span>
+                                                    {item.projState === ProjectState.Readying && <strong>准备中</strong>}
+                                                    {item.projState === ProjectState.IdeaPub && <strong>创意发布</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.Trading && <strong>交易中</strong>}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
+                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -107,14 +105,14 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                                     <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
                                                 </div>
                                                 <div className="project-status">
-                                                    {item.projState === ProjectState.Readying && <span>准备中</span>}
-                                                    {item.projState === ProjectState.IdeaPub && <span>创意发布</span>}
-                                                    {item.projState === ProjectState.CrowdFunding && <span>众筹中</span>}
-                                                    {item.projState === ProjectState.Trading && <span>交易中</span>}
-                                                    {item.projState === ProjectState.ClearUp && <span>清退</span>}
-                                                    {item.projSubState === ProjSubState.Auditing && <span className="green-text">审核中</span>}
-                                                    {item.projSubState === ProjSubState.Preheating && <span className="purple-text">众筹预热</span>}
-                                                    {item.projSubState === ProjSubState.AuditFailed && <span className="red-text">审核失败</span>}
+                                                    {item.projState === ProjectState.Readying && <strong>准备中</strong>}
+                                                    {item.projState === ProjectState.IdeaPub && <strong>创意发布</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.Trading && <strong>交易中</strong>}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
+                                                    {item.projSubState === ProjSubState.Auditing && <strong className="green-text">审核中</strong>}
+                                                    {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>}
+                                                    {item.projSubState === ProjSubState.AuditFailed && <strong className="red-text">审核失败</strong>}
                                                 </div>
                                             </div>
                                         </div>
@@ -149,6 +147,13 @@ class MyProject extends React.Component<IMyProjectProps, any> {
         } else
         {
             this.props.myproject.getManagerData();
+        }
+    }
+    private handleCountNumber = (id:number)=>{
+        if(id===1){
+            return this.props.myproject.attentionCount
+        }else{
+            return this.props.myproject.manageCount
         }
     }
     // 管理项目的分页
