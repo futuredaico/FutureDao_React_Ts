@@ -7,13 +7,16 @@ export interface IProjectInfoStore {
     projUpdateCount:number
     projUpdateList:IProjectUpdate[],
     projTeamList:IProjectTeam[],
-    updateInfo:IProjectUpdate|null,
+    updateId:string,
+    updateInfo:IProjUpdateInfo|null,
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,
     startSupport:()=>Promise<boolean>,
     getUpdateData:()=>Promise<boolean>,
     getTeamData:()=>Promise<boolean>,
+    getUpdateInfo:()=>Promise<boolean>,
+    deletUpdateInfo:()=>Promise<boolean>,
   }
   
   
@@ -41,6 +44,18 @@ export interface IProjectInfoStore {
     lastUpdateTime:number,
     discussCount:number,
     zanCount:number
+  }
+  export interface IProjUpdateInfo{
+    updateTitle:string,
+    updateDetail:string,
+    lastUpdatorId:string,
+    lastUpdateTime:number,
+    discussCount:number,
+    zanCount:number,
+    username:string,
+    headIconUrl:string,
+    isMember:boolean,
+    rank:number
   }
   export interface IProjectTeam{
     username:string,

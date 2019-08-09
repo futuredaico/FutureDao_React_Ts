@@ -100,7 +100,9 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
       // todo
       window.location.hash = 'message'
     }
-    this.props.projectinfo.menuNum = item.id
+    this.props.projectinfo.menuNum = item.id;
+    this.props.projectinfo.isShowUpdateInfo = false;
+    this.props.projectinfo.updateId = '';
   }
   private handleNumCount = (id:number)=>{
     if(id===3){

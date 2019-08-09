@@ -65,11 +65,11 @@ export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateI
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
  */
-export const getUpdateInfoById = (userId:string,token:string,projId:string,proUpdateId:string) =>
+export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string) =>
 {
     const opts = {
         method: 'queryUpdate',
-        params: [userId,token,projId,proUpdateId]
+        params: [projId,proUpdateId,userId]
     }
     return request(opts);
 }

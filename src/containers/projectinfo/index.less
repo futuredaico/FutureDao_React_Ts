@@ -355,6 +355,7 @@
 .updatelist-wrapper{
     .updatelist-list{
         clear: both;
+        cursor: pointer;
         .updatelist-p{
             margin-top: 15px;
             text-align: justify;
@@ -419,11 +420,19 @@
                 height: 30px;
                 margin-right:10px;
                 vertical-align: middle;
+                border-radius: 50%;
+                cursor: pointer;
             }
             .right-update{
                 color: @t-9b;
                 float: right;
+                span{
+                    cursor: pointer;
+                }
             }
+        }
+        .updateinfo-p{
+            margin-bottom: 20px;
         }
         .zan-img{
             width: 18px;

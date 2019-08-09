@@ -19,6 +19,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         if (projectId)
         {
             this.props.projectinfo.getProjInfo(projectId);
+            this.props.projectinfo.getUpdateData();
         }
     }
     public componentWillUnmount()

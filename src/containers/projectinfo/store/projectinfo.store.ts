@@ -2,7 +2,7 @@ import {observable, action} from 'mobx';
 import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
-import { IProjectInfo, IProjectUpdate, IProjectTeam } from '../interface/projectinfo.interface';
+import { IProjectInfo, IProjectUpdate, IProjectTeam, IProjUpdateInfo } from '../interface/projectinfo.interface';
 class ProjectInfo {
   @observable public menuNum = 1;
   @observable public isShowUpdateInfo = false;
@@ -11,7 +11,8 @@ class ProjectInfo {
   @observable public projUpdateCount:number = 0;
   @observable public projUpdateList:IProjectUpdate[] = [];
   @observable public projTeamList:IProjectTeam[] = [];
-  @observable public updateInfo:IProjectUpdate|null = null;
+  @observable public updateId:string = '';
+  @observable public updateInfo:IProjUpdateInfo|null = null;
   /**
    * 获取项目基本详情
    */
@@ -135,6 +136,38 @@ class ProjectInfo {
       return false
     }
     this.projTeamList = result[0].data.list;
+    return true;
+  }
+  /**
+   * 获取更新日志详情
+   */
+  @action public getUpdateInfo = async ()=>{
+    let result: any = [];
+    try{
+      result = await Api.getUpdateInfoById(this.projId,this.updateId,common.userId);
+    }catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.updateInfo = result[0].data;
+    return true;
+  }
+  @action public deletUpdateInfo = async ()=>{
+    let result: any = [];
+    try{
+      result = await Api.deleteUpdate(common.userId,common.token, this.projId,this.updateId);
+    }catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
     return true;
   }
 }

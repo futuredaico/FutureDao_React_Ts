@@ -4,6 +4,8 @@ import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 class CreateProject {
   @observable public menuNum = 1;
+  @observable public projId = '';
+  @observable public updateId = '';
 
   /**
    * 删除项目

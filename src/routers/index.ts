@@ -56,8 +56,22 @@ export default [
   },
   {
     component: asyncComponent(() => import('../containers/project')),
-    path: '/project/:projectId'
+    path: '/project',
+    children:[
+      {
+        path:'/project/:projectId',
+        component: asyncComponent(() => import('../containers/project/createproject')),
+      },
+      {
+        path:'/project/update/:updateId',
+        component: asyncComponent(() => import('../containers/project/updateproject')),
+      }
+    ]
   },
+  // {
+  //   component: asyncComponent(() => import('../containers/project')),
+  //   path: '/project/:projectId'
+  // },
   {
     component: asyncComponent(() => import('../containers/project')),
     path: '/project'

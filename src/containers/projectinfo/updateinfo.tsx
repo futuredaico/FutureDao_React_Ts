@@ -9,41 +9,58 @@ import Button from '@/components/Button';
 import { Input } from 'antd';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 // import RightTable from './transright';
-// import * as formatTime from '@/utils/formatTime';
+import * as formatTime from '@/utils/formatTime';
 @observer
 class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
         underBottom: 1
     }
+    public componentDidMount()
+    {
+        this.props.projectinfo.getUpdateInfo()
+    }
+    public componentWillUnmount()
+    {
+        this.props.projectinfo.updateInfo = null;
+    }
     public render()
     {
+        if (!this.props.projectinfo.updateInfo)
+        {
+            return <div />;
+        }
         return (
             <div className="updateinfo-wrapper">
                 <div className="updateinfo-top" >
                     <div className="updateinfo-tips">
-                        <span>2019-09-01</span>
+                        <span>{formatTime.format('yyyy-MM-dd ', this.props.projectinfo.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>#3更新</span>
+                        <span>#{this.props.projectinfo.updateInfo.rank}更新</span>
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackUpdateList} className="back-img" />
                     </div>
-                    <strong className="update-title">Alpha版本已完成，即将开启测试</strong>
+                    <strong className="update-title">{this.props.projectinfo.updateInfo.updateTitle}</strong>
                     <div className="update-people">
-                        <img src={require('@/img/h5.png')} alt="" />
-                        <strong>Lilith</strong>
-                        <div className="right-update">
-                            <span>修改</span>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span>删除</span>
-                        </div>
+                        <img src={this.props.projectinfo.updateInfo.headIconUrl.replace('temp_', '')} alt="" />
+                        <strong>{this.props.projectinfo.updateInfo.username}</strong>
+                        {
+                            this.props.projectinfo.updateInfo.isMember && (
+                                <div className="right-update">
+                                    <span onClick={this.handleToUpdateEdit}>修改</span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span onClick={this.handleDeleteUpdate}>删除</span>
+                                </div>
+                            )
+                        }
+
                     </div>
-                    <p className="updateinfo-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                    <div className="updateinfo-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.updateInfo.updateDetail }} />
                     <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" />
-                    <span className="zan-span">12</span>
+                    <span className="zan-span">{this.props.projectinfo.updateInfo.zanCount}</span>
                 </div>
                 <div className="message-wrapper" id="message">
                     <div className="updateinfo-tips">
-                        <span>评论：12</span>
+                        <span>评论：{this.props.projectinfo.updateInfo.discussCount}</span>
                     </div>
                     <div className="textarea-wrapper">
                         <textarea name="message" id="" rows={4} style={{ resize: 'none' }} className="message-textarea" />
@@ -123,8 +140,20 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
             </div>
         );
     }
-    private handleBackUpdateList = () => {
+    // 返回列表页
+    private handleBackUpdateList = () =>
+    {
         this.props.projectinfo.isShowUpdateInfo = false;
+    }
+    // 删除更新
+    private handleDeleteUpdate = () =>
+    {
+        this.props.projectinfo.deletUpdateInfo();
+    }
+    // 到发布更新
+    private handleToUpdateEdit = () =>
+    {
+        // todo
     }
 }
 

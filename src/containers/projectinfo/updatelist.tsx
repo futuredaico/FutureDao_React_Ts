@@ -40,7 +40,7 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
     private handleToInfo = (item: IProjectUpdate) =>
     {
         this.props.projectinfo.isShowUpdateInfo = true;
-        this.props.projectinfo.updateInfo = item;
+        this.props.projectinfo.updateId = item.updateId;
     }
 }
 
