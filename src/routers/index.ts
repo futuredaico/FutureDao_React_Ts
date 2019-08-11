@@ -39,13 +39,13 @@ export default [
   {
     component: asyncComponent(() => import('../containers/personalcenter')),
     path: '/personalcenter',
-    children:[
+    children: [
       {
-        path:'/personalcenter/myproject',
+        path: '/personalcenter/myproject',
         component: asyncComponent(() => import('../containers/personalcenter/myproject')),
       },
       {
-        path:'/personalcenter/userinfo',
+        path: '/personalcenter/userinfo',
         component: asyncComponent(() => import('../containers/personalcenter/personedit')),
       }
     ]
@@ -57,25 +57,29 @@ export default [
   {
     component: asyncComponent(() => import('../containers/project')),
     path: '/project',
-    children:[
+    children: [
       {
-        path:'/project/:projectId',
+        path: '/project/update/:projectId',
+        component: asyncComponent(() => import('../containers/project/updateproject')),
+      },
+      {
+        path: '/project/:projectId',
         component: asyncComponent(() => import('../containers/project/createproject')),
       },
       {
-        path:'/project/update/:updateId',
-        component: asyncComponent(() => import('../containers/project/updateproject')),
-      }
+        path: '/project',
+        component: asyncComponent(() => import('../containers/project/createproject')),
+      },
     ]
   },
   // {
   //   component: asyncComponent(() => import('../containers/project')),
   //   path: '/project/:projectId'
   // },
-  {
-    component: asyncComponent(() => import('../containers/project')),
-    path: '/project'
-  },
+  // {
+  //   component: asyncComponent(() => import('../containers/project')),
+  //   path: '/project'
+  // },
   {
     component: asyncComponent(() => import('../containers/notfound')),
     path: '/:any',

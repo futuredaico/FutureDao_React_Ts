@@ -44,22 +44,22 @@ export default class Header extends React.Component<IProps, any>{
                 (this.props.common.userInfo) && (
                   <li>
                     <div className="people-login">
-                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_', '')} alt="" className="people-img"  />
+                      <img src={this.props.common.userInfo.headIconUrl.replace('temp_', '')} alt="" className="people-img" />
                       {/* {
                         this.state.showManger && ( */}
-                          <div className="people-manager">
-                            <div className="people-trangle">
-                              <div className="trangle" />
-                            </div>
-                            <div className="people-list">
-                              <ul className="people-ul">
-                                <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
-                                <li className="people-li" onClick={this.handleToMyProject}>我的项目</li>
-                                <li className="people-li" onClick={this.handleToLogout} >退出账号</li>
-                              </ul>
-                            </div>
-                          </div>
-                        {/* )
+                      <div className="people-manager">
+                        <div className="people-trangle">
+                          <div className="trangle" />
+                        </div>
+                        <div className="people-list">
+                          <ul className="people-ul">
+                            <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
+                            <li className="people-li" onClick={this.handleToMyProject}>我的项目</li>
+                            <li className="people-li" onClick={this.handleToLogout} >退出账号</li>
+                          </ul>
+                        </div>
+                      </div>
+                      {/* )
                       } */}
                     </div>
                   </li>
@@ -74,7 +74,8 @@ export default class Header extends React.Component<IProps, any>{
   // 创建项目
   private handleToCreateProject = () => {
     if (this.props.common.userInfo) {
-      this.props.history.push('/project');
+      window.location.href = '/project'
+      // this.props.history.push('/project');
     } else {
       this.handleToLogin();
     }

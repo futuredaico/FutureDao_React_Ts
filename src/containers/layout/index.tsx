@@ -7,6 +7,7 @@ import CommonStore from '@/store/common';
 import ScrollToTop from '@/components/scrolltotop';
 import './index.less';
 import Footer from '../footer';
+import VerifyMail from './verifymail';
 
 export default class LayoutIndex extends React.Component<any, any> {
   public static contextTypes = {
@@ -55,7 +56,7 @@ export default class LayoutIndex extends React.Component<any, any> {
             common={CommonStore}
           />
           <div className="layout-main">
-            {CommonStore.isVerifyEmail&&<div className="verify-wrapper">小提示：  我们需要验证你的电子邮件地址。请点击我们发送的邮件里的链接。  <strong className="send-email">重新发送</strong></div>}
+            <VerifyMail common={CommonStore} />
             {this.props.children}
           </div>
           <Footer

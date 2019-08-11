@@ -10,8 +10,7 @@ import Editor from '@/components/braftEditor';
 import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import { IUpdateProjectProps } from './interface/updateproject.interface';
-interface IState
-{
+interface IState {
   updateTitle: string, // 标题
   detailString: string, // 文本编辑内容
   detailStr: string,  // 传给接口的参数
@@ -26,8 +25,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
     isHasEdit: false
   };
 
-  public render()
-  {
+  public render() {
     return (
       <>
         <h3 className="right-title">发布更新</h3>
@@ -59,27 +57,23 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
       </ >
     );
   }
-  private handleChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     //
     this.setState({
       updateTitle: ev.target.value
     })
   }
   // 文本框的输入
-  private onChangeEditorValue = (value: any) =>
-  {
+  private onChangeEditorValue = (value: any) => {
     // todo
     const text = value.toText()
-    if (text !== "")
-    {
+    if (text !== "") {
       this.setState({
         detailString: BraftEditor.createEditorState(value),
         detailStr: BraftEditor.createEditorState(value).toHTML(),
         isHasEdit: true
       })
-    } else
-    {
+    } else {
       this.setState({
         detailString: '',
         detailStr: '',
@@ -88,21 +82,17 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
     }
   }
   // 发布更新
-  private handleSendUpdate = async () =>
-  {
-    if (!this.state.updateTitle || !this.state.isHasEdit)
-    {
+  private handleSendUpdate = async () => {
+    if (!this.state.updateTitle || !this.state.isHasEdit) {
       return false;
     }
     const params = this.props.match.params;
     const projectId = params["projectId"];
-    if (!projectId)
-    {
+    if (!projectId) {
       return false;
     }
     const res = await this.props.updateproject.sendUpdate(projectId, this.state.updateTitle, this.state.detailStr);
-    if (res)
-    {
+    if (res) {
       this.setState({
         updateTitle: '',
         detailString: BraftEditor.createEditorState(''),

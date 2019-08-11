@@ -17,8 +17,7 @@ import { History } from 'history';
 import { IProjectStore } from './interface/project.interface';
 import { ICreateProjectStore } from './interface/createproject.interface';
 
-interface IProps extends RouteComponentProps<{ projectId: string,updateId:string }>
-{
+interface IProps extends RouteComponentProps<{ projectId: string, updateId: string }> {
     route: {
         [key: string]: any
     };
@@ -31,28 +30,31 @@ interface IProps extends RouteComponentProps<{ projectId: string,updateId:string
 @inject('project', 'createproject')
 @observer
 class Project extends React.Component<IProps, any> {
-
     public state = {
         showDeletProject: false,
+        isUpdate: false
     }
-    public componentDidMount(){
-        const projectId = this.props.match.params.projectId;
-        const updateId = this.props.match.params.updateId;
+
+    public componentDidMount() {
+        const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
         console.log(projectId)
-        this.props.project.projId = projectId;
-        this.props.project.updateId = updateId;
+        if (projectId && projectId !== '/project') {
+            this.props.project.projId = projectId;
+            this.setState({
+                isUpdate: !!projectId
+            })
+        }
     }
-    public render()
-    {
+    public render() {
         const createClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick('/project') ? true : false }
+            { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/begin))/i) ? true : false }
         );
         const updateClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick('/project/update') ? true : false },
+            { 'li-active': this.mapChildClick(/project\/update/i) ? true : false },
             { 'li-notallow': (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing) ? true : false }
         );
         const beginClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick('/project/begin') ? true : false },
+            { 'li-active': this.mapChildClick(/project\/begin/i) ? true : false },
             { 'li-notallow': true }
         );
         const deleteClassName = classnames('menu-li',
@@ -61,7 +63,7 @@ class Project extends React.Component<IProps, any> {
         );
         return (
             <div className="create-page">
-                {this.props.createproject.step !== 1 && (
+                {this.state.isUpdate && (
                     <div className="create-left-menu">
                         <div className="left-menu-title">
                             <h2 className="h2-title">{!!this.props.createproject.createContent.projTitle ? this.props.createproject.createContent.projTitle : '项目名称'} <img src={require("@/img/back.png")} alt="" className="back-img" onClick={this.handleGoBackPersonMenager} /></h2>
@@ -107,77 +109,33 @@ class Project extends React.Component<IProps, any> {
         );
     }
     // 菜单选择
-    private mapUnderline = (str: string) =>
-    {
-        console.log(this.props.project.projId)
-        if(str === '/project'){
-            this.props.history.push(str+'/'+this.props.project.projId);
-            return true;
-        }
-        // if (str === '/project/update' && (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing))
-        // {
-        //     return false;
-        // }
-        // if (str === '/project/begin')
-        // {
-        //     return false;
-        // }
-        // else if (str === 'project/detele' && this.props.createproject.createContent.role !== 'admin')
-        // {
-        //     return false
-        // } 
-        // else if (str === 'project/detele')
-        // {
-        //     this.handleShowDeleteProject();
-        //     return true;
-        // }
-        this.props.history.push(str);
-        // this.props.project.menuNum = num
-        return true;
+    private mapUnderline = (str: string) => {
+        console.log(str)
+        this.props.history.push(str + '/' + this.props.project.projId);
     }
     // 菜单选择样式
-    private mapChildClick = (path) =>
-    {
-        if (path instanceof Array)
-        {
-            for (const i in path)
-            {
-                if (new RegExp(path[i], 'i').test(this.props.history.location.pathname))
-                {
-                    return true;
-                }
-            }
-        }
-        if (path === this.props.history.location.pathname)
-        {
-            return true;
-        }
-        return false;
+    private mapChildClick = (path) => {
+        return path.test(this.props.history.location.pathname)
     }
     // 显示删除项目弹框
-    private handleShowDeleteProject = () =>
-    {
+    private handleShowDeleteProject = () => {
         this.setState({
             showDeletProject: !this.state.showDeletProject
         })
     }
     // 确认删除
-    private handleCheckDelete = () =>
-    {
+    private handleCheckDelete = () => {
         const projectId = this.props.match.params.projectId;
-        if (projectId)
-        {
+        if (projectId) {
             this.props.project.deleteMember(projectId);
-        } else
-        {
+        } else {
             return false;
         }
         this.handleShowDeleteProject();
         return true;
     }
     // 跳到我的项目-管理中页面
-    private handleGoBackPersonMenager = () =>
-    {
+    private handleGoBackPersonMenager = () => {
         this.props.history.push('/personalcenter/myproject');
     }
 }
