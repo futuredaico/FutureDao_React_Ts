@@ -63,13 +63,13 @@ export default [
         component: asyncComponent(() => import('../containers/project/updateproject')),
       },
       {
-        path: '/project/:projectId',
+        path: '/project/edit/:projectId',
         component: asyncComponent(() => import('../containers/project/createproject')),
       },
       {
-        path: '/project',
+        path: '/project/:projectId',
         component: asyncComponent(() => import('../containers/project/createproject')),
-      },
+      }
     ]
   },
   // {

@@ -47,8 +47,8 @@ export const deleteUpdate = (userId:string,token:string,projId:string,proUpdateI
  * @param token 访问令牌
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
- * @param title 
- * @param detail 
+ * @param title 修改日志的标题
+ * @param detail 修改日志的内容
  */
 export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateId:string,title:string,detail:string) =>
 {

@@ -14,7 +14,8 @@ import * as formatTime from '@/utils/formatTime';
 class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
-        underBottom: 1
+        underBottom: 1,
+        showDelet:false
     }
     public componentDidMount()
     {
@@ -48,7 +49,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                 <div className="right-update">
                                     <span onClick={this.handleToUpdateEdit}>修改</span>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span onClick={this.handleDeleteUpdate}>删除</span>
+                                    <span onClick={this.handleShowDelete}>删除</span>
                                 </div>
                             )
                         }
@@ -137,6 +138,19 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                         </div>
                     </div>
                 </div>
+                {
+                    this.state.showDelet && (
+                        <div className="delete-info-wrapper">
+                            <div className="delete-content">
+                                <div className="delete-text">确认删除本次更新？</div>
+                                <div className="delete-btn">
+                                    <Button text="取消" btnColor="red-btn" onClick={this.handleShowDelete} />
+                                    <Button text="确认" onClick={this.handleDeleteUpdate} />
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         );
     }
@@ -145,15 +159,30 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     {
         this.props.projectinfo.isShowUpdateInfo = false;
     }
-    // 删除更新
-    private handleDeleteUpdate = () =>
-    {
-        this.props.projectinfo.deletUpdateInfo();
+    // 显示删除项目弹框
+    private handleShowDelete = () => {
+        this.setState({
+            showDelet: !this.state.showDelet
+        })
     }
+    // 删除更新
+    private handleDeleteUpdate = () => {
+        this.props.projectinfo.deletUpdateInfo();
+        this.props.projectinfo.isShowUpdateInfo = false;
+        this.props.projectinfo.updateId = '';
+        this.handleShowDelete();
+        return true;
+    }
+    
+    // private handleDeleteUpdate = () =>
+    // {
+    //     this.props.projectinfo.deletUpdateInfo();
+    // }
     // 到发布更新
     private handleToUpdateEdit = () =>
     {
         // todo
+        this.props.history.push('/project/update/'+this.props.projectinfo.projId+'?updateid='+this.props.projectinfo.updateId)
     }
 }
 

@@ -120,6 +120,38 @@ export const sendUpdate = (userId:string,token:string,projId:string,updateTitle:
     return request(opts);
 }
 /**
+ * 根据更新ID查询项目更新日志
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param proUpdateId 项目更新ID
+ */
+export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string) =>
+{
+    const opts = {
+        method: 'queryUpdate',
+        params: [projId,proUpdateId,userId]
+    }
+    return request(opts);
+}
+/**
+ * 修改更新日志
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param proUpdateId 项目更新ID
+ * @param title 修改日志的标题
+ * @param detail 修改日志的内容
+ */
+export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateId:string,title:string,detail:string) =>
+{
+    const opts = {
+        method: 'modifyUpdate',
+        params: [userId,token,projId,proUpdateId,title,detail]
+    }
+    return request(opts);
+}
+/**
  * 
  * @param userId 用户id
  * @param token 访问令牌

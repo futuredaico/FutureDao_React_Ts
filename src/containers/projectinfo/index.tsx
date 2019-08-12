@@ -9,7 +9,7 @@ import Pbottom from './pbottom';
 import Button from '@/components/Button';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 
-@inject('projectinfo')
+@inject('projectinfo','common')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     public componentDidMount()
@@ -90,8 +90,13 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
             </div>
         );
     }
+    // 关注
     private handleToAttention = () =>
     {
+        if(!this.props.common.userInfo){
+            this.props.history.push('/load/login');
+            return false
+        }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo)
         {
             return false;
@@ -106,8 +111,13 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         this.props.projectinfo.projInfo.isStar = !this.props.projectinfo.projInfo.isStar
         return true;
     }
+    // 看好
     private handleToStartSupport = async () =>
     {
+        if(!this.props.common.userInfo){
+            this.props.history.push('/load/login');
+            return false
+        }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo||this.props.projectinfo.projInfo.isSupport)
         {
             return false;

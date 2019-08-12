@@ -1,4 +1,5 @@
 import { RouteComponentProps } from "react-router";
+import { ICommonStore } from "@/store/interface/common.interface";
 export interface IProjectInfoStore {
     menuNum:number,
     isShowUpdateInfo:boolean,
@@ -22,6 +23,7 @@ export interface IProjectInfoStore {
   
   export interface IProjectInfoProps extends RouteComponentProps<{ projectId: string }>{
     projectinfo:IProjectInfoStore,
+    common:ICommonStore,
     intl:any
   }
 

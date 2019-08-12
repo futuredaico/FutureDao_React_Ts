@@ -73,11 +73,17 @@ export default class Header extends React.Component<IProps, any>{
   }
   // 创建项目
   private handleToCreateProject = () => {
-    if (this.props.common.userInfo) {
-      window.location.href = '/project'
-      // this.props.history.push('/project');
-    } else {
+    console.log(this.props.common.isVerifyEmail)
+    if (!this.props.common.userInfo) {
+      // 未登录
       this.handleToLogin();
+    }else if(this.props.common.isVerifyEmail){
+      // 邮箱未验证
+      this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱后进行操作。');
+    }
+     else {
+      // 正常访问
+      window.location.href = '/project'
     }
   }
   // 登录

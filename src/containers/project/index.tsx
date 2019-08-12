@@ -17,7 +17,7 @@ import { History } from 'history';
 import { IProjectStore } from './interface/project.interface';
 import { ICreateProjectStore } from './interface/createproject.interface';
 
-interface IProps extends RouteComponentProps<{ projectId: string, updateId: string }> {
+interface IProps extends RouteComponentProps<{ projectId: string }> {
     route: {
         [key: string]: any
     };
@@ -37,7 +37,6 @@ class Project extends React.Component<IProps, any> {
 
     public componentDidMount() {
         const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
-        console.log(projectId)
         if (projectId && projectId !== '/project') {
             this.props.project.projId = projectId;
             this.setState({
@@ -70,10 +69,10 @@ class Project extends React.Component<IProps, any> {
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
-                                <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>编辑项目资料</li>
-                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>发布更新</li>
-                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>启动融资</li>
-                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>删除项目</li>
+                                <li className={createClassName} onClick={this.mapUnderline.bind(this, '')}>编辑项目资料</li>
+                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/update')}>发布更新</li>
+                                <li className={beginClassName} >启动融资（即将上线）</li>
+                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/delete')}>删除项目</li>
 
                             </ul>
                         </div>
@@ -110,8 +109,14 @@ class Project extends React.Component<IProps, any> {
     }
     // 菜单选择
     private mapUnderline = (str: string) => {
-        console.log(str)
-        this.props.history.push(str + '/' + this.props.project.projId);
+        if(str === '/project/delete'){
+            this.handleShowDeleteProject();
+        }
+        else{
+            const url = '/project'+str + '/' + this.props.project.projId;
+            console.log(url)
+            this.props.history.push('/project'+str);
+        }
     }
     // 菜单选择样式
     private mapChildClick = (path) => {

@@ -30,6 +30,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
     public componentDidMount()
     {
         this.props.myproject.getAttentionData();
+        this.props.myproject.getManagerData();
     }
     public render()
     {

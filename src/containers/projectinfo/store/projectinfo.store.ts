@@ -156,6 +156,9 @@ class ProjectInfo {
     this.updateInfo = result[0].data;
     return true;
   }
+  /**
+   * 删除更新日志
+   */
   @action public deletUpdateInfo = async ()=>{
     let result: any = [];
     try{

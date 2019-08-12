@@ -87,7 +87,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                 )
                                 : <div className="person-p">
                                     {
-                                        (this.props.common.userInfo && this.props.common.userInfo.brief !== '') ? this.props.common.userInfo.brief : '这家伙很懒，什么都没留下。'
+                                        (this.props.common.userInfo && this.props.common.userInfo.brief !== '') ? this.props.common.userInfo.brief : '暂无简介。'
                                     }
                                 </div>
                         }
@@ -252,7 +252,9 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
     // 修改邮箱时的密码输入
     private handleToEnterPwd = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        this.props.personedit.newEmailCode = '';
+        if(this.props.personedit.newEmailCode=== CodeType.passwordError){
+            this.props.personedit.newEmailCode = '';
+        }
         this.setState({
             emailPwd: ev.target.value.trim()
         })

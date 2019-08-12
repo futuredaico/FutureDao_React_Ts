@@ -18,7 +18,7 @@ class Common implements ICommonStore
   @observable public userInfo: IUserInfo|null = null; // 当前邮箱
   @observable public userId: string = ''; // 用户id
   @observable public token: string = ''; // 登录token
-  @observable public isVerifyEmail:boolean = false; // 是否验证过邮箱
+  @observable public isVerifyEmail:boolean = false; // 是否验证过邮箱,true为未认证（显示），false为不显示
 
   // 初始化语言
   @action public initLanguage = () =>

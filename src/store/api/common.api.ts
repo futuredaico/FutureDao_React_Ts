@@ -1,6 +1,6 @@
 import request from 'utils/request';
 import { RcFile } from 'antd/lib/upload';
-
+// 上传文件图片之类的
 export const uploadFile = (file:RcFile)=>{
   const formData = new FormData();
   formData.append('xxxx', file);

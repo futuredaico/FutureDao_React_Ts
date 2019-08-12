@@ -104,14 +104,7 @@ class PersonEdit
         }
         if (result[0].resultCode === CodeType.success)
         {
-            if (common.userInfo)
-            {
-                common.userInfo.email = email;
-            }
-            else
-            {
-                return false
-            }
+            common.getUserInfo();
         } else
         {
             this.newEmailCode = result[0].resultCode;
