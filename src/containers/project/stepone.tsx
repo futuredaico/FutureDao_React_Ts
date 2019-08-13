@@ -227,14 +227,9 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.state.titleValue,
         this.state.typeValue,
         'https://futuredao.oss-cn-hangzhou.aliyuncs.com/default.jpg',
-        this.state.textareaValue,
-        '',
-        '',
-        '',
-        '',
-        ''
+        this.state.textareaValue        
       ]
-      const creatResult = await this.props.createproject.modifyProject(content);
+      const creatResult = await this.props.createproject.modifyStepOne(content);
       console.log(creatResult)
     }
     return true;

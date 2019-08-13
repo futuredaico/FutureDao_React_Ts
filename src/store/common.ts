@@ -15,10 +15,10 @@ class Common implements ICommonStore
   @observable public message: any | null = null;// 当前显示内容
   @observable public network: 'TestNet' | 'MainNet' = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'TestNet' : 'MainNet';  // 当前网络  
   @observable public footer: boolean = true; // 显示页尾
-  @observable public userInfo: IUserInfo|null = null; // 当前邮箱
+  @observable public userInfo: IUserInfo | null = null; // 当前邮箱
   @observable public userId: string = ''; // 用户id
   @observable public token: string = ''; // 登录token
-  @observable public isVerifyEmail:boolean = false; // 是否验证过邮箱,true为未认证（显示），false为不显示
+  @observable public isVerifyEmail: boolean = false; // 是否验证过邮箱,true为未认证（显示），false为不显示
 
   // 初始化语言
   @action public initLanguage = () =>
@@ -79,7 +79,8 @@ class Common implements ICommonStore
       sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
       this.getUserInfo();
     }
-    else{
+    else
+    {
       return false
     }
     return true;
@@ -89,59 +90,86 @@ class Common implements ICommonStore
   {
     this.clearUserInfo();
     sessionStorage.clear();
-    window.location.href="/"
+    window.location.href = "/"
   }
   // 清空用户信息
-  @action public clearUserInfo = () => {
+  @action public clearUserInfo = () =>
+  {
     this.userInfo = null;
     this.userId = '';
     this.token = '';
-    this.isVerifyEmail = false;    
+    this.isVerifyEmail = false;
   }
   // 获取用户的基本信息
-  @action public getUserInfo = async ()=>{
+  @action public getUserInfo = async () =>
+  {
     let result: any = [];
-        try
-        {
-            result = await Api.getUserInfo(this.userId,this.token);
-        } catch (e)
-        {
-            return false;
-        }
-        if (result[0].resultCode === CodeType.success)
-        {
-            this.userInfo = result[0].data;
-            if(result[0].data.emailVerifyState!==EmailVerify.detailStringEmailVerifySucc){
-              this.isVerifyEmail=true;
-            }else{
-              this.isVerifyEmail= false;
-            }
-        }else{
-          return false
-        }
-        return true;
+    try
+    {
+      result = await Api.getUserInfo(this.userId, this.token);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode === CodeType.success)
+    {
+      this.userInfo = result[0].data;
+      if (result[0].data.emailVerifyState !== EmailVerify.detailStringEmailVerifySucc)
+      {
+        this.isVerifyEmail = true;
+      } else
+      {
+        this.isVerifyEmail = false;
+      }
+    } else
+    {
+      return false
+    }
+    return true;
   }
   // 刷新后获取保持登录状态
-  @action public getLoginStatus = ()=>{
+  @action public getLoginStatus = () =>
+  {
     const loginStr = sessionStorage.getItem('user');
     console.log(loginStr)
-    if(loginStr){
+    if (loginStr)
+    {
       const json = JSON.parse(loginStr);
       console.log(json);
-      this.userId= json.userId;
+      this.userId = json.userId;
       this.token = json.token;
       this.getUserInfo();
     }
   }
 
   // 右上角提示弹框4.5秒消失
-  @action public openNotificationWithIcon = (type:string,message:string,des:string) => {
+  @action public openNotificationWithIcon = (type: string, message: string, des: string) =>
+  {
     notification[type]({
       message: message,
       description:
         des,
     });
   };
+  // 重新发送验证邮件
+  @action public reSendEmail = async () =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.reSendVerify(this.userId, this.token);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode === CodeType.success)
+    {
+      this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+    }else{
+      this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+    }
+    return true
+  }
 }
 
 // 外部使用require

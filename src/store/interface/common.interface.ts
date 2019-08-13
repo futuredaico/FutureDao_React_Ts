@@ -15,7 +15,8 @@ export interface ICommonStore
   logoutFutureDao: () => void,
   getLoginStatus: () => void,
   getUserInfo: () => void,
-  openNotificationWithIcon: (type: string, message: string, des: string) => void
+  openNotificationWithIcon: (type: string, message: string, des: string) => void,
+  reSendEmail: () => void,
 }
 export interface ICommonProps
 {

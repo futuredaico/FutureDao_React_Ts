@@ -117,18 +117,10 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.common.userId,
       this.props.common.token,
       this.props.createproject.createContent.projId,
-      '',
-      '',
-      '',
-      '',
-      '',
       '',// todo 暂时没有
       this.state.projDetail,
-      '',
-      '',
-      ''
     ]
-    const creatResult = await this.props.createproject.modifyProject(content);
+    const creatResult = await this.props.createproject.modifyStepTwo(content);
     if (creatResult) {
       this.props.createproject.step = 3;
       this.props.createproject.stepOneStatus = 2;

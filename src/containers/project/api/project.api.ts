@@ -14,6 +14,45 @@ export const createProj = (params:string[]) =>
     return request(opts);
 }
 /**
+ * 修改详情信息模块的内容
+ * @param params 
+ */
+export const modifyProjVideo = (params:string[]) =>
+{
+    const opts = {
+        method: 'modifyProjVideo',
+        params: [...params]
+    }
+    console.log(opts.params)
+    return request(opts);
+}
+/**
+ * 修改团队信息模块的内容
+ * @param params 
+ */
+export const modifyProjEmail = (params:string[]) =>
+{
+    const opts = {
+        method: 'modifyProjEmail',
+        params: [...params]
+    }
+    console.log(opts.params)
+    return request(opts);
+}
+/**
+ * 修改基础信息模块的内容
+ * @param params 
+ */
+export const modifyProjName = (params:string[]) =>
+{
+    const opts = {
+        method: 'modifyProjName',
+        params: [...params]
+    }
+    console.log(opts.params)
+    return request(opts);
+}
+/**
  * 修改项目
  * @param params 
  */

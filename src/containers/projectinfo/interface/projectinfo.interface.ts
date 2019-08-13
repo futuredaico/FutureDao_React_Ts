@@ -64,3 +64,14 @@ export interface IProjectInfoStore {
     headIconUrl:string,
     brief:string
   }
+  export interface IDiscussList{
+    preDiscussId:string,  // 上一个评论的ID
+    discussId:string, // 当前评论ID
+    discussContent:string, // 评论内容
+    userId:string, // 评论者ID
+    zanCount:number, // 赞数
+    time:number, // 评论时间
+    username:string, // 评论者
+    headIconUrl:string, // 评论者头像
+    subSize:number // 回复数
+  }

@@ -44,3 +44,19 @@ export const login = (email: string, pwd: string) =>
     }
     return request(opts);
 }
+/**
+ * 重新发送验证邮箱
+ * @param userId 用户ID
+ * @param token 
+ */
+export const reSendVerify = (userId: string, token: string) =>
+{
+    const opts = {
+        method: 'reSendVerify',
+        params: [
+            userId,
+            token
+        ]
+    }
+    return request(opts);
+}

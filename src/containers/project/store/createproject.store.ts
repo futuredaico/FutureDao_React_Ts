@@ -41,11 +41,6 @@ class CreateProject
       this.createContent.projType,
       this.createContent.projCoverUrl,
       this.createContent.projBrief,
-      this.createContent.videoBriefUrl,
-      this.createContent.projDetail,
-      this.createContent.connectEmail,
-      this.createContent.officialWeb,
-      this.createContent.community
     ]
     try
     {
@@ -63,15 +58,15 @@ class CreateProject
     return true;
   }
   /**
-   * 修改项目
+   * 修改基础信息
    */
-  @action public modifyProject = async (params: string[]) =>
+  @action public modifyStepOne = async (params: string[]) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.modifyProj(params);
+      result = await Api.modifyProjName(params);
     } catch (e)
     {
       return false;
@@ -84,6 +79,72 @@ class CreateProject
     this.getProject(this.createContent.projId);
     return true;
   }
+  /**
+   * 修改详情模块
+   */
+  @action public modifyStepTwo = async (params: string[]) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.modifyProjVideo(params);
+    } catch (e)
+    {
+      return false;
+    }
+    console.log(result)
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.getProject(this.createContent.projId);
+    return true;
+  }
+  /**
+   * 修改团队模块
+   */
+  @action public modifyStepThree = async (params: string[]) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.modifyProjEmail(params);
+    } catch (e)
+    {
+      return false;
+    }
+    console.log(result)
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.getProject(this.createContent.projId);
+    return true;
+  }
+  /**
+   * 修改项目
+   */
+  // @action public modifyProject = async (params: string[]) =>
+  // {
+  //   let result: any = [];
+
+  //   try
+  //   {
+  //     result = await Api.modifyProj(params);
+  //   } catch (e)
+  //   {
+  //     return false;
+  //   }
+  //   console.log(result)
+  //   if (result[0].resultCode !== CodeType.success)
+  //   {
+  //     return false
+  //   }
+  //   this.getProject(this.createContent.projId);
+  //   return true;
+  // }
   /**
    * 获取项目信息
    */

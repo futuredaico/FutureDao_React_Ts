@@ -101,18 +101,11 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
       this.props.common.userId,
       this.props.common.token,
       this.props.createproject.createContent.projId,
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
       this.state.emailInput,
       this.state.webInput,
       this.state.communityInput
     ]
-    const creatResult = await this.props.createproject.modifyProject(content);
+    const creatResult = await this.props.createproject.modifyStepThree(content);
     if (creatResult)
     {
       this.props.common.openNotificationWithIcon('success', '操作成功', '保存成功');

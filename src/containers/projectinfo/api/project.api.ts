@@ -42,23 +42,6 @@ export const deleteUpdate = (userId:string,token:string,projId:string,proUpdateI
     return request(opts);
 }
 /**
- * 修改更新日志
- * @param userId 用户ID
- * @param token 访问令牌
- * @param projId 项目ID
- * @param proUpdateId 项目更新ID
- * @param title 修改日志的标题
- * @param detail 修改日志的内容
- */
-export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateId:string,title:string,detail:string) =>
-{
-    const opts = {
-        method: 'modifyUpdate',
-        params: [userId,token,projId,proUpdateId,title,detail]
-    }
-    return request(opts);
-}
-/**
  * 根据更新ID查询项目更新日志
  * @param userId 用户ID
  * @param token 访问令牌
@@ -126,6 +109,62 @@ export const getTeamList = (projId:string,page:number,pageSize:number) =>
     const opts = {
         method: 'queryProjTeamBrief',
         params: [projId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 发送评论
+ * @param userId 用户id
+ * @param token 
+ * @param projId 项目ID
+ * @param prevousId 上一条评论ID（可为空，表示一级评论）
+ * @param discussStr 评论内容
+ */
+export const sendDiscussToProj = (userId:string,token:string,projId:string,prevousId:string,discussStr:string) =>
+{
+    const opts = {
+        method: 'addProjDiscuss',
+        params: [userId,token,projId,prevousId,discussStr]
+    }
+    return request(opts);
+}
+/**
+ * 查询项目评论列表
+ * @param projId 项目ID
+ * @param discussId 评论ID（为空表示查询一级评论）
+ * @param page 当前页码
+ * @param pageSize 每页条数
+ */
+export const getProjDiscussList = (projId:string,discussId:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getProjSubDiscussList',
+        params: [projId,discussId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 
+ * @param userId 
+ * @param token 
+ * @param projId 
+ * @param updateId 
+ * @param prevousId 
+ * @param discussStr 
+ */
+export const sendDiscussToUpdate = (userId:string,token:string,projId:string,updateId:string,prevousId:string,discussStr:string) =>
+{
+    const opts = {
+        method: 'addUpdateDiscuss',
+        params: [userId,token,projId,updateId,prevousId,discussStr]
+    }
+    return request(opts);
+}
+export const getUpdateDiscussList = (projId:string,discussId:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getUpdateSubDiscussList',
+        params: [projId,discussId,page,pageSize]
     }
     return request(opts);
 }
