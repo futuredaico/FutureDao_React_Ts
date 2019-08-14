@@ -113,7 +113,7 @@ export const getTeamList = (projId:string,page:number,pageSize:number) =>
     return request(opts);
 }
 /**
- * 发送评论
+ * 发送项目的评论
  * @param userId 用户id
  * @param token 
  * @param projId 项目ID
@@ -132,25 +132,41 @@ export const sendDiscussToProj = (userId:string,token:string,projId:string,prevo
  * 查询项目评论列表
  * @param projId 项目ID
  * @param discussId 评论ID（为空表示查询一级评论）
+ * @param userId 用户id
  * @param page 当前页码
  * @param pageSize 每页条数
  */
-export const getProjDiscussList = (projId:string,discussId:string,page:number,pageSize:number) =>
+export const getProjDiscussList = (projId:string,discussId:string,userId:string,page:number,pageSize:number) =>
 {
     const opts = {
         method: 'getProjSubDiscussList',
-        params: [projId,discussId,page,pageSize]
+        params: [projId,discussId,userId,page,pageSize]
     }
     return request(opts);
 }
 /**
- * 
- * @param userId 
+ * 查询项目二级评论接口
+ * @param childId 一级评论ID
+ * @param userId 用户ID
+ * @param page 分页索引
+ * @param pageSize 分页大小
+ */
+export const getProjDiscussChildList = (childId:string,userId:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getProjSubChildDiscussList',
+        params: [childId,userId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 发送更新日志的评论
+ * @param userId 用户id
  * @param token 
- * @param projId 
- * @param updateId 
- * @param prevousId 
- * @param discussStr 
+ * @param projId 项目ID
+ * @param updateId 更新日志ID
+ * @param prevousId 上一条评论ID（可为空，表示一级评论）
+ * @param discussStr 评论内容
  */
 export const sendDiscussToUpdate = (userId:string,token:string,projId:string,updateId:string,prevousId:string,discussStr:string) =>
 {
@@ -160,11 +176,50 @@ export const sendDiscussToUpdate = (userId:string,token:string,projId:string,upd
     }
     return request(opts);
 }
-export const getUpdateDiscussList = (projId:string,discussId:string,page:number,pageSize:number) =>
+/**
+ * 查询更新日志的评论列表
+ * @param projId 项目ID
+ * @param discussId 评论ID（为空表示查询一级评论）
+ * @param userId 用户id
+ * @param page 当前页码
+ * @param pageSize 每页条数 
+ */
+export const getUpdateDiscussList = (projId:string,discussId:string,userId:string,page:number,pageSize:number) =>
 {
     const opts = {
         method: 'getUpdateSubDiscussList',
-        params: [projId,discussId,page,pageSize]
+        params: [projId,discussId,userId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 点赞项目评论
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param discussId 评论ID
+ */
+export const sendZanProj = (userId:string,token:string,projId:string,discussId:string) =>
+{
+    const opts = {
+        method: 'zanProjDiscuss',
+        params: [userId,token,projId,discussId]
+    }
+    return request(opts);
+}
+/**
+ * 点赞更新评论
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param updateId 更新ID
+ * @param discussId 评论ID
+ */
+export const sendZanUpdate = (userId:string,token:string,projId:string,updateId:string,discussId:string) =>
+{
+    const opts = {
+        method: 'zanProjDiscuss',
+        params: [userId,token,projId,updateId,discussId]
     }
     return request(opts);
 }

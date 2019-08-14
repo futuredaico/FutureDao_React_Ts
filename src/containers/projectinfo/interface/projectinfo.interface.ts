@@ -10,6 +10,10 @@ export interface IProjectInfoStore {
     projTeamList:IProjectTeam[],
     updateId:string,
     updateInfo:IProjUpdateInfo|null,
+    projDiscussList:IDiscussList[],
+    projDiscussReplyList:IDiscussReplyList[],
+    updateDiscussList:IDiscussList[],
+    updateDiscussReplyList:IDiscussReplyList[],
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,
@@ -18,6 +22,12 @@ export interface IProjectInfoStore {
     getTeamData:()=>Promise<boolean>,
     getUpdateInfo:()=>Promise<boolean>,
     deletUpdateInfo:()=>Promise<boolean>,
+    getProjDiscussList:(discussId:string)=>Promise<boolean>,
+    sendProjDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
+    getUpdateDiscussList:(discussId:string)=>Promise<boolean>,
+    sendUpdateDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
+    sendProZan:(discussId:string)=>Promise<boolean>,
+    sendUpdateZan:(discussId:string)=>Promise<boolean>,
   }
   
   
@@ -70,8 +80,24 @@ export interface IProjectInfoStore {
     discussContent:string, // 评论内容
     userId:string, // 评论者ID
     zanCount:number, // 赞数
+    childrenId:string, // 回复评论ID
     time:number, // 评论时间
     username:string, // 评论者
     headIconUrl:string, // 评论者头像
     subSize:number // 回复数
+    isZan:boolean, // 是否点赞
+    isShowReply:boolean // 是否展开回复  
+  }
+
+  export interface IDiscussReplyList{
+    discussId:string, // 当前评论ID
+    discussContent:string, // 评论内容
+    userId:string, // 评论者ID
+    zanCount:number, // 赞数
+    time:number, // 评论时间
+    username:string, // 评论者
+    headIconUrl:string, // 评论者头像
+    isZan:boolean, // 是否点赞
+    preUserId:string, // 被回复人ID
+    preUsername:string // 被回复人名称
   }
