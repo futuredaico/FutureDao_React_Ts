@@ -28,6 +28,7 @@ export interface IProjectInfoStore {
     sendUpdateDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
     sendProZan:(discussId:string)=>Promise<boolean>,
     sendUpdateZan:(discussId:string)=>Promise<boolean>,
+    getProjDiscussReplyList:(childId:string) => Promise<boolean>
   }
   
   
@@ -100,4 +101,5 @@ export interface IProjectInfoStore {
     isZan:boolean, // 是否点赞
     preUserId:string, // 被回复人ID
     preUsername:string // 被回复人名称
+    isShowReply:boolean // 是否展开回复  
   }

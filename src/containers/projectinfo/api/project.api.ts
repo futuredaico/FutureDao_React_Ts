@@ -193,6 +193,21 @@ export const getUpdateDiscussList = (projId:string,discussId:string,userId:strin
     return request(opts);
 }
 /**
+ * 查询更新日志二级评论接口
+ * @param childId 一级评论ID
+ * @param userId 用户ID
+ * @param page 分页索引
+ * @param pageSize 分页大小
+ */
+export const getUpdateDiscussChildList = (childId:string,userId:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getUpdateSubChildDiscussList',
+        params: [childId,userId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
  * 点赞项目评论
  * @param userId 用户ID
  * @param token 访问令牌

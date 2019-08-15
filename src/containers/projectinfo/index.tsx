@@ -101,6 +101,10 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
+        if(this.props.common.isVerifyEmail){
+            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
+            return false;
+        }
         if (this.props.projectinfo.projInfo.isStar)
         {
             this.props.projectinfo.cancelAttention();
@@ -117,9 +121,13 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         if(!this.props.common.userInfo){
             this.props.history.push('/load/login');
             return false
-        }
+        }        
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo||this.props.projectinfo.projInfo.isSupport)
         {
+            return false;
+        }
+        if(this.props.common.isVerifyEmail){
+            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
         const res = await this.props.projectinfo.startSupport();

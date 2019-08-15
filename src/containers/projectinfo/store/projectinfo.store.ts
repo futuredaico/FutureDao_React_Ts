@@ -207,12 +207,12 @@ class ProjectInfo
 
     this.projDiscussList = result[0].data.list;
     this.projDiscussList = this.projDiscussList.map((item: IDiscussList) =>
-        {
-            return {
-                ...item,
-                isShowReply: false
-            }
-        })
+    {
+      return {
+        ...item,
+        isShowReply: false
+      }
+    })
     return true;
   }
   /**
@@ -233,6 +233,13 @@ class ProjectInfo
       return false
     }
     this.projDiscussReplyList = result[0].data.list;
+    this.projDiscussReplyList = this.projDiscussReplyList.map((item: IDiscussReplyList) =>
+    {
+      return {
+        ...item,
+        isShowReply: false
+      }
+    })
     return true;
   }
   /**
@@ -272,6 +279,33 @@ class ProjectInfo
       return false
     }
     this.updateDiscussList = result[0].data.list;
+    return true;
+  }
+  /**
+   * 获取更新日志二级评论
+   */
+  @action public getUpdateDiscussReplyList = async (childId: string) =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.getUpdateDiscussChildList(childId, common.userId, this.updateDiscussPage, this.updateDiscussPageSize);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.updateDiscussReplyList = result[0].data.list;
+    this.updateDiscussReplyList = this.updateDiscussReplyList.map((item: IDiscussReplyList) =>
+    {
+      return {
+        ...item,
+        isShowReply: false
+      }
+    })
     return true;
   }
   /**
