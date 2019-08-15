@@ -269,7 +269,7 @@ class ProjectInfo
     let result: any = [];
     try
     {
-      result = await Api.getUpdateDiscussList(this.projId, discussId, common.userId, this.updateDiscussPage, this.updateDiscussPageSize);
+      result = await Api.getUpdateDiscussList(this.updateId, discussId, common.userId, this.updateDiscussPage, this.updateDiscussPageSize);
     } catch (e)
     {
       return false;

@@ -6,20 +6,21 @@ import { observer } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { Input } from 'antd';
-import { IProjectInfoProps } from './interface/projectinfo.interface';
+import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/projectinfo.interface';
 // import RightTable from './transright';
 import * as formatTime from '@/utils/formatTime';
 @observer
 class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     public state = {
-        underPrice: 4,
-        underBottom: 1,
-        showDelet:false
+        showDelet: false,
+        updateDiscuss: '',
+        updateReply: '',
+        updateReplyOther: ''
     }
     public componentDidMount()
     {
-        this.props.projectinfo.getUpdateInfo()
+        this.props.projectinfo.getUpdateInfo();
+        this.handleGetUpdateDiscussList('');
     }
     public componentWillUnmount()
     {
@@ -63,79 +64,107 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                     <div className="updateinfo-tips">
                         <span>评论：{this.props.projectinfo.updateInfo.discussCount}</span>
                     </div>
-                    <div className="textarea-wrapper">
-                        <textarea name="message" id="" rows={4} style={{ resize: 'none' }} className="message-textarea" />
-                        <div className="people-message">
-                            <img src={require('@/img/default.png')} alt="" />
-                            <strong>Lilith</strong>
-                            <Button text="发表评论" />
-                        </div>
-                    </div>
+                    {
+                        (this.props.common.userInfo && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isStar || this.props.projectinfo.projInfo.isSupport))) && (
+                            <div className="textarea-wrapper">
+                                <textarea
+                                    name="message"
+                                    id=""
+                                    maxLength={400}
+                                    style={{ resize: 'none' }}
+                                    className="message-textarea"
+                                    value={this.state.updateDiscuss}
+                                    onChange={this.handleChangeUpdateDiscuss}
+                                />
+                                <div className="people-message">
+                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                    <strong>{this.props.common.userInfo.username}</strong>
+                                    <Button text="发表评论" btnColor={this.state.updateDiscuss ? '' : 'gray-btn'} onClick={this.handleSendUpdateDiscuss} />
+                                </div>
+                            </div>
+                        )
+                    }
                     <div className="message-comment">
-                        <div className="comment-list">
-                            <div className="comment-people">
-                                <img src={require('@/img/default.png')} alt="" />
-                                <strong>XXXXX</strong>
-                            </div>
-                            <p>应该可以为游戏招揽不少用户，但资金用途说明不够清晰，请补充一下！</p>
-                            <span className="time-tips">10h ago</span>
-                            <div className="right-other">
-                                <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" />
-                                <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" />
-                                <span>12</span>
-                            </div>
-                            <div className="comment-input">
-                                <Input placeholder="Basic usage" />
-                                <Button text="回复" />
-                            </div>
-                        </div>
-                        <div className="comment-list">
-                            <div className="comment-people">
-                                <img src={require('@/img/default.png')} alt="" />
-                                <strong>XXXXX</strong>
-                            </div>
-                            <p>应该可以为游戏招揽不少用户，但资金用途说明不够清晰，请补充一下！</p>
-                            <span className="time-tips">10h ago</span>
-                            <div className="right-other">
-                                <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" />
-                                <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" />
-                                <span>12</span>
-                            </div>
-                            <div className="comment-input">
-                                <Input placeholder="Basic usage" />
-                                <Button text="回复" />
-                            </div>
-                            <div className="reply-comment">
-                                <div className="reply-people">
-                                    <img src={require('@/img/default.png')} alt="" />
-                                    <strong>XXXXX</strong>
-                                </div>
-                                <p>应该可以为游戏招揽不少用户，但资金用途说明不够清晰，请补充一下！</p>
-                                <span className="time-tips">10h ago</span>
-                                <div className="right-other">
-                                    <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" />
-                                    <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" />
-                                    <span>12</span>
-                                </div>
-                                <div className="reply-input">
-                                    <Input placeholder="Basic usage" />
-                                    <Button text="回复" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="comment-list">
-                            <div className="comment-people">
-                                <img src={require('@/img/default.png')} alt="" />
-                                <strong>XXXXX</strong>
-                            </div>
-                            <p>应该可以为游戏招揽不少用户，但资金用途说明不够清晰，请补充一下！</p>
-                            <span className="time-tips">10h ago</span>
-                            <div className="right-other">
-                                <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" />
-                                <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" />
-                                <span>12</span>
-                            </div>
-                        </div>
+                        {
+                            this.props.projectinfo.updateDiscussList.length > 0 && this.props.projectinfo.updateDiscussList.map((item: IDiscussList, index: number) =>
+                            {
+                                return (
+
+                                    <div className="comment-list" key={index}>
+                                        <div className="comment-people">
+                                            <img src={item.headIconUrl ? item.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                            <strong>{item.username}</strong>
+                                        </div>
+                                        <p>{item.discussContent}</p>
+                                        <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
+                                        <div className="right-other">
+                                            <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenUpdatReply.bind(this, item)} />
+                                            {
+                                                item.isZan
+                                                    ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
+                                                    : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendUpdateZan.bind(this, item)} />
+                                            }
+                                            <span>{item.zanCount ? item.zanCount : ''}</span>
+                                        </div>
+                                        {
+                                            (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                <div className="comment-input">
+                                                    <textarea
+                                                        maxLength={500}
+                                                        value={this.state.updateReply}
+                                                        onChange={this.handleUpdatReplyDiscuss}
+                                                        className="reply-textarea"
+                                                    />
+                                                    <Button text="回复" btnColor={this.state.updateReply ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyDiscuss.bind(this, item)} />
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            (item.isShowReply && item.subSize > 0) && (
+                                                <div className="reply-comment">
+                                                    {
+                                                        this.props.projectinfo.updateDiscussReplyList.map((replyItem: IDiscussReplyList, num: number) =>
+                                                        {
+                                                            return (
+                                                                <div className="reply-list" key={num}>
+                                                                    <div className="reply-people">
+                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                                                        <strong>{replyItem.username}</strong>
+                                                                    </div>
+                                                                    <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
+                                                                    <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
+                                                                    <div className="right-other">
+                                                                        <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenUpdatReplyOther.bind(this, replyItem)} />
+                                                                        {
+                                                                            replyItem.isZan
+                                                                                ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
+                                                                                : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendUpdateZan.bind(this, replyItem)} />
+                                                                        }
+                                                                        <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
+                                                                    </div>
+                                                                    {
+                                                                        (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                                            <div className="reply-input">
+                                                                                <textarea
+                                                                                    className="reply-textarea"
+                                                                                    value={this.state.updateReplyOther}
+                                                                                    onChange={this.handleUpdatReplyOther}
+                                                                                />
+                                                                                <Button text="回复" btnColor={this.state.updateReplyOther ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyOther.bind(this, item, replyItem)} />
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
                 {
@@ -160,29 +189,159 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
         this.props.projectinfo.isShowUpdateInfo = false;
     }
     // 显示删除项目弹框
-    private handleShowDelete = () => {
+    private handleShowDelete = () =>
+    {
         this.setState({
             showDelet: !this.state.showDelet
         })
     }
     // 删除更新
-    private handleDeleteUpdate = () => {
+    private handleDeleteUpdate = () =>
+    {
         this.props.projectinfo.deletUpdateInfo();
         this.props.projectinfo.isShowUpdateInfo = false;
         this.props.projectinfo.updateId = '';
         this.handleShowDelete();
         return true;
     }
-    
-    // private handleDeleteUpdate = () =>
-    // {
-    //     this.props.projectinfo.deletUpdateInfo();
-    // }
     // 到发布更新
     private handleToUpdateEdit = () =>
     {
         // todo
-        this.props.history.push('/project/update/'+this.props.projectinfo.projId+'?updateid='+this.props.projectinfo.updateId)
+        this.props.history.push('/project/update/' + this.props.projectinfo.projId + '?updateid=' + this.props.projectinfo.updateId)
+    }
+    /**
+     * 以下留言部分
+     */
+    // 获取列表
+    private handleGetUpdateDiscussList = (discussId: string) =>
+    {
+        this.props.projectinfo.getUpdateDiscussList(discussId);
+    }
+    // 留言输入
+    private handleChangeUpdateDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
+    {
+        this.setState({
+            updateDiscuss: ev.target.value
+        })
+    }
+    // 发表留言
+    private handleSendUpdateDiscuss = async () =>
+    {
+        if (!this.state.updateDiscuss)
+        {
+            return false;
+        }
+        if (this.props.common.isVerifyEmail)
+        {
+            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
+            return false;
+        }
+        const res = await this.props.projectinfo.sendUpdateDiscuss('', this.state.updateDiscuss);
+        if (res)
+        {
+            this.setState({
+                updateDiscuss: ''
+            })
+            setTimeout(() =>
+            {
+                this.handleGetUpdateDiscussList('');
+            }, 2000)
+        }
+        return true;
+    }
+    // 点赞
+    private handleSendUpdateZan = async (item: IDiscussList | IDiscussReplyList) =>
+    {
+        const res = await this.props.projectinfo.sendUpdateZan(item.discussId);
+        if (res)
+        {
+            item.isZan = true;
+        }
+    }
+    // 打开回复
+    private handleOpenUpdatReply = (item: IDiscussList) =>
+    {
+
+        this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
+        {
+            if (list.discussId === item.discussId)
+            {
+                item.isShowReply = !item.isShowReply;
+            } else
+            {
+                list.isShowReply = false;
+            }
+        })
+        this.setState({
+            updateDiscuss: '',
+            updateReply: '',
+            updateReplyOther: ''
+        })
+        if (item.isShowReply)
+        {
+            this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
+        }
+    }
+    // 打开回复二级
+    private handleOpenUpdatReplyOther = (item: IDiscussReplyList) =>
+    {
+        this.props.projectinfo.updateDiscussReplyList.forEach((list: IDiscussReplyList) =>
+        {
+            if (list.discussId === item.discussId)
+            {
+                item.isShowReply = !item.isShowReply;
+            } else
+            {
+                list.isShowReply = false;
+            }
+        })
+        this.setState({
+            updateDiscuss: '',
+            updateReply: '',
+            updateReplyOther: ''
+        })
+    }
+    // 回复评论一级输入
+    private handleUpdatReplyDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
+    {
+        this.setState({
+            updateReply: ev.target.value
+        })
+    }
+    // 回复评论输入（二级）
+    private handleUpdatReplyOther = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
+    {
+        this.setState({
+            updateReplyOther: ev.target.value
+        })
+    }
+    // 回复评论一级
+    private handleSendUpdatReplyDiscuss = (item: IDiscussList) =>
+    {
+
+        if (!this.state.updateReply)
+        {
+            return false;
+        }
+        this.props.projectinfo.sendUpdateDiscuss(item.discussId, this.state.updateReply);
+        item.isShowReply = false;
+        return true;
+    }
+    // 回复评论二级
+    private handleSendUpdatReplyOther = (item: IDiscussList, replyItem: IDiscussReplyList) =>
+    {
+        if (!this.state.updateReplyOther)
+        {
+            return false;
+        }
+        this.props.projectinfo.sendUpdateDiscuss(replyItem.discussId, this.state.updateReplyOther);
+        replyItem.isShowReply = false;
+        setTimeout(() =>
+        {
+            this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
+        }, 2000)
+        return true;
     }
 }
 

@@ -173,7 +173,11 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             this.setState({
                 discussInput: ''
             })
-        }
+            setTimeout(() =>
+            {
+                this.handleGetDataList('');
+            }, 2000)            
+        }        
         return true;
     }
     // 点赞

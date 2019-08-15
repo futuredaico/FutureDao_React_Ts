@@ -28,7 +28,8 @@ export interface IProjectInfoStore {
     sendUpdateDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
     sendProZan:(discussId:string)=>Promise<boolean>,
     sendUpdateZan:(discussId:string)=>Promise<boolean>,
-    getProjDiscussReplyList:(childId:string) => Promise<boolean>
+    getProjDiscussReplyList:(childId:string) => Promise<boolean>,
+    getUpdateDiscussReplyList:(childId:string) => Promise<boolean>,
   }
   
   

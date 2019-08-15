@@ -178,17 +178,17 @@ export const sendDiscussToUpdate = (userId:string,token:string,projId:string,upd
 }
 /**
  * 查询更新日志的评论列表
- * @param projId 项目ID
+ * @param updateId 更新ID
  * @param discussId 评论ID（为空表示查询一级评论）
  * @param userId 用户id
  * @param page 当前页码
  * @param pageSize 每页条数 
  */
-export const getUpdateDiscussList = (projId:string,discussId:string,userId:string,page:number,pageSize:number) =>
+export const getUpdateDiscussList = (updateId:string,discussId:string,userId:string,page:number,pageSize:number) =>
 {
     const opts = {
         method: 'getUpdateSubDiscussList',
-        params: [projId,discussId,userId,page,pageSize]
+        params: [updateId,discussId,userId,page,pageSize]
     }
     return request(opts);
 }
@@ -233,7 +233,7 @@ export const sendZanProj = (userId:string,token:string,projId:string,discussId:s
 export const sendZanUpdate = (userId:string,token:string,projId:string,updateId:string,discussId:string) =>
 {
     const opts = {
-        method: 'zanProjDiscuss',
+        method: 'zanUpdateDiscuss',
         params: [userId,token,projId,updateId,discussId]
     }
     return request(opts);
