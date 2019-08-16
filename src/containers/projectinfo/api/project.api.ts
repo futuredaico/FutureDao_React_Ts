@@ -238,3 +238,18 @@ export const sendZanUpdate = (userId:string,token:string,projId:string,updateId:
     }
     return request(opts);
 }
+/**
+ * 点赞该条更新日志
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param updateId 更新ID
+ */
+export const sendZanUpdateInfo = (userId:string,token:string,projId:string,updateId:string) =>
+{
+    const opts = {
+        method: 'zanUpdate',
+        params: [userId,token,projId,updateId]
+    }
+    return request(opts);
+}

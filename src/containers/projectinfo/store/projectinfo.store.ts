@@ -365,6 +365,22 @@ class ProjectInfo
     }
     return true;
   }
+  @action public sendUpdateZanInfo = async () =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.sendZanUpdateInfo(common.userId, common.token, this.projId, this.updateId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    return true;
+  }
 }
 
 export default new ProjectInfo();

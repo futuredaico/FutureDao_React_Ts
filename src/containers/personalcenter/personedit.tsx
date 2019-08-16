@@ -15,7 +15,7 @@ import { RcFile } from 'antd/lib/upload';
 @observer
 class PersonalEidt extends React.Component<IPersonProps, any> {
     public state = {
-        imageUrl: this.props.common.userInfo ? this.props.common.userInfo.headIconUrl.replace('temp_', '') : null,
+        imageUrl: this.props.common.userInfo ? (this.props.common.userInfo.headIconUrl?this.props.common.userInfo.headIconUrl:require('@/img/default.png')) : require('@/img/default.png'),
         isEditDes: false, // 个人简介
         isEditEmail: false, // 邮箱
         isEditPwd: false, // 密码

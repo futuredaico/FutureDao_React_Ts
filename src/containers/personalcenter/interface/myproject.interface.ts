@@ -13,7 +13,8 @@ export interface IMyProjectStore
   attentionPage:number,
   attentionPageSize:number,
   getManagerData:()=>Promise<boolean>,
-  getAttentionData:()=>Promise<boolean>
+  getAttentionData:()=>Promise<boolean>,
+  getSomethingCount:()=>Promise<boolean>
 }
 
 export interface IMyProjectProps  extends RouteComponentProps

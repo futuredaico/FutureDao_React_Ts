@@ -42,7 +42,7 @@ export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
                         this.state.invateStep === 0 && (
                             <>
                                 <div className="invite-p">
-                                    <img src={this.props.emailcheck.proInfo?this.props.emailcheck.proInfo.adminHeadIconUrl.replace('temp_',''):''} alt="" className="invite-img" />
+                                    <img src={this.props.emailcheck.proInfo?(this.props.emailcheck.proInfo.adminHeadIconUrl?this.props.emailcheck.proInfo.adminHeadIconUrl:require('@/img/default.png')): require('@/img/default.png')} alt="" className="invite-img" />
                                     <strong>{this.props.emailcheck.proInfo&&this.props.emailcheck.proInfo.adminUsername}</strong>
                                     <span>邀请你加入项目</span>
                                     <strong>{this.props.emailcheck.proInfo&&this.props.emailcheck.proInfo.projName}</strong>

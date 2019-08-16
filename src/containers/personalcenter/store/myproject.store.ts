@@ -23,19 +23,19 @@ class MyProject
         let result: any = [];
         try
         {
-            result = await Api.getManagerList(common.userId, common.token, this.managerPage,this.managerPageSize);
+            result = await Api.getManagerList(common.userId, common.token, this.managerPage, this.managerPageSize);
         } catch (e)
         {
             this.manageCount = 0;
-            this.manageList= [];
+            this.manageList = [];
             return false;
         }
         if (result[0].resultCode !== CodeType.success)
         {
-            return false            
+            return false
         }
-        this.manageCount = result[0].data.count||0;
-        this.manageList= result[0].data.list||[];
+        this.manageCount = result[0].data.count || 0;
+        this.manageList = result[0].data.list || [];
         return true;
     }
     /**
@@ -46,19 +46,42 @@ class MyProject
         let result: any = [];
         try
         {
-            result = await Api.getAttentionList(common.userId, common.token, this.attentionPage,this.attentionPageSize);
+            result = await Api.getAttentionList(common.userId, common.token, this.attentionPage, this.attentionPageSize);
         } catch (e)
         {
             this.attentionCount = 0;
-            this.attentionList= [];
+            this.attentionList = [];
             return false;
         }
         if (result[0].resultCode !== CodeType.success)
         {
-            return false            
-        } 
-        this.attentionCount = result[0].data.count||0;
-        this.attentionList= result[0].data.list||[];
+            return false
+        }
+        this.attentionCount = result[0].data.count || 0;
+        this.attentionList = result[0].data.list || [];
+        return true;
+    }
+    /**
+     * 获取列表计数
+     */
+    @action public getSomethingCount = async () =>
+    {
+        let result: any = [];
+        try
+        {
+            result = await Api.getMangeProjCount(common.userId, common.token);
+        } catch (e)
+        {
+            this.attentionCount = 0;
+            this.manageCount = 0;
+            return false;
+        }
+        if (result[0].resultCode !== CodeType.success)
+        {
+            return false
+        }
+        this.attentionCount = result[0].data.starCount || 0;
+        this.manageCount = result[0].data.manageCount || 0;
         return true;
     }
 }

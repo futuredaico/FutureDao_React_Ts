@@ -30,6 +30,7 @@ export interface IProjectInfoStore {
     sendUpdateZan:(discussId:string)=>Promise<boolean>,
     getProjDiscussReplyList:(childId:string) => Promise<boolean>,
     getUpdateDiscussReplyList:(childId:string) => Promise<boolean>,
+    sendUpdateZanInfo:()=>Promise<boolean>,
   }
   
   
@@ -48,7 +49,10 @@ export interface IProjectInfoStore {
     projDetail:string,
     supportCount:number,
     isSupport:boolean,
-    isStar:boolean
+    isStar:boolean,
+    videoBriefUrl:string,
+    discussCount:number,
+    updateCount:number,
   }
 
   export interface IProjectUpdate{
@@ -69,7 +73,8 @@ export interface IProjectInfoStore {
     username:string,
     headIconUrl:string,
     isMember:boolean,
-    rank:number
+    rank:number,
+    isZan:boolean
   }
   export interface IProjectTeam{
     username:string,

@@ -9,7 +9,7 @@ import Pbottom from './pbottom';
 import Button from '@/components/Button';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 
-@inject('projectinfo','common')
+@inject('projectinfo', 'common')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     public componentDidMount()
@@ -93,7 +93,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     // 关注
     private handleToAttention = () =>
     {
-        if(!this.props.common.userInfo){
+        if (!this.props.common.userInfo)
+        {
             this.props.history.push('/load/login');
             return false
         }
@@ -101,7 +102,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        if(this.props.common.isVerifyEmail){
+        if (this.props.common.isVerifyEmail)
+        {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
@@ -118,15 +120,17 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     // 看好
     private handleToStartSupport = async () =>
     {
-        if(!this.props.common.userInfo){
+        if (!this.props.common.userInfo)
+        {
             this.props.history.push('/load/login');
             return false
-        }        
-        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo||this.props.projectinfo.projInfo.isSupport)
+        }
+        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport)
         {
             return false;
         }
-        if(this.props.common.isVerifyEmail){
+        if (this.props.common.isVerifyEmail)
+        {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
@@ -134,5 +138,6 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         this.props.projectinfo.projInfo.isSupport = res;
         return true;
     }
+    
 }
 export default injectIntl(ProjectInfo)

@@ -109,13 +109,13 @@ class Project extends React.Component<IProps, any> {
     }
     // 菜单选择
     private mapUnderline = (str: string) => {
-        if(str === '/project/delete'){
+        if(str === '/delete'){
             this.handleShowDeleteProject();
         }
         else{
             const url = '/project'+str + '/' + this.props.project.projId;
             console.log(url)
-            this.props.history.push('/project'+str);
+            this.props.history.push(url);
         }
     }
     // 菜单选择样式

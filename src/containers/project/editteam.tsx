@@ -94,7 +94,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
-                                            <img src={item.headIconUrl.replace('temp_', '')} alt="" className="people-img" />
+                                            <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" className="people-img" />
                                             <span className="peo-name">{item.username}</span>
                                         </span>
                                         {
@@ -173,7 +173,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                         {
                                                             return (
                                                                 <li key={index} onClick={this.handleSelectUser.bind(this, item)}>
-                                                                    <img src={item.headIconUrl.replace('temp_', '')} alt="" />
+                                                                    <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" />
                                                                     <span className="name-text">{item.username}</span>
                                                                     <span>{item.email}</span>
                                                                 </li>

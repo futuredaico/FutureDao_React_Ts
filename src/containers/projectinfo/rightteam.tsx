@@ -20,7 +20,7 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                         return (
                             <div className="team-smallbox" key={index}>
                                 <div className="team-people">
-                                    <img src={item.headIconUrl.replace('temp_','')} alt="" />
+                                    <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" />
                                     <span>{item.username}</span>
                                 </div>
                                 <p className="team-des">{!!item.brief?item.brief:'暂无简介'}</p>

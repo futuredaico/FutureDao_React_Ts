@@ -75,6 +75,18 @@ export const modifyEmail = (userId: string,token:string,email:string,pwd:string)
     }
     return request(opts);
 }
+export const getMangeProjCount = (userId: string,token:string) =>
+{
+    const opts = {
+        method: 'getStarMangeProjCount',
+        params: [
+            userId,
+            token
+        ]
+    }
+    return request(opts);
+}
+
 /**
  * 获取管理中项目列表
  * @param userId 用户id

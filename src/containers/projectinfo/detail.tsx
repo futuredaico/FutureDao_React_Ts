@@ -48,7 +48,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                                     onChange={this.handleChangeDiscuss}
                                 />
                                 <div className="people-message">
-                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" />
                                     <strong>{this.props.common.userInfo.username}</strong>
                                     <Button text="发表评论" btnColor={this.state.discussInput ? '' : 'gray-btn'} onClick={this.handleSendDiscuss} />
                                 </div>
@@ -63,7 +63,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
 
                                     <div className="comment-list" key={index}>
                                         <div className="comment-people">
-                                            <img src={item.headIconUrl ? item.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
                                             <strong>{item.username}</strong>
                                         </div>
                                         <p>{item.discussContent}</p>
@@ -99,7 +99,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                                                             return (
                                                                 <div className="reply-list" key={num}>
                                                                     <div className="reply-people">
-                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl.replace('temp_', '') : require('@/img/default.png')} alt="" />
+                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl: require('@/img/default.png')} alt="" />
                                                                         <strong>{replyItem.username}</strong>
                                                                     </div>
                                                                     <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
@@ -176,8 +176,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             setTimeout(() =>
             {
                 this.handleGetDataList('');
-            }, 2000)            
-        }        
+            }, 2000)
+        }
         return true;
     }
     // 点赞
