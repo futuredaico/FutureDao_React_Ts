@@ -182,18 +182,20 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         );
     }
     // 限制图片上传大小与格式
-    private beforeUpload(file: RcFile)
+    private beforeUpload =  (file: RcFile)=>
     {
-        if (file.size / 1024 / 1024 < 3)
+        if (file.size / 1024 / 1024 > 3)
         {
+            this.props.common.openNotificationWithIcon('error', '操作失败', '头像太大了请更换小一点的头像');
             return false;
         }
         // todo commonStore
-        const res = this.props.common.uploadFile(file);
+        const res =  this.props.common.uploadFile(file);
+        console.log(res)
         if (res)
         {
             this.setState({
-                imageUrl: res['url']
+                imageUrl: res['result']
             })
         }
         return false;

@@ -83,7 +83,8 @@ export default class Header extends React.Component<IProps, any>{
     }
      else {
       // 正常访问
-      window.location.href = '/project'
+      const href = process.env.REACT_APP_SERVER_ENV === 'DEV'?'/test':'';
+      window.location.href = href+ '/project'
     }
   }
   // 登录

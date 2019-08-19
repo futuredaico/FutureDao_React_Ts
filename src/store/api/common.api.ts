@@ -3,11 +3,16 @@ import { RcFile } from 'antd/lib/upload';
 // 上传文件图片之类的
 export const uploadFile = (file:RcFile)=>{
   const formData = new FormData();
-  formData.append('xxxx', file);
+  formData.append('file', file);
+  console.log(file)
+  console.log(formData)
   const opts = {
-    method:'todo',
-    params:formData
+    method:'file',
+    params:formData,
+    baseUrl:'file'
   }
+  console.log(opts)
+  return
   return request(opts)
 }
 

@@ -57,7 +57,7 @@ class Common implements ICommonStore
       return await Api.uploadFile(file);
     } catch (e)
     {
-      return false;
+      return null;
     }
   }
   // 登录

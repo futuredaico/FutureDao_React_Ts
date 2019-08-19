@@ -11,6 +11,7 @@ interface IOpts {
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
 const baseUrl: string = "https://apidao.nel.group/api/" + network;
+const fileUrl:string = "https://apidao.nel.group/api/file/"+network;
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 
@@ -30,6 +31,9 @@ export default function request(opts: IOpts): Promise<any> {
   let url = baseUrl;
   if (opts.baseUrl === 'common') {
     url = baseCommonUrl;
+  }
+  if (opts.baseUrl === 'file') {
+    url = fileUrl;
   }
   const params = makeRpcPostBody(opts.method, opts.params);
   const args = {

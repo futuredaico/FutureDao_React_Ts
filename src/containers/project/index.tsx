@@ -6,9 +6,6 @@ import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import { RouteComponentProps } from "react-router";
-// import CreateProject from './createproject';
-// import UpdateProject from './updateproject';
-// import { IProjectProps } from './interface/project.interface';
 import Button from '@/components/Button';
 import classnames from 'classnames';
 import { ProjectState, ProjSubState } from '@/store/interface/common.interface';
@@ -69,11 +66,10 @@ class Project extends React.Component<IProps, any> {
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
-                                <li className={createClassName} onClick={this.mapUnderline.bind(this, '')}>编辑项目资料</li>
-                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/update')}>发布更新</li>
-                                <li className={beginClassName} >启动融资（即将上线）</li>
-                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/delete')}>删除项目</li>
-
+                            <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>编辑项目资料</li>
+                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>发布更新</li>
+                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>启动融资</li>
+                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>删除项目</li>
                             </ul>
                         </div>
                     </div>
@@ -83,12 +79,6 @@ class Project extends React.Component<IProps, any> {
                     {
                         renderRoutes(this.props.route.children)
                     }
-                    {/* {
-                        this.props.project.menuNum === 1 && <CreateProject {...this.props} />
-                    }
-                    {
-                        this.props.project.menuNum === 2 && <UpdateProject {...this.props} />
-                    } */}
                 </div>
                 {
                     this.state.showDeletProject && (
@@ -113,9 +103,7 @@ class Project extends React.Component<IProps, any> {
             this.handleShowDeleteProject();
         }
         else{
-            const url = '/project'+str + '/' + this.props.project.projId;
-            console.log(url)
-            this.props.history.push(url);
+            this.props.history.push(str + '/' + this.props.project.projId);
         }
     }
     // 菜单选择样式

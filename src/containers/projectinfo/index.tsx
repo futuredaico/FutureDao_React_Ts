@@ -75,7 +75,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                                 }
                             </div>
                         </div>
-                        <div className="ptop-share">
+                        {/* <div className="ptop-share">
                             <span>分享项目到</span>
                             <div className="share-icon">
                                 <div className="img-div twitter-icon" />
@@ -83,7 +83,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                                 <div className="img-div webchat-icon" />
                                 <div className="img-div fb-icon" />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Pbottom {...this.props} />
