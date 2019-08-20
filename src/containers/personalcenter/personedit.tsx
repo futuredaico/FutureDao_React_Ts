@@ -15,7 +15,7 @@ import { RcFile } from 'antd/lib/upload';
 @observer
 class PersonalEidt extends React.Component<IPersonProps, any> {
     public state = {
-        imageUrl: this.props.common.userInfo ? (this.props.common.userInfo.headIconUrl?this.props.common.userInfo.headIconUrl:require('@/img/default.png')) : require('@/img/default.png'),
+        imageUrl:null,
         isEditDes: false, // 个人简介
         isEditEmail: false, // 邮箱
         isEditPwd: false, // 密码
@@ -41,7 +41,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                 <h2>个人资料</h2>
                 <div className="person-picture">
                     <div className="person-img">
-                        {this.state.imageUrl ? <img src={this.state.imageUrl} alt="" /> : <div className="no-img" />}
+                        {(this.props.common.userInfo &&this.props.common.userInfo.headIconUrl) ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img"src={require('@/img/default.png')}  alt="" />}
                     </div>
                     <div className="person-name-img">
                         <strong className="person-name">{this.props.common.userInfo && this.props.common.userInfo.username}</strong>
@@ -182,7 +182,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         );
     }
     // 限制图片上传大小与格式
-    private beforeUpload =  (file: RcFile)=>
+    private beforeUpload = (file: RcFile) =>
     {
         if (file.size / 1024 / 1024 > 3)
         {
@@ -190,15 +190,22 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
             return false;
         }
         // todo commonStore
-        const res =  this.props.common.uploadFile(file);
+        this.uploadPicture(file)
+        return false;
+    }
+    private uploadPicture = async (file: RcFile) =>
+    {
+        //
+        const res = await this.props.common.uploadFile(file);
         console.log(res)
         if (res)
         {
-            this.setState({
-                imageUrl: res['result']
-            })
+            const imgRes = await this.props.personedit.updateUserImg(res);
+            if (imgRes && this.props.common.userInfo)
+            {
+                this.props.common.userInfo.headIconUrl = res;
+            }
         }
-        return false;
     }
     // 输入个人简介
     private handleToChangeDes = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -214,11 +221,11 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         const res = await this.props.personedit.updateUserBrief(this.state.briefTextarea);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '操作成功', '个人简历成功');
+            this.props.common.openNotificationWithIcon('success', '操作成功', '个人简介成功');
         }
         else
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '个人简历失败');
+            this.props.common.openNotificationWithIcon('error', '操作失败', '个人简介失败');
         }
         this.handleCancelEdit();
     }
@@ -254,7 +261,8 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
     // 修改邮箱时的密码输入
     private handleToEnterPwd = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        if(this.props.personedit.newEmailCode=== CodeType.passwordError){
+        if (this.props.personedit.newEmailCode === CodeType.passwordError)
+        {
             this.props.personedit.newEmailCode = '';
         }
         this.setState({

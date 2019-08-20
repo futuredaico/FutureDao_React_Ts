@@ -52,13 +52,16 @@ class Common implements ICommonStore
   @action public uploadFile = async (file: RcFile) =>
   {
     // todo
+    let result: any = [];
     try
     {
-      return await Api.uploadFile(file);
+      result = await Api.uploadFile(file);
     } catch (e)
     {
-      return null;
+      return '';
     }
+    console.log(result);
+    return result
   }
   // 登录
   @action public loginFutureDao = async (email: string, pwd: string) =>

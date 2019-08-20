@@ -10,7 +10,7 @@ export interface ICommonStore
   userId: string,
   footer: boolean,
   isVerifyEmail: boolean,
-  uploadFile: (file: RcFile) => Promise<boolean>,
+  uploadFile: (file: RcFile) => Promise<string>,
   loginFutureDao: (email: string, pwd: string) => Promise<boolean>,
   logoutFutureDao: () => void,
   getLoginStatus: () => void,

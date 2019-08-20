@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, { AxiosRequestConfig } from 'axios';
 
 interface IOpts {
   method: string, // 接口名
@@ -6,12 +6,14 @@ interface IOpts {
   isGET?: boolean, // 是否是get 请求（默认请求是post）
   baseUrl?: string, // 如果是common 则 取 baseCommonUrl（默认 baseUrl）
   getAll?: boolean, // 是否获取所有返回结果
+  isUpload?: boolean, // 是否上传
 }
 
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
 const baseUrl: string = "https://apidao.nel.group/api/" + network;
-const fileUrl:string = "https://apidao.nel.group/api/file/"+network;
+// const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
+const fileUrl: string = "http://47.99.156.117:50101/api/file/" + network;
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 
@@ -36,11 +38,19 @@ export default function request(opts: IOpts): Promise<any> {
     url = fileUrl;
   }
   const params = makeRpcPostBody(opts.method, opts.params);
-  const args = {
+  let args: AxiosRequestConfig = {
     url,
     method: opts.isGET ? 'GET' : 'POST',
     [opts.isGET ? 'params' : 'data']: opts.method ? params : JSON.stringify(params),
     ...defaultConfig,
+  }
+  if (opts.isUpload) {
+    args = {
+      url,
+      method: 'POST',
+      data: opts.params,
+      ...defaultConfig,
+    }
   }
   return new Promise((resolve, reject) => {
     Axios(args)
