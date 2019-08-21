@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
 import { RouteComponentProps } from "react-router";
 import Button from '@/components/Button';
 import classnames from 'classnames';
-import { ProjectState, ProjSubState } from '@/store/interface/common.interface';
+import { ProjectState, ProjSubState, ICommonStore } from '@/store/interface/common.interface';
 import { renderRoutes } from 'react-router-config';
 import { History } from 'history';
 import { IProjectStore } from './interface/project.interface';
@@ -21,10 +21,11 @@ interface IProps extends RouteComponentProps<{ projectId: string }> {
     history: History,
     project: IProjectStore,
     createproject: ICreateProjectStore,
+    common:ICommonStore,
     intl: any
 }
 
-@inject('project', 'createproject')
+@inject('project', 'createproject','common')
 @observer
 class Project extends React.Component<IProps, any> {
     public state = {
@@ -68,7 +69,7 @@ class Project extends React.Component<IProps, any> {
                             <ul className="menu-list-ul">
                             <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>编辑项目资料</li>
                                 <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>发布更新</li>
-                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>启动融资</li>
+                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>启动融资（即将上线）</li>
                                 <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>删除项目</li>
                             </ul>
                         </div>
@@ -99,12 +100,28 @@ class Project extends React.Component<IProps, any> {
     }
     // 菜单选择
     private mapUnderline = (str: string) => {
-        if(str === '/delete'){
-            this.handleShowDeleteProject();
+        if(str === '/project/update'){
+            //
+            if((this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing)){
+                return false;
+            }else{
+                this.props.history.push(str + '/' + this.props.project.projId);
+            }
+        }
+        else if(str === '/project/begin'){
+            return false;
+        }
+        else if(str === '/project/delete'){
+            if(this.props.createproject.createContent.role!=='admin'){
+                this.props.common.openNotificationWithIcon('error', '操作失败', '仅限管理员可删除项目');
+            }else{
+                this.handleShowDeleteProject();
+            }
         }
         else{
             this.props.history.push(str + '/' + this.props.project.projId);
         }
+        return true;
     }
     // 菜单选择样式
     private mapChildClick = (path) => {

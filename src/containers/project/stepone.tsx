@@ -21,7 +21,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     nameValue: this.props.createproject.createContent.projName, // 项目名称
     titleValue: this.props.createproject.createContent.projTitle, // 项目标题
     typeValue: this.props.createproject.createContent.projType, // 项目类型
-    imageUrl: null,  // 封面
+    imageUrl: this.props.createproject.createContent.projConverUrl,  // 封面
     loading: false,
     textareaValue: this.props.createproject.createContent.projBrief, // 项目简介
     textareaNum: 0, // 项目简介统计
@@ -50,7 +50,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     }
   ]
 
-  public render() {
+  public render()
+  {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -58,7 +59,6 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         <span className="small-text">尺寸 750*480，格式 jpg，png，分辨率72像素/英寸，不大于3MB</span>
       </div>
     );
-    const imageUrl = this.state.imageUrl;
     return (
       <div className="stepone-page" id="projectname">
         <div className="inline-title">
@@ -101,11 +101,12 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
             listType="picture-card"
             className={this.state.imgEnter ? "avatar-uploader err-active" : "avatar-uploader"}
             showUploadList={false}
+            accept="image/*,/pdf"
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             beforeUpload={this.beforeUpload}
           // onChange={this.handleChangeImg}
           >
-            {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+            {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton}
           </Upload>
           {
             this.state.imgEnter && <span className="err-span">填写本栏信息</span>
@@ -127,14 +128,15 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
             text="创建项目并继续"
             btnSize="bg-btn"
             onClick={this.handleToCreateProject}
-            btnColor={(!this.state.nameValue || !this.state.titleValue || !this.state.textareaValue) ? 'gray-btn' : ''}
+            btnColor={(!this.state.nameValue || !this.state.titleValue || !this.state.textareaValue || !this.state.imageUrl) ? 'gray-btn' : ''}
           />
         </div>
       </div >
     );
   }
   // 项目名称
-  private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
     //
     this.setState({
       nameValue: ev.target.value,
@@ -142,7 +144,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 项目标题
-  private handleToChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  private handleToChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
     //
     this.setState({
       titleValue: ev.target.value,
@@ -150,29 +153,47 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 下拉框选择
-  private onSelletCallback = (item) => {
+  private onSelletCallback = (item) =>
+  {
     // todo
     this.setState({
       typeValue: item.id
     })
   }
   // 限制图片上传大小与格式
-  private beforeUpload(file: RcFile) {
-    if (file.size / 1024 / 1024 < 3) {
+  private beforeUpload = (file: RcFile) =>
+  {
+    // 限制大小3M以下
+    if (file.size / 1024 / 1024 > 3)
+    {
+      this.props.common.openNotificationWithIcon('error', '操作失败', '图片太大了');
       return false;
     }
+    this.handleUploadCoverPicture(file);
     // todo commonStore
-    const res = commonStore.uploadFile(file);
-    if (res) {
+    return true;
+  }
+  // 上传封面
+  private handleUploadCoverPicture = async (file: RcFile) =>
+  {
+    const res = await commonStore.uploadFile(file);
+    if (res)
+    {
       this.setState({
-        imageUrl: res['url'],
+        imageUrl: res,
         imgEnter: false
       })
+    } else
+    {
+      this.setState({
+        imageUrl: null,
+        imgEnter: true
+      })
     }
-    return false;
   }
   // 获取项目简介的输入字数
-  private handleGetLength = (e) => {
+  private handleGetLength = (e) =>
+  {
     const str = e.target.value;
     this.setState({
       textareaValue: str,
@@ -181,22 +202,26 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     })
   }
   // 创建项目
-  private handleToCreateProject = async () => {
+  private handleToCreateProject = async () =>
+  {
+
     const res = this.checkInputStatus();
-    if (!res) {
+    if (!res)
+    {
       return
     }
     // 区分是新建项目还是管理项目
     const projectId = this.props.match.params.projectId;
-    if (!projectId) {
+    if (!projectId)
+    {
       this.props.createproject.createContent = {
         projId: '',
         projName: this.state.nameValue,
         projTitle: this.state.titleValue,
         projType: this.state.typeValue,
-        projCoverUrl: 'https://futuredao.oss-cn-hangzhou.aliyuncs.com/default.jpg',
+        projConverUrl: this.state.imageUrl,
         projBrief: this.state.textareaValue,
-        videoBriefUrl: '',
+        projVideoUrl: '',
         projDetail: '',
         connectEmail: '',
         officialWeb: '',
@@ -206,7 +231,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         role: 'admin'
       }
       const crestResult = await this.props.createproject.createProject();
-      if (crestResult) {
+      if (crestResult)
+      {
         this.props.createproject.step = 2;
         this.props.createproject.stepOneStatus = 2;
         this.props.createproject.stepTwoStatus = 3;
@@ -214,8 +240,10 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         window.scrollTo(0, 0);
         this.props.history.push('/project/' + this.props.createproject.createContent.projId);
       }
-    } else {
-      if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+    } else
+    {
+      if (this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
+      {
         this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
         return false;
       }
@@ -226,17 +254,23 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.state.nameValue,
         this.state.titleValue,
         this.state.typeValue,
-        'https://futuredao.oss-cn-hangzhou.aliyuncs.com/default.jpg',
-        this.state.textareaValue        
+        this.state.imageUrl,
+        this.state.textareaValue
       ]
       const creatResult = await this.props.createproject.modifyStepOne(content);
       console.log(creatResult)
+      if (creatResult) {
+        this.props.createproject.step = 2;
+        window.scrollTo(0, 0)
+      }
     }
     return true;
   }
   // 检查填写情况
-  private checkInputStatus = () => {
-    if (!this.state.nameValue) {
+  private checkInputStatus = () =>
+  {
+    if (!this.state.nameValue)
+    {
       this.setState({
         nameEnter: true
       })
@@ -244,20 +278,23 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.titleValue) {
+    if (!this.state.titleValue)
+    {
       this.setState({
         titleEnter: true
       })
       window.scrollTo(0, 0);
       return false
     }
-    // if(!this.state.imageUrl){
-    //   this.setState({
-    //     imgEnter:true
-    //   })
-    //   return false
-    // }
-    if (!this.state.textareaValue) {
+    if (!this.state.imageUrl)
+    {
+      this.setState({
+        imgEnter: true
+      })
+      return false
+    }
+    if (!this.state.textareaValue)
+    {
       this.setState({
         textareaEnter: true
       })

@@ -126,7 +126,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
       const res = await this.props.updateproject.modifyUpdateInfo(projectId, this.state.updateId, this.state.updateTitle, this.state.detailStr);
       if (res)
       {
-        this.props.common.openNotificationWithIcon('error', '操作成功', '日志修改成功');
+        this.props.common.openNotificationWithIcon('success', '操作成功', '日志修改成功');
       }
     }
     else

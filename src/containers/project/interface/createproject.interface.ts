@@ -29,20 +29,20 @@ export interface ICreateProjectProps extends RouteComponentProps<{ projectId: st
 }
 
 export interface ICreateContent {
-  projId: string,
-  projName: string,
-  projTitle: string,
-  projType: string,
-  projCoverUrl: string,
-  projBrief: string,
-  videoBriefUrl: string,
-  projDetail: string,
-  connectEmail: string,
-  officialWeb: string,
-  community: string,
-  projState: string,
-  projSubState: string,
-  role: string
+  projId: string,       // 项目ID
+  projName: string,     // 项目名称
+  projTitle: string,    // 项目标题
+  projType: string,     // 项目类型
+  projConverUrl: string, // 项目封面
+  projBrief: string,    // 项目简介
+  projVideoUrl: string,// 视频介绍
+  projDetail: string,   // 项目详情
+  connectEmail: string, // 邮箱
+  officialWeb: string,  // 官网
+  community: string,    // 社区
+  projState: string,    // 项目阶段状态
+  projSubState: string, // 项目提交审核状态
+  role: string          // 项目担任角色
 }
 
 export interface IMemberList {

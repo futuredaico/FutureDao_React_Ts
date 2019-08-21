@@ -160,12 +160,15 @@
     "t-ff6": "#FF6D59",
     "t-fa9": "#FA9D9D",
     "t-41c": "#41C73B",
+    "t-b9": "#B9B9B9",
+    "t-f3":" #F3B82B",
     "bg-ddd": "#DDDDDD",
     "bg-e5": "#e5e5e5",
     "bg-f6": "#F6F6F6",
     "bg-8a": "#8A7FE6",
     "bg-ff": "#fff",
     "bg-f25": "#F25151",
-    "bg-fd": "#FDFDFD"
+    "bg-fd": "#FDFDFD",
+    "bg-9e": "#9E94F5"
   }
 }

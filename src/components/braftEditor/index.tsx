@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import comonSotre from '@/store/common'
+import commonStore from '@/store/common'
 import { IBraftEditProps } from './index.interface';
 // 引入编辑器组件
 import BraftEditor, { ControlType, MediaType } from 'braft-editor';
@@ -48,11 +48,10 @@ export default class BraftEditorCustom extends React.Component<IBraftEditProps> 
 
   private uploadFn: MediaType["uploadFn"] = async (param: any) => {
     console.log(param);
-    const res = await comonSotre.uploadFile(param.file);
-
+    const res = await commonStore.uploadFile(param.file);
     if (res) {
       param.success({
-        url: res.url,
+        url: res,
         meta: {
           id: Math.random().toString(),
           title: '',

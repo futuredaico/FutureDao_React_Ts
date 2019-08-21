@@ -50,9 +50,10 @@ export interface IProjectInfoStore {
     supportCount:number,
     isSupport:boolean,
     isStar:boolean,
-    videoBriefUrl:string,
+    projVideoUrl:string,
     discussCount:number,
     updateCount:number,
+    time:number
   }
 
   export interface IProjectUpdate{

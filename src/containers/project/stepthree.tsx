@@ -56,7 +56,7 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存" btnSize="bg-btn" onClick={this.handleToSaveStepThree} />
+          <Button text="保存" btnSize="bg-btn" onClick={this.handleToSaveStepThree} btnColor={!this.state.emailInput?'gray-btn':''} />
         </div>
       </div>
     );

@@ -14,9 +14,9 @@ class CreateProject
     projName: '',
     projTitle: '',
     projType: '',
-    projCoverUrl: '',
+    projConverUrl: '',
     projBrief: '',
-    videoBriefUrl: '',
+    projVideoUrl: '',
     projDetail: '',
     connectEmail: '',
     officialWeb: '',
@@ -39,7 +39,7 @@ class CreateProject
       this.createContent.projName,
       this.createContent.projTitle,
       this.createContent.projType,
-      this.createContent.projCoverUrl,
+      this.createContent.projConverUrl,
       this.createContent.projBrief,
     ]
     try
@@ -49,7 +49,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false

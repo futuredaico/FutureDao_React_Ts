@@ -100,9 +100,11 @@ export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
         return true;
     }
     // 进入我的项目
-    private handleToGoMyProject = ()=>{
+    private handleToGoMyProject = async ()=>{
+        // 检查登陆状况
+        await this.props.common.getLoginStatus();
         if(this.props.common.userInfo){
-            this.props.history.push('/personalcenter')
+            this.props.history.push('/personalcenter/myproject')
         }else{
             this.props.history.push('/load/login')
         }

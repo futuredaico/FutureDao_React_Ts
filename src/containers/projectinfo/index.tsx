@@ -6,12 +6,17 @@ import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
-import Button from '@/components/Button';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
-
+import * as formatTime from '@/utils/formatTime';
+interface IState {
+    isShowVideo:boolean 
+}
 @inject('projectinfo', 'common')
 @observer
-class ProjectInfo extends React.Component<IProjectInfoProps, any> {
+class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
+    public state ={
+        isShowVideo:false
+    }
     public componentDidMount()
     {
         const projectId = this.props.match.params.projectId;
@@ -19,7 +24,6 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         if (projectId)
         {
             this.props.projectinfo.getProjInfo(projectId);
-            this.props.projectinfo.getUpdateData();
         }
     }
     public componentWillUnmount()
@@ -42,27 +46,34 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                     <p className="title-p">{this.props.projectinfo.projInfo.projBrief}</p>
                     <div className="ptop-left">
                         <div className="ptop-img">
-                            <img src={this.props.projectinfo.projInfo.projConverUrl} alt="" />
+                            {
+                                this.state.isShowVideo ? <video src={this.props.projectinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
+                                :<img src={this.props.projectinfo.projInfo.projConverUrl} alt=""/>
+                            }
+                            {
+                                (this.props.projectinfo.projInfo.projVideoUrl &&!this.state.isShowVideo) && <div className="play-btn" onClick={this.handlePlayVideo}/>
+                            }
                         </div>
                     </div>
                     <div className="ptop-right">
                         <div className="right-big-text">
-                            <span className="big-gray-text">{this.props.projectinfo.projInfo.supportCount}</span> 人看好
+                            <span className="big-purple-text">{this.props.projectinfo.projInfo.supportCount}</span>
+                            <span className="md-purple-text">人</span>
+                            <span className="sm-purple-text">看好这个项目</span>
                         </div>
                         <p className="gray-text">
-                            这个项目只是发布了创意，还没有启动融资，如果你看好这个创意，点击下面的”看好“，给作者一点鼓励吧。
+                            这个项目只是发布了创意，还没有启动融资，如果你看好这个创意，点击下面的“看好”，给作者一点鼓励吧。
                         </p>
                         <div className="do-like">
-                            <Button
-                                text={this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"}
-                                btnColor={this.props.projectinfo.projInfo.isSupport ? 'gray-btn' : ''}
-                                onClick={this.handleToStartSupport}
-                            />
+                            <div className={this.props.projectinfo.projInfo.isSupport ? 'dolike-btn dolike-gray-btn' : "dolike-btn"} onClick={this.handleToStartSupport}>
+                                <div className="dolike-img" />
+                                <span>{this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"}</span>
+                            </div>
                             <div className="dolike-wrapper" onClick={this.handleToAttention}>
                                 {
                                     this.props.projectinfo.projInfo.isStar ? (
                                         <>
-                                            <img src={require("@/img/like2.png")} alt="" />
+                                            <img src={require("@/img/guanzhu.png")} alt="" />
                                             <span className="dolike-text">已关注</span>
                                         </>
                                     )
@@ -75,7 +86,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                                 }
                             </div>
                         </div>
-                        {/* <div className="ptop-share">
+                        <p className="sm-gray-text">该项目创建于 {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p>
+                        <div className="ptop-share">
                             <span>分享项目到</span>
                             <div className="share-icon">
                                 <div className="img-div twitter-icon" />
@@ -83,7 +95,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
                                 <div className="img-div webchat-icon" />
                                 <div className="img-div fb-icon" />
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
                 <Pbottom {...this.props} />
@@ -95,7 +107,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     {
         if (!this.props.common.userInfo)
         {
-            this.props.history.push('/load/login');
+            this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
             return false
         }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo)
@@ -122,7 +134,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
     {
         if (!this.props.common.userInfo)
         {
-            this.props.history.push('/load/login');
+            this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
             return false
         }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport)
@@ -136,8 +148,15 @@ class ProjectInfo extends React.Component<IProjectInfoProps, any> {
         }
         const res = await this.props.projectinfo.startSupport();
         this.props.projectinfo.projInfo.isSupport = res;
+        this.handleToAttention();
         return true;
     }
-    
+    private handlePlayVideo = ()=>{
+        if(!this.state.isShowVideo){
+            this.setState({
+                isShowVideo:true
+            })
+        }
+    }
 }
 export default injectIntl(ProjectInfo)

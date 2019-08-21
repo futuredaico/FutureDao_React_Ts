@@ -33,113 +33,121 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                     <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />
                     {/* <img src={require('@/img/tu2.png')} alt="" className="detail-img" /> */}
                 </div>
-                <div className="message-wrapper" id="message">
-                    <h3>留言</h3>
-                    {
-                        (this.props.common.userInfo && (this.props.projectinfo.projInfo.isStar || this.props.projectinfo.projInfo.isSupport)) && (
-                            <div className="textarea-wrapper">
-                                <textarea
-                                    name="message"
-                                    id=""
-                                    maxLength={400}
-                                    style={{ resize: 'none' }}
-                                    className="message-textarea hei-textarea"
-                                    value={this.state.discussInput}
-                                    onChange={this.handleChangeDiscuss}
-                                />
-                                <div className="people-message">
-                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" />
-                                    <strong>{this.props.common.userInfo.username}</strong>
-                                    <Button text="发表评论" btnColor={this.state.discussInput ? '' : 'gray-btn'} onClick={this.handleSendDiscuss} />
+                {
+                    (this.props.projectinfo.projInfo.discussCount === 0 && (!this.props.projectinfo.projInfo.isStar || !this.props.projectinfo.projInfo.isSupport)) ?
+                        <div />
+                        : (
+                            <div className="message-wrapper" id="message">
+                                <h3>留言</h3>
+                                {
+                                    (this.props.common.userInfo && (this.props.projectinfo.projInfo.isStar || this.props.projectinfo.projInfo.isSupport)) && (
+                                        <div className="textarea-wrapper">
+                                            <textarea
+                                                name="message"
+                                                id=""
+                                                maxLength={400}
+                                                style={{ resize: 'none' }}
+                                                className="message-textarea hei-textarea"
+                                                value={this.state.discussInput}
+                                                onChange={this.handleChangeDiscuss}
+                                            />
+                                            <div className="people-message">
+                                                <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" />
+                                                <strong>{this.props.common.userInfo.username}</strong>
+                                                <Button text="发表评论" btnColor={this.state.discussInput ? '' : 'gray-btn'} onClick={this.handleSendDiscuss} />
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                <div className="message-comment">
+                                    {
+                                        this.props.projectinfo.projDiscussList.length > 0 && this.props.projectinfo.projDiscussList.map((item: IDiscussList, index: number) =>
+                                        {
+                                            return (
+
+                                                <div className="comment-list" key={index}>
+                                                    <div className="comment-people">
+                                                        <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
+                                                        <strong>{item.username}</strong>
+                                                    </div>
+                                                    <p>{item.discussContent}</p>
+                                                    <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
+                                                    <div className="right-other">
+                                                        <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReply.bind(this, item)} />
+                                                        {
+                                                            item.isZan
+                                                                ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
+                                                                : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendZan.bind(this, item)} />
+                                                        }
+                                                        <span>{item.zanCount ? item.zanCount : ''}</span>
+                                                    </div>
+                                                    {
+                                                        (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                            <div className="comment-input">
+                                                                <textarea
+                                                                    maxLength={500}
+                                                                    value={this.state.replyInput}
+                                                                    onChange={this.handleReplyDiscuss}
+                                                                    className="reply-textarea"
+                                                                />
+                                                                <Button text="回复" btnColor={this.state.replyInput ? '' : 'gray-btn'} onClick={this.handleSendReplyDiscuss.bind(this, item)} />
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {
+                                                        (item.isShowReply && item.subSize > 0) && (
+                                                            <div className="reply-comment">
+                                                                {
+                                                                    this.props.projectinfo.projDiscussReplyList.map((replyItem: IDiscussReplyList, num: number) =>
+                                                                    {
+                                                                        return (
+                                                                            <div className="reply-list" key={num}>
+                                                                                <div className="reply-people">
+                                                                                    <img src={replyItem.headIconUrl ? replyItem.headIconUrl : require('@/img/default.png')} alt="" />
+                                                                                    <strong>{replyItem.username}</strong>
+                                                                                </div>
+                                                                                <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
+                                                                                <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
+                                                                                <div className="right-other">
+                                                                                    <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReplyOther.bind(this, replyItem)} />
+                                                                                    {
+                                                                                        replyItem.isZan
+                                                                                            ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
+                                                                                            : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendZan.bind(this, replyItem)} />
+                                                                                    }
+                                                                                    <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
+                                                                                </div>
+                                                                                {
+                                                                                    (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                                                        <div className="reply-input">
+                                                                                            <textarea
+                                                                                                maxLength={500}
+                                                                                                className="reply-textarea"
+                                                                                                value={this.state.replyInputOther}
+                                                                                                onChange={this.handleReplyOther}
+                                                                                            />
+                                                                                            <Button text="回复" btnColor={this.state.replyInputOther ? '' : 'gray-btn'} onClick={this.handleSendReplyOther.bind(this, item, replyItem)} />
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+
+                                                            </div>
+                                                        )
+                                                    }
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         )
-                    }
-                    <div className="message-comment">
-                        {
-                            this.props.projectinfo.projDiscussList.length > 0 && this.props.projectinfo.projDiscussList.map((item: IDiscussList, index: number) =>
-                            {
-                                return (
+                }
 
-                                    <div className="comment-list" key={index}>
-                                        <div className="comment-people">
-                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
-                                            <strong>{item.username}</strong>
-                                        </div>
-                                        <p>{item.discussContent}</p>
-                                        <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
-                                        <div className="right-other">
-                                            <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReply.bind(this, item)} />
-                                            {
-                                                item.isZan
-                                                    ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
-                                                    : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendZan.bind(this, item)} />
-                                            }
-                                            <span>{item.zanCount ? item.zanCount : ''}</span>
-                                        </div>
-                                        {
-                                            (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
-                                                <div className="comment-input">
-                                                    <textarea
-                                                        maxLength={500}
-                                                        value={this.state.replyInput}
-                                                        onChange={this.handleReplyDiscuss}
-                                                        className="reply-textarea"
-                                                    />
-                                                    <Button text="回复" btnColor={this.state.replyInput ? '' : 'gray-btn'} onClick={this.handleSendReplyDiscuss.bind(this, item)} />
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            (item.isShowReply && item.subSize > 0) && (
-                                                <div className="reply-comment">
-                                                    {
-                                                        this.props.projectinfo.projDiscussReplyList.map((replyItem: IDiscussReplyList, num: number) =>
-                                                        {
-                                                            return (
-                                                                <div className="reply-list" key={num}>
-                                                                    <div className="reply-people">
-                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl: require('@/img/default.png')} alt="" />
-                                                                        <strong>{replyItem.username}</strong>
-                                                                    </div>
-                                                                    <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
-                                                                    <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
-                                                                    <div className="right-other">
-                                                                        <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReplyOther.bind(this, replyItem)} />
-                                                                        {
-                                                                            replyItem.isZan
-                                                                                ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
-                                                                                : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendZan.bind(this, replyItem)} />
-                                                                        }
-                                                                        <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
-                                                                    </div>
-                                                                    {
-                                                                        (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
-                                                                            <div className="reply-input">
-                                                                                <textarea
-                                                                                    className="reply-textarea"
-                                                                                    value={this.state.replyInputOther}
-                                                                                    onChange={this.handleReplyOther}
-                                                                                />
-                                                                                <Button text="回复" btnColor={this.state.replyInputOther ? '' : 'gray-btn'} onClick={this.handleSendReplyOther.bind(this, item, replyItem)} />
-                                                                            </div>
-                                                                        )
-                                                                    }
-
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-
-                                                </div>
-                                            )
-                                        }
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                </div>
             </>
         );
     }

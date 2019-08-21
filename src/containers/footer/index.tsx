@@ -26,7 +26,7 @@ export default class Footer extends React.Component<IProps, any>
       return null;
     }
     return (
-      <footer>
+      <footer className="layout-footer-w">
         <div className="footer-wrapper">
           <div className="footer-left">
             <div className="footer-list">

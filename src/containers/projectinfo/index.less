@@ -16,9 +16,30 @@
             vertical-align: top;
             display: inline-block;
             .ptop-img{
-                img{
+                position: relative;
+                img,video{
                     width: 750px;
                     height: 480px;
+                }
+                video{
+                    background: black;
+                }
+                .play-btn{
+                    width: 63px;
+                    height: 63px;
+                    border-radius: 50%;
+                    background: url('../../img/play-no.png') no-repeat;
+                    background-size: cover;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin-top: -31px;
+                    margin-left: -31px;
+                    &:hover{                        
+                        background: url('../../img/play.png') no-repeat;
+                        background-size: cover;
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -26,62 +47,122 @@
             width: 300px;
             vertical-align: top;
             display: inline-block;
+            border-top: 1px solid @bg-e5;            
             .right-big-text{
-                font-size: 22px;
+                // margin: 47px 0;
+                margin: 30px 0 47px 0;
+                font-size: 18px;
                 font-weight: 600;
                 color: @t-purple;
-                margin-bottom: 40px;
-                .big-gray-text{
+                text-align: center;
+                .big-purple-text{
                     font-size: 40px;
+                }
+                .md-purple-text{
+                    font-size: 30px;
+                }
+                .sm-purple-text{
+                    margin-top: 10px;
+                    display: block;
                 }
             }
             .gray-text{
                 font-size: 14px;
-                color: @t-9b;
-                height: 358px;
+                height: 150px;
+                height: 140px;
                 overflow: hidden;
             }
             .do-like{
-                // padding-bottom: 30px;
+                // margin-bottom: 55px;
+                margin-bottom: 20px;
                 clear: both;
+                .dolike-btn{
+                    display: inline-block;
+                    width: 180px;
+                    height: 44px;
+                    line-height: 44px;
+                    text-align: center;
+                    font-size: 16px;
+                    color: #fff;
+                    background: #8A7FE6;
+                    box-shadow: 0 2px 8px 0 rgba(188,181,249,0.50);
+                    border-radius: 3px;
+                    .dolike-img{
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 5px;
+                        background: url('../../img/like.png') no-repeat;
+                        background-size: cover;
+                        vertical-align: middle;
+                    }
+                    span{
+                        vertical-align: middle;
+                    }
+                    &:hover{
+                        background: @bg-9e;
+                        box-shadow: 0 2px 8px 0 rgba(188,181,249,0.50);
+                    }
+                }
+                .dolike-gray-btn{
+                    color: @t-b9;
+                    background: @bg-ddd;
+                    box-shadow: 0 2px 8px 0 rgba(202,202,202,0.50);
+                    .dolike-img{
+                        background: url('../../img/like-un.png') no-repeat;
+                        background-size: cover;
+                    }
+                    &:hover{
+                        background: @bg-ddd;
+                        box-shadow: 0 2px 8px 0 rgba(202,202,202,0.50);
+                    }
+                }
                 .dolike-wrapper{
                     float: right;
                     font-size: 14px;
                     color: @t-9b;
                     cursor: pointer;
+                    margin-top: 10px;
                     img{
-                        width: 30px;
+                        width: 20px;
                         margin-right: 10px;
                         vertical-align: middle;
                     }                    
                     .dolike-text{
-                        color: @t-fa9;
+                        color: @t-f3;
                     }
                     .no-dolike{
-                        width: 30px;
-                        height: 30px;
+                        width: 20px;
+                        height: 20px;
                         margin-right: 10px;
                         vertical-align: middle;
-                        background: url('../../img/like.png') no-repeat;
+                        background: url('../../img/guanzhu-un.png') no-repeat;
                         background-size: cover;
                         display: inline-block;
                     }
                     &:hover{
-                        color: @t-fa9;
+                        color: @t-f3;
                         .no-dolike{
-                            background: url('../../img/like2.png') no-repeat;
+                            background: url('../../img/guanzhu.png') no-repeat;
                             background-size: cover;
                         }
                     }
                 }
             }
+            .sm-gray-text{
+                font-size: 12px;
+                color: @t-b2;  
+                border-bottom: 1px solid @bg-e5;  
+                // padding-bottom: 32px;
+                padding-bottom: 15px;                
+            }
             .ptop-share{
-                padding-top: 20px;
+                padding-top: 15px;
                 span{
                     font-size: 14px;
                 }
                 .share-icon{
-                    margin-top: 30px;
+                    margin-top: 15px;
                     .img-div{
                         width: 30px;
                         height: 30px;
@@ -224,6 +305,11 @@
 .projectdetail-wrapper{
     .detail-p{
         margin: 30px 0 20px 0;
+        img{
+            display: block;
+            margin: 0 auto;
+            max-width: 750px;
+        }
     }
     .detail-img{
         width: 750px;
@@ -399,6 +485,16 @@
             margin-top: 15px;
             text-align: justify;
             margin-bottom: 15px;
+            max-height: 85px;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            display: -webkit-box;
+            -webkit-line-clamp: 4; // （行数）
+            /* autoprefixer: off */
+            -webkit-box-orient: vertical; 
+            img,video{
+                display: none;
+            }
         }
         .time-tips{
             font-size: 12px;

@@ -15,7 +15,6 @@ import { RcFile } from 'antd/lib/upload';
 @observer
 class PersonalEidt extends React.Component<IPersonProps, any> {
     public state = {
-        imageUrl:null,
         isEditDes: false, // 个人简介
         isEditEmail: false, // 邮箱
         isEditPwd: false, // 密码
@@ -51,6 +50,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                             // listType="picture-card"
                             className="avatar-uploader"
                             showUploadList={false}
+                            accept="image/*,/pdf"
                             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                             beforeUpload={this.beforeUpload}
                         >
@@ -184,18 +184,19 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
     // 限制图片上传大小与格式
     private beforeUpload = (file: RcFile) =>
     {
-        if (file.size / 1024 / 1024 > 3)
+        // 图片大小限制不超过1Mb
+        if (file.size / 1024 / 1024 > 1)
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '头像太大了请更换小一点的头像');
+            this.props.common.openNotificationWithIcon('error', '操作失败', '头像太大了');
             return false;
         }
         // todo commonStore
-        this.uploadPicture(file)
+        this.handleUploadPicture(file);
         return false;
     }
-    private uploadPicture = async (file: RcFile) =>
+    // 上传头像，并提交
+    private handleUploadPicture = async (file: RcFile) =>
     {
-        //
         const res = await this.props.common.uploadFile(file);
         console.log(res)
         if (res)

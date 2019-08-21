@@ -17,7 +17,7 @@ import { ProjSubState } from '@/store/interface/common.interface';
 @observer
 class StepTwo extends React.Component<ICreateProjectProps, any> {
   public state = {
-    imageUrl: this.props.createproject.createContent.videoBriefUrl,
+    videoUrl: this.props.createproject.createContent.projVideoUrl,
     loading: false,
     projDetail: this.props.createproject.createContent.projDetail, // 文本编辑内容
     projectDetails: BraftEditor.createEditorState(this.props.createproject.createContent.projDetail),
@@ -31,9 +31,6 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
         <span className="small-text">介绍介绍介绍</span>
       </div>
     );
-    const imageUrl = this.state.imageUrl;
-
-    console.log(this.props.createproject.createContent.projDetail)
     return (
       <div className="steptwo-page">
         <div className="inline-title">
@@ -44,12 +41,13 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
             name="avatar"
             listType="picture-card"
             className="avatar-uploader"
+            accept="video/*"
             showUploadList={false}
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             beforeUpload={this.beforeUpload}
           // onChange={this.handleChangeImg}
           >
-            {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+            {this.state.videoUrl ? <video src={this.state.videoUrl} controls={true} /> : uploadButton}
           </Upload>
         </div>
         <div className="inline-title">
@@ -69,24 +67,41 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} />
+          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} btnColor={!this.state.projDetail?'gray-btn':''} />
         </div>
       </div >
     );
   }
-  // 限制图片上传大小与格式
-  private beforeUpload(file: RcFile) {
-    if (file.size / 1024 / 1024 < 3) {
+  // 限制视频上传大小与格式
+  private beforeUpload = (file: RcFile) =>
+  {
+    // 视频文件限制200M以内
+    if (file.size / 1024 / 1024 > 200)
+    {
+      this.props.common.openNotificationWithIcon('error', '操作失败', '视频太大了');
       return false;
     }
+    this.handleUploadVedio(file);
     // todo commonStore
-    const res = commonStore.uploadFile(file);
-    if (res) {
+    return true;
+  }
+  // 上传视频
+  private handleUploadVedio = async (file: RcFile) =>
+  {
+    const res = await commonStore.uploadFile(file);
+    if (res)
+    {
       this.setState({
-        imageUrl: res['url']
+        videoUrl: res,
+        imgEnter: false
+      })
+    } else
+    {
+      this.setState({
+        videoUrl: null,
+        imgEnter: true
       })
     }
-    return false;
   }
   // 文本框的输入
   private onChangeEditorValue = (value: any) => {
@@ -117,7 +132,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.common.userId,
       this.props.common.token,
       this.props.createproject.createContent.projId,
-      '',// todo 暂时没有
+      this.state.videoUrl,
       this.state.projDetail,
     ]
     const creatResult = await this.props.createproject.modifyStepTwo(content);
@@ -127,6 +142,8 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.createproject.stepTwoStatus = 2;
       this.props.createproject.stepThreeStatus = 1;
       window.scrollTo(0, 0)
+    }else{
+      this.props.common.openNotificationWithIcon('error', '操作失败', '保存失败');
     }
     return true;
   }
