@@ -13,7 +13,7 @@ const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' :
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
 const baseUrl: string = "https://apidao.nel.group/api/" + network;
 // const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
-const fileUrl: string = "http://apidao.nel.group/api/file/" + network;
+const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 
