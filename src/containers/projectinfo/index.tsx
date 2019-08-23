@@ -8,14 +8,15 @@ import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 import * as formatTime from '@/utils/formatTime';
-interface IState {
-    isShowVideo:boolean 
+interface IState
+{
+    isShowVideo: boolean
 }
 @inject('projectinfo', 'common')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
-    public state ={
-        isShowVideo:false
+    public state = {
+        isShowVideo: false
     }
     public componentDidMount()
     {
@@ -48,10 +49,10 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         <div className="ptop-img">
                             {
                                 this.state.isShowVideo ? <video src={this.props.projectinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
-                                :<img src={this.props.projectinfo.projInfo.projConverUrl} alt=""/>
+                                    : <img src={this.props.projectinfo.projInfo.projConverUrl} alt="" />
                             }
                             {
-                                (this.props.projectinfo.projInfo.projVideoUrl &&!this.state.isShowVideo) && <div className="play-btn" onClick={this.handlePlayVideo}/>
+                                (this.props.projectinfo.projInfo.projVideoUrl && !this.state.isShowVideo) && <div className="play-btn" onClick={this.handlePlayVideo} />
                             }
                         </div>
                     </div>
@@ -62,7 +63,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                             <span className="sm-purple-text">看好这个项目</span>
                         </div>
                         <p className="gray-text">
-                            这个项目只是发布了创意，还没有启动融资，如果你看好这个创意，点击下面的“看好”，给作者一点鼓励吧。
+                            这个项目只是发布了项目，还没有开始出售产品，如果你看好这个项目，点击下面的“看好”，给作者一点鼓励吧。
                         </p>
                         <div className="do-like">
                             <div className={this.props.projectinfo.projInfo.isSupport ? 'dolike-btn dolike-gray-btn' : "dolike-btn"} onClick={this.handleToStartSupport}>
@@ -151,10 +152,12 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         this.handleToAttention();
         return true;
     }
-    private handlePlayVideo = ()=>{
-        if(!this.state.isShowVideo){
+    private handlePlayVideo = () =>
+    {
+        if (!this.state.isShowVideo)
+        {
             this.setState({
-                isShowVideo:true
+                isShowVideo: true
             })
         }
     }

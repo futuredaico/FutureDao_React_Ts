@@ -10,15 +10,18 @@ import Card from '@/components/card';
 import { Pagination } from 'antd';
 import { IHomeProps, IProjList } from './interface/home.interface';
 import { ProjType } from '@/store/interface/common.interface';
+
 @inject('home')
 @observer
 class Home extends React.Component<IHomeProps, any> {
+
   public componentDidMount()
   {
     this.props.home.getProjList();
   }
-  public componentWillUnmount(){
-    this.props.home.projList =[];
+  public componentWillUnmount()
+  {
+    this.props.home.projList = [];
     this.props.home.projListCount = 0;
     this.props.home.projListPage = 1;
   }
@@ -59,20 +62,19 @@ class Home extends React.Component<IHomeProps, any> {
                         <div className="home-des">
                           <div className="sbox-title">{item.projTitle}</div>
                           <div className="sbox-card">
-                            <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
+                            <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
                           </div>
-                          <div className="sbox-asset">                            
-                            {/* <div className="sbox-line">
+                          <div className="sbox-showtype">
+                            <div className="showtype-text"><strong>项目展示</strong></div>
+                            <div className="kanhao-count">{item.supportCount}人看好</div>
+                          </div>
+                          {/* <div className="sbox-line">
                               <div className="sbox-line-left">已售出 3427股</div>
                               <div className="sbox-line-right">1120 人参与</div>                              
                             </div> */}
-                            <div className="sbox-line">
-                              <div className="sbox-line-left">{item.supportCount}人 看好</div>
-                            </div>
-                            {/* <div className="sbox-line">
+                          {/* <div className="sbox-line">
                               <div className="sbox-line-left">5天后开启众筹</div>                             
                             </div> */}
-                          </div>
                           <div className="sbox-doing">
                             {/* <div className="sbox-toptext">300 ETH</div> */}
                             {/* toThousands(parseFloat(parseFloat(item.storePrice).toFixed(4)).toString()) */}
@@ -108,18 +110,40 @@ class Home extends React.Component<IHomeProps, any> {
     // todo
   }
   // 区分项目类别
-  private handleDiffType =(type:string)=>{
+  private handleDiffType = (type: string) =>
+  {
     //
-    if(type === ProjType.GAME){
+    if (type === ProjType.GAME)
+    {
       return '游戏'
-    }else if(type === ProjType.COMIC){
+    } else if (type === ProjType.COMIC)
+    {
       return '动漫'
-    }else if(type === ProjType.MOVIE){
+    } else if (type === ProjType.MOVIE)
+    {
       return '电影'
-    }else {
+    } else
+    {
       return '其他'
     }
   }
-} 
+  private handleDiffColor = (type: string) =>
+  {
+    //
+    if (type === ProjType.GAME)
+    {
+      return 'c-green'
+    } else if (type === ProjType.COMIC)
+    {
+      return 'c-red'
+    } else if (type === ProjType.MOVIE)
+    {
+      return 'c-gray'
+    } else
+    {
+      return 'c-purple'
+    }
+  }
+}
 
 export default injectIntl(Home);
