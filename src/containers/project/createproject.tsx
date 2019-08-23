@@ -13,7 +13,7 @@ import classnames from 'classnames';
 import { ICreateProjectProps } from './interface/createproject.interface'
 import { ProjSubState } from '@/store/interface/common.interface';
 
-@inject('createproject', 'common')
+@inject('createproject', 'common','project')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps> {
     public state = {

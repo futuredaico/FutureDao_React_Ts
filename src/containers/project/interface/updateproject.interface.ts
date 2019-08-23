@@ -1,6 +1,8 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IProjUpdateInfo } from "@/containers/projectinfo/interface/projectinfo.interface";
+import { ICreateProjectStore } from "./createproject.interface";
+import { IProjectStore } from "./project.interface";
 
 export interface IUpdateProjectStore
 {
@@ -13,6 +15,8 @@ export interface IUpdateProjectStore
 
 export interface IUpdateProjectProps extends RouteComponentProps<{ projectId: string }>
 {
+  project:IProjectStore,
+  createproject: ICreateProjectStore,
   updateproject: IUpdateProjectStore,
   common: ICommonStore,
   intl: any

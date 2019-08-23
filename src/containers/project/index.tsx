@@ -13,6 +13,7 @@ import { renderRoutes } from 'react-router-config';
 import { History } from 'history';
 import { IProjectStore } from './interface/project.interface';
 import { ICreateProjectStore } from './interface/createproject.interface';
+import { getQueryString } from '@/utils/function'
 
 interface IProps extends RouteComponentProps<{ projectId: string }> {
     route: {
@@ -100,7 +101,15 @@ class Project extends React.Component<IProps, any> {
     }
     // 菜单选择
     private mapUnderline = (str: string) => {
-        if(str === '/project/update'){
+        if(str === '/project'){
+            const updateId = getQueryString('updateid');
+            if(updateId){
+                window.location.href = str + '/' + this.props.project.projId;
+            }else{
+                this.props.history.push(str + '/' + this.props.project.projId);
+            }
+        }
+        else if(str === '/project/update'){
             //
             if((this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing)){
                 return false;

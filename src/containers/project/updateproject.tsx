@@ -19,7 +19,7 @@ interface IState
   isHasEdit: boolean, // 判断详情是否输入了内容
   updateId: string  // 更新日志的ID
 }
-@inject('common', 'updateproject')
+@inject('common', 'updateproject','createproject','project')
 @observer
 class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
   public state = {
@@ -33,9 +33,11 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
   public async componentDidMount()
   {
     const projectId = this.props.match.params.projectId;
+    this.props.project.projId = projectId;
     if (this.state.updateId)
     {
-      await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
+      this.props.createproject.getProject(projectId);
+      await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);      
       if (this.props.updateproject.updateInfo)
       {
         this.setState({

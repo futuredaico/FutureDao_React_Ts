@@ -1,5 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
+import { IProjectStore } from "./project.interface";
 
 export interface ICreateProjectStore {
   step: number,
@@ -23,6 +24,7 @@ export interface ICreateProjectStore {
 
 
 export interface ICreateProjectProps extends RouteComponentProps<{ projectId: string }> {
+  project:IProjectStore,
   createproject: ICreateProjectStore,
   common: ICommonStore,
   intl: any

@@ -38,7 +38,6 @@ class PersonalCenter extends React.Component<IProps, any> {
                                 <li className="menu-li">
                                 身份认证
                                 </li>
-                               
                             </ul>
                         </div>
                     </div>

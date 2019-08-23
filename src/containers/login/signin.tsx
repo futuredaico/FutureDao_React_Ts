@@ -40,7 +40,7 @@ class SignIn extends React.Component<ISignInProps, any> {
                         this.props.signin.usernameCode && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                {this.props.signin.usernameCode === CodeType.invalidUsername && "用户名至少3~24位"}
+                                {this.props.signin.usernameCode === CodeType.invalidUsername && "用户名3~24位"}
                                 {this.props.signin.usernameCode === CodeType.usernameHasRegisted  && "用户名已被人使用"}
                             </span>
                         )
