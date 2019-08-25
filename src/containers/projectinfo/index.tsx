@@ -8,8 +8,8 @@ import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 import * as formatTime from '@/utils/formatTime';
-interface IState
-{
+import QRCode from 'qrcode.react';
+interface IState {
     isShowVideo: boolean
 }
 @inject('projectinfo', 'common')
@@ -18,26 +18,21 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     public state = {
         isShowVideo: false
     }
-    public componentDidMount()
-    {
+    public componentDidMount() {
         const projectId = this.props.match.params.projectId;
         this.props.projectinfo.projId = projectId;
-        if (projectId)
-        {
+        if (projectId) {
             this.props.projectinfo.getProjInfo(projectId);
         }
     }
-    public componentWillUnmount()
-    {
+    public componentWillUnmount() {
         this.props.projectinfo.projId = '';
         this.props.projectinfo.menuNum = 1;
         this.props.projectinfo.isShowUpdateInfo = false;
         this.props.projectinfo.projInfo = null;
     }
-    public render()
-    {
-        if (!this.props.projectinfo.projInfo)
-        {
+    public render() {
+        if (!this.props.projectinfo.projInfo) {
             return null;
         }
         return (
@@ -91,59 +86,55 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         <div className="ptop-share">
                             <span>分享项目到</span>
                             <div className="share-icon">
-                                <div className="img-div twitter-icon" />
-                                <div className="img-div qq-icon" />
-                                <div className="img-div webchat-icon" />
-                                <div className="img-div fb-icon" />
+                                <a href={`https://twitter.com/share?text=FutureDAO&url=${window.location.href}`} target="_blank"><div className="img-div twitter-icon" /></a>
+                                <a href={`https://connect.qq.com/widget/shareqq/index.html?url=${window.location.href}?sharesource=qzone&title=${'FutureDAO'}&summary=${'我是简洁'}`} target="_blank"><div className="img-div qq-icon" /></a>
+                                <a href="javascript:;">
+                                    <div className="img-div webchat-icon">
+                                        <div className="qr-box">
+                                            <QRCode value={window.location.href} size={80} />
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href={`https://www.facebook.com/sharer.php?title=FutureDAO&u=${window.location.href}`} target="_blank"><div className="img-div fb-icon" /></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <Pbottom {...this.props} />
-            </div>
+            </div >
         );
     }
     // 关注
-    private handleToAttention = () =>
-    {
-        if (!this.props.common.userInfo)
-        {
+    private handleToAttention = () => {
+        if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
             return false
         }
-        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo)
-        {
+        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo) {
             return false;
         }
-        if (this.props.common.isVerifyEmail)
-        {
+        if (this.props.common.isVerifyEmail) {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
-        if (this.props.projectinfo.projInfo.isStar)
-        {
+        if (this.props.projectinfo.projInfo.isStar) {
             this.props.projectinfo.cancelAttention();
-        } else
-        {
+        } else {
             this.props.projectinfo.startAttention();
         }
         this.props.projectinfo.projInfo.isStar = !this.props.projectinfo.projInfo.isStar
         return true;
     }
     // 看好
-    private handleToStartSupport = async () =>
-    {
-        if (!this.props.common.userInfo)
-        {
+    private handleToStartSupport = async () => {
+        if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
             return false
         }
-        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport)
-        {
+        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport) {
             return false;
         }
-        if (this.props.common.isVerifyEmail)
-        {
+        if (this.props.common.isVerifyEmail) {
             this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
@@ -152,10 +143,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         this.handleToAttention();
         return true;
     }
-    private handlePlayVideo = () =>
-    {
-        if (!this.state.isShowVideo)
-        {
+    private handlePlayVideo = () => {
+        if (!this.state.isShowVideo) {
             this.setState({
                 isShowVideo: true
             })
