@@ -19,9 +19,9 @@ class ProjectInfo
   @observable public updateDiscussPage: number = 1; // 更新日志评论当前页
   @observable public updateDiscussPageSize: number = 20; // 更新日志评论每页条数
   @observable public projDiscussList: IDiscussList[] = []; // 项目评论列表
-  @observable public projDiscussReplyList: IDiscussReplyList[] = []; // 项目评论列表回复列表
+  // @observable public projDiscussReplyList: IDiscussReplyList[] = []; // 项目评论列表回复列表
   @observable public updateDiscussList: IDiscussList[] = []; // 更新日志评论列表
-  @observable public updateDiscussReplyList: IDiscussReplyList[] = [];
+  // @observable public updateDiscussReplyList: IDiscussReplyList[] = [];
 
   /**
    * 获取项目基本详情
@@ -42,7 +42,6 @@ class ProjectInfo
       return false
     }
     this.projInfo = result[0].data;
-    console.log(this.projInfo)
     return true;
   }
   /**
@@ -205,14 +204,15 @@ class ProjectInfo
       return false
     }
 
-    this.projDiscussList = result[0].data.list;
-    this.projDiscussList = this.projDiscussList.map((item: IDiscussList) =>
+    const list = result[0].data.list.map((item: IDiscussList) =>
     {
-      return {
-        ...item,
-        isShowReply: false
-      }
+        return {
+          ...item,
+          isShowReply: false,
+          childredList:[]
+        }
     })
+    this.projDiscussList = list;
     return true;
   }
   /**
@@ -226,21 +226,20 @@ class ProjectInfo
       result = await Api.getProjDiscussChildList(childId, common.userId, this.projDiscussPage, this.projDiscussPageSize);
     } catch (e)
     {
-      return false;
+      return [];
     }
     if (result[0].resultCode !== CodeType.success)
     {
-      return false
+      return []
     }
-    this.projDiscussReplyList = result[0].data.list;
-    this.projDiscussReplyList = this.projDiscussReplyList.map((item: IDiscussReplyList) =>
+    const list = result[0].data.list.map((item: IDiscussReplyList) =>
     {
       return {
         ...item,
         isShowReply: false
       }
     })
-    return true;
+    return list;
   }
   /**
    * 发表项目评论
@@ -278,7 +277,17 @@ class ProjectInfo
     {
       return false
     }
-    this.updateDiscussList = result[0].data.list;
+    
+    const list = result[0].data.list.map((item: IDiscussList) =>
+    {
+        return {
+          ...item,
+          isShowReply: false,
+          childredList:[]
+        }
+    })
+    this.updateDiscussList = list;
+    // this.updateDiscussList = result[0].data.list;
     return true;
   }
   /**
@@ -292,21 +301,20 @@ class ProjectInfo
       result = await Api.getUpdateDiscussChildList(childId, common.userId, this.updateDiscussPage, this.updateDiscussPageSize);
     } catch (e)
     {
-      return false;
+      return [];
     }
     if (result[0].resultCode !== CodeType.success)
     {
-      return false
+      return []
     }
-    this.updateDiscussReplyList = result[0].data.list;
-    this.updateDiscussReplyList = this.updateDiscussReplyList.map((item: IDiscussReplyList) =>
+    const list = result[0].data.list.map((item: IDiscussReplyList) =>
     {
       return {
         ...item,
         isShowReply: false
       }
     })
-    return true;
+    return list;
   }
   /**
    * 发表更新日志评论

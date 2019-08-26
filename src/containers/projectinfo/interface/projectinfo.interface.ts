@@ -11,9 +11,9 @@ export interface IProjectInfoStore {
     updateId:string,
     updateInfo:IProjUpdateInfo|null,
     projDiscussList:IDiscussList[],
-    projDiscussReplyList:IDiscussReplyList[],
+    // projDiscussReplyList:IDiscussReplyList[],
     updateDiscussList:IDiscussList[],
-    updateDiscussReplyList:IDiscussReplyList[],
+    // updateDiscussReplyList:IDiscussReplyList[],
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,
@@ -28,8 +28,8 @@ export interface IProjectInfoStore {
     sendUpdateDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
     sendProZan:(discussId:string)=>Promise<boolean>,
     sendUpdateZan:(discussId:string)=>Promise<boolean>,
-    getProjDiscussReplyList:(childId:string) => void,
-    getUpdateDiscussReplyList:(childId:string) => Promise<boolean>,
+    getProjDiscussReplyList:(childId:string) => Promise<[]>,
+    getUpdateDiscussReplyList:(childId:string) => Promise<[]>,
     sendUpdateZanInfo:()=>Promise<boolean>,
   }
   
@@ -99,7 +99,7 @@ export interface IProjectInfoStore {
   export interface IDiscussList extends IDiscussInfo{
     preDiscussId:string,  // 上一个评论的ID
     childrenId:string, // 回复评论ID
-    // childredList:IDiscussReplyList[]
+    childredList:IDiscussReplyList[]
   }
 
   export interface IDiscussReplyList extends IDiscussInfo{

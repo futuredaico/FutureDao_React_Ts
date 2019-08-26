@@ -64,7 +64,6 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                                         this.props.projectinfo.projDiscussList.length > 0 && this.props.projectinfo.projDiscussList.map((item: IDiscussList, index: number) =>
                                         {
                                             return (
-
                                                 <div className="comment-list" key={index}>
                                                     <div className="comment-people">
                                                         <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
@@ -95,10 +94,11 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                                                         )
                                                     }
                                                     {
-                                                        (item.isShowReply && item.subSize > 0) && (
+                                                        (item.childredList.length > 0) && (
                                                             <div className="reply-comment">
                                                                 {
-                                                                    this.props.projectinfo.projDiscussReplyList.map((replyItem: IDiscussReplyList, num: number) =>
+
+                                                                    item.childredList.map((replyItem: IDiscussReplyList, num: number) =>
                                                                     {
                                                                         return (
                                                                             <div className="reply-list" key={num}>
@@ -151,10 +151,26 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             </>
         );
     }
-    // 获取列表
-    private handleGetDataList = (discussId: string) =>
+    // 获取留言列表
+    private handleGetDataList = async (discussId: string) =>
     {
-        this.props.projectinfo.getProjDiscussList(discussId);
+        await this.props.projectinfo.getProjDiscussList(discussId);
+        if (this.props.projectinfo.projDiscussList.length > 0)
+        {
+            this.props.projectinfo.projDiscussList.map((item: IDiscussList) =>
+            {
+                if (item.subSize > 0)
+                {
+                    this.handleGetReplayList(item)
+                }
+            })
+        }
+    }
+    // 获取回复列表
+    private handleGetReplayList = async (item: IDiscussList) =>
+    {
+        const replyList = await this.props.projectinfo.getProjDiscussReplyList(item.childrenId);
+        item.childredList = [...replyList]
     }
     // 留言输入
     private handleChangeDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -195,8 +211,10 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
         if (res)
         {
             item.isZan = true;
+            item.zanCount++;
         }
     }
+
     // 打开回复
     private handleOpenReply = (item: IDiscussList) =>
     {
@@ -216,24 +234,29 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             replyInput: '',
             replyInputOther: ''
         })
-        if (item.isShowReply)
-        {
-            this.props.projectinfo.getProjDiscussReplyList(item.childrenId);
-        }
+        // if (item.isShowReply)
+        // {
+        //     this.props.projectinfo.getProjDiscussReplyList(item.childrenId);
+        // }
     }
     // 打开回复二级
-    private handleOpenReplyOther = (item: IDiscussReplyList) =>
+    private handleOpenReplyOther = (replyItem: IDiscussReplyList) =>
     {
-        this.props.projectinfo.projDiscussReplyList.forEach((list: IDiscussReplyList) =>
+        this.props.projectinfo.projDiscussList.forEach((list: IDiscussList) =>
         {
-            if (list.discussId === item.discussId)
+            list.isShowReply = false;
+            list.childredList.forEach((replyList: IDiscussReplyList) =>
             {
-                item.isShowReply = !item.isShowReply;
-            } else
-            {
-                list.isShowReply = false;
-            }
+                if (replyList.discussId === replyItem.discussId)
+                {
+                    replyItem.isShowReply = !replyItem.isShowReply;
+                } else
+                {
+                    replyList.isShowReply = false;
+                }
+            })
         })
+
         this.setState({
             discussInput: '',
             replyInput: '',
@@ -257,13 +280,15 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
     // 回复评论一级
     private handleSendReplyDiscuss = (item: IDiscussList) =>
     {
-
         if (!this.state.replyInput)
         {
             return false;
         }
         this.props.projectinfo.sendProjDiscuss(item.discussId, this.state.replyInput);
         item.isShowReply = false;
+        setTimeout(() => {
+            this.handleGetReplayList(item);
+        }, 2000);
         return true;
     }
     // 回复评论二级
@@ -277,7 +302,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
         replyItem.isShowReply = false;
         setTimeout(() =>
         {
-            this.props.projectinfo.getProjDiscussReplyList(item.childrenId);
+            this.handleGetReplayList(item);
         }, 2000)
         return true;
     }
