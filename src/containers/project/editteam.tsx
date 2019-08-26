@@ -20,7 +20,7 @@ interface IState
     isSearching: boolean,// 是否正在搜索
     selectMember: IMemberList | null // 已经选择的成员
     isCanInvite: boolean, // 是否可以邀请成员
-    deleteMember:IMemberList | null // 选择要删除的成员
+    deleteMember: IMemberList | null // 选择要删除的成员
 }
 
 @observer
@@ -33,7 +33,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         isSearching: false,
         selectMember: null,
         isCanInvite: false,
-        deleteMember:null
+        deleteMember: null
     }
     // 下拉筛选
     // private identityOptions = [
@@ -94,7 +94,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
-                                            <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" className="people-img" />
+                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                             <span className="peo-name">{item.username}</span>
                                         </span>
                                         {
@@ -118,8 +118,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                         <span className="table-td">成员</span>
                                                         <span className="table-td">
                                                             {
-                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this,item)} />
-                                                            }                                                            
+                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this, item)} />
+                                                            }
                                                         </span>
                                                     </>
                                                 )
@@ -173,7 +173,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                         {
                                                             return (
                                                                 <li key={index} onClick={this.handleSelectUser.bind(this, item)}>
-                                                                    <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" />
+                                                                    <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
                                                                     <span className="name-text">{item.username}</span>
                                                                     <span>{item.email}</span>
                                                                 </li>
@@ -185,7 +185,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         )
                                     }
                                 </div>
-                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember?'gray-btn':''} />
+                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember ? 'gray-btn' : ''} />
                             </div>
                         </div>
                     )
@@ -226,7 +226,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         this.props.createproject.inviteMember(this.state.selectMember.userId);
         this.handleShowAddBox();
         this.props.common.openNotificationWithIcon('success', '操作成功', '邀请邮件已发出。');
-        
+
         return true;
     }
     // 邀请成员输入
@@ -236,7 +236,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         this.setState({
             inviteStr: ev.target.value.trim(),
             isSearching: true,
-            selectMember:null
+            selectMember: null
         })
         if (!ev.target.value)
         {
@@ -274,23 +274,25 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         })
     }
     // 打开删除成员弹框
-    private handleShowDelete = (item:IMemberList) =>
+    private handleShowDelete = (item: IMemberList) =>
     {
         this.setState({
             showDelete: !this.state.showDelete,
-            deleteMember:item
+            deleteMember: item
         })
     }
-    private handleCancelDelete = () =>{
+    private handleCancelDelete = () =>
+    {
         this.setState({
             showDelete: !this.state.showDelete,
-            deleteMember:null
+            deleteMember: null
         })
     }
     // 确认删除
-    private handleCheckDelete =async () =>
+    private handleCheckDelete = async () =>
     {
-        if(!this.state.deleteMember){
+        if (!this.state.deleteMember)
+        {
             return false;
         }
         await this.props.createproject.deleteMember(this.state.deleteMember.userId);
