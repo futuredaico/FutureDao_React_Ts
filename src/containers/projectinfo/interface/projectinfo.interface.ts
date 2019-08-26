@@ -28,7 +28,7 @@ export interface IProjectInfoStore {
     sendUpdateDiscuss:(prevousId:string,discussStr:string)=>Promise<boolean>,
     sendProZan:(discussId:string)=>Promise<boolean>,
     sendUpdateZan:(discussId:string)=>Promise<boolean>,
-    getProjDiscussReplyList:(childId:string) => Promise<boolean>,
+    getProjDiscussReplyList:(childId:string) => void,
     getUpdateDiscussReplyList:(childId:string) => Promise<boolean>,
     sendUpdateZanInfo:()=>Promise<boolean>,
   }
@@ -82,31 +82,27 @@ export interface IProjectInfoStore {
     headIconUrl:string,
     brief:string
   }
-  export interface IDiscussList{
-    preDiscussId:string,  // 上一个评论的ID
+
+  export interface IDiscussInfo{
     discussId:string, // 当前评论ID
     discussContent:string, // 评论内容
     userId:string, // 评论者ID
     zanCount:number, // 赞数
-    childrenId:string, // 回复评论ID
     time:number, // 评论时间
     username:string, // 评论者
     headIconUrl:string, // 评论者头像
     subSize:number // 回复数
     isZan:boolean, // 是否点赞
-    isShowReply:boolean // 是否展开回复  
+    isShowReply:boolean // 是否展开回复
   }
 
-  export interface IDiscussReplyList{
-    discussId:string, // 当前评论ID
-    discussContent:string, // 评论内容
-    userId:string, // 评论者ID
-    zanCount:number, // 赞数
-    time:number, // 评论时间
-    username:string, // 评论者
-    headIconUrl:string, // 评论者头像
-    isZan:boolean, // 是否点赞
+  export interface IDiscussList extends IDiscussInfo{
+    preDiscussId:string,  // 上一个评论的ID
+    childrenId:string, // 回复评论ID
+    // childredList:IDiscussReplyList[]
+  }
+
+  export interface IDiscussReplyList extends IDiscussInfo{
     preUserId:string, // 被回复人ID
     preUsername:string // 被回复人名称
-    isShowReply:boolean // 是否展开回复  
   }

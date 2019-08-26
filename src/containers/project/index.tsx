@@ -143,14 +143,21 @@ class Project extends React.Component<IProps, any> {
         })
     }
     // 确认删除
-    private handleCheckDelete = () => {
-        const projectId = this.props.match.params.projectId;
+    private handleCheckDelete = async () => {
+        
+        const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
         if (projectId) {
-            this.props.project.deleteMember(projectId);
+            const res = await this.props.project.deleteMember(projectId);
+            if(res){
+                this.handleShowDeleteProject();
+                this.props.common.openNotificationWithIcon('success', '操作成功', '项目删除成功');
+                this.handleGoBackPersonMenager();
+            }else{
+                this.props.common.openNotificationWithIcon('error', '操作失败', '项目删除失败');
+            }
         } else {
             return false;
         }
-        this.handleShowDeleteProject();
         return true;
     }
     // 跳到我的项目-管理中页面

@@ -397,15 +397,13 @@
 
     .people-message {
       clear: both;
-
-      img {
+      .people-img {
         width: 30px;
         height: 30px;
         margin-right: 10px;
         vertical-align: middle;
         border-radius: 50%;
       }
-
       .normal-button {
         float: right;
       }
@@ -420,8 +418,7 @@
 
       .comment-people {
         margin-top: 35px;
-
-        img {
+        .people-img {
           width: 30px;
           height: 30px;
           margin-right: 10px;
@@ -444,13 +441,11 @@
       .right-other {
         float: right;
         margin-right: 25px;
-
-        img {
+        .zan-img,.message-img {
           width: 20px;
           height: 20px;
           margin-right: 5px;
           vertical-align: middle;
-          border-radius: 50%;
           cursor: pointer;
         }
 
@@ -502,7 +497,7 @@
         }
 
         .reply-people {
-          img {
+          .people-img {
             width: 30px;
             height: 30px;
             margin-right: 10px;
@@ -525,28 +520,23 @@
         .right-other {
           float: right;
           margin-right: 5px;
-
           img {
             width: 20px;
             height: 20px;
             margin-right: 5px;
             vertical-align: middle;
           }
-
           .message-img {
             margin-right: 30px;
           }
-
           span {
             font-size: 12px;
             vertical-align: middle;
           }
         }
-
         .reply-input {
           text-align: right;
           margin: 20px 0 0 40px;
-
           .reply-textarea {
             display: block;
             height: auto;
@@ -562,14 +552,12 @@
       }
     }
   }
-
 }
 
 .updatelist-wrapper {
   .updatelist-list {
     clear: both;
     cursor: pointer;
-
     .updatelist-p {
       margin-top: 15px;
       text-align: justify;
@@ -581,18 +569,15 @@
       -webkit-line-clamp: 4; // （行数）
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
-
       img,
       video {
         display: none;
       }
     }
-
     .time-tips {
       font-size: 12px;
       color: @t-a0;
     }
-
     .right-other {
       float: right;
       font-size: 12px;
@@ -651,8 +636,7 @@
     .update-people {
       margin: 15px 0;
       clear: both;
-
-      img {
+      .people-img {
         width: 30px;
         height: 30px;
         margin-right: 10px;

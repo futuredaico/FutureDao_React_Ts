@@ -43,7 +43,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                     </div>
                     <strong className="update-title">{this.props.projectinfo.updateInfo.updateTitle}</strong>
                     <div className="update-people">
-                        <img src={this.props.projectinfo.updateInfo.headIconUrl?this.props.projectinfo.updateInfo.headIconUrl:require('@/img/default.png')} alt="" />
+                        <img src={this.props.projectinfo.updateInfo.headIconUrl ? this.props.projectinfo.updateInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                         <strong>{this.props.projectinfo.updateInfo.username}</strong>
                         {
                             this.props.projectinfo.updateInfo.isMember && (
@@ -81,7 +81,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                     onChange={this.handleChangeUpdateDiscuss}
                                 />
                                 <div className="people-message">
-                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" />
+                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                     <strong>{this.props.common.userInfo.username}</strong>
                                     <Button text="发表评论" btnColor={this.state.updateDiscuss ? '' : 'gray-btn'} onClick={this.handleSendUpdateDiscuss} />
                                 </div>
@@ -96,7 +96,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
 
                                     <div className="comment-list" key={index}>
                                         <div className="comment-people">
-                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
+                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                             <strong>{item.username}</strong>
                                         </div>
                                         <p>{item.discussContent}</p>
@@ -132,7 +132,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                                             return (
                                                                 <div className="reply-list" key={num}>
                                                                     <div className="reply-people">
-                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl : require('@/img/default.png')} alt="" />
+                                                                        <img src={replyItem.headIconUrl ? replyItem.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                                                         <strong>{replyItem.username}</strong>
                                                                     </div>
                                                                     <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
@@ -220,9 +220,10 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
         const res = await this.props.projectinfo.sendUpdateZanInfo();
         if (res)
         {
-            if(this.props.projectinfo.updateInfo){
+            if (this.props.projectinfo.updateInfo)
+            {
                 this.props.projectinfo.updateInfo.isZan = true;
-            }            
+            }
         }
     }
     /**
