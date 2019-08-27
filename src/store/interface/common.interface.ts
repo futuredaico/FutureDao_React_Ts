@@ -98,6 +98,7 @@ export enum ProjSubState
   // * 准备中: 无状态/审核中/审核失败
   // * 众筹中: 无状态/预热中 
   Init = "init",          // 初始状态: 无状态
+  Modify = "modify",      // 修改中
   Auditing = "auditing",      // 审核中
   AuditFailed = "auditfailed",   // 审核失败
   Preheating = "preheating",    // 预热中

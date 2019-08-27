@@ -72,7 +72,7 @@ class CreateProject extends React.Component<ICreateProjectProps> {
                 <h3 className="right-title">编辑项目资料</h3>
                 <div className="right-apply-btn">
                     {
-                        this.props.createproject.createContent.projSubState === ProjSubState.Init && <Button text="提交" btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
+                        (this.props.createproject.createContent.projSubState === ProjSubState.Init||this.props.createproject.createContent.projSubState === ProjSubState.Modify) && <Button text="提交" btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
                     }
                     {
                         this.props.createproject.createContent.projSubState === ProjSubState.Auditing && <Button text="审核中" btnColor="gray-btn" />
