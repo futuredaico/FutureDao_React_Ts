@@ -40,7 +40,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
                             <div className="message-wrapper" id="message">
                                 <h3>留言</h3>
                                 {
-                                    (this.props.common.userInfo && (this.props.projectinfo.projInfo.isStar || this.props.projectinfo.projInfo.isSupport)) && (
+                                    (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport) && (
                                         <div className="textarea-wrapper">
                                             <textarea
                                                 name="message"

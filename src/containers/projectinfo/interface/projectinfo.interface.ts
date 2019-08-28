@@ -41,19 +41,19 @@ export interface IProjectInfoStore {
   }
 
   export interface IProjectInfo{
-    projName:string,
-    projTitle:string,
-    projType:string,
-    projConverUrl:string,
-    projBrief:string,
-    projDetail:string,
-    supportCount:number,
-    isSupport:boolean,
-    isStar:boolean,
-    projVideoUrl:string,
-    discussCount:number,
-    updateCount:number,
-    time:number
+    projName:string, // 项目名称
+    projTitle:string, // 项目标题
+    projType:string, // 项目类型
+    projConverUrl:string, // 项目封面
+    projBrief:string, // 项目简介
+    projDetail:string, // 项目详情
+    supportCount:number, // 看好人数
+    isSupport:boolean, // 是否看好
+    isStar:boolean, // 是否关注
+    projVideoUrl:string, // 视频
+    discussCount:number, // 留言人数
+    updateCount:number, // 更新条数
+    time:number // 创建时间
   }
 
   export interface IProjectUpdate{
