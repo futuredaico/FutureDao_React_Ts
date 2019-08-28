@@ -55,8 +55,14 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">上传封面图</div>
-        <span className="small-text">尺寸 750*480，格式 jpg，png，分辨率72像素/英寸，不大于3MB</span>
+        {
+          !this.state.loading && (
+            <>
+              <div className="ant-upload-text">上传封面图</div>
+              <span className="small-text">尺寸 750*480，格式 jpg，png，分辨率72像素/英寸，不大于3MB</span>
+            </>
+          )
+        }
       </div>
     );
     return (
@@ -169,6 +175,9 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       this.props.common.openNotificationWithIcon('error', '操作失败', '图片太大了');
       return false;
     }
+    this.setState({
+      loading: true
+    })
     this.handleUploadCoverPicture(file);
     // todo commonStore
     return true;
@@ -181,13 +190,15 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     {
       this.setState({
         imageUrl: res,
-        imgEnter: false
+        imgEnter: false,
+        loading: false
       })
     } else
     {
       this.setState({
         imageUrl: null,
-        imgEnter: true
+        imgEnter: true,
+        loading: false
       })
     }
   }
@@ -237,8 +248,12 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.createproject.stepOneStatus = 2;
         this.props.createproject.stepTwoStatus = 3;
         this.props.createproject.stepThreeStatus = 3;
+        this.props.project.isEdit = true;
         window.scrollTo(0, 0);
         this.props.history.push('/project/' + this.props.createproject.createContent.projId);
+      } else
+      {
+        this.props.common.openNotificationWithIcon('error', '操作失败', '项目创建失败，已有该项目名称或项目标题');
       }
     } else
     {
@@ -259,7 +274,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       ]
       const creatResult = await this.props.createproject.modifyStepOne(content);
       console.log(creatResult)
-      if (creatResult) {
+      if (creatResult)
+      {
         this.props.createproject.step = 2;
         window.scrollTo(0, 0)
       }

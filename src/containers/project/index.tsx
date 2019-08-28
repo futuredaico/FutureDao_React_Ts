@@ -31,16 +31,13 @@ interface IProps extends RouteComponentProps<{ projectId: string }> {
 class Project extends React.Component<IProps, any> {
     public state = {
         showDeletProject: false,
-        isUpdate: false
     }
 
     public componentDidMount() {
         const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
         if (projectId && projectId !== '/project') {
             this.props.project.projId = projectId;
-            this.setState({
-                isUpdate: !!projectId
-            })
+            this.props.project.isEdit = !!projectId;            
         }
     }
     public render() {
@@ -61,7 +58,7 @@ class Project extends React.Component<IProps, any> {
         );
         return (
             <div className="create-page">
-                {this.state.isUpdate && (
+                {this.props.project.isEdit && (
                     <div className="create-left-menu">
                         <div className="left-menu-title">
                             <h2 className="h2-title">{!!this.props.createproject.createContent.projTitle ? this.props.createproject.createContent.projTitle : '项目名称'} <img src={require("@/img/back.png")} alt="" className="back-img" onClick={this.handleGoBackPersonMenager} /></h2>

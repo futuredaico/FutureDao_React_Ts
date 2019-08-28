@@ -6,6 +6,7 @@ class CreateProject {
   @observable public menuNum = 1;
   @observable public projId = '';
   @observable public updateId = '';
+  @observable public isEdit:boolean = false; // true为编辑状态，false为创建状态
 
   /**
    * 删除项目

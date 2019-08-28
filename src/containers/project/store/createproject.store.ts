@@ -5,7 +5,7 @@ import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 class CreateProject
 {
-  @observable public step = 1;
+  @observable public step = 1; // 编辑项目的菜单选择
   @observable public stepOneStatus = 1;// 基础信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public stepTwoStatus = 0; // 详细信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public stepThreeStatus = 0; // 详细信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
@@ -158,7 +158,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false
@@ -173,7 +172,6 @@ class CreateProject
     if(this.createContent.connectEmail){
       this.stepThreeStatus=2;
     }
-    console.log(this.createContent)
     return true;
   }
   /**

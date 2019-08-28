@@ -4,6 +4,7 @@
 // import { IUpdateProjectStore } from "./updateproject.interface";
 
 export interface IProjectStore {
+  isEdit:boolean,
   menuNum: number,
   projId:string,
   updateId:string,

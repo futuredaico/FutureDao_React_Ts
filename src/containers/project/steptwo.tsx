@@ -23,12 +23,19 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     projectDetails: BraftEditor.createEditorState(this.props.createproject.createContent.projDetail),
     detailEnter: false,
   };
-  public render() {
+  public render()
+  {
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">上传视频文件</div>
-        <span className="small-text">介绍介绍介绍</span>
+        {
+          !this.state.loading && (
+            <>
+              <div className="ant-upload-text">上传视频文件</div>
+              <span className="small-text">介绍介绍介绍</span>
+            </>
+          )
+        }
       </div>
     );
     return (
@@ -67,7 +74,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} btnColor={!this.state.projDetail?'gray-btn':''} />
+          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} btnColor={!this.state.projDetail ? 'gray-btn' : ''} />
         </div>
       </div >
     );
@@ -81,6 +88,9 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.common.openNotificationWithIcon('error', '操作失败', '视频太大了');
       return false;
     }
+    this.setState({
+      loading: true
+    })
     this.handleUploadVedio(file);
     // todo commonStore
     return true;
@@ -93,22 +103,27 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     {
       this.setState({
         videoUrl: res,
-        imgEnter: false
+        imgEnter: false,
+        loading: false
       })
     } else
     {
+      this.props.common.openNotificationWithIcon('error', '操作失败', '视频上传失败');
       this.setState({
         videoUrl: null,
-        imgEnter: true
+        imgEnter: true,
+        loading: false
       })
     }
   }
   // 文本框的输入
-  private onChangeEditorValue = (value: any) => {
+  private onChangeEditorValue = (value: any) =>
+  {
 
     // todo
     const text = value.toText()
-    if (text !== "") {
+    if (text !== "")
+    {
       this.setState({
         projDetail: BraftEditor.createEditorState(value).toHTML(),
         projectDetails: BraftEditor.createEditorState(value),
@@ -117,39 +132,46 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     }
   }
   // 保存并提交
-  private handleToSaveDetail = async () => {
+  private handleToSaveDetail = async () =>
+  {
     //
-    if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+    if (this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
+    {
       this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
       return false;
     }
     const res = this.checkInputStatus();
-    if (!res) {
+    if (!res)
+    {
       return
     }
-
+    const video = this.state.videoUrl ? this.state.videoUrl : '';
     const content: string[] = [
       this.props.common.userId,
       this.props.common.token,
       this.props.createproject.createContent.projId,
-      this.state.videoUrl,
+      video,
       this.state.projDetail,
     ]
     const creatResult = await this.props.createproject.modifyStepTwo(content);
-    if (creatResult) {
+    if (creatResult)
+    {
       this.props.createproject.step = 3;
       this.props.createproject.stepOneStatus = 2;
       this.props.createproject.stepTwoStatus = 2;
       this.props.createproject.stepThreeStatus = 1;
       window.scrollTo(0, 0)
-    }else{
+    } else
+    {
       this.props.common.openNotificationWithIcon('error', '操作失败', '保存失败');
     }
     return true;
   }
   // 校验必填参数是否填写了
-  private checkInputStatus = () => {
-    if (!this.state.projDetail) {
+  private checkInputStatus = () =>
+  {
+    if (!this.state.projDetail)
+    {
       return false
     }
     return true
