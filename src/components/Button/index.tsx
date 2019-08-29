@@ -13,8 +13,8 @@ interface IProps
 	style?: object,
 	disabled?: boolean, // 按钮是否禁止点击
 	text: string,
-	btnSize?:'sm-btn'|'bg-btn', // 按钮大小
-	btnColor?:'white-btn'|'gray-btn'|''|'red-btn'|'white-purple' // 按钮颜色
+	btnSize?:'sm-btn'|'bg-btn'|'video-btn', // 按钮大小
+	btnColor?:'white-btn'|'gray-btn'|''|'red-btn'|'white-purple'|'gray-red'|'gray-black' // 按钮颜色
 	// intl:any
 }
 

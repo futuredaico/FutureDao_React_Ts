@@ -149,6 +149,33 @@
                 border: 1px solid  @t-f13;
             }
         }
+        .video-wrapper{
+            position: relative;
+            width: 400px;
+            .video-icon{
+                width: 400px;
+                height: 250px; 
+                background: #000;
+                margin-bottom: 10px;
+                video{
+                    display: block;
+                    max-width: 400px;
+                    max-height: 250px;
+                    margin: 0 auto;
+                }                
+            }
+            .video-btn-wrapper{
+                position: absolute;
+                right: 0;
+                .avatar-uploader{
+                    display: inline-block;
+                    .ant-upload{
+                        width: 80px;
+                        height: 30px; 
+                    }
+                }
+            }
+        }
         .avatar-uploader{
             .ant-upload{
                 width: 400px;
@@ -347,6 +374,8 @@
                 border-radius: 3px;
                 width: 650px;
                 ul{
+                    max-height: 196px;
+                    overflow: scroll;
                     li{
                         padding: 15px;
                         img{

@@ -12,21 +12,31 @@ import StepThree from './stepthree';
 import classnames from 'classnames';
 import { ICreateProjectProps } from './interface/createproject.interface'
 import { ProjSubState } from '@/store/interface/common.interface';
+import { getQueryString } from '@/utils/function'
 
-@inject('createproject', 'common','project')
+@inject('createproject', 'common', 'project')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps> {
     public state = {
         isEdit: !!this.props.match.params.projectId
     }
-    public componentDidMount() {
+    public componentDidMount()
+    {
         // 区分是新建项目还是管理项目
         const projectId = this.props.match.params.projectId;
-        if (projectId) {
+        if (projectId)
+        {
             this.props.createproject.getProject(projectId);
+            const type = getQueryString('type') || '';
+            if (!!type)
+            {
+                this.props.createproject.step = 2;
+                this.props.history.replace('/project/' + projectId);
+            }
         }
     }
-    public componentWillMount() {
+    public componentWillMount()
+    {
         this.props.createproject.createContent = {
             projId: '',
             projName: '',
@@ -48,8 +58,10 @@ class CreateProject extends React.Component<ICreateProjectProps> {
         this.props.createproject.stepTwoStatus = 0;
         this.props.createproject.stepThreeStatus = 0;
     }
-    public render() {
-        if (this.state.isEdit && !this.props.createproject.createContent.projId) {
+    public render()
+    {
+        if (this.state.isEdit && !this.props.createproject.createContent.projId)
+        {
             return null;
         }
         const oneClassName = classnames('step-tab',
@@ -72,7 +84,7 @@ class CreateProject extends React.Component<ICreateProjectProps> {
                 <h3 className="right-title">编辑项目资料</h3>
                 <div className="right-apply-btn">
                     {
-                        (this.props.createproject.createContent.projSubState === ProjSubState.Init||this.props.createproject.createContent.projSubState === ProjSubState.Modify) && <Button text="提交" btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
+                        (this.props.createproject.createContent.projSubState === ProjSubState.Init || this.props.createproject.createContent.projSubState === ProjSubState.Modify) && <Button text="提交" btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
                     }
                     {
                         this.props.createproject.createContent.projSubState === ProjSubState.Auditing && <Button text="审核中" btnColor="gray-btn" />
@@ -97,26 +109,34 @@ class CreateProject extends React.Component<ICreateProjectProps> {
         );
     }
     // 编辑步骤
-    private handleEditStep = (number: number) => {
-        if (number === 2) {
-            if (this.props.createproject.stepTwoStatus === 0) {
+    private handleEditStep = (number: number) =>
+    {
+        if (number === 2)
+        {
+            if (this.props.createproject.stepTwoStatus === 0)
+            {
                 return
             }
         }
-        else if (number === 3) {
-            if (this.props.createproject.stepThreeStatus === 0) {
+        else if (number === 3)
+        {
+            if (this.props.createproject.stepThreeStatus === 0)
+            {
                 return
             }
         }
         this.props.createproject.step = number;
     }
-    private handleCommitProject = async ()=>{
-        if((this.props.createproject.stepOneStatus !== 2 || this.props.createproject.stepTwoStatus !== 2 || this.props.createproject.stepThreeStatus !== 2)){
+    private handleCommitProject = async () =>
+    {
+        if ((this.props.createproject.stepOneStatus !== 2 || this.props.createproject.stepTwoStatus !== 2 || this.props.createproject.stepThreeStatus !== 2))
+        {
             return false
         }
         await this.props.createproject.commitProjectAudit();
         const projectId = this.props.match.params.projectId;
-        if (projectId) {
+        if (projectId)
+        {
             this.props.createproject.getProject(projectId);
         }
         return true

@@ -44,18 +44,42 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
           <strong>视频介绍</strong>
         </div>
         <div className="inline-enter">
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            accept="video/*"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={this.beforeUpload}
-          // onChange={this.handleChangeImg}
-          >
-            {this.state.videoUrl ? <video src={this.state.videoUrl} controls={true} /> : uploadButton}
-          </Upload>
+          {
+            this.state.videoUrl
+              ? <div className="video-wrapper">
+                  <div className="video-icon">
+                  <video src={this.state.videoUrl} controls={true} />
+                  </div>
+                  <div className="video-btn-wrapper">
+                    <Button text="删除" onClick={this.handleToDeleteVideo} btnColor='gray-red' btnSize="video-btn" />
+                    <Upload
+                      name="avatar"
+                      // listType="picture-card"
+                      className="avatar-uploader"
+                      accept="video/*"
+                      showUploadList={false}
+                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                      beforeUpload={this.beforeUpload}
+                    // onChange={this.handleChangeImg}
+                    >
+                      <Button text="更换视频" btnColor='gray-black' btnSize="video-btn" />
+                    </Upload>
+                  </div>
+                </div>
+              : <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                accept="video/*"
+                showUploadList={false}
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                beforeUpload={this.beforeUpload}
+              // onChange={this.handleChangeImg}
+              >
+                {uploadButton}
+              </Upload>
+          }
+
         </div>
         <div className="inline-title">
           <strong>项目详情</strong>&nbsp;
@@ -89,6 +113,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       return false;
     }
     this.setState({
+      videoUrl: null,
       loading: true
     })
     this.handleUploadVedio(file);
@@ -103,7 +128,6 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     {
       this.setState({
         videoUrl: res,
-        imgEnter: false,
         loading: false
       })
     } else
@@ -111,10 +135,15 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       this.props.common.openNotificationWithIcon('error', '操作失败', '视频上传失败');
       this.setState({
         videoUrl: null,
-        imgEnter: true,
         loading: false
       })
     }
+  }
+  private handleToDeleteVideo = ()=>{
+    this.setState({
+      videoUrl:null,
+      loading: false
+    })
   }
   // 文本框的输入
   private onChangeEditorValue = (value: any) =>

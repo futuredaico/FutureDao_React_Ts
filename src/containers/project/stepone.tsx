@@ -195,6 +195,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       })
     } else
     {
+      this.props.common.openNotificationWithIcon('error', '操作失败', '封面上传失败');
       this.setState({
         imageUrl: null,
         imgEnter: true,
@@ -250,7 +251,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.createproject.stepThreeStatus = 3;
         this.props.project.isEdit = true;
         window.scrollTo(0, 0);
-        this.props.history.push('/project/' + this.props.createproject.createContent.projId);
+        this.props.history.push('/project/' + this.props.createproject.createContent.projId+'?type=create');
       } else
       {
         this.props.common.openNotificationWithIcon('error', '操作失败', '项目创建失败，已有该项目名称或项目标题');
