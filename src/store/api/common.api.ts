@@ -12,6 +12,17 @@ export const uploadFile = (file: RcFile) => {
   }
   return request(opts)
 }
+export const uploadVideo = (file: RcFile) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const opts = {
+    method: 'file',
+    params: formData,
+    baseUrl: 'video',
+    isUpload: true
+  }
+  return request(opts)
+}
 
 /**
  * 获取用户信息

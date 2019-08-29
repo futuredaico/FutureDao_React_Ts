@@ -123,7 +123,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
   // 上传视频
   private handleUploadVedio = async (file: RcFile) =>
   {
-    const res = await commonStore.uploadFile(file);
+    const res = await commonStore.uploadVideo(file);
     if (res)
     {
       this.setState({

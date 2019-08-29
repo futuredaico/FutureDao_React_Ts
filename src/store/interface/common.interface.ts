@@ -11,6 +11,7 @@ export interface ICommonStore
   footer: boolean,
   isVerifyEmail: boolean,
   uploadFile: (file: RcFile) => Promise<string>,
+  uploadVideo: (file: RcFile) => Promise<string>,
   loginFutureDao: (email: string, pwd: string) => Promise<boolean>,
   logoutFutureDao: () => void,
   getLoginStatus: () => void,

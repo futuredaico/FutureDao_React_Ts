@@ -48,7 +48,7 @@ class Common implements ICommonStore
       this.language = 'en'
     }
   }
-  // 上传图片，视频
+  // 上传图片
   @action public uploadFile = async (file: RcFile) =>
   {
     // todo
@@ -60,7 +60,20 @@ class Common implements ICommonStore
     {
       return '';
     }
-    console.log(result);
+    return result
+  }
+  // 上传视频
+  @action public uploadVideo = async (file: RcFile) =>
+  {
+    // todo
+    let result: any = [];
+    try
+    {
+      result = await Api.uploadVideo(file);
+    } catch (e)
+    {
+      return '';
+    }
     return result
   }
   // 登录
