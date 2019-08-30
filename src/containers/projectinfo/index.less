@@ -5,7 +5,7 @@
     padding: 50px 0;
 
     h2 {
-      font-size: 18px;
+      font-size: 22px;
       margin-bottom: 20px;
     }
 
@@ -86,6 +86,7 @@
         height: 150px;
         height: 140px;
         overflow: hidden;
+        text-align: justify;
       }
 
       .do-like {
@@ -362,11 +363,17 @@
 .projectdetail-wrapper {
   .detail-p {
     margin: 30px 0 20px 0;
-
     img {
       display: block;
-      margin: 0 auto;
       max-width: 750px;
+      margin: 15px 0;
+    }
+    p{
+      text-indent: 2em;
+      margin-bottom: 15px;
+    }
+    h2{
+      margin: 15px 0;
     }
   }
 
@@ -382,9 +389,12 @@
     padding: 15px 0;
     border-bottom: 1px solid @bg-e5;
     margin-bottom: 20px;
-
     .hei-textarea {
       margin-top: 15px;
+      &:read-only{
+        background: @bg-f6;
+        color:@t-b9;
+      }
     }
 
     .message-textarea {
@@ -556,6 +566,9 @@
 }
 
 .updatelist-wrapper {
+  .no-update{
+    margin-top: 30px;
+  }
   .updatelist-list {
     clear: both;
     cursor: pointer;
@@ -664,6 +677,7 @@
       width: 18px;
       height: 18px;
       margin-right: 10px;
+      cursor: pointer;
     }
 
     .zan-span {

@@ -14,14 +14,15 @@ import * as formatTime from 'utils/formatTime';
 @inject('myproject')
 @observer
 class MyProject extends React.Component<IMyProjectProps, any> {
+    public intrl = this.props.intl.messages;
     public myprojectMenu = [
         {
             id: 1,
-            name: '关注中'
+            name: this.intrl.myproject.follow
         },
         {
             id: 2,
-            name: '管理中'
+            name: this.intrl.myproject.manager
         }
     ]
     public state = {
@@ -36,7 +37,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
     {
         return (
             <div className="myproject-page">
-                <h2>我的项目</h2>
+                <h2>{this.intrl.myproject.project}</h2>
                 <div className="myproject-menu">
                     <ul className="title-ul">
                         {
@@ -67,11 +68,11 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                                     <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
                                                 </div>
                                                 <div className="project-status">
-                                                    {item.projState === ProjectState.Readying && <strong>准备中</strong>}
-                                                    {item.projState === ProjectState.IdeaPub && <strong>创意发布</strong>}
-                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
+                                                    {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
+                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
-                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
                                                     <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
                                                 </div>
                                             </div>
@@ -106,14 +107,14 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                                     <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
                                                 </div>
                                                 <div className="project-status">
-                                                    {item.projState === ProjectState.Readying && <strong>准备中</strong>}
-                                                    {item.projState === ProjectState.IdeaPub && <strong>创意发布</strong>}
-                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
+                                                    {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
+                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
-                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
-                                                    {item.projSubState === ProjSubState.Auditing && <strong className="green-text">审核中</strong>}
-                                                    {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>}
-                                                    {item.projSubState === ProjSubState.AuditFailed && <strong className="red-text">审核失败</strong>}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
+                                                    {item.projSubState === ProjSubState.Auditing && <strong className="green-text">{this.intrl.myproject.review}</strong>}
+                                                    {/* {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>} */}
+                                                    {item.projSubState === ProjSubState.AuditFailed && <strong className="red-text">{this.intrl.myproject.failed}</strong>}
                                                 </div>
                                             </div>
                                         </div>
@@ -175,16 +176,16 @@ class MyProject extends React.Component<IMyProjectProps, any> {
         //
         if (type === ProjType.GAME)
         {
-            return '游戏'
+            return this.intrl.card.game
         } else if (type === ProjType.COMIC)
         {
-            return '动漫'
+            return this.intrl.card.animation
         } else if (type === ProjType.MOVIE)
         {
-            return '电影'
+            return this.intrl.card.movies
         } else
         {
-            return '其他'
+            return this.intrl.card.other
         }
     }
     // 跳转到项目详情页todo

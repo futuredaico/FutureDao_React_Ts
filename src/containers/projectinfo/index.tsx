@@ -15,6 +15,7 @@ interface IState {
 @inject('projectinfo', 'common')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
+    public intrl = this.props.intl.messages;
     public state = {
         isShowVideo: false
     }
@@ -54,37 +55,37 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                     <div className="ptop-right">
                         <div className="right-big-text">
                             <span className="big-purple-text">{this.props.projectinfo.projInfo.supportCount}</span>
-                            <span className="md-purple-text">人</span>
-                            <span className="sm-purple-text">看好这个项目</span>
+                            <span className="md-purple-text">{this.intrl.projinfo.people}</span>
+                            <span className="sm-purple-text">{this.intrl.projinfo.supporttips}</span>
                         </div>
                         <p className="gray-text">
-                            这个项目只是发布了项目，还没有开始出售产品，如果你看好这个项目，点击下面的“看好”，给作者一点鼓励吧。
+                            {this.intrl.projinfo.tips}
                         </p>
                         <div className="do-like">
                             <div className={this.props.projectinfo.projInfo.isSupport ? 'dolike-btn dolike-gray-btn' : "dolike-btn"} onClick={this.handleToStartSupport}>
                                 <div className="dolike-img" />
-                                <span>{this.props.projectinfo.projInfo.isSupport ? '已看好' : "看好"}</span>
+                                <span>{this.props.projectinfo.projInfo.isSupport ? this.intrl.btn.supported : this.intrl.btn.support}</span>
                             </div>
                             <div className="dolike-wrapper" onClick={this.handleToAttention}>
                                 {
                                     this.props.projectinfo.projInfo.isStar ? (
                                         <>
                                             <img src={require("@/img/guanzhu.png")} alt="" />
-                                            <span className="dolike-text">已关注</span>
+                                            <span className="dolike-text">{this.intrl.projinfo.followed}</span>
                                         </>
                                     )
                                         : (
                                             <>
                                                 <div className="no-dolike" />
-                                                <span>关注</span>
+                                                <span>{this.intrl.projinfo.follow}</span>
                                             </>
                                         )
                                 }
                             </div>
                         </div>
-                        <p className="sm-gray-text">该项目创建于 {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p>
+                        <p className="sm-gray-text">{this.intrl.projinfo.begintime} {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p>
                         <div className="ptop-share">
-                            <span>分享项目到</span>
+                            <span>{this.intrl.projinfo.share}</span>
                             <div className="share-icon">
                                 <a href={`https://twitter.com/share?text=FutureDAO&url=${window.location.href}`} target="_blank"><div className="img-div twitter-icon" /></a>
                                 <a href={`https://connect.qq.com/widget/shareqq/index.html?url=${window.location.href}?sharesource=qzone&title=${'FutureDAO'}&summary=${'我是简洁'}`} target="_blank"><div className="img-div qq-icon" /></a>
@@ -107,14 +108,14 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     // 关注
     private handleToAttention = () => {
         if (!this.props.common.userInfo) {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo) {
             return false;
         }
         if (this.props.common.isVerifyEmail) {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
             return false;
         }
         if (this.props.projectinfo.projInfo.isStar) {
@@ -128,14 +129,14 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     // 看好
     private handleToStartSupport = async () => {
         if (!this.props.common.userInfo) {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '请登录之后在操作，谢谢');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
         if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport) {
             return false;
         }
         if (this.props.common.isVerifyEmail) {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
             return false;
         }
         const res = await this.props.projectinfo.startSupport();

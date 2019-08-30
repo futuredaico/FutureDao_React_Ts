@@ -18,6 +18,7 @@ interface IProps
 
 @observer
 class PersonalCenter extends React.Component<IProps, any> {
+    public intrl = this.props.intl.messages;
     public render()
     {
         return (
@@ -25,19 +26,19 @@ class PersonalCenter extends React.Component<IProps, any> {
                 <div className="personal-content">
                     <div className="personal-left-menu">
                         <div className="left-menu-title">
-                            <h2 className="h2-title">个人中心</h2>
+                            <h2 className="h2-title">{this.intrl.user.center}</h2>
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
                                 <li className={this.mapChildClick('/personalcenter/userinfo') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/userinfo')}>
-                                    个人资料
+                                    {this.intrl.user.info}
                                 </li>
                                 <li className={this.mapChildClick('/personalcenter/myproject') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/myproject')}>
-                                我的项目
+                                {this.intrl.myproject.project}
                                 </li>
-                                <li className="menu-li">
+                                {/* <li className="menu-li">
                                 身份认证
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>

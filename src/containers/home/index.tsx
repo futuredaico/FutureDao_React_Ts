@@ -14,7 +14,7 @@ import { ProjType } from '@/store/interface/common.interface';
 @inject('home')
 @observer
 class Home extends React.Component<IHomeProps, any> {
-
+  public intrl = this.props.intl.messages;
   public componentDidMount()
   {
     this.props.home.getProjList();
@@ -46,7 +46,7 @@ class Home extends React.Component<IHomeProps, any> {
         </div> */}
         <div className="index-content-wrapper">
           <div className="home-title">
-            <div className="home-text">发现项目</div>
+            <div className="home-text">{this.intrl.home.discover}</div>
           </div>
           <div className="home-list-wrapper">
             <ul className="home-list-ul">
@@ -65,8 +65,8 @@ class Home extends React.Component<IHomeProps, any> {
                             <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
                           </div>
                           <div className="sbox-showtype">
-                            <div className="showtype-text"><strong>项目展示</strong></div>
-                            <div className="kanhao-count">{item.supportCount}人看好</div>
+                            <div className="showtype-text"><strong>{this.intrl.home.display}</strong></div>
+                            <div className="kanhao-count">{item.supportCount}{this.intrl.home.supporttips}</div>
                           </div>
                           {/* <div className="sbox-line">
                               <div className="sbox-line-left">已售出 3427股</div>
@@ -115,16 +115,16 @@ class Home extends React.Component<IHomeProps, any> {
     //
     if (type === ProjType.GAME)
     {
-      return '游戏'
+      return this.intrl.card.game
     } else if (type === ProjType.COMIC)
     {
-      return '动漫'
+      return this.intrl.card.animation
     } else if (type === ProjType.MOVIE)
     {
-      return '电影'
+      return this.intrl.card.movies
     } else
     {
-      return '其他'
+      return this.intrl.card.other
     }
   }
   private handleDiffColor = (type: string) =>

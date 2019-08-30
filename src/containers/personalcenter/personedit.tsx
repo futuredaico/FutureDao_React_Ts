@@ -14,6 +14,7 @@ import { RcFile } from 'antd/lib/upload';
 @inject('personedit', 'common')
 @observer
 class PersonalEidt extends React.Component<IPersonProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         isEditDes: false, // 个人简介
         isEditEmail: false, // 邮箱
@@ -37,7 +38,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
 
         return (
             <div className="personedit-page">
-                <h2>个人资料</h2>
+                <h2>{this.intrl.user.info}</h2>
                 <div className="person-picture">
                     <div className="person-img">
                         {(this.props.common.userInfo &&this.props.common.userInfo.headIconUrl) ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img"src={require('@/img/default.png')}  alt="" />}
@@ -54,14 +55,14 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                             beforeUpload={this.beforeUpload}
                         >
-                            修改头像
+                            {this.intrl.btn.repeople}
                         </Upload>
                     </div>
                 </div>
                 <div className={infoClassName}>
                     <div className={desClassName}>
                         <div className="edit-title">
-                            <strong>个人简介</strong>
+                            <strong>{this.intrl.user.profile}</strong>
                             {
                                 !this.state.isEditDes && <div className="edit-img" onClick={this.handleEditPerson.bind(this, 1)} />
                             }
@@ -80,21 +81,21 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                             onChange={this.handleToChangeDes}
                                         />
                                         <div className="personedit-btn">
-                                            <Button text="取消" btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text="确认修改" onClick={this.handleToSaveDrief} />
+                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveDrief} />
                                         </div>
                                     </>
                                 )
                                 : <div className="person-p">
                                     {
-                                        (this.props.common.userInfo && this.props.common.userInfo.brief !== '') ? this.props.common.userInfo.brief : '暂无简介。'
+                                        (this.props.common.userInfo && this.props.common.userInfo.brief !== '') ? this.props.common.userInfo.brief : this.intrl.user.noprofile
                                     }
                                 </div>
                         }
                     </div>
                     <div className={emailClassName}>
                         <div className="edit-title">
-                            <strong>邮箱</strong>
+                            <strong>{this.intrl.user.email}</strong>
                             {
                                 !this.state.isEditEmail && <div className="edit-img" onClick={this.handleEditPerson.bind(this, 2)} />
                             }
@@ -104,14 +105,14 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                 ? (
                                     <>
                                         <Input
-                                            placeholder="新邮箱"
+                                            placeholder={this.intrl.user.newemail}
                                             className="edit-input"
                                             value={this.state.emailInput}
                                             onChange={this.handleToChangeEmail}
                                             onBlur={this.handleTocheckEmail}
                                         />
                                         <Input.Password
-                                            placeholder="确认密码"
+                                            placeholder={this.intrl.user.checkpwd}
                                             className="edit-pwd"
                                             value={this.state.emailPwd}
                                             onChange={this.handleToEnterPwd}
@@ -120,15 +121,15 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                             this.props.personedit.newEmailCode && (
                                                 <span className="err-msg">
                                                     <img src={require('@/img/attention.png')} alt="" />
-                                                    {this.props.personedit.newEmailCode === CodeType.invalidEmail && "邮箱格式不正确"}
-                                                    {this.props.personedit.newEmailCode === CodeType.emailHasRegisted && "邮箱已被注册"}
-                                                    {this.props.personedit.newEmailCode === CodeType.passwordError && "密码错误"}
+                                                    {this.props.personedit.newEmailCode === CodeType.invalidEmail && this.intrl.inputerr.eformaterr}
+                                                    {this.props.personedit.newEmailCode === CodeType.emailHasRegisted && this.intrl.inputerr.emailerr}
+                                                    {this.props.personedit.newEmailCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
                                                 </span>
                                             )
                                         }
                                         <div className="personedit-btn">
-                                            <Button text="取消" btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text="确认修改" onClick={this.handleToSaveNewEmail} btnColor={(this.state.isSaveEmail && this.state.emailPwd) ? '' : 'gray-btn'} />
+                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewEmail} btnColor={(this.state.isSaveEmail && this.state.emailPwd) ? '' : 'gray-btn'} />
                                         </div>
                                     </>
                                 )
@@ -137,7 +138,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                     </div>
                     <div className={pwdClassName}>
                         <div className="edit-title">
-                            <strong>密码</strong>
+                            <strong>{this.intrl.user.password}</strong>
                             {
                                 !this.state.isEditPwd && <div className="edit-img" onClick={this.handleEditPerson.bind(this, 3)} />
                             }
@@ -148,13 +149,13 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                 ? (
                                     <>
                                         <Input.Password
-                                            placeholder="旧密码"
+                                            placeholder={this.intrl.user.oldpwd}
                                             className="edit-input"
                                             value={this.state.oldPwd}
                                             onChange={this.handleToChangeOldPwd}
                                         />
                                         <Input.Password
-                                            placeholder="新密码"
+                                            placeholder={this.intrl.user.newpwd}
                                             className="edit-pwd"
                                             value={this.state.newPwd}
                                             onChange={this.handleToChangeNewPwd}
@@ -163,14 +164,14 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                                             this.props.personedit.newPwdCode && (
                                                 <span className="err-msg">
                                                     <img src={require('@/img/attention.png')} alt="" />
-                                                    {this.props.personedit.newPwdCode === CodeType.invalidPasswordLen && "密码长度不少于8位"}
-                                                    {this.props.personedit.newPwdCode === CodeType.passwordError && "密码错误"}
+                                                    {this.props.personedit.newPwdCode === CodeType.invalidPasswordLen && this.intrl.inputerr.pwderr}
+                                                    {this.props.personedit.newPwdCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
                                                 </span>
                                             )
                                         }
                                         <div className="personedit-btn">
-                                            <Button text="取消" btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text="确认修改" onClick={this.handleToSaveNewPwd} btnColor={(this.state.oldPwd && this.state.newPwd) ? '' : 'gray-btn'} />
+                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewPwd} btnColor={(this.state.oldPwd && this.state.newPwd) ? '' : 'gray-btn'} />
                                         </div>
                                     </>
                                 )

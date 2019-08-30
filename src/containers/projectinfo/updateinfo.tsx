@@ -11,6 +11,7 @@ import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/
 import * as formatTime from '@/utils/formatTime';
 @observer
 class UpdateInfo extends React.Component<IProjectInfoProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         showDelet: false,
         updateDiscuss: '',
@@ -38,7 +39,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                     <div className="updateinfo-tips">
                         <span>{formatTime.format('yyyy-MM-dd ', this.props.projectinfo.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>#{this.props.projectinfo.updateInfo.rank}更新</span>
+                        <span>#{this.props.projectinfo.updateInfo.rank} {this.intrl.projinfo.update}</span>
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackUpdateList} className="back-img" />
                     </div>
                     <strong className="update-title">{this.props.projectinfo.updateInfo.updateTitle}</strong>
@@ -48,9 +49,9 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                         {
                             this.props.projectinfo.updateInfo.isMember && (
                                 <div className="right-update">
-                                    <span onClick={this.handleToUpdateEdit}>修改</span>
+                                    <span onClick={this.handleToUpdateEdit}>{this.intrl.projinfo.edit}</span>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span onClick={this.handleShowDelete}>删除</span>
+                                    <span onClick={this.handleShowDelete}>{this.intrl.projinfo.delete}</span>
                                 </div>
                             )
                         }
@@ -66,27 +67,47 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                 </div>
                 <div className="message-wrapper" id="message">
                     <div className="updateinfo-tips">
-                        <span>评论：{this.props.projectinfo.updateInfo.discussCount}</span>
+                        <span>{this.intrl.projinfo.comments}：{this.props.projectinfo.updateInfo.discussCount}</span>
                     </div>
                     {
-                        (this.props.common.userInfo && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isStar || this.props.projectinfo.projInfo.isSupport))) && (
-                            <div className="textarea-wrapper">
+                        (this.props.common.userInfo && this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.isSupport)
+                            ? (
+                                <div className="textarea-wrapper">
+                                    <textarea
+                                        name="message"
+                                        id=""
+                                        maxLength={400}
+                                        style={{ resize: 'none' }}
+                                        className="message-textarea"
+                                        value={this.state.updateDiscuss}
+                                        onChange={this.handleChangeUpdateDiscuss}
+                                    />
+                                    <div className="people-message">
+                                        <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
+                                        <strong>{this.props.common.userInfo.username}</strong>
+                                        <Button text={this.intrl.btn.comment} btnColor={this.state.updateDiscuss ? '' : 'gray-btn'} onClick={this.handleSendUpdateDiscuss} />
+                                    </div>
+                                </div>
+                            )
+                            : <div className="textarea-wrapper">
                                 <textarea
                                     name="message"
                                     id=""
                                     maxLength={400}
                                     style={{ resize: 'none' }}
-                                    className="message-textarea"
-                                    value={this.state.updateDiscuss}
-                                    onChange={this.handleChangeUpdateDiscuss}
+                                    className="message-textarea hei-textarea"
+                                    readOnly={true}
+                                    value={this.intrl.projinfo.textarea}
                                 />
-                                <div className="people-message">
-                                    <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                    <strong>{this.props.common.userInfo.username}</strong>
-                                    <Button text="发表评论" btnColor={this.state.updateDiscuss ? '' : 'gray-btn'} onClick={this.handleSendUpdateDiscuss} />
-                                </div>
+                                {
+                                    this.props.common.userInfo && (
+                                        <div className="people-message">
+                                            <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
+                                            <strong>{this.props.common.userInfo.username}</strong>
+                                        </div>
+                                    )
+                                }
                             </div>
-                        )
                     }
                     <div className="message-comment">
                         {
@@ -118,7 +139,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                                         onChange={this.handleUpdatReplyDiscuss}
                                                         className="reply-textarea"
                                                     />
-                                                    <Button text="回复" btnColor={this.state.updateReply ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyDiscuss.bind(this, item)} />
+                                                    <Button text={this.intrl.btn.reply} btnColor={this.state.updateReply ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyDiscuss.bind(this, item)} />
                                                 </div>
                                             )
                                         }
@@ -134,7 +155,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                                                         <img src={replyItem.headIconUrl ? replyItem.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                                                         <strong>{replyItem.username}</strong>
                                                                     </div>
-                                                                    <p><strong>回复 {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
+                                                                    <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
                                                                     <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
                                                                     <div className="right-other">
                                                                         <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenUpdatReplyOther.bind(this, replyItem)} />
@@ -153,7 +174,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                                                                                     value={this.state.updateReplyOther}
                                                                                     onChange={this.handleUpdatReplyOther}
                                                                                 />
-                                                                                <Button text="回复" btnColor={this.state.updateReplyOther ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyOther.bind(this, item, replyItem)} />
+                                                                                <Button text={this.intrl.btn.reply} btnColor={this.state.updateReplyOther ? '' : 'gray-btn'} onClick={this.handleSendUpdatReplyOther.bind(this, item, replyItem)} />
                                                                             </div>
                                                                         )
                                                                     }
@@ -174,10 +195,10 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                     this.state.showDelet && (
                         <div className="delete-info-wrapper">
                             <div className="delete-content">
-                                <div className="delete-text">确认删除本次更新？</div>
+                                <div className="delete-text">{this.intrl.projinfo.deletetips}</div>
                                 <div className="delete-btn">
-                                    <Button text="取消" btnColor="red-btn" onClick={this.handleShowDelete} />
-                                    <Button text="确认" onClick={this.handleDeleteUpdate} />
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleShowDelete} />
+                                    <Button text={this.intrl.btn.comfirm} onClick={this.handleDeleteUpdate} />
                                 </div>
                             </div>
                         </div>
@@ -191,7 +212,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     {
         this.props.projectinfo.isShowUpdateInfo = false;
     }
-    
+
     // 显示删除项目弹框
     private handleShowDelete = () =>
     {
@@ -217,6 +238,11 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     // 更新日志的点赞
     private handleSendUpdateZanInfo = async () =>
     {
+        const checkRes = this.handleCheckOption();
+        if (!checkRes)
+        {
+            return false;
+        }
         const res = await this.props.projectinfo.sendUpdateZanInfo();
         if (res)
         {
@@ -225,6 +251,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
                 this.props.projectinfo.updateInfo.isZan = true;
             }
         }
+        return true;
     }
     /**
      * 以下留言部分
@@ -250,6 +277,29 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
         const replyList = await this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
         item.childredList = [...replyList]
     }
+    // 一切操作之前的验证 
+    private handleCheckOption = () =>
+    {
+        // 验证是否登陆
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false
+        }
+        // 验证是否验证过邮箱
+        if (this.props.common.isVerifyEmail)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+            return false;
+        }
+        // 验证是否支持了项目
+        if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
+            return false
+        }
+        return true
+    }
     // 留言输入
     private handleChangeUpdateDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
     {
@@ -262,11 +312,6 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     {
         if (!this.state.updateDiscuss)
         {
-            return false;
-        }
-        if (this.props.common.isVerifyEmail)
-        {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱之后在操作，谢谢');
             return false;
         }
         const res = await this.props.projectinfo.sendUpdateDiscuss('', this.state.updateDiscuss);
@@ -285,17 +330,27 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     // 评论的点赞
     private handleSendUpdateZan = async (item: IDiscussList | IDiscussReplyList) =>
     {
+        const checkRes = this.handleCheckOption();
+        if (!checkRes)
+        {
+            return false;
+        }
         const res = await this.props.projectinfo.sendUpdateZan(item.discussId);
         if (res)
         {
             item.isZan = true;
             item.zanCount++;
         }
+        return true;
     }
     // 打开回复
     private handleOpenUpdatReply = (item: IDiscussList) =>
     {
-
+        const checkRes = this.handleCheckOption();
+        if (!checkRes)
+        {
+            return false;
+        }
         this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
         {
             if (list.discussId === item.discussId)
@@ -311,14 +366,16 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
             updateReply: '',
             updateReplyOther: ''
         })
-        // if (item.isShowReply)
-        // {
-        //     this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
-        // }
+        return true;
     }
     // 打开回复二级
     private handleOpenUpdatReplyOther = (replyItem: IDiscussReplyList) =>
     {
+        const checkRes = this.handleCheckOption();
+        if (!checkRes)
+        {
+            return false;
+        }
         this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
         {
             list.isShowReply = false;
@@ -338,6 +395,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
             updateReply: '',
             updateReplyOther: ''
         })
+        return true;
     }
     // 回复评论一级输入
     private handleUpdatReplyDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -356,14 +414,14 @@ class UpdateInfo extends React.Component<IProjectInfoProps, any> {
     // 回复评论一级
     private handleSendUpdatReplyDiscuss = (item: IDiscussList) =>
     {
-
         if (!this.state.updateReply)
         {
             return false;
         }
         this.props.projectinfo.sendUpdateDiscuss(item.discussId, this.state.updateReply);
         item.isShowReply = false;
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             this.handleGetUpdateReplayList(item);
         }, 2000);
         return true;

@@ -9,7 +9,7 @@ import { observer } from 'mobx-react';
 import { ICommonStore } from '@/store/interface/common.interface';
 
 interface IProps {
-  // locale: any,
+  locale: any,
   common: ICommonStore
   onChangeLanguage: (lang: string) => void;
 }
@@ -32,19 +32,19 @@ export default class Footer extends React.Component<IProps, any>
             <div className="footer-list">
               <ul>
                 <li className="footer-li">
-                  <strong>关于</strong>
-                  <span>关于我们</span>
+                  <strong>{this.props.locale.about}</strong>
+                  <span>{this.props.locale.aboutus}</span>
                 </li>
                 <li className="footer-li">
-                  <strong>支持</strong>
-                  <span>项目发起流程</span>
-                  <span>常见问题</span>
-                  <span>帮助中心</span>
+                  <strong>{this.props.locale.support}</strong>
+                  <span>{this.props.locale.process}</span>
+                  <span>{this.props.locale.faq}</span>
+                  <span>{this.props.locale.help}</span>
                 </li>
                 <li className="footer-li">
-                  <strong>条款</strong>
-                  <span>用户协议</span>
-                  <span>隐私政策</span>
+                  <strong>{this.props.locale.terms}</strong>
+                  <span>{this.props.locale.agreement}</span>
+                  <span>{this.props.locale.policy}</span>
                 </li>
               </ul>
             </div>

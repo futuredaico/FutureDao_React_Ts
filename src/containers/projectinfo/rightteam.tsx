@@ -5,6 +5,7 @@ import './index.less';
 import { IProjectInfoProps, IProjectTeam } from './interface/projectinfo.interface';
 @observer
 class RightTeam extends React.Component<IProjectInfoProps, any> {
+    public intrl = this.props.intl.messages;
     public componentDidMount()
     {
         this.props.projectinfo.getTeamData();
@@ -13,7 +14,7 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
     {
         return (
             <div className="team-wrapper">
-                <h3>团队介绍</h3>
+                <h3>{this.intrl.projinfo.team}</h3>
                 {
                     this.props.projectinfo.projTeamList.length > 0 && this.props.projectinfo.projTeamList.map((item: IProjectTeam, index: number) =>
                     {
@@ -23,7 +24,7 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                                     <img src={item.headIconUrl?item.headIconUrl:require('@/img/default.png')} alt="" />
                                     <span>{item.username}</span>
                                 </div>
-                                <p className="team-des">{!!item.brief?item.brief:'暂无简介'}</p>
+                                <p className="team-des">{!!item.brief?item.brief:this.intrl.projinfo.noprofile}</p>
                             </div>
                         )
                     })

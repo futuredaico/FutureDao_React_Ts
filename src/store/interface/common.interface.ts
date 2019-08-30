@@ -50,6 +50,13 @@ export enum CodeType
   headIconNotUpload = "10211",       // 头像未上传
   projBriefNotUpload = "10212",      // 项目封面未上传
   projVideoNotUpload = "10213",      // 项目视频未上传
+  projRequiredFieldIsEmpty = "10214",// 项目必选项为空
+  projNotSupportOp = "10215",        // 项目不支持此操作
+  lenExceedingThreshold = "10216",   // 长度超过阈值
+  EmailNotVerify = "10219",          // 邮箱未验证
+  EmailVerifying = "10220",          // 邮箱验证中
+  EmailVerifySucc = "10221",         // 邮箱验证成功 
+  EmailVerifyFail = "10222",         // 邮箱验证失败
   T_RepeatProjNameOrProjTitle = "10230",      // 重复的项目名称或项目标题
   T_HaveNotPermissionCreateProj = "10231",    // 没有权限[创建]项目
   T_HaveNotPermissionDeleteProj = "10232",    // 没有权限[删除]项目

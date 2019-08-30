@@ -86,7 +86,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
           <span className="red-type">*</span>
         </div>
         <div className="inline-enter">
-          <div style={{ width: 750, height: 374 }}>
+          <div style={{ width: 750, height: 600 }}>
             <Editor
               onChange={this.onChangeEditorValue}
               value={this.state.projectDetails}

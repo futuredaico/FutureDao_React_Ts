@@ -10,7 +10,7 @@ import { ICommonStore } from '@/store/interface/common.interface';
 
 interface IProps {
   history: History,
-  // locale: any,
+  locale: any,
   common: ICommonStore,
 }
 @observer
@@ -25,9 +25,9 @@ export default class Header extends React.Component<IProps, any>{
           <div className="header-menu">
             <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
-              <li><Link to="/">发现项目</Link></li>
+              <li><Link to="/">{this.props.locale.discover}</Link></li>
               <li>
-                <a href="javascript:;" onClick={this.handleToCreateProject}>创建项目</a>
+                <a href="javascript:;" onClick={this.handleToCreateProject}>{this.props.locale.creat}</a>
               </li>
             </ul>
           </div>
@@ -36,7 +36,7 @@ export default class Header extends React.Component<IProps, any>{
               {
                 (!this.props.common.userInfo) && (
                   <li>
-                    <span className="point-login" onClick={this.handleToLogin}>登陆 | </span>  <span className="point-login" onClick={this.handleToSignin}>注册</span>
+                    <span className="point-login" onClick={this.handleToLogin}>{this.props.locale.login} | </span>  <span className="point-login" onClick={this.handleToSignin}>{this.props.locale.sign}</span>
                   </li>
                 )
               }
@@ -53,9 +53,9 @@ export default class Header extends React.Component<IProps, any>{
                         </div>
                         <div className="people-list">
                           <ul className="people-ul">
-                            <li className="people-li" onClick={this.handleToPersonal}>个人中心</li>
-                            <li className="people-li" onClick={this.handleToMyProject}>我的项目</li>
-                            <li className="people-li" onClick={this.handleToLogout} >退出账号</li>
+                            <li className="people-li" onClick={this.handleToPersonal}>{this.props.locale.center}</li>
+                            <li className="people-li" onClick={this.handleToMyProject}>{this.props.locale.myproject}</li>
+                            <li className="people-li" onClick={this.handleToLogout} >{this.props.locale.exit}</li>
                           </ul>
                         </div>
                       </div>

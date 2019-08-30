@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react';
 import { getQueryString } from '@/utils/function'
 import Button from '@/components/Button';
 import { IEmailCheckProps } from './interface/emailcheck.interface';
+import { injectIntl } from 'react-intl';
 
 // interface IState
 // {
@@ -19,7 +20,7 @@ import { IEmailCheckProps } from './interface/emailcheck.interface';
 // }
 @inject('emailcheck','common')
 @observer
-export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
+class InvifyCheck extends React.Component<IEmailCheckProps, any>
 {
     public state = {
         username: getQueryString('username') || '',
@@ -110,3 +111,4 @@ export default class InvifyCheck extends React.Component<IEmailCheckProps, any>
         }
     }
 }
+export default injectIntl(InvifyCheck)

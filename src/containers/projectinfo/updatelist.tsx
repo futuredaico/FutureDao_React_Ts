@@ -10,6 +10,7 @@ import * as formatTime from 'utils/formatTime';
 
 @observer
 class UpdateList extends React.Component<IProjectInfoProps, any> {
+    public intrl = this.props.intl.messages;
     public componentDidMount()
     {
         this.props.projectinfo.getUpdateData();
@@ -17,9 +18,10 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
     public render()
     {
         return (
-            <div className="updatelist-wrapper">
+            <div className="updatelist-wrapper">            
                 {
-                    this.props.projectinfo.projUpdateList.length > 0 && this.props.projectinfo.projUpdateList.map((item: IProjectUpdate, index: number) =>
+                    this.props.projectinfo.projUpdateList.length > 0 
+                    ? this.props.projectinfo.projUpdateList.map((item: IProjectUpdate, index: number) =>
                     {
                         return (
                             <div className="updatelist-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
@@ -28,12 +30,13 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
                                 {/* <p className="updatelist-p">{item.updateDetail}</p> */}
                                 <span className="time-tips">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                                 <div className="right-other">
-                                    <span>评论：{item.discussCount}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>赞：{item.zanCount}</span>
+                                    <span>{this.intrl.projinfo.comments}：{item.discussCount}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span>{this.intrl.projinfo.zan}：{item.zanCount}</span>
                                 </div>
                             </div>
                         )
                     })
+                    :<div className="no-update">{this.intrl.projinfo.noupdate}</div>
                 }
             </div>
         );

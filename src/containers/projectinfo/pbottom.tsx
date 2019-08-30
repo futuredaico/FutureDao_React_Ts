@@ -14,21 +14,22 @@ import classnames from 'classnames'
 
 @observer
 class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
+  public intrl = this.props.intl.messages;
   public state = {
     fixed: false
   }
   private menuOne = [
     {
       id: 1,
-      name: '项目详情'
+      name: this.intrl.projinfo.info
     },
     {
       id: 2,
-      name: '留言'
+      name: this.intrl.projinfo.comment
     },
     {
       id: 3,
-      name: '更新'
+      name: this.intrl.projinfo.update
     }
   ]
   private pBottomTitle: React.RefObject<HTMLDivElement> = React.createRef();

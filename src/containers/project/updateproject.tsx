@@ -64,7 +64,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
           <strong>详情</strong>
         </div>
         <div className="inline-enter">
-          <div style={{ width: 750, height: 374 }}>
+          <div style={{ width: 750, height: 600 }}>
             <Editor
               onChange={this.onChangeEditorValue}
               value={this.state.detailString}

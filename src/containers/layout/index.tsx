@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import Header from '@/containers/header';
-// import { zh_CN, en_US } from '@/language';
+import { zh_CN, en_US } from '@/language';
 import CommonStore from '@/store/common';
 import ScrollToTop from '@/components/scrolltotop';
 import './index.less';
@@ -22,14 +22,17 @@ export default class LayoutIndex extends React.Component<any, any> {
     lang: CommonStore.language === 'en' ? 'en' : 'zh', // zh为中，en为英
   }
   // 切换语言
-  public onChangeLanguage = (lang: string) => {
-    if (lang === "zh") {
+  public onChangeLanguage = (lang: string) =>
+  {
+    if (lang === "zh")
+    {
       CommonStore.setLanguage('zh');
       sessionStorage.setItem('language', 'zh');
       this.setState({
         lang: 'zh'
       })
-    } else {
+    } else
+    {
       CommonStore.setLanguage('en');
       sessionStorage.setItem('language', 'en');
       this.setState({
@@ -37,30 +40,33 @@ export default class LayoutIndex extends React.Component<any, any> {
       })
     }
   }
-  public componentDidMount() {
+  public componentDidMount()
+  {
     // 初始化先匹配一次
     this.onMapping();
     // listen 路由改变，重新匹配一次
-    this.context.router.history.listen(() => {
+    this.context.router.history.listen(() =>
+    {
       this.onMapping();
     });
   }
 
-  public render() {
+  public render()
+  {
     return (
       <div className="layout-container">
         <ScrollToTop>
           <Header
             history={this.context.router.history}
-            // locale={this.state.lang === 'en' ? en_US.header : zh_CN.header}
+            locale={this.state.lang === 'en' ? en_US.header : zh_CN.header}
             common={CommonStore}
           />
           <div className="layout-main">
-            <VerifyMail common={CommonStore} />
+            <VerifyMail common={CommonStore} locale={this.state.lang === 'en' ? en_US.email : zh_CN.email} />
             {this.props.children}
           </div>
           <Footer
-            // locale={this.state.lang === 'en' ? en_US.header : zh_CN.header}
+            locale={this.state.lang === 'en' ? en_US.footer : zh_CN.footer}
             common={CommonStore}
             onChangeLanguage={this.onChangeLanguage}
           />
@@ -69,8 +75,10 @@ export default class LayoutIndex extends React.Component<any, any> {
     );
   }
 
-  private onMapping() {
-    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname))) {
+  private onMapping()
+  {
+    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname)))
+    {
       CommonStore.footer = false;
       return;
     }
