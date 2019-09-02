@@ -29,6 +29,7 @@ interface IProps extends RouteComponentProps<{ projectId: string }> {
 @inject('project', 'createproject','common')
 @observer
 class Project extends React.Component<IProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         showDeletProject: false,
     }
@@ -65,10 +66,10 @@ class Project extends React.Component<IProps, any> {
                         </div>
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
-                            <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>编辑项目资料</li>
-                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>发布更新</li>
-                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>启动融资（即将上线）</li>
-                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>删除项目</li>
+                            <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>{this.intrl.edit.editinfo}</li>
+                                <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>{this.intrl.update.update}</li>
+                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>{this.intrl.start.start}</li>
+                                <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>{this.intrl.delete.deletetitle}</li>
                             </ul>
                         </div>
                     </div>
@@ -83,10 +84,10 @@ class Project extends React.Component<IProps, any> {
                     this.state.showDeletProject && (
                         <div className="delete-people-wrapper">
                             <div className="delete-content">
-                                <div className="delete-text">删除项目将清除所有相关数据是否继续？</div>
+                                <div className="delete-text">{this.intrl.delete.deletetips}<br/>{this.intrl.delete.deletetips2}</div>
                                 <div className="delete-btn">
-                                    <Button text="取消" btnColor="red-btn" onClick={this.handleShowDeleteProject} />
-                                    <Button text="确认" onClick={this.handleCheckDelete} />
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleShowDeleteProject} />
+                                    <Button text={this.intrl.btn.comfirm} onClick={this.handleCheckDelete} />
                                 </div>
                             </div>
                         </div>
@@ -119,7 +120,7 @@ class Project extends React.Component<IProps, any> {
         }
         else if(str === '/project/delete'){
             if(this.props.createproject.createContent.role!=='admin'){
-                this.props.common.openNotificationWithIcon('error', '操作失败', '仅限管理员可删除项目');
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
             }else{
                 this.handleShowDeleteProject();
             }
@@ -147,10 +148,10 @@ class Project extends React.Component<IProps, any> {
             const res = await this.props.project.deleteMember(projectId);
             if(res){
                 this.handleShowDeleteProject();
-                this.props.common.openNotificationWithIcon('success', '操作成功', '项目删除成功');
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.deletesuccess);
                 this.handleGoBackPersonMenager();
             }else{
-                this.props.common.openNotificationWithIcon('error', '操作失败', '项目删除失败');
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.deleteerr);
             }
         } else {
             return false;

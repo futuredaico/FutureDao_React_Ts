@@ -17,6 +17,7 @@ export interface ILoginProps extends RouteComponentProps
 @inject('common')
 @observer
 class Login extends React.Component<ILoginProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         loginEmail: '',
         loginPwd: '',
@@ -26,23 +27,23 @@ class Login extends React.Component<ILoginProps, any> {
     {
         return (
             <div className="normal-wrapper">
-                <Input placeholder="邮箱" value={this.state.loginEmail} onChange={this.handleOnChangeLoginEmail} />
+                <Input placeholder={this.intrl.login.email} value={this.state.loginEmail} onChange={this.handleOnChangeLoginEmail} />
                 <label htmlFor="loginpwd">
-                    <Input.Password placeholder="登陆密码" value={this.state.loginPwd} onChange={this.handleOnChangeLoginPwd} onPressEnter={this.handleToLogin} />
+                    <Input.Password placeholder={this.intrl.login.password} value={this.state.loginPwd} onChange={this.handleOnChangeLoginPwd} onPressEnter={this.handleToLogin} />
                     {
                         this.state.loginErr && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                邮箱或密码输入错误
+                                {this.intrl.inputerr.loginerr}
                             </span>
                         )
                     }
 
                 </label>
-                <Button text="登陆" onClick={this.handleToLogin} />
+                <Button text={this.intrl.btn.login} onClick={this.handleToLogin} />
                 <div className="gray-text-wrapper">
-                    <span className="gray-text" onClick={this.handleForget} >忘记密码?</span><br />
-                    <span className="gray-text" onClick={this.handleSignin} >还没有帐户？点击立即注册</span>
+                    <span className="gray-text" onClick={this.handleForget} >{this.intrl.login.forgot}</span><br />
+                    <span className="gray-text" onClick={this.handleSignin} >{this.intrl.login.signtips}</span>
                 </div>
             </div>
         );

@@ -188,7 +188,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         // 图片大小限制不超过1Mb
         if (file.size / 1024 / 1024 > 1)
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '头像太大了');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             return false;
         }
         // todo commonStore
@@ -223,11 +223,11 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         const res = await this.props.personedit.updateUserBrief(this.state.briefTextarea);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '操作成功', '个人简介成功');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.drieftips);
         }
         else
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '个人简介失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.drieferr);
         }
         this.handleCancelEdit();
     }
@@ -281,12 +281,12 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
         const res = await this.props.personedit.updateUserEmail(this.state.emailInput, this.state.emailPwd);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '操作成功', '邮箱已修改，请重新验证');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.emailtips);
             this.handleCancelEdit();
         }
         else
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '修改邮箱失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.emailerr);
         }
     }
 
@@ -316,14 +316,14 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
 
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '操作成功', '密码已修改');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.pwdtips);
             this.handleCancelEdit();
             // this.props.common.logoutFutureDao();
             // this.props.history.push('/load/login');
         }
         else
         {
-            this.props.common.openNotificationWithIcon('error', '操作失败', '修改密码失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.pwderr);
         }
 
     }

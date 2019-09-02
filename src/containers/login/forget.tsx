@@ -13,6 +13,7 @@ import { IForgetProps } from './interface/forget.interface';
 @inject('forget','common')
 @observer
 class ForgetPwd extends React.Component<IForgetProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         stepNum: true,
         forgetEmail: '',
@@ -28,7 +29,7 @@ class ForgetPwd extends React.Component<IForgetProps, any> {
                             <>
                                 <label>
                                     <Input
-                                        placeholder="邮箱"
+                                        placeholder={this.intrl.login.email}
                                         value={this.state.forgetEmail}
                                         onChange={this.handleOnChangeForgetEmail}
                                         onBlur={this.handleCheckEmail}
@@ -37,23 +38,23 @@ class ForgetPwd extends React.Component<IForgetProps, any> {
                                         ((this.props.forget.forgetEmailCode !== CodeType.emailHasRegisted) && (this.props.forget.forgetEmailCode)) && (
                                             <span className="err-msg">
                                                 <img src={require('@/img/attention.png')} alt="" />
-                                                {this.props.forget.forgetEmailCode === CodeType.invalidEmail && "邮箱格式不正确"}
-                                                {this.props.forget.forgetEmailCode === CodeType.success && "该邮箱未注册"}
+                                                {this.props.forget.forgetEmailCode === CodeType.invalidEmail && this.intrl.inputerr.emailerr2}
+                                                {this.props.forget.forgetEmailCode === CodeType.success && this.intrl.inputerr.emailerr1}
                                             </span>
                                         )
                                     }
                                 </label>
-                                <Button text="取消" btnColor="red-btn" onClick={this.handleToLogin} />
-                                <Button text="重置密码" onClick={this.handleResetPwd} btnColor={this.props.forget.forgetEmailCode !== CodeType.emailHasRegisted ? 'gray-btn' : ''} />
+                                <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleToLogin} />
+                                <Button text={this.intrl.btn.reset} onClick={this.handleResetPwd} btnColor={this.props.forget.forgetEmailCode !== CodeType.emailHasRegisted ? 'gray-btn' : ''} />
                             </>
                         )
                         : (
                             <>
                                 <div className="forget-tips">
-                                    <p>我们向您发送了一封重置密码的电子邮件，请按照邮件提示进行操作。</p>
-                                    <p>请确保邮件未归类入垃圾邮件。如果无法收到邮件，请查看<a href="#">帮助</a>。</p>
+                                    <p>{this.intrl.forget.sendmsg}</p>
+                                    <p>{this.intrl.forget.sendmsg2}<a href="#">{this.intrl.forget.sendmsg3}</a>。</p>
                                 </div>
-                                <Button text="完成" onClick={this.handleToLogin} />
+                                <Button text={this.intrl.btn.finish} onClick={this.handleToLogin} />
                             </>
                         )
                 }

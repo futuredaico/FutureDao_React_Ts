@@ -18,12 +18,16 @@ export default {
     supported:"已看好",
     comment:"发表评论",
     editstep1:"创建项目并继续",
+    editstep2:"保存并继续",
     save:"保存",
-    invite:"邀请新成员",
+    invite:"+ 邀请新成员",
     invite2:"邀请",
     comfirm:"确认",
     submit:"提交",
-    reply:"回复"
+    reply:"回复",
+    delete:"删除",
+    updatevideo:"更换视频",
+    review:"审核中",
   },
   card:{
     game:"游戏",
@@ -33,14 +37,15 @@ export default {
   },
   inputerr:{
     loginerr:"邮箱或密码输入错误",
-    eformaterr:"邮箱格式不正确",
-    emailerr:"该邮箱未注册",
+    errormsg2:"该邮箱未注册",
     usererr1:"用户名至少3个字符",
     usererr2:"用户名已被人使用",
     emailerr1:"该邮箱已注册",
     emailerr2:"邮箱格式不正确",
-    pwderr:"密码至少8个字符",
-    pwderr2:"密码错误"
+    pwderr:"密码至少8个字符", 
+    pwderr2:"密码错误",
+    pwderr3:"该密码不合法",
+    notsame:"两次密码不一致。"
   },
   header:{
     discover:"发现项目",
@@ -64,24 +69,24 @@ export default {
   },
   home:{
     discover:"发现项目",
-    supporttips:"{人看好",
-    display:"项目展示",    
+    supporttips:"人看好",
+    display:"创意展示",    
   },
   login:{
     email:"邮箱",
     password:"登陆密码",
     forgot:"忘记密码？",
-    signtips:"还没有帐户？",
-    sign:"立即注册",    
+    signtips:"还没有帐户？立即注册",
   },
   forget:{
     sendmsg:"我们向您发送了一封重置密码的电子邮件，请按照邮件提示进行操作。",
-    sendmsg2:"请确保邮件未归类入垃圾邮件。如果无法收到邮件，请查看帮助。",    
+    sendmsg2:"请确保邮件未归类入垃圾邮件。如果无法收到邮件，请查看", 
+    sendmsg3:"帮助。"   
   },
   sign:{
     username:"用户名",        
-    gologin:"已有帐户？",
-    login:"登陆"
+    gologin:"已有帐户？登陆",
+    pwd:"密码"
   },
   email:{
     decline:"你已拒绝该邀请",
@@ -116,7 +121,7 @@ export default {
     follow:"关注中",
     manager:"管理中",
     ethereum:"以太坊",
-    display:"项目展示",
+    display:"创意展示",
     prepare:"准备中",
     review:"审核中",
     failed:"审核失败",
@@ -129,7 +134,7 @@ export default {
     followed:"已关注",
     people:"人",
     supporttips:"看好这个项目",
-    tips:"这个项目只是发布了展示，还没有开始融资，如果你看好这个项目，点击下面的“看好”，给作者一点鼓励吧",
+    tips:"这个项目只是发布了创意展示，还没有开始融资，如果你看好这个项目，点击下面的“看好”，给作者一点鼓励吧",
     info:"项目详情",
     comment:"留言",
     update:"更新",
@@ -172,7 +177,8 @@ export default {
     contact:"联系方式",
     email:"邮箱",
     website:"官网",
-    community:"社区"
+    community:"社区",
+    error:"填写本栏信息"
   },
   team:{
     team:"团队成员",
@@ -182,11 +188,13 @@ export default {
     status:"身份",
     manager:"管理",
     mermber:"成员",
-    noverify:"未认证",    
+    noverify:"未认证",
+    people:"个人认证",
+    company:"企业认证",
     invitetitle:"邀请成员加入项目",
     search:"使用E-mail进行搜索",
     notfound:"未找到该用户",
-    delete1:"确认将XX",
+    delete1:"确认将",
     delete2:"移除团队？"
   },
   start:{
@@ -198,9 +206,31 @@ export default {
     deletetips2:"是否继续？"
   },
   notify:{
+    success:"操作成功",
     error:"操作失败",
     loginerr:"请登录之后在操作，谢谢",
     verifyerr:"请验证邮箱之后在操作，谢谢",
-    supporterr:"请先看好项目之后在操作，谢谢"
+    supporterr:"请先看好项目之后在操作，谢谢",
+    adminerr:"仅限管理员可删除项目",
+    deletesuccess:"项目删除成功",
+    deleteerr:"项目删除失败",
+    imgerr:"图片太大了",
+    emailtips:"邮箱已修改，请重新验证",
+    emailerr:"修改邮箱失败",
+    pwdtips:"密码修改成功",
+    pwderr:"修改密码失败",
+    drieftips:"个人简介成功",
+    drieferr:"个人简介失败",
+    editerr1:"项目正在审核中不可以修改哦",
+    sendmsg:"邀请邮件已发出。",
+    uploaderr:"封面上传失败",
+    createerr:"项目创建失败，已有该项目名称或项目标题",
+    editerr2:"项目正在审核中不可以修改哦",
+    savesuccess:"保存成功",
+    savefail:"保存失败",
+    videoerr:"视频太大了",
+    videoerr2:"视频上传失败",
+    updatetips:"日志修改成功",
+    updateerr:"日志修改失败"
   }
 }

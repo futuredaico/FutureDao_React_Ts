@@ -19,9 +19,10 @@ interface IState
   isHasEdit: boolean, // 判断详情是否输入了内容
   updateId: string  // 更新日志的ID
 }
-@inject('common', 'updateproject','createproject','project')
+@inject('common', 'updateproject', 'createproject', 'project')
 @observer
 class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
+  public intrl = this.props.intl.messages;
   public state = {
     updateTitle: '',
     detailString: '',
@@ -37,7 +38,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
     if (this.state.updateId)
     {
       this.props.createproject.getProject(projectId);
-      await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);      
+      await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
       if (this.props.updateproject.updateInfo)
       {
         this.setState({
@@ -53,18 +54,18 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
   {
     return (
       <>
-        <h3 className="right-title">发布更新</h3>
+        <h3 className="right-title">{this.intrl.update.update}</h3>
         <div className="inline-title">
-          <strong>标题</strong>
+          <strong>{this.intrl.update.title}</strong>
         </div>
         <div className="inline-enter">
           <Input maxLength={80} value={this.state.updateTitle} onChange={this.handleChangeTitle} />
         </div>
         <div className="inline-title">
-          <strong>详情</strong>
+          <strong>{this.intrl.update.info}</strong>
         </div>
         <div className="inline-enter">
-          <div style={{ width: 750, height: 600 }}>
+          <div style={{ width: 750, minHeight: 500, maxHeight: 1000 }}>
             <Editor
               onChange={this.onChangeEditorValue}
               value={this.state.detailString}
@@ -98,7 +99,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
     {
       this.setState({
         detailString: BraftEditor.createEditorState(value),
-        detailStr: BraftEditor.createEditorState(value).toHTML(),
+        detailStr: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'),
         isHasEdit: true
       })
     } else
@@ -128,7 +129,10 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
       const res = await this.props.updateproject.modifyUpdateInfo(projectId, this.state.updateId, this.state.updateTitle, this.state.detailStr);
       if (res)
       {
-        this.props.common.openNotificationWithIcon('success', '操作成功', '日志修改成功');
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
+      } else
+      {
+        this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
       }
     }
     else

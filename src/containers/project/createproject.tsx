@@ -17,6 +17,7 @@ import { getQueryString } from '@/utils/function'
 @inject('createproject', 'common', 'project')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps> {
+    public intrl = this.props.intl.messages;
     public state = {
         isEdit: !!this.props.match.params.projectId
     }
@@ -81,24 +82,24 @@ class CreateProject extends React.Component<ICreateProjectProps> {
         const isCanApply = (this.props.createproject.stepOneStatus === 2 && this.props.createproject.stepTwoStatus === 2 && this.props.createproject.stepThreeStatus === 2) ? true : false
         return (
             <>
-                <h3 className="right-title">编辑项目资料</h3>
+                <h3 className="right-title">{this.intrl.edit.editinfo}</h3>
                 <div className="right-apply-btn">
                     {
-                        (this.props.createproject.createContent.projSubState === ProjSubState.Init || this.props.createproject.createContent.projSubState === ProjSubState.Modify) && <Button text="提交" btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
+                        (this.props.createproject.createContent.projSubState === ProjSubState.Init || this.props.createproject.createContent.projSubState === ProjSubState.Modify) && <Button text={this.intrl.btn.submit} btnColor={isCanApply ? '' : "gray-btn"} onClick={this.handleCommitProject} />
                     }
                     {
-                        this.props.createproject.createContent.projSubState === ProjSubState.Auditing && <Button text="审核中" btnColor="gray-btn" />
+                        this.props.createproject.createContent.projSubState === ProjSubState.Auditing && <Button text={this.intrl.btn.review} btnColor="gray-btn" />
                     }
                 </div>
                 <div className="right-tab">
                     <div className={oneClassName} onClick={this.handleEditStep.bind(this, 1)}>
-                        <span className="step-span">基础信息</span>
+                        <span className="step-span">{this.intrl.edit.step1}</span>
                     </div>
                     <div className={twoClassName} onClick={this.handleEditStep.bind(this, 2)}>
-                        <span className="step-span">详细信息</span>
+                        <span className="step-span">{this.intrl.edit.step2}</span>
                     </div>
                     <div className={threeClassName} onClick={this.handleEditStep.bind(this, 3)}>
-                        <span className="step-span">团队信息</span>
+                        <span className="step-span">{this.intrl.edit.step3}</span>
                     </div>
                 </div>
 

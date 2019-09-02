@@ -16,7 +16,7 @@ import { ProjSubState } from '@/store/interface/common.interface';
 
 @observer
 class StepOne extends React.Component<ICreateProjectProps, any> {
-
+  public intrl = this.props.intl.messages;
   public state = {
     nameValue: this.props.createproject.createContent.projName, // 项目名称
     titleValue: this.props.createproject.createContent.projTitle, // 项目标题
@@ -34,19 +34,19 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
   private mydeityOptions = [
     {
       id: 'game',
-      name: '游戏',
+      name: this.intrl.card.game,
     },
     {
       id: 'comic',
-      name: '电影',
+      name: this.intrl.card.movies,
     },
     {
       id: 'movie',
-      name: '动漫',
+      name: this.intrl.card.animation,
     },
     {
       id: 'other',
-      name: '其他',
+      name: this.intrl.card.other,
     }
   ]
 
@@ -58,8 +58,8 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         {
           !this.state.loading && (
             <>
-              <div className="ant-upload-text">上传封面图</div>
-              <span className="small-text">尺寸 750*480，格式 jpg，png，分辨率72像素/英寸，不大于3MB</span>
+              <div className="ant-upload-text">{this.intrl.edit.uploadcover}</div>
+              <span className="small-text">{this.intrl.edit.covertips}</span>
             </>
           )
         }
@@ -68,37 +68,37 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     return (
       <div className="stepone-page" id="projectname">
         <div className="inline-title">
-          <strong>项目名称</strong>&nbsp;
+          <strong>{this.intrl.edit.name}</strong>&nbsp;
           <span className="red-type">*</span>&nbsp;&nbsp;
-          <span className="tips-text">（ 一个简短的名称，会在发送邮件、通知消息或对别人提起时用到，30字以内 ）</span>
+          <span className="tips-text">{this.intrl.edit.nametips}</span>
         </div>
         <div className="inline-enter">
           <Input maxLength={30} value={this.state.nameValue} onChange={this.handleToChangeName} className={this.state.nameEnter ? "err-active" : ''} />
           {
-            this.state.nameEnter && <span className="err-span">填写本栏信息</span>
+            this.state.nameEnter && <span className="err-span">{this.intrl.edit.error}</span>
           }
         </div>
         <div className="inline-title">
-          <strong>项目标题</strong>&nbsp;
+          <strong>{this.intrl.edit.title}</strong>&nbsp;
           <span className="red-type">*</span>&nbsp;&nbsp;
-          <span className="tips-text">（ 用于展示在首页的标题，60字以内 ）</span>
+          <span className="tips-text">{this.intrl.edit.titletips}</span>
         </div>
         <div className="inline-enter">
           <Input maxLength={60} value={this.state.titleValue} onChange={this.handleToChangeTitle} className={this.state.titleEnter ? "err-active" : ''} />
           {
-            this.state.titleEnter && <span className="err-span">填写本栏信息</span>
+            this.state.titleEnter && <span className="err-span">{this.intrl.edit.error}</span>
           }
         </div>
         <div className="inline-title">
-          <strong>项目类型</strong>&nbsp;
+          <strong>{this.intrl.edit.type}</strong>&nbsp;
           <span className="red-type">*</span>&nbsp;&nbsp;
-          <span className="tips-text">（ 为你的项目进行归类 ）</span>
+          <span className="tips-text">{this.intrl.edit.typetips}</span>
         </div>
         <div className="inline-enter">
           <Select options={this.mydeityOptions} text='' onCallback={this.onSelletCallback} defaultValue={this.state.typeValue} />
         </div>
         <div className="inline-title">
-          <strong>项目封面</strong>&nbsp;
+          <strong>{this.intrl.edit.cover}</strong>&nbsp;
           <span className="red-type">*</span>
         </div>
         <div className="inline-enter">
@@ -115,23 +115,23 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
             {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton}
           </Upload>
           {
-            this.state.imgEnter && <span className="err-span">填写本栏信息</span>
+            this.state.imgEnter && <span className="err-span">{this.intrl.edit.error}</span>
           }
         </div>
         <div className="inline-title">
-          <strong>项目简介</strong>&nbsp;
+          <strong>{this.intrl.edit.intro}</strong>&nbsp;
           <span className="red-type">*</span>
         </div>
         <div className="inline-enter">
           <span className="text-numb">{this.state.textareaNum}/400</span>
           <textarea className={this.state.textareaEnter ? "textarea-wrapper err-active" : "textarea-wrapper"} maxLength={400} style={{ resize: 'none' }} onChange={this.handleGetLength} value={this.state.textareaValue} />
           {
-            this.state.textareaEnter && <span className="err-span">填写本栏信息</span>
+            this.state.textareaEnter && <span className="err-span">{this.intrl.edit.error}</span>
           }
         </div>
         <div className="inline-btn">
           <Button
-            text="创建项目并继续"
+            text={this.intrl.btn.editstep1}
             btnSize="bg-btn"
             onClick={this.handleToCreateProject}
             btnColor={(!this.state.nameValue || !this.state.titleValue || !this.state.textareaValue || !this.state.imageUrl) ? 'gray-btn' : ''}
@@ -172,7 +172,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     // 限制大小3M以下
     if (file.size / 1024 / 1024 > 3)
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '图片太大了');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
       return false;
     }
     this.setState({
@@ -195,7 +195,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
       })
     } else
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '封面上传失败');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
       this.setState({
         imageUrl: null,
         imgEnter: true,
@@ -254,13 +254,13 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.history.push('/project/' + this.props.createproject.createContent.projId+'?type=create');
       } else
       {
-        this.props.common.openNotificationWithIcon('error', '操作失败', '项目创建失败，已有该项目名称或项目标题');
+        this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.createerr);
       }
     } else
     {
       if (this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
       {
-        this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
+        this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
         return false;
       }
       const content: string[] = [

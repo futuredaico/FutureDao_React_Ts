@@ -6,7 +6,7 @@ export default {
   btn:{
     login:"Log in",
     sign:"Sign up",
-    cancel:"Cancle",
+    cancel:"Cancel",
     reset:"Reset password",
     finish:"Finished",
     agree:"Agree",
@@ -18,23 +18,16 @@ export default {
     supported:"Supported",
     comment:"Comment",
     editstep1:"Create project and continue",
+    editstep2:"Save and continue",
     save:"Save",
-    invite:"Invite new members",
+    invite:"+ Invite new members",
     invite2:"Invite",
     comfirm:"Confirm",
     submit:"Submit",
-    reply:"Reply"
-  },
-  inputerr:{
-    loginerr:"Incorrect email or password",
-    errormsg:"Incorrect email format",
-    errormsg2:"The Email address is not registered",
-    usererr1:"Username must have at least 3 characters",
-    usererr2:"This username is not available",
-    emailerr1:"This email address is registered",
-    emailerr2:"Incorrect email format",
-    pwderr:"This password must have at least 8 characters", 
-    pwderr2:"密码错误"
+    reply:"Reply",
+    delete:"Delete",
+    updatevideo:"Change",
+    review:"Under review",
   },
   card:{
     game:"Games",
@@ -42,6 +35,18 @@ export default {
     movies:"Movies",
     animation:"Animation "
   },
+  inputerr:{
+    loginerr:"Incorrect email or password",
+    errormsg2:"The Email address is not registered",
+    usererr1:"Username must have at least 3 characters",
+    usererr2:"This username is not available",
+    emailerr1:"This email address is registered",
+    emailerr2:"Incorrect email format",
+    pwderr:"This password must have at least 8 characters", 
+    pwderr2:"密码错误",
+    pwderr3:"该密码不合法",
+    notsame:"两次密码不一致。"
+  },  
   header:{
     discover:"Discover projects",
     creat:"Establish project",
@@ -71,17 +76,17 @@ export default {
     email:"Email",
     password:"Password",
     forgot:"Forgot password?",
-    signtips:"Don't have an account yet? ",
-    sign:"Sign up",
+    signtips:"Don't have an account yet? Sign up",
   },
   forget:{
     sendmsg:"We have sent you a password reset email, please follow the prompts.",
-    sendmsg2:"Please ensure that the message is not classified as spam. If you are unable to receive the message, please check the help.",    
+    sendmsg2:"Please ensure that the message is not classified as spam. If you are unable to receive the message, please check the help.", 
+    sendmsg3:"help."     
   },
   sign:{
     username:"Username",
-    gologin:"Already have an account? ",
-    login:"Log in"
+    gologin:"Already have an account? Log in ",
+    pwd:"Password"
   },
   email:{
     decline:"You have declined the invitation",
@@ -172,7 +177,8 @@ export default {
     contact:"Contact info",
     email:"Email address",
     website:"Website",
-    community:"Community"
+    community:"Community",
+    error:"填写本栏信息"
   },
   team:{
     team:"Team members",
@@ -182,12 +188,14 @@ export default {
     status:"Status",
     manager:"Management",
     mermber:"Member",
-    noverify:"Not verified",    
+    noverify:"Not verified",
+    people:"个人认证",
+    company:"企业认证", 
     invitetitle:"Invite members to join the project",
     search:"Search by E-mail",
     notfound:"The user was not found",
-    delete1:"Confirm to remove XX ",
-    delete2:"from the team?"
+    delete1:"Confirm to remove ",
+    delete2:" from the team?"
   },
   start:{
     start:"Start fundraising (coming soon)"
@@ -198,9 +206,31 @@ export default {
     deletetips2:"Whether to continue?"
   },
   notify:{
+    success:"操作成功",
     error:"操作失败",
     loginerr:"请登录之后在操作，谢谢",
-    verifyerr:"请验证邮箱之后在操作，谢谢",    
-    supporterr:"请先看好项目之后在操作，谢谢"
+    verifyerr:"请验证邮箱之后在操作，谢谢",
+    supporterr:"请先看好项目之后在操作，谢谢",
+    adminerr:"仅限管理员可删除项目",
+    deletesuccess:"项目删除成功",
+    deleteerr:"项目删除失败",
+    imgerr:"图片太大了",
+    emailtips:"邮箱已修改，请重新验证",
+    emailerr:"修改邮箱失败",
+    pwdtips:"密码修改成功",
+    pwderr:"修改密码失败",
+    drieftips:"个人简介成功",
+    drieferr:"个人简介失败",
+    editerr1:"项目正在审核中不可以修改哦",
+    sendmsg:"邀请邮件已发出。",
+    uploaderr:"封面上传失败",
+    createerr:"项目创建失败，已有该项目名称或项目标题",
+    editerr2:"项目正在审核中不可以修改哦",
+    savesuccess:"保存成功",
+    savefail:"保存失败",
+    videoerr:"视频太大了",
+    videoerr2:"视频上传失败",
+    updatetips:"日志修改成功",
+    updateerr:"日志修改失败"
   }
 }

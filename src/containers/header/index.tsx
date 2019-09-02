@@ -11,7 +11,8 @@ import { ICommonStore } from '@/store/interface/common.interface';
 interface IProps {
   history: History,
   locale: any,
-  common: ICommonStore,
+  common: ICommonStore,  
+  notify:any
 }
 @observer
 export default class Header extends React.Component<IProps, any>{
@@ -79,7 +80,7 @@ export default class Header extends React.Component<IProps, any>{
       this.handleToLogin();
     }else if(this.props.common.isVerifyEmail){
       // 邮箱未验证
-      this.props.common.openNotificationWithIcon('error', '操作失败', '请验证邮箱后进行操作。');
+      this.props.common.openNotificationWithIcon('error', this.props.notify.error, this.props.notify.verifyerr);
     }
      else {
       // 正常访问

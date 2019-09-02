@@ -25,6 +25,7 @@ interface IState
 
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         identityValue: 'admin',
         showAdd: false,
@@ -77,16 +78,16 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         return (
             <>
                 <div className="inline-title">
-                    <strong>团队成员</strong>&nbsp;&nbsp;
-          <span className="tips-text">（ 暂未接受邀请的成员信息不会对外公示 ）</span>
+                    <strong>{this.intrl.team.team}</strong>&nbsp;&nbsp;
+          <span className="tips-text">{this.intrl.team.tips}</span>
                 </div>
                 <div className="inline-enter">
                     <ul className="inline-table">
                         <li className="table-li">
-                            <span className="table-th">头像/名称</span>
-                            <span className="table-th">认证状态</span>
-                            <span className="table-th">身份</span>
-                            <span className="table-th">管理</span>
+                            <span className="table-th">{this.intrl.team.avatar}</span>
+                            <span className="table-th">{this.intrl.team.verify}</span>
+                            <span className="table-th">{this.intrl.team.status}</span>
+                            <span className="table-th">{this.intrl.team.manager}</span>
                         </li>
                         {
                             this.props.createproject.teamList.map((item: ITeamList, index) =>
@@ -98,27 +99,27 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                             <span className="peo-name">{item.username}</span>
                                         </span>
                                         {
-                                            item.authenticationState === 'not' && <span className="table-td gray-color">未认证</span>
+                                            item.authenticationState === 'not' && <span className="table-td gray-color">{this.intrl.team.noverify}</span>
                                         }
                                         {
-                                            item.authenticationState === 'person' && <span className="table-td gray-color">个人认证</span>
+                                            item.authenticationState === 'person' && <span className="table-td gray-color">{this.intrl.team.people}</span>
                                         }
                                         {
-                                            item.authenticationState === 'company' && <span className="table-td gray-color">企业认证</span>
+                                            item.authenticationState === 'company' && <span className="table-td gray-color">{this.intrl.team.company}</span>
                                         }
                                         {
                                             item.role === 'admin' ? (
                                                 <>
-                                                    <span className="table-td admin-color">管理</span>
+                                                    <span className="table-td admin-color">{this.intrl.team.manager}</span>
                                                     <span className="table-td" />
                                                 </>
                                             )
                                                 : (
                                                     <>
-                                                        <span className="table-td">成员</span>
+                                                        <span className="table-td">{this.intrl.team.mermber}</span>
                                                         <span className="table-td">
                                                             {
-                                                                this.state.isCanInvite && <Button text="删除" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this, item)} />
+                                                                this.state.isCanInvite && <Button text={this.intrl.btn.delete} btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this, item)} />
                                                             }
                                                         </span>
                                                     </>
@@ -141,7 +142,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 {
                     this.state.isCanInvite && (
                         <div className="inline-enter-btn">
-                            <Button text="+ 邀请新成员" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
+                            <Button text={this.intrl.btn.invite} btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
                         </div>
                     )
                 }
@@ -153,10 +154,10 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 <div className="close-icon" onClick={this.handleShowAddBox}>
                                     <img src={require("@/img/close.png")} alt="" />
                                 </div>
-                                <div className="invite-title">邀请成员加入项目</div>
+                                <div className="invite-title">{this.intrl.team.invitetitle}</div>
                                 <div className="invite-input">
                                     {/* 补充邮箱 */}
-                                    <Input placeholder="使用E-mail进行搜索" value={this.state.inviteStr} onChange={this.handleToEmailSearch} />
+                                    <Input placeholder={this.intrl.team.search} value={this.state.inviteStr} onChange={this.handleToEmailSearch} />
                                     {
                                         this.state.isSearching && (
                                             <div className="invite-select-list">
@@ -164,7 +165,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                                     {
                                                         this.props.createproject.searchList.length === 0 && (
                                                             <li>
-                                                                <span className="nodata-text">未找到该用户</span>
+                                                                <span className="nodata-text">{this.intrl.team.notfound}</span>
                                                             </li>
                                                         )
                                                     }
@@ -185,7 +186,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         )
                                     }
                                 </div>
-                                <Button text="邀请" btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember ? 'gray-btn' : ''} />
+                                <Button text={this.intrl.btn.invite2} btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember ? 'gray-btn' : ''} />
                             </div>
                         </div>
                     )
@@ -194,10 +195,10 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     this.state.showDelete && (
                         <div className="delete-people-wrapper">
                             <div className="delete-content">
-                                <div className="delete-text">确认将 XXX 移除团队？</div>
+                                <div className="delete-text">{this.intrl.team.delete1} {this.state.deleteMember&&this.state.deleteMember.username} {this.intrl.team.delete2}</div>
                                 <div className="delete-btn">
-                                    <Button text="取消" btnColor="red-btn" onClick={this.handleCancelDelete} />
-                                    <Button text="确认" onClick={this.handleCheckDelete} />
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelDelete} />
+                                    <Button text={this.intrl.btn.comfirm} onClick={this.handleCheckDelete} />
                                 </div>
                             </div>
                         </div>
@@ -225,7 +226,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
 
         this.props.createproject.inviteMember(this.state.selectMember.userId);
         this.handleShowAddBox();
-        this.props.common.openNotificationWithIcon('success', '操作成功', '邀请邮件已发出。');
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendmsg);
 
         return true;
     }

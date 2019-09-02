@@ -13,6 +13,7 @@ import { CodeType } from '@/store/interface/common.interface';
 @inject('signin','common')
 @observer
 class SignIn extends React.Component<ISignInProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         usernameValue: '',
         emailValue:'',
@@ -30,7 +31,7 @@ class SignIn extends React.Component<ISignInProps, any> {
             <div className="normal-wrapper signin-wrapper">
                 <label htmlFor="username">
                     <Input
-                        placeholder="用户名"
+                        placeholder={this.intrl.sign.username}
                         className={this.props.signin.usernameCode ? "red-input" : ''}
                         value={this.state.usernameValue}
                         onChange={this.handleOnChangeUsername}
@@ -40,15 +41,15 @@ class SignIn extends React.Component<ISignInProps, any> {
                         this.props.signin.usernameCode && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                {this.props.signin.usernameCode === CodeType.invalidUsername && "用户名3~24位"}
-                                {this.props.signin.usernameCode === CodeType.usernameHasRegisted  && "用户名已被人使用"}
+                                {this.props.signin.usernameCode === CodeType.invalidUsername && this.intrl.inputerr.usererr1}
+                                {this.props.signin.usernameCode === CodeType.usernameHasRegisted  && this.intrl.inputerr.usererr2}
                             </span>
                         )
                     }
                 </label>
                 <label htmlFor="email">
                     <Input 
-                        placeholder="邮箱" 
+                        placeholder={this.intrl.login.email} 
                         className={this.props.signin.emailCode ? "red-input" : ''}
                         value={this.state.emailValue}
                         onChange={this.handleOnChangeEmail}
@@ -58,8 +59,8 @@ class SignIn extends React.Component<ISignInProps, any> {
                         this.props.signin.emailCode && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                {this.props.signin.emailCode === CodeType.invalidEmail && "邮箱格式不正确"}
-                                {this.props.signin.emailCode === CodeType.emailHasRegisted  && "该邮箱已注册"}
+                                {this.props.signin.emailCode === CodeType.invalidEmail && this.intrl.inputerr.eformaterr}
+                                {this.props.signin.emailCode === CodeType.emailHasRegisted  && this.intrl.inputerr.emailerr1}
                             </span>
                         )
                     }
@@ -67,7 +68,7 @@ class SignIn extends React.Component<ISignInProps, any> {
                 </label>
                 <label htmlFor="pwd">
                     <Input.Password 
-                        placeholder="密码" 
+                        placeholder={this.intrl.sign.pwd}
                         className={this.state.pwdFlag ? "red-password" : ''}
                         value={this.state.pwdValue}
                         onChange={this.handleOnChangePwd}
@@ -77,16 +78,16 @@ class SignIn extends React.Component<ISignInProps, any> {
                         (this.state.pwdFlag || this.props.signin.pwdCode) && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                {this.state.pwdFlag && "密码至少8位"}
-                                {this.props.signin.pwdCode === CodeType.invalidPasswordLen   && "该密码不合法"}
+                                {this.state.pwdFlag && this.intrl.inputerr.pwderr}
+                                {this.props.signin.pwdCode === CodeType.invalidPasswordLen   && this.intrl.inputerr.pwderr3}
                             </span>
                         )
                     }
                     {/* <span className="err-msg"><img src={require('@/img/attention.png')} alt="" />密码至少8位</span> */}
                 </label>
-                <Button text="注册" btnColor={(this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag || this.state.pwdValue.length<8)?'gray-btn':''} onClick={this.handleToSignIn} />
+                <Button text={this.intrl.btn.sign} btnColor={(this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag || this.state.pwdValue.length<8)?'gray-btn':''} onClick={this.handleToSignIn} />
                 <div className="gray-text-wrapper">
-                    <span className="gray-text" onClick={this.handleLogin}>已有帐户？登陆</span>
+                    <span className="gray-text" onClick={this.handleLogin}>{this.intrl.sign.gologin}</span>
                 </div>
             </div>
         );

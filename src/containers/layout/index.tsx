@@ -59,6 +59,7 @@ export default class LayoutIndex extends React.Component<any, any> {
           <Header
             history={this.context.router.history}
             locale={this.state.lang === 'en' ? en_US.header : zh_CN.header}
+            notify={this.state.lang === 'en' ? en_US.notify : zh_CN.notify}
             common={CommonStore}
           />
           <div className="layout-main">

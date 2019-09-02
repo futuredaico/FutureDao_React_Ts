@@ -16,6 +16,7 @@ import { ProjSubState } from '@/store/interface/common.interface';
 
 @observer
 class StepTwo extends React.Component<ICreateProjectProps, any> {
+  public intrl = this.props.intl.messages;
   public state = {
     videoUrl: this.props.createproject.createContent.projVideoUrl,
     loading: false,
@@ -31,8 +32,8 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
         {
           !this.state.loading && (
             <>
-              <div className="ant-upload-text">上传视频文件</div>
-              <span className="small-text">介绍介绍介绍</span>
+              <div className="ant-upload-text">{this.intrl.edit.uploadvideo}</div>
+              <span className="small-text">{this.intrl.edit.videotips}</span>
             </>
           )
         }
@@ -41,31 +42,31 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     return (
       <div className="steptwo-page">
         <div className="inline-title">
-          <strong>视频介绍</strong>
+          <strong>{this.intrl.edit.videotitle}</strong>
         </div>
         <div className="inline-enter">
           {
             this.state.videoUrl
               ? <div className="video-wrapper">
-                  <div className="video-icon">
+                <div className="video-icon">
                   <video src={this.state.videoUrl} controls={true} />
-                  </div>
-                  <div className="video-btn-wrapper">
-                    <Button text="删除" onClick={this.handleToDeleteVideo} btnColor='gray-red' btnSize="video-btn" />
-                    <Upload
-                      name="avatar"
-                      // listType="picture-card"
-                      className="avatar-uploader"
-                      accept="video/*"
-                      showUploadList={false}
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      beforeUpload={this.beforeUpload}
-                    // onChange={this.handleChangeImg}
-                    >
-                      <Button text="更换视频" btnColor='gray-black' btnSize="video-btn" />
-                    </Upload>
-                  </div>
                 </div>
+                <div className="video-btn-wrapper">
+                  <Button text={this.intrl.btn.delete} onClick={this.handleToDeleteVideo} btnColor='gray-red' btnSize="video-btn" />
+                  <Upload
+                    name="avatar"
+                    // listType="picture-card"
+                    className="avatar-uploader"
+                    accept="video/*"
+                    showUploadList={false}
+                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    beforeUpload={this.beforeUpload}
+                  // onChange={this.handleChangeImg}
+                  >
+                    <Button text={this.intrl.btn.updatevideo} btnColor='gray-black' btnSize="video-btn" />
+                  </Upload>
+                </div>
+              </div>
               : <Upload
                 name="avatar"
                 listType="picture-card"
@@ -82,23 +83,23 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
 
         </div>
         <div className="inline-title">
-          <strong>项目详情</strong>&nbsp;
+          <strong>{this.intrl.edit.detail}</strong>&nbsp;
           <span className="red-type">*</span>
         </div>
         <div className="inline-enter">
-          <div style={{ width: 750, height: 600 }}>
+          <div style={{ width: 750, minHeight: 500, maxHeight: 1000 }}>
             <Editor
               onChange={this.onChangeEditorValue}
               value={this.state.projectDetails}
               className={this.state.detailEnter ? "err-active" : ''}
             />
             {
-              this.state.detailEnter && <span className="err-span">填写本栏信息</span>
+              this.state.detailEnter && <span className="err-span">{this.intrl.edit.error}</span>
             }
           </div>
         </div>
         <div className="inline-btn">
-          <Button text="保存并继续" btnSize="bg-btn" onClick={this.handleToSaveDetail} btnColor={!this.state.projDetail ? 'gray-btn' : ''} />
+          <Button text={this.intrl.btn.editstep2} btnSize="bg-btn" onClick={this.handleToSaveDetail} btnColor={!this.state.projDetail ? 'gray-btn' : ''} />
         </div>
       </div >
     );
@@ -109,7 +110,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     // 视频文件限制200M以内
     if (file.size / 1024 / 1024 > 200)
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '视频太大了');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.videoerr);
       return false;
     }
     this.setState({
@@ -132,16 +133,17 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       })
     } else
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '视频上传失败');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.videoerr2);
       this.setState({
         videoUrl: null,
         loading: false
       })
     }
   }
-  private handleToDeleteVideo = ()=>{
+  private handleToDeleteVideo = () =>
+  {
     this.setState({
-      videoUrl:null,
+      videoUrl: null,
       loading: false
     })
   }
@@ -150,11 +152,12 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
   {
 
     // todo
-    const text = value.toText()
+    const text = value.toText();
+    console.log(BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'))
     if (text !== "")
     {
       this.setState({
-        projDetail: BraftEditor.createEditorState(value).toHTML(),
+        projDetail: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'),
         projectDetails: BraftEditor.createEditorState(value),
         detailEnter: false
       })
@@ -166,7 +169,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     //
     if (this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '项目正在审核中不可以修改哦');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
       return false;
     }
     const res = this.checkInputStatus();
@@ -192,7 +195,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       window.scrollTo(0, 0)
     } else
     {
-      this.props.common.openNotificationWithIcon('error', '操作失败', '保存失败');
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.savefail);
     }
     return true;
   }

@@ -13,6 +13,7 @@ import { CodeType } from '@/store/interface/common.interface';
 @inject('forget','common')
 @observer
 class PwdUpdate extends React.Component<IForgetProps, any> {
+    public intrl = this.props.intl.messages;
     public state = {
         username: getQueryString('username') || '',
         email: getQueryString('email') || '',
@@ -26,10 +27,10 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
     {
         return (
             <div className="normal-wrapper">
-                <Input placeholder="邮箱" readOnly={true} value={this.state.email} />
+                <Input placeholder={this.intrl.login.email} readOnly={true} value={this.state.email} />
                 <label htmlFor="newpwd">
                     <Input.Password
-                        placeholder="新密码"
+                        placeholder={this.intrl.password.newpwd}
                         value={this.state.newPwd}
                         className={this.state.newPwdFlag ? "red-password" : ''}
                         onChange={this.handleChangeNewPwd}
@@ -39,15 +40,15 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
                         (this.state.newPwdFlag || this.props.forget.resetPwdCode) && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                {this.state.newPwdFlag && "密码至少8位"}
-                                {this.props.forget.resetPwdCode === CodeType.invalidPasswordLen && "该密码不合法"}
+                                {this.state.newPwdFlag && this.intrl.inputerr.pwderr}
+                                {this.props.forget.resetPwdCode === CodeType.invalidPasswordLen && this.intrl.inputerr.pwderr3}
                             </span>
                         )
                     }
                 </label>
                 <label htmlFor="newagain">
                     <Input.Password
-                        placeholder="确认密码"
+                        placeholder={this.intrl.password.againpwd}
                         className={this.state.isSameInput ? "red-password" : ''}
                         value={this.state.newAgain}
                         onChange={this.handleChangeAgainPwd}
@@ -57,13 +58,13 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
                         this.state.isSameInput && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                                两次密码不一致。
+                               {this.intrl.inputerr.notsame}
                         </span>
                         )
                     }
                 </label>
                 <Button
-                    text="更改密码"
+                    text={this.intrl.btn.repwd}
                     btnColor={(this.state.newPwd.length < 8 || this.state.newAgain.length < 8 || this.state.newPwdFlag || this.state.isSameInput) ? 'gray-btn' : ''}
                     onClick={this.handleVerifyReset}
                 />
@@ -122,7 +123,7 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
         }
         const res = await this.props.forget.verifyResetPassword(this.state.username,this.state.email,this.state.newPwd,this.state.code)
         if(res){
-            this.props.common.openNotificationWithIcon('success', '操作成功', '密码修改成功');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.pwdtips);
             this.props.common.loginFutureDao(this.state.email,this.state.newPwd);
             this.props.history.push('/')
         }

@@ -105,7 +105,7 @@ class Common implements ICommonStore
   @action public logoutFutureDao = () =>
   {
     this.clearUserInfo();
-    sessionStorage.clear();
+    sessionStorage.removeItem("user");
     window.location.href = "/"
   }
   // 清空用户信息
@@ -180,9 +180,17 @@ class Common implements ICommonStore
     }
     if (result[0].resultCode === CodeType.success)
     {
-      this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+      if(this.language === 'en'){
+        this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+      }else{
+        this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+      }
     }else{
-      this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+      if(this.language==='en'){
+        this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+      }else{
+        this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+      }
     }
     return true
   }
