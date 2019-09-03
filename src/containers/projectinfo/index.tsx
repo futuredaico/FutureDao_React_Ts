@@ -87,7 +87,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         <div className="ptop-share">
                             <span>{this.intrl.projinfo.share}</span>
                             <div className="share-icon">
-                                <a href={`https://twitter.com/share?text=${this.props.projectinfo.projInfo.projName}&url=${window.location.href}`} target="_blank"><div className="img-div twitter-icon" /></a>
+                                <a href={`https://twitter.com/intent/tweet?text=${this.props.projectinfo.projInfo.projName}&url=${window.location.href}`} target="_blank"><div className="img-div twitter-icon" /></a>
                                 <a href={`https://connect.qq.com/widget/shareqq/index.html?url=${window.location.href}?sharesource=qzone&title=${this.props.projectinfo.projInfo.projName}&summary=${this.props.projectinfo.projInfo.projBrief}`} target="_blank"><div className="img-div qq-icon" /></a>
                                 <a href="javascript:;">
                                     <div className="img-div webchat-icon">
