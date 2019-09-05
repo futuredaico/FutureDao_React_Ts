@@ -13,10 +13,13 @@ import classnames from 'classnames';
 import { ICreateProjectProps } from './interface/createproject.interface'
 import { ProjSubState } from '@/store/interface/common.interface';
 import { getQueryString } from '@/utils/function'
+interface IState{
+    isEdit:boolean
+}
 
 @inject('createproject', 'common', 'project')
 @observer
-class CreateProject extends React.Component<ICreateProjectProps> {
+class CreateProject extends React.Component<ICreateProjectProps,IState> {
     public intrl = this.props.intl.messages;
     public state = {
         isEdit: !!this.props.match.params.projectId

@@ -147,11 +147,9 @@ class Common implements ICommonStore
   @action public getLoginStatus = () =>
   {
     const loginStr = sessionStorage.getItem('user');
-    console.log(loginStr)
     if (loginStr)
     {
       const json = JSON.parse(loginStr);
-      console.log(json);
       this.userId = json.userId;
       this.token = json.token;
       this.getUserInfo();
@@ -181,15 +179,15 @@ class Common implements ICommonStore
     if (result[0].resultCode === CodeType.success)
     {
       if(this.language === 'en'){
-        this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+        this.openNotificationWithIcon('success', 'Operation successful', 'Email sent, please check it.');
       }else{
-        this.openNotificationWithIcon('success', '操作成功', '邮箱已发送，请注意查看');
+        this.openNotificationWithIcon('success', '操作成功', '邮件已发送，请注意查收');
       }
     }else{
       if(this.language==='en'){
-        this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+        this.openNotificationWithIcon('error', 'Operation failed', 'Sending email failed, please retry later');
       }else{
-        this.openNotificationWithIcon('error', '操作失败', '邮箱发送失败，请稍后在试');
+        this.openNotificationWithIcon('error', '操作失败', '邮件发送失败，请稍后再试');
       }
     }
     return true

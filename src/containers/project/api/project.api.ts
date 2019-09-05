@@ -10,7 +10,6 @@ export const createProj = (params:string[]) =>
         method: 'createProj',
         params: [...params]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -23,7 +22,6 @@ export const modifyProjVideo = (params:string[]) =>
         method: 'modifyProjVideo',
         params: [...params]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -36,7 +34,6 @@ export const modifyProjEmail = (params:string[]) =>
         method: 'modifyProjEmail',
         params: [...params]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -49,7 +46,6 @@ export const modifyProjName = (params:string[]) =>
         method: 'modifyProjName',
         params: [...params]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**
@@ -62,7 +58,6 @@ export const modifyProj = (params:string[]) =>
         method: 'modifyProj',
         params: [...params]
     }
-    console.log(opts.params)
     return request(opts);
 }
 /**

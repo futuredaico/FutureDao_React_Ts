@@ -14,9 +14,16 @@ export interface ILoginProps extends RouteComponentProps
     common: ICommonStore
     intl: any
 }
+interface IState
+{
+    loginEmail: string,
+    loginPwd: string,
+    loginErr: boolean
+}
+
 @inject('common')
 @observer
-class Login extends React.Component<ILoginProps, any> {
+class Login extends React.Component<ILoginProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         loginEmail: '',

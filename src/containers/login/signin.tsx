@@ -9,18 +9,26 @@ import { Input } from 'antd';
 import Button from '@/components/Button';
 import { ISignInProps } from './interface/signin.interface';
 import { CodeType } from '@/store/interface/common.interface';
+interface IState
+{
+    usernameValue: string,
+    emailValue: string,
+    pwdValue: string,
+    pwdFlag: boolean
+}
 
-@inject('signin','common')
+@inject('signin', 'common')
 @observer
-class SignIn extends React.Component<ISignInProps, any> {
+class SignIn extends React.Component<ISignInProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         usernameValue: '',
-        emailValue:'',
-        pwdValue:'',
-        pwdFlag:false
+        emailValue: '',
+        pwdValue: '',
+        pwdFlag: false
     }
-    public componentWillUnmount(){
+    public componentWillUnmount()
+    {
         this.props.signin.usernameCode = '';
         this.props.signin.emailCode = '';
         this.props.signin.pwdCode = '';
@@ -42,14 +50,14 @@ class SignIn extends React.Component<ISignInProps, any> {
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
                                 {this.props.signin.usernameCode === CodeType.invalidUsername && this.intrl.inputerr.usererr1}
-                                {this.props.signin.usernameCode === CodeType.usernameHasRegisted  && this.intrl.inputerr.usererr2}
+                                {this.props.signin.usernameCode === CodeType.usernameHasRegisted && this.intrl.inputerr.usererr2}
                             </span>
                         )
                     }
                 </label>
                 <label htmlFor="email">
-                    <Input 
-                        placeholder={this.intrl.login.email} 
+                    <Input
+                        placeholder={this.intrl.login.email}
                         className={this.props.signin.emailCode ? "red-input" : ''}
                         value={this.state.emailValue}
                         onChange={this.handleOnChangeEmail}
@@ -60,14 +68,14 @@ class SignIn extends React.Component<ISignInProps, any> {
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
                                 {this.props.signin.emailCode === CodeType.invalidEmail && this.intrl.inputerr.eformaterr}
-                                {this.props.signin.emailCode === CodeType.emailHasRegisted  && this.intrl.inputerr.emailerr1}
+                                {this.props.signin.emailCode === CodeType.emailHasRegisted && this.intrl.inputerr.emailerr1}
                             </span>
                         )
                     }
                     {/* <span className="err-msg"><img src={require('@/img/attention.png')} alt="" />该邮箱已注册</span> */}
                 </label>
                 <label htmlFor="pwd">
-                    <Input.Password 
+                    <Input.Password
                         placeholder={this.intrl.sign.pwd}
                         className={this.state.pwdFlag ? "red-password" : ''}
                         value={this.state.pwdValue}
@@ -79,13 +87,13 @@ class SignIn extends React.Component<ISignInProps, any> {
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
                                 {this.state.pwdFlag && this.intrl.inputerr.pwderr}
-                                {this.props.signin.pwdCode === CodeType.invalidPasswordLen   && this.intrl.inputerr.pwderr3}
+                                {this.props.signin.pwdCode === CodeType.invalidPasswordLen && this.intrl.inputerr.pwderr3}
                             </span>
                         )
                     }
                     {/* <span className="err-msg"><img src={require('@/img/attention.png')} alt="" />密码至少8位</span> */}
                 </label>
-                <Button text={this.intrl.btn.sign} btnColor={(this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag || this.state.pwdValue.length<8)?'gray-btn':''} onClick={this.handleToSignIn} />
+                <Button text={this.intrl.btn.sign} btnColor={(this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag || this.state.pwdValue.length < 8) ? 'gray-btn' : ''} onClick={this.handleToSignIn} />
                 <div className="gray-text-wrapper">
                     <span className="gray-text" onClick={this.handleLogin}>{this.intrl.sign.gologin}</span>
                 </div>
@@ -124,7 +132,7 @@ class SignIn extends React.Component<ISignInProps, any> {
         this.props.signin.pwdCode = ""
         this.setState({
             pwdValue: e.target.value.trim(),
-            pwdFlag:false
+            pwdFlag: false
         })
     }
     // 校验密码
@@ -132,9 +140,10 @@ class SignIn extends React.Component<ISignInProps, any> {
     {
         // this.props.signin.checkUsername(this.state.usernameValue)
         const pwd = this.state.pwdValue;
-        if(pwd.length<8){
+        if (pwd.length < 8)
+        {
             this.setState({
-                pwdFlag:true
+                pwdFlag: true
             })
         }
     }
@@ -144,20 +153,24 @@ class SignIn extends React.Component<ISignInProps, any> {
         this.props.history.push('/load/login')
     }
     // 注册并登录
-    private handleToSignIn = async () => {
-        
-        if(this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag){
+    private handleToSignIn = async () =>
+    {
+
+        if (this.props.signin.usernameCode || this.props.signin.emailCode || this.props.signin.pwdCode || this.state.pwdFlag)
+        {
             return
         }
-        if(!this.state.usernameValue || !this.state.emailValue ||this.state.pwdValue.length<8){
+        if (!this.state.usernameValue || !this.state.emailValue || this.state.pwdValue.length < 8)
+        {
             return
         }
-        const res = await this.props.signin.registerUser(this.state.usernameValue,this.state.emailValue,this.state.pwdValue);
+        const res = await this.props.signin.registerUser(this.state.usernameValue, this.state.emailValue, this.state.pwdValue);
         // todo 登录
-        if(res){
-            this.props.common.loginFutureDao(this.state.emailValue,this.state.pwdValue);
+        if (res)
+        {
+            this.props.common.loginFutureDao(this.state.emailValue, this.state.pwdValue);
             this.props.history.push('/')
-        }        
+        }
     }
 }
 

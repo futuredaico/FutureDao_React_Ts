@@ -10,11 +10,11 @@ import { History } from 'history'
 // import Button from '@/components/Button';
 interface IProps
 {
-  route: {
-    [key: string]: any
-  };
-  history:History,
-  intl:any
+    route: {
+        [key: string]: any
+    };
+    history: History,
+    intl: any
 }
 @observer
 class Load extends React.Component<IProps, any> {

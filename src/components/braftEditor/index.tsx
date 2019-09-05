@@ -47,7 +47,6 @@ export default class BraftEditorCustom extends React.Component<IBraftEditProps> 
   }
 
   private uploadFn: MediaType["uploadFn"] = async (param: any) => {
-    console.log(param);
     const res = await commonStore.uploadFile(param.file);
     if (res) {
       param.success({

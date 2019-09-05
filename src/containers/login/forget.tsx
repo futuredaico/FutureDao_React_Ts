@@ -9,10 +9,16 @@ import { Input } from 'antd';
 import Button from '@/components/Button';
 import { CodeType } from '@/store/interface/common.interface';
 import { IForgetProps } from './interface/forget.interface';
-// import Button from '@/components/Button';
-@inject('forget','common')
+interface IState
+{
+    stepNum: boolean,
+    forgetEmail: string,
+    forgetFlag: boolean,// 重置是否成功
+}
+
+@inject('forget', 'common')
 @observer
-class ForgetPwd extends React.Component<IForgetProps, any> {
+class ForgetPwd extends React.Component<IForgetProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         stepNum: true,
@@ -68,13 +74,14 @@ class ForgetPwd extends React.Component<IForgetProps, any> {
         this.setState({
             forgetEmail: ev.target.value,
         })
-        this.props.forget.forgetEmailCode= '';
+        this.props.forget.forgetEmailCode = '';
     }
     // 校验是否注册过的邮箱
     private handleCheckEmail = () =>
     {
         // todo
-        if(!this.state.forgetEmail){
+        if (!this.state.forgetEmail)
+        {
             return
         }
         this.props.forget.checkEmail(this.state.forgetEmail);

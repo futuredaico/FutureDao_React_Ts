@@ -10,10 +10,14 @@ import { Pagination } from 'antd';
 import { IMyProjectProps, IProjAttentionList, IProjManagerList } from './interface/myproject.interface';
 import { ProjType, ProjectState, ProjSubState } from '@/store/interface/common.interface';
 import * as formatTime from 'utils/formatTime';
+interface IState
+{
+    projectMenuNum: number
+}
 
 @inject('myproject')
 @observer
-class MyProject extends React.Component<IMyProjectProps, any> {
+class MyProject extends React.Component<IMyProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public myprojectMenu = [
         {
@@ -45,7 +49,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                             {
                                 return (
                                     <li className={this.state.projectMenuNum === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapUnderline.bind(this, item)}>
-                                        {item.name}&nbsp;&nbsp;{this.handleCountNumber(item.id)}                                        
+                                        {item.name}&nbsp;&nbsp;{this.handleCountNumber(item.id)}
                                     </li>
                                 )
                             })
@@ -59,7 +63,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                 this.props.myproject.attentionCount > 0 && this.props.myproject.attentionList.map((item: IProjAttentionList, index: number) =>
                                 {
                                     return (
-                                        <div className="attention-line" key={index} onClick={this.handleToProjectInfo.bind(this,item.projId)}>
+                                        <div className="attention-line" key={index} onClick={this.handleToProjectInfo.bind(this, item.projId)}>
                                             <img src={item.projConverUrl} alt="" className="attention-img" />
                                             <div className="attention-content">
                                                 <strong className="attention-title">{item.projTitle}</strong>
@@ -98,7 +102,7 @@ class MyProject extends React.Component<IMyProjectProps, any> {
                                 this.props.myproject.manageCount > 0 && this.props.myproject.manageList.map((item: IProjManagerList, index: number) =>
                                 {
                                     return (
-                                        <div className="manager-line" key={index} onClick={this.handleToEditProject.bind(this,item.projId)}>
+                                        <div className="manager-line" key={index} onClick={this.handleToEditProject.bind(this, item.projId)}>
                                             <img src={item.projConverUrl} alt="" className="manager-img" />
                                             <div className="manager-right">
                                                 <strong className="project-title">{item.projTitle}</strong>
@@ -151,10 +155,13 @@ class MyProject extends React.Component<IMyProjectProps, any> {
             this.props.myproject.getManagerData();
         }
     }
-    private handleCountNumber = (id:number)=>{
-        if(id===1){
+    private handleCountNumber = (id: number) =>
+    {
+        if (id === 1)
+        {
             return this.props.myproject.attentionCount
-        }else{
+        } else
+        {
             return this.props.myproject.manageCount
         }
     }
@@ -189,12 +196,13 @@ class MyProject extends React.Component<IMyProjectProps, any> {
         }
     }
     // 跳转到项目详情页todo
-    private handleToProjectInfo = (projId:string) =>
+    private handleToProjectInfo = (projId: string) =>
     {
         this.props.history.push('/projectinfo/' + projId);
     }
     // 跳转到项目编辑页
-    private handleToEditProject = (projId:string)=>{
+    private handleToEditProject = (projId: string) =>
+    {
         this.props.history.push('/project/' + projId);
     }
 }

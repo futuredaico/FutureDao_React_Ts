@@ -43,9 +43,9 @@ export default {
     emailerr1:"This email address is registered",
     emailerr2:"Incorrect email format",
     pwderr:"This password must have at least 8 characters", 
-    pwderr2:"密码错误",
-    pwderr3:"该密码不合法",
-    notsame:"两次密码不一致。"
+    pwderr2:"Incorrect password",
+    pwderr3:"Invalid password",
+    notsame:"Passwords don’t match."
   },  
   header:{
     discover:"Discover projects",
@@ -70,7 +70,7 @@ export default {
   home:{
     discover:"Discover projects",
     supporttips:" supporters",
-    display:"Project display",    
+    display:"Creative display",    
   },
   login:{
     email:"Email",
@@ -96,9 +96,9 @@ export default {
     invite1:"xxxx invites you to join the team of project xxx",
     invite2:"",
     bindtips:"Email verification successful",
-    sendtips:"小提示：  我们需要验证你的电子邮件地址。请点击我们发送的邮件里的链接。 ",
-    send:"重新发送",
-    verifyfail:"该链接已经失效。"
+    sendtips:"Tip: We need to verify your email address. Please click on the link in the email we sent. ",
+    send:"Resend",
+    verifyfail:"The link has expired."
   },
   password:{
     newpwd:"New password",
@@ -121,7 +121,7 @@ export default {
     follow:"Following",
     manager:"Managing",
     ethereum:"Ethereum",
-    display:"Project display",
+    display:"Creative display",
     prepare:"In preparation",
     review:"Under review",
     failed:"Review failed",
@@ -145,10 +145,10 @@ export default {
     zan:"Likes",
     edit:"Edit",
     delete:"Delete",
-    textarea:"只有项目的支持者才能留言",
+    textarea:"Only supporters can  comment on the project.",
     noprofile:"No intro",
-    noupdate:"无更新数据",
-    deletetips:"确认删除本次更新？"
+    noupdate:"No update data",
+    deletetips:"Confirm to delete this update?"
   },
   update:{
     update:"Publish updates",
@@ -178,7 +178,7 @@ export default {
     email:"Email address",
     website:"Website",
     community:"Community",
-    error:"填写本栏信息"
+    error:"Please fill in the info in the column."
   },
   team:{
     team:"Team members",
@@ -189,8 +189,8 @@ export default {
     manager:"Management",
     mermber:"Member",
     noverify:"Not verified",
-    people:"个人认证",
-    company:"企业认证", 
+    people:"Personal certification",
+    company:"Enterprise certification", 
     invitetitle:"Invite members to join the project",
     search:"Search by E-mail",
     notfound:"The user was not found",
@@ -206,31 +206,30 @@ export default {
     deletetips2:"Whether to continue?"
   },
   notify:{
-    success:"操作成功",
-    error:"操作失败",
-    loginerr:"请登录之后在操作，谢谢",
-    verifyerr:"请验证邮箱之后在操作，谢谢",
-    supporterr:"请先看好项目之后在操作，谢谢",
-    adminerr:"仅限管理员可删除项目",
-    deletesuccess:"项目删除成功",
-    deleteerr:"项目删除失败",
-    imgerr:"图片太大了",
-    emailtips:"邮箱已修改，请重新验证",
-    emailerr:"修改邮箱失败",
-    pwdtips:"密码修改成功",
-    pwderr:"修改密码失败",
-    drieftips:"个人简介成功",
-    drieferr:"个人简介失败",
-    editerr1:"项目正在审核中不可以修改哦",
-    sendmsg:"邀请邮件已发出。",
-    uploaderr:"封面上传失败",
-    createerr:"项目创建失败，已有该项目名称或项目标题",
-    editerr2:"项目正在审核中不可以修改哦",
-    savesuccess:"保存成功",
-    savefail:"保存失败",
-    videoerr:"视频太大了",
-    videoerr2:"视频上传失败",
-    updatetips:"日志修改成功",
-    updateerr:"日志修改失败"
+    success:"Operation successful",
+    error:"Operation failed",
+    loginerr:"Please log in first.",
+    verifyerr:"Please verify your email address first.",
+    supporterr:"Only project supporters can operate",
+    adminerr:"Only administrators can delete projects.",
+    deletesuccess:"Project deleted",
+    deleteerr:"Project deletion failed",
+    imgerr:"The image size exceeds the limit.",
+    emailtips:"The email address was changed. Please re-verify it.",
+    emailerr:"Email address change failed.",
+    pwdtips:"Password changed",
+    pwderr:"Password change failed",
+    drieftips:"Changed",
+    drieferr:"Change failed",
+    sendmsg:"The invitation email has been sent.",
+    uploaderr:"Cover upload failed",
+    createerr:"Creation failed. Duplicate project name or title",
+    editerr2:"Project is under review and cannot be changed.",
+    savesuccess:"Saved",
+    savefail:"Saving failed",
+    videoerr:"The video size exceeds the limit",
+    videoerr2:"Video upload failed",
+    updatetips:"Changed",
+    updateerr:"Change failed"
   }
 }

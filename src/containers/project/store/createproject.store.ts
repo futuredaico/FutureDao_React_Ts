@@ -70,7 +70,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false
@@ -92,7 +91,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false
@@ -114,7 +112,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false
@@ -136,7 +133,6 @@ class CreateProject
   //   {
   //     return false;
   //   }
-  //   console.log(result)
   //   if (result[0].resultCode !== CodeType.success)
   //   {
   //     return false
@@ -188,7 +184,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false
@@ -210,7 +205,6 @@ class CreateProject
     {
       return false;
     }
-    console.log(result)
     if (result[0].resultCode !== CodeType.success)
     {
       return false

@@ -8,8 +8,14 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/projectinfo.interface';
 import * as formatTime from '@/utils/formatTime';
+interface IState
+{
+    discussInput: string,
+    replyInput: string,
+    replyInputOther: string,
+}
 @observer
-class ProjectDetail extends React.Component<IProjectInfoProps, any> {
+class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         discussInput: '',
@@ -30,7 +36,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             <>
                 <div className="projectdetail-wrapper">
                     <h3>{this.intrl.projinfo.info}</h3>
-                    <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />                    
+                    <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />
                 </div>
                 <div className="message-wrapper" id="message">
                     <h3>{this.intrl.projinfo.comment}</h3>
@@ -202,7 +208,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
             return false;
         }
         const checkRes = this.handleCheckOption();
-        if(!checkRes){
+        if (!checkRes)
+        {
             return false;
         }
         const res = await this.props.projectinfo.sendProjDiscuss('', this.state.discussInput);
@@ -219,19 +226,23 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
         return true;
     }
     // 一切操作之前的验证 
-    private handleCheckOption = () => {
+    private handleCheckOption = () =>
+    {
         // 验证是否登陆
-        if (!this.props.common.userInfo) {
+        if (!this.props.common.userInfo)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
         // 验证是否验证过邮箱
-        if (this.props.common.isVerifyEmail) {
+        if (this.props.common.isVerifyEmail)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
             return false;
         }
         // 验证是否支持了项目
-        if(this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport){
+        if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
             return false
         }
@@ -241,7 +252,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
     private handleSendZan = async (item: IDiscussList | IDiscussReplyList) =>
     {
         const checkRes = this.handleCheckOption();
-        if(!checkRes){
+        if (!checkRes)
+        {
             return false;
         }
         const res = await this.props.projectinfo.sendProZan(item.discussId);
@@ -256,7 +268,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
     private handleOpenReply = (item: IDiscussList) =>
     {
         const checkRes = this.handleCheckOption();
-        if(!checkRes){
+        if (!checkRes)
+        {
             return false;
         }
         this.props.projectinfo.projDiscussList.forEach((list: IDiscussList) =>
@@ -280,7 +293,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, any> {
     private handleOpenReplyOther = (replyItem: IDiscussReplyList) =>
     {
         const checkRes = this.handleCheckOption();
-        if(!checkRes){
+        if (!checkRes)
+        {
             return false;
         }
         this.props.projectinfo.projDiscussList.forEach((list: IDiscussList) =>

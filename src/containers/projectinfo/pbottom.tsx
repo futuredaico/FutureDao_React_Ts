@@ -36,7 +36,6 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
 
   public componentDidMount()
   {
-    // console.log(this.pBottomTitle.current);
     if (this.pBottomTitle && this.pBottomTitle.current)
     {
       const refTop = this.pBottomTitle && this.pBottomTitle.current ? this.pBottomTitle.current.offsetTop : 0;
@@ -128,9 +127,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
   }
   private onScrollFn(refTop: number)
   {
-    // console.log(refTop);
     const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    // console.log(currentScrollTop);
     if (currentScrollTop >= refTop)
     {
       this.setState({

@@ -14,7 +14,7 @@ interface IState
     code: string,
     verifyRes: string | null,
 }
-@inject('emailcheck','common')
+@inject('emailcheck', 'common')
 @observer
 export default class EmailCheck extends React.Component<IEmailCheckProps, IState> {
     public state = {
@@ -25,7 +25,6 @@ export default class EmailCheck extends React.Component<IEmailCheckProps, IState
     }
     public async componentDidMount()
     {
-        console.log(this.props)
         const res = await this.props.emailcheck.verifyRegister(this.state.username, this.state.email, this.state.code);
         this.setState({
             verifyRes: res ? '1' : '2'

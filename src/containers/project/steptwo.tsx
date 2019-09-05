@@ -13,9 +13,16 @@ import commonStore from '@/store/common';
 import { RcFile } from 'antd/lib/upload';
 import { ICreateProjectProps } from './interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
-
+interface IState
+{
+  videoUrl: string,
+  loading: boolean,
+  projDetail: string, // 文本编辑内容
+  projectDetails: string,
+  detailEnter: boolean,
+}
 @observer
-class StepTwo extends React.Component<ICreateProjectProps, any> {
+class StepTwo extends React.Component<ICreateProjectProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
     videoUrl: this.props.createproject.createContent.projVideoUrl,
@@ -114,7 +121,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
       return false;
     }
     this.setState({
-      videoUrl: null,
+      videoUrl: '',
       loading: true
     })
     this.handleUploadVedio(file);
@@ -135,7 +142,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
     {
       this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.videoerr2);
       this.setState({
-        videoUrl: null,
+        videoUrl: '',
         loading: false
       })
     }
@@ -143,7 +150,7 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
   private handleToDeleteVideo = () =>
   {
     this.setState({
-      videoUrl: null,
+      videoUrl: '',
       loading: false
     })
   }
@@ -153,11 +160,10 @@ class StepTwo extends React.Component<ICreateProjectProps, any> {
 
     // todo
     const text = value.toText();
-    console.log(BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'))
     if (text !== "")
     {
       this.setState({
-        projDetail: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'),
+        projDetail: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g, '<p class="br-p"></p>'),
         projectDetails: BraftEditor.createEditorState(value),
         detailEnter: false
       })

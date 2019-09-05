@@ -8,18 +8,23 @@ import './index.less';
 import { observer } from 'mobx-react';
 import { ICommonStore } from '@/store/interface/common.interface';
 
-interface IProps {
+interface IProps
+{
   history: History,
   locale: any,
-  common: ICommonStore,  
-  notify:any
+  common: ICommonStore,
+  notify: any
+}
+interface IState{
+  showManger:boolean
 }
 @observer
-export default class Header extends React.Component<IProps, any>{
+export default class Header extends React.Component<IProps, IState>{
   public state = {
     showManger: false
   }
-  public render() {
+  public render()
+  {
     return (
       <header className="header-wrap header-shadow">
         <div className="header-box">
@@ -45,7 +50,7 @@ export default class Header extends React.Component<IProps, any>{
                 (this.props.common.userInfo) && (
                   <li>
                     <div className="people-login">
-                      <img src={this.props.common.userInfo.headIconUrl?this.props.common.userInfo.headIconUrl: require('@/img/default.png')} alt="" className="people-img" />
+                      <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                       {/* {
                         this.state.showManger && ( */}
                       <div className="people-manager">
@@ -73,27 +78,32 @@ export default class Header extends React.Component<IProps, any>{
     );
   }
   // 创建项目
-  private handleToCreateProject = () => {
-    console.log(this.props.common.isVerifyEmail)
-    if (!this.props.common.userInfo) {
+  private handleToCreateProject = () =>
+  {
+    if (!this.props.common.userInfo)
+    {
       // 未登录
       this.handleToLogin();
-    }else if(this.props.common.isVerifyEmail){
+    } else if (this.props.common.isVerifyEmail)
+    {
       // 邮箱未验证
       this.props.common.openNotificationWithIcon('error', this.props.notify.error, this.props.notify.verifyerr);
     }
-     else {
+    else
+    {
       // 正常访问
-      const href = process.env.REACT_APP_SERVER_ENV === 'DEV'?'/test':'';
-      window.location.href = href+ '/project'
+      const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+      window.location.href = href + '/project'
     }
   }
   // 登录
-  private handleToLogin = () => {
+  private handleToLogin = () =>
+  {
     this.props.history.push('/load/login');
   }
   // 注册
-  private handleToSignin = () => {
+  private handleToSignin = () =>
+  {
     this.props.history.push('/load/signin');
   }
 
@@ -104,17 +114,20 @@ export default class Header extends React.Component<IProps, any>{
   // }
 
   // 进入个人中心
-  private handleToPersonal = () => {
+  private handleToPersonal = () =>
+  {
     // this.handleToShow();
     this.props.history.push('/personalcenter/userinfo')
   }
   // 进入我的项目
-  private handleToMyProject = () => {
+  private handleToMyProject = () =>
+  {
     // this.handleToShow();
     this.props.history.push('/personalcenter/myproject')
   }
   // 退出登录
-  private handleToLogout = () => {
+  private handleToLogout = () =>
+  {
     // todo
     this.props.common.logoutFutureDao();
   }

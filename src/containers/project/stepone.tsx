@@ -12,10 +12,23 @@ import { RcFile } from 'antd/lib/upload';
 import commonStore from '@/store/common';
 import { ICreateProjectProps } from './interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
-
+interface IState
+{
+  nameValue: string, // 项目名称
+  titleValue: string, // 项目标题
+  typeValue: string, // 项目类型
+  imageUrl: string,  // 封面
+  loading: boolean,  // 上传图片是否正在加载中
+  textareaValue: string, // 项目简介
+  textareaNum: number, // 项目简介统计
+  nameEnter: boolean, // 是否输入了名称
+  titleEnter: boolean,// 是否输入了标题
+  imgEnter: boolean, // 是否上传了封面
+  textareaEnter: boolean, // 是否输入了项目介绍
+}
 
 @observer
-class StepOne extends React.Component<ICreateProjectProps, any> {
+class StepOne extends React.Component<ICreateProjectProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
     nameValue: this.props.createproject.createContent.projName, // 项目名称
@@ -197,7 +210,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
     {
       this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
       this.setState({
-        imageUrl: null,
+        imageUrl: '',
         imgEnter: true,
         loading: false
       })
@@ -251,7 +264,7 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.props.createproject.stepThreeStatus = 3;
         this.props.project.isEdit = true;
         window.scrollTo(0, 0);
-        this.props.history.push('/project/' + this.props.createproject.createContent.projId+'?type=create');
+        this.props.history.push('/project/' + this.props.createproject.createContent.projId + '?type=create');
       } else
       {
         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.createerr);
@@ -274,7 +287,6 @@ class StepOne extends React.Component<ICreateProjectProps, any> {
         this.state.textareaValue
       ]
       const creatResult = await this.props.createproject.modifyStepOne(content);
-      console.log(creatResult)
       if (creatResult)
       {
         this.props.createproject.step = 2;

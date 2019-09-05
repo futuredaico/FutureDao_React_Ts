@@ -1,9 +1,10 @@
 import * as React from 'react';
 import './index.less';
 
-interface IProps {
+interface IProps
+{
   rate: number,
-  style?:object,
+  style?: object,
   // onChange: (rate: number) => void
 }
 
@@ -16,33 +17,39 @@ export default class Slider extends React.Component<IProps> {
     text: 0,
   }
   private slideRef: React.RefObject<HTMLDivElement> = React.createRef();
-  public componentDidMount() {
+  public componentDidMount()
+  {
     this.setState({
-      rate: this.props.rate>100?100:this.props.rate,
+      rate: this.props.rate > 100 ? 100 : this.props.rate,
       text: this.props.rate,
       width: this.slideRef.current && this.slideRef.current['offsetWidth'],
       leftX: this.slideRef.current && this.slideRef.current['offsetLeft']
     })
   }
-  public componentDidUpdate() {
+  public componentDidUpdate()
+  {
     // if (this.props.onChange) {
     //   this.props.onChange(Math.ceil(this.state.rate));
     // }
   }
-  public getOffsetLeft = () => {
+  public getOffsetLeft = () =>
+  {
     const obj = this.slideRef.current && this.slideRef.current;
-    if (!obj) {
+    if (!obj)
+    {
       return 0;
     }
     let tmp = obj.offsetLeft;
     let val = obj.offsetParent;
-    while (val != null) {
+    while (val != null)
+    {
       tmp += val['offsetLeft'];
       val = val['offsetParent'];
     }
     return tmp;
   }
-  public handleMouseDown = (ev: React.MouseEvent<HTMLDivElement>) => {
+  public handleMouseDown = (ev: React.MouseEvent<HTMLDivElement>) =>
+  {
     const width = this.slideRef.current && this.slideRef.current['offsetWidth'];
     const leftX = this.getOffsetLeft();
     const addPageX = (ev.pageX - leftX) / (this.state.width / 99);
@@ -55,8 +62,10 @@ export default class Slider extends React.Component<IProps> {
     document.addEventListener('mousemove', this.handleMouseMove, false)
     document.addEventListener('mouseup', this.handleMouseUp, false)
   }
-  public handleMouseMove = (ev: MouseEvent) => {
-    if (!this.state.isDown) {
+  public handleMouseMove = (ev: MouseEvent) =>
+  {
+    if (!this.state.isDown)
+    {
       return false;
     }
     const leftX = this.getOffsetLeft();
@@ -67,16 +76,16 @@ export default class Slider extends React.Component<IProps> {
 
     return true;
   }
-  public handleMouseUp = (ev: MouseEvent) => {
+  public handleMouseUp = (ev: MouseEvent) =>
+  {
     this.setState({
       isDown: false,
     })
     document.removeEventListener('mousemove', this.handleMouseMove)
     document.removeEventListener('mouseup', this.handleMouseUp)
   }
-  public handleTouchStart = (ev: React.TouchEvent<HTMLDivElement>) => {
-    console.log(ev.touches[0]);
-
+  public handleTouchStart = (ev: React.TouchEvent<HTMLDivElement>) =>
+  {
     const width = this.slideRef.current && this.slideRef.current['offsetWidth'];
     const leftX = this.getOffsetLeft();
     const addPageX = (ev.touches[0].pageX - leftX) / (this.state.width / 99);
@@ -90,8 +99,10 @@ export default class Slider extends React.Component<IProps> {
     document.addEventListener('touchend', this.handleTouchEnd, false)
   }
 
-  public handleTouchMove = (ev: TouchEvent) => {
-    if (!this.state.isDown) {
+  public handleTouchMove = (ev: TouchEvent) =>
+  {
+    if (!this.state.isDown)
+    {
       return false;
     }
     const leftX = this.getOffsetLeft();
@@ -102,7 +113,8 @@ export default class Slider extends React.Component<IProps> {
 
     return true;
   }
-  public handleTouchEnd = (ev: TouchEvent) => {
+  public handleTouchEnd = (ev: TouchEvent) =>
+  {
     this.setState({
       isDown: false,
     })
@@ -110,14 +122,15 @@ export default class Slider extends React.Component<IProps> {
     document.removeEventListener('touchend', this.handleTouchEnd)
   }
 
-  public render() {
+  public render()
+  {
     return (
       <div className="comp-slider-container">
         <div className="slide-box"
           ref={this.slideRef}
           style={this.props.style}
         >
-          <div className="slide" style={{ width: this.state.rate + '%' }} />  
+          <div className="slide" style={{ width: this.state.rate + '%' }} />
           {/* <span className="slide-top-text">{this.props.topText}</span>*/}
         </div>
       </div>

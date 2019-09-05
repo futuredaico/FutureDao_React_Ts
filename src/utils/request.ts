@@ -66,20 +66,17 @@ export default function request(opts: IOpts): Promise<any> {
             resolve(data.data);
             return;
           }
-          console.log(data.data.result)
           if(!!data.data.result.length){
-            //
-            console.log(1)
             if(data.data.result[0].resultCode === CodeType.invalidLoginInfo || data.data.result[0].resultCode === CodeType.notFindUserInfo ){
               // 无效的登录信息(即用户名/邮箱/密码错误)/没有找到用户信息
               if(common.language === 'en'){
-                common.openNotificationWithIcon('error', '操作失败', '登陆状态异常，请重新登陆');
+                common.openNotificationWithIcon('error', 'Operation failed', 'The login status is abnormal, please log in again.');
               }else{
                 common.openNotificationWithIcon('error', '操作失败', '登陆状态异常，请重新登陆');
               }
             }else if(data.data.result[0].resultCode === CodeType.invalidAccessToken||data.data.result[0].resultCode === CodeType.expireAccessToken){
               if(common.language === 'en'){
-                common.openNotificationWithIcon('error', '操作失败', '登陆超时，请重新登陆');
+                common.openNotificationWithIcon('error', 'Operation failed', 'Login timed out, please log in again');
               }else{
                 common.openNotificationWithIcon('error', '操作失败', '登陆超时，请重新登陆');
               }

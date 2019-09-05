@@ -10,9 +10,20 @@ import Button from '@/components/Button';
 import { getQueryString } from '@/utils/function'
 import { IForgetProps } from './interface/forget.interface';
 import { CodeType } from '@/store/interface/common.interface';
-@inject('forget','common')
+interface IState
+{
+    username: string,
+    email: string,
+    code: string,
+    newPwd: string,
+    newAgain: string,
+    newPwdFlag: boolean, // 新密码的输入
+    isSameInput: boolean // 两次输入不一致为true
+}
+
+@inject('forget', 'common')
 @observer
-class PwdUpdate extends React.Component<IForgetProps, any> {
+class PwdUpdate extends React.Component<IForgetProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         username: getQueryString('username') || '',
@@ -58,8 +69,8 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
                         this.state.isSameInput && (
                             <span className="err-msg">
                                 <img src={require('@/img/attention.png')} alt="" />
-                               {this.intrl.inputerr.notsame}
-                        </span>
+                                {this.intrl.inputerr.notsame}
+                            </span>
                         )
                     }
                 </label>
@@ -74,7 +85,7 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
     // 新密码的输入
     private handleChangeNewPwd = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        this.props.forget.resetPwdCode='';
+        this.props.forget.resetPwdCode = '';
         this.setState({
             newPwd: ev.target.value.trim(),
             newPwdFlag: false
@@ -121,10 +132,11 @@ class PwdUpdate extends React.Component<IForgetProps, any> {
         {
             return false;
         }
-        const res = await this.props.forget.verifyResetPassword(this.state.username,this.state.email,this.state.newPwd,this.state.code)
-        if(res){
+        const res = await this.props.forget.verifyResetPassword(this.state.username, this.state.email, this.state.newPwd, this.state.code)
+        if (res)
+        {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.pwdtips);
-            this.props.common.loginFutureDao(this.state.email,this.state.newPwd);
+            this.props.common.loginFutureDao(this.state.email, this.state.newPwd);
             this.props.history.push('/')
         }
         return true;

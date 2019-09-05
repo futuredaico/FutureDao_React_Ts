@@ -11,22 +11,36 @@ import classnames from 'classnames';
 import { IPersonProps } from './interface/personedit.interface';
 import { CodeType } from '@/store/interface/common.interface';
 import { RcFile } from 'antd/lib/upload';
+interface IState
+{
+    isEditDes: boolean, // 个人简介
+    isEditEmail: boolean, // 邮箱
+    isEditPwd: boolean, // 密码
+    isEditStatus: boolean, // 总的编辑
+    briefTextarea: string, // 个人简介内容
+    emailInput: string, // 新的邮箱
+    emailPwd: string,   // 修改邮箱输入的密码
+    oldPwd: string,      // 旧密码
+    newPwd: string,      // 新密码
+    isSaveEmail: boolean,  // 确认邮箱修改
+    isSavePwd: boolean, // 确认密码修改
+}
 @inject('personedit', 'common')
 @observer
-class PersonalEidt extends React.Component<IPersonProps, any> {
+class PersonalEidt extends React.Component<IPersonProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
-        isEditDes: false, // 个人简介
-        isEditEmail: false, // 邮箱
-        isEditPwd: false, // 密码
-        isEditStatus: false, // 总的编辑
-        briefTextarea: '', // 个人简介内容
-        emailInput: '', // 新的邮箱
-        emailPwd: '',   // 修改邮箱输入的密码
-        oldPwd: '',      // 旧密码
-        newPwd: '',      // 新密码
-        isSaveEmail: false,  // 确认邮箱修改
-        isSavePwd: false, // 确认密码修改
+        isEditDes: false,
+        isEditEmail: false,
+        isEditPwd: false,
+        isEditStatus: false,
+        briefTextarea: '',
+        emailInput: '',
+        emailPwd: '',
+        oldPwd: '',
+        newPwd: '',
+        isSaveEmail: false,
+        isSavePwd: false
     }
 
     public render()
@@ -41,7 +55,7 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
                 <h2>{this.intrl.user.info}</h2>
                 <div className="person-picture">
                     <div className="person-img">
-                        {(this.props.common.userInfo &&this.props.common.userInfo.headIconUrl) ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img"src={require('@/img/default.png')}  alt="" />}
+                        {(this.props.common.userInfo && this.props.common.userInfo.headIconUrl) ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img" src={require('@/img/default.png')} alt="" />}
                     </div>
                     <div className="person-name-img">
                         <strong className="person-name">{this.props.common.userInfo && this.props.common.userInfo.username}</strong>
@@ -199,7 +213,6 @@ class PersonalEidt extends React.Component<IPersonProps, any> {
     private handleUploadPicture = async (file: RcFile) =>
     {
         const res = await this.props.common.uploadFile(file);
-        console.log(res)
         if (res)
         {
             const imgRes = await this.props.personedit.updateUserImg(res);

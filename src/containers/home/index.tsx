@@ -104,7 +104,6 @@ class Home extends React.Component<IHomeProps, any> {
   // 分页
   private handleChangePage = (index: number) =>
   {
-    console.log(index)
     this.props.home.projListPage = index;
     this.props.home.getProjList();
     // todo

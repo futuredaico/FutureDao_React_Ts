@@ -9,8 +9,15 @@ import Button from '@/components/Button';
 import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/projectinfo.interface';
 // import RightTable from './transright';
 import * as formatTime from '@/utils/formatTime';
+interface IState
+{
+    showDelet: boolean,
+    updateDiscuss: string,
+    updateReply: string,
+    updateReplyOther: string
+}
 @observer
-class UpdateInfo extends React.Component<IProjectInfoProps, any> {
+class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         showDelet: false,

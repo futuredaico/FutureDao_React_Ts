@@ -10,9 +10,16 @@ import { Input } from 'antd';
 import EditTeam from './editteam';
 import { ICreateProjectProps } from './interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
+interface IState
+{
+  emailInput: string,
+  webInput: string,
+  communityInput: string,
+  emailEnter: number,
+}
 
 @observer
-class StepThree extends React.Component<ICreateProjectProps, any> {
+class StepThree extends React.Component<ICreateProjectProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
     emailInput: this.props.createproject.createContent.connectEmail,
@@ -57,7 +64,7 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
           </div>
         </div>
         <div className="inline-btn">
-          <Button text={this.intrl.btn.save} btnSize="bg-btn" onClick={this.handleToSaveStepThree} btnColor={!this.state.emailInput?'gray-btn':''} />
+          <Button text={this.intrl.btn.save} btnSize="bg-btn" onClick={this.handleToSaveStepThree} btnColor={!this.state.emailInput ? 'gray-btn' : ''} />
         </div>
       </div>
     );
@@ -88,7 +95,8 @@ class StepThree extends React.Component<ICreateProjectProps, any> {
   // 保存并提交
   private handleToSaveStepThree = async () =>
   {
-    if(this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+    if (this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
+    {
       this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
       return false;
     }
