@@ -163,7 +163,7 @@ class StepTwo extends React.Component<ICreateProjectProps, IState> {
     if (text !== "")
     {
       this.setState({
-        projDetail: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g, '<p class="br-p"></p>'),
+        projDetail: BraftEditor.createEditorState(value).toHTML().replace(/\s\s/g, '&nbsp;&nbsp;'),
         projectDetails: BraftEditor.createEditorState(value),
         detailEnter: false
       })

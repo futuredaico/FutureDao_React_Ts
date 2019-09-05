@@ -99,7 +99,7 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
     {
       this.setState({
         detailString: BraftEditor.createEditorState(value),
-        detailStr: BraftEditor.createEditorState(value).toHTML().replace(/<p><\/p>/g,'<p class="br-p"></p>'),
+        detailStr: BraftEditor.createEditorState(value).toHTML().replace(/\s\s/g, '&nbsp;&nbsp;'),
         isHasEdit: true
       })
     } else

@@ -9,7 +9,7 @@ import 'braft-editor/dist/index.css';
 
 const editorControls: ControlType[] = [
   'undo', 'redo', 'separator', 'bold', 'italic', 'underline', 'separator',
-  'headings', 'list-ul', 'list-ol', 'separator',
+  'headings','text-align', 'list-ul', 'list-ol', 'separator',
   // 'link', 'separator',
   'hr', 'separator',
   'media', 
