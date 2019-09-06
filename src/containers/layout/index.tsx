@@ -27,14 +27,14 @@ export default class LayoutIndex extends React.Component<any, any> {
     if (lang === "zh")
     {
       CommonStore.setLanguage('zh');
-      sessionStorage.setItem('language', 'zh');
+      localStorage.setItem('futuredaolang', 'zh');      
       this.setState({
         lang: 'zh'
       })
     } else
     {
       CommonStore.setLanguage('en');
-      sessionStorage.setItem('language', 'en');
+      localStorage.setItem('futuredaolang', 'en');
       this.setState({
         lang: 'en'
       })

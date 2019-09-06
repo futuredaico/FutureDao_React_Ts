@@ -5,6 +5,7 @@ import { ICommonStore, CodeType, IUserInfo, EmailVerify } from './interface/comm
 import { RcFile } from 'antd/lib/upload';
 import * as Api from './api/common.api';
 import { notification } from 'antd';
+import * as Cookie from '@/utils/cookie';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
@@ -23,7 +24,7 @@ class Common implements ICommonStore
   // 初始化语言
   @action public initLanguage = () =>
   {
-    const sessionLanguage = sessionStorage.getItem('language');
+    const sessionLanguage = localStorage.getItem('futuredaolang');
     if (sessionLanguage)
     {
       this.language = sessionLanguage;
@@ -92,7 +93,9 @@ class Common implements ICommonStore
     {
       this.userId = result[0].data.userId;
       this.token = result[0].data.accessToken;
-      sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
+      // sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
+      Cookie.setCookie("user",this.userId);
+      Cookie.setCookie("token",this.token);
       this.getUserInfo();
     }
     else
@@ -105,7 +108,9 @@ class Common implements ICommonStore
   @action public logoutFutureDao = () =>
   {
     this.clearUserInfo();
-    sessionStorage.removeItem("user");
+    // sessionStorage.removeItem("user");
+    Cookie.removeCookie("user");
+    Cookie.removeCookie("token");
     window.location.href = "/"
   }
   // 清空用户信息
@@ -146,12 +151,14 @@ class Common implements ICommonStore
   // 刷新后获取保持登录状态
   @action public getLoginStatus = () =>
   {
-    const loginStr = sessionStorage.getItem('user');
-    if (loginStr)
+    // const loginStr = sessionStorage.getItem('user');
+    const user = Cookie.getCookie("user");
+    const token = Cookie.getCookie("token");
+    if (user && token)
     {
-      const json = JSON.parse(loginStr);
-      this.userId = json.userId;
-      this.token = json.token;
+      // const json = JSON.parse(loginStr);
+      this.userId = user;
+      this.token = token;
       this.getUserInfo();
     }
   }
