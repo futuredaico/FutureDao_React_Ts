@@ -51,6 +51,10 @@ export default [
     ]
   },
   {
+    component: asyncComponent(() => import('../containers/support')),
+    path: '/support/:projectId'
+  },
+  {
     component: asyncComponent(() => import('../containers/projectinfo')),
     path: '/projectinfo/:projectId'
   },

@@ -4,12 +4,13 @@ import q1 from '@/img/explain.png';
 // import q2 from '@/img/explain2.png';
 // import q3 from '@/img/explain3.png';
 import { injectIntl } from 'react-intl';
+import classnames from 'classnames';
 import './index.less';
 interface IProps
 {
   // type: string,
-  text:string,
-  style?:object,
+  text: string,
+  hintType: 'right-hint' | 'bottom-hint'
   intl: any
 }
 class Hint extends React.Component<IProps>
@@ -17,6 +18,7 @@ class Hint extends React.Component<IProps>
   public prop = this.props.intl.messages;
   public render()
   {
+    const hintClassName = classnames("hint-content", this.props.hintType)
     return (
       <div className="hint-box">
         <div className="hint-msg">
@@ -26,8 +28,8 @@ class Hint extends React.Component<IProps>
             {/* {this.props.type === '2' && <img src={q2} alt="" />}
             {this.props.type === '3' && <img src={q3} className="type3" alt="" />} */}
           </div>
-          <div className="hint-content" style={this.props.style}>
-          <p>{this.props.text}</p>
+          <div className={hintClassName} >
+            <p>{this.props.text}</p>
             {/* {
               this.props.type !== '3' && (
                 <>

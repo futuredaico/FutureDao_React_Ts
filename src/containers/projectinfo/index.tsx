@@ -53,18 +53,41 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         </div>
                     </div>
                     <div className="ptop-right">
-                        <div className="right-big-text">
+                        {/* <div className="right-big-text">
                             <span className="big-purple-text">{this.props.projectinfo.projInfo.supportCount}</span>
                             <span className="md-purple-text">{this.intrl.projinfo.people}</span>
                             <span className="sm-purple-text">{this.intrl.projinfo.supporttips}</span>
                         </div>
                         <p className="gray-text">
                             {this.intrl.projinfo.tips}
-                        </p>
+                        </p> */}
+                        <div className="going-wrapper">
+                            <div className="going-line">
+                                <div className="going-purple">
+                                    <strong className="purple-big">100</strong><strong className="purple-sm"> ETH</strong>
+                                </div>
+                                <div className="going-gray">已售出</div>
+                            </div>
+                            <div className="going-line">
+                                <div className="going-normal">
+                                    <strong>1500</strong>
+                                </div>
+                                <div className="going-gray">发行代币</div>
+                            </div>
+                            <div className="going-line">
+                                <div className="going-normal">
+                                <strong>1000</strong>
+                                </div>
+                                <div className="going-gray">支持人数</div>
+                            </div>
+                        </div>
                         <div className="do-like">
-                            <div className={this.props.projectinfo.projInfo.isSupport ? 'dolike-btn dolike-gray-btn' : "dolike-btn"} onClick={this.handleToStartSupport}>
+                            {/* <div className={this.props.projectinfo.projInfo.isSupport ? 'dolike-btn dolike-gray-btn' : "dolike-btn"} onClick={this.handleToStartSupport}>
                                 <div className="dolike-img" />
                                 <span>{this.props.projectinfo.projInfo.isSupport ? this.intrl.btn.supported : this.intrl.btn.support}</span>
+                            </div> */}
+                            <div className="dolike-btn" onClick={this.handleToOtherSupport}>
+                                <span>立即支持</span>
                             </div>
                             <div className="dolike-wrapper" onClick={this.handleToAttention}>
                                 {
@@ -127,29 +150,34 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         return true;
     }
     // 看好
-    private handleToStartSupport = async () => {
-        if (!this.props.common.userInfo) {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-            return false
-        }
-        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport) {
-            return false;
-        }
-        if (this.props.common.isVerifyEmail) {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
-            return false;
-        }
-        const res = await this.props.projectinfo.startSupport();
-        this.props.projectinfo.projInfo.isSupport = res;
-        this.handleToAttention();
-        return true;
-    }
+    // private handleToStartSupport = async () => {
+    //     if (!this.props.common.userInfo) {
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+    //         return false
+    //     }
+    //     if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport) {
+    //         return false;
+    //     }
+    //     if (this.props.common.isVerifyEmail) {
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+    //         return false;
+    //     }
+    //     const res = await this.props.projectinfo.startSupport();
+    //     this.props.projectinfo.projInfo.isSupport = res;
+    //     this.handleToAttention();
+    //     return true;
+    // }
     private handlePlayVideo = () => {
         if (!this.state.isShowVideo) {
             this.setState({
                 isShowVideo: true
             })
         }
+    }
+    // 支持众筹详情产品预售页
+    private handleToOtherSupport = () => {
+        //
+        window.open('/support/'+this.props.projectinfo.projId)
     }
 }
 export default injectIntl(ProjectInfo)

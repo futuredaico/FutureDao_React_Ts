@@ -25,7 +25,7 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
                     {
                         return (
                             <div className="updatelist-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
-                                <h3>{item.updateTitle}</h3>
+                                <h3 className="title-h3">{item.updateTitle}</h3>
                                 <div className="updatelist-p" dangerouslySetInnerHTML={{ '__html': item.updateDetail }} />
                                 {/* <p className="updatelist-p">{item.updateDetail}</p> */}
                                 <span className="time-tips">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>

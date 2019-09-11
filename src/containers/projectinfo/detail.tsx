@@ -35,11 +35,28 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
         return (
             <>
                 <div className="projectdetail-wrapper">
-                    <h3>{this.intrl.projinfo.info}</h3>
+                    <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />
+                    <div className="contract-info">
+                        <h3 className="title-h3">项目合约详情</h3>
+                        <div className="two-row">
+                            <div className="left-row">
+                                <span className="block-span"><span title="">项目代币名称：</span><strong>ABC</strong></span>
+                                <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>1000</strong></span>
+                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>70 ETH</strong></span>
+                                <span className="block-span"><span title="购买代币所花费的资金，其中一定比例会被智能合约储存起来当作回购代币的储备金。">储备比例：</span><strong>30%</strong></span>
+                            </div>
+                            <div className="right-row">
+                                <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>10000</strong></span>
+                                <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>0</strong></span>
+                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>30 ETH</strong></span>
+                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>0.0001 ETH</strong></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="message-wrapper" id="message">
-                    <h3>{this.intrl.projinfo.comment}</h3>
+                    <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                     {
                         (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport)
                             ? (
