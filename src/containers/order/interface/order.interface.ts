@@ -1,14 +1,14 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
-export interface ISupportStore {
-    supportMenu:number,
+export interface IOrderStore {
+    orderMenu:number,
     projId:string,
     // sendUpdateZanInfo:()=>Promise<boolean>,
   }
   
   
-  export interface ISupportProps extends RouteComponentProps<{ projectId: string }>{
-    support:ISupportStore,
+  export interface IOrderProps extends RouteComponentProps<{ projectId: string }>{
+    order:IOrderStore,
     common:ICommonStore,
     intl:any
   }

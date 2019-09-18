@@ -1,0 +1,202 @@
+.order-wrapper {  
+  width: 1080px;
+  margin: 0 auto;
+  padding: 50px 0;
+  .order-title {
+    font-size: 18px;
+    margin-bottom: 30px;
+    margin-top: 60px;
+    &:first-child{
+      margin-top: 0;
+    }
+  }
+  .order-info-box,.attention-tips{
+    background: @bg-ff;
+    border: 1px solid @bg-e5;
+    box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
+    border-radius: 5px;
+  } 
+  .order-info-box{
+    padding: 30px;  
+    .order-line{
+      line-height: 44px;
+      .oline-left,.oline-right{
+        display: inline-block;
+        height: 44px;
+        vertical-align: middle;
+      }
+      .oline-left{
+        min-width: 210px;
+        .red-xin{
+          color: @t-f251;
+        }
+      }
+      .oline-right{
+        font-weight: 600;
+        .input-count{
+          width: 120px;
+          height: 30px;
+          vertical-align: middle;
+          background: none;
+          border: 1px solid @t-b2;
+          border-radius: 3px;
+          padding: 0 15px;
+        }
+        .input-text{
+          width: 400px;
+          height: 44px;
+          vertical-align: middle;
+          background: none;
+          border: 1px solid @bg-e5;
+          border-radius: 3px;
+          padding: 0 15px;
+          &::placeholder{
+            color: @t-b2;
+          }
+        }
+      }
+    }
+    .order-line-input{
+      margin-bottom: 30px;
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }
+    .order-big-line{
+      border-top: 1px solid @bg-e5;
+      font-size: 22px;
+      margin-top: 15px;
+      padding-top: 30px;
+      .oline-left,.oline-right{
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .oline-left{
+        min-width: 210px;
+      }
+      .oline-right{
+        font-weight: 600;
+      }
+    }
+  }
+  .attention-please{
+    margin-top: 5px;
+    margin-left: 30px;
+    font-size: 14px;
+    color: @t-f251;
+    img{
+      width: 14px;
+      height: 14px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  }
+  .attention-tips{
+    padding: 30px 50px;
+    margin-bottom: 70px;    
+    .attention-p{
+      margin-bottom: 10px;
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }    
+  }
+}
+.order-footer{
+  width: 100%;
+  display: block;
+  height: 68px;
+  background: @bg-ff;
+  box-shadow: 0 -2px 6px 0 rgba(197,197,197,0.50);
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  line-height: 68px;
+}
+.order-create-wrapper,.order-cancel-wrapper,.order-check-wrapper{
+  padding: 50px 0;
+  .order-create-content,.order-cancel-content,.order-check-content{
+    height: 476px;
+    width: 1080px;
+    box-sizing: border-box;
+    margin: 0 auto;    
+    background: @bg-ff;
+    border: 1px solid @bg-e5;
+    box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
+    border-radius: 5px;
+    text-align: center;    
+    position: relative;
+    .step-btn{      
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      -moz-transform: translateX(-50%);
+      -ms-transform: translateX(-50%); 
+      -o-transform: translateX(-50%); 
+      transform: translateX(-50%);
+      .white-purple{
+        margin-right: 30px;
+      }
+    }
+  }
+}
+.order-create-wrapper{  
+  .order-create-content{
+    padding: 50px 0 60px 0;
+    .ocreate-title{
+      font-size: 22px;
+      margin-bottom: 50px;
+    }
+    .ocreate-content{
+      margin-bottom: 20px;
+      text-align: left;
+      width: 580px;
+      margin: 0 auto;
+      .content-line{
+        margin-bottom: 30px;
+        .cline-left,.cline-right{
+          display: inline-block;
+        }
+        .cline-left{
+          min-width: 200px;
+        }
+        .cline-right{
+          font-weight: 600;
+        }
+      }
+    }
+    .ocreate-p{
+      font-size: 16px;
+      margin-bottom: 10px;
+      &:last-child{
+        margin-bottom: 0;
+      }
+      .purple-span{
+        font-weight: 600;
+        color: @t-purple;
+      }
+    }    
+  }
+}
+.order-cancel-wrapper{
+  .order-cancel-content{
+    padding-top: 160px;
+    .ocancel-title{
+      font-size: 22px;
+    }
+  }
+}
+.order-check-wrapper{
+  .order-check-content{
+    padding-top: 160px;
+    .ocheck-title{
+      font-size: 22px;
+      margin-bottom: 40px;
+    }
+    .ocheck-p{
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+  }
+}

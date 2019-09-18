@@ -177,7 +177,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     // 支持众筹详情产品预售页
     private handleToOtherSupport = () => {
         //
-        window.open('/support/'+this.props.projectinfo.projId)
+        const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+        window.open(url+'/support/'+this.props.projectinfo.projId)
     }
 }
 export default injectIntl(ProjectInfo)

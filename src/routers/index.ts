@@ -7,6 +7,14 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/order')),
+    path: '/order/:projectId'
+  },
+  {
+    component: asyncComponent(() => import('../containers/support')),
+    path: '/support/:projectId'
+  },
+  {
     component: asyncComponent(() => import('../containers/emailpage/invite')),
     path: '/inviteteam',
   },
@@ -49,11 +57,7 @@ export default [
         component: asyncComponent(() => import('../containers/personalcenter/personedit')),
       }
     ]
-  },
-  {
-    component: asyncComponent(() => import('../containers/support')),
-    path: '/support/:projectId'
-  },
+  },  
   {
     component: asyncComponent(() => import('../containers/projectinfo')),
     path: '/projectinfo/:projectId'
