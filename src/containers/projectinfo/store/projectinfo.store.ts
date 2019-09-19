@@ -5,7 +5,7 @@ import { CodeType } from '@/store/interface/common.interface';
 import { IProjectInfo, IProjectUpdate, IProjectTeam, IProjUpdateInfo, IDiscussList, IDiscussReplyList } from '../interface/projectinfo.interface';
 class ProjectInfo
 {
-  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志
+  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
   @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IProjectInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID

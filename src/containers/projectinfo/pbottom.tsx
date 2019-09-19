@@ -8,7 +8,8 @@ import { injectIntl } from 'react-intl';
 import ProjectDetail from './detail'
 import UpdateList from './updatelist';
 import RightTeam from './rightteam';
-import UpdateInfo from './updateinfo'
+import UpdateInfo from './updateinfo';
+import Transation from './transation';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 import classnames from 'classnames'
 
@@ -30,6 +31,14 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
     {
       id: 3,
       name: this.intrl.projinfo.update
+    },
+    {
+      id: 4,
+      name: "交易"
+    },
+    {
+      id: 5,
+      name: "治理"
     }
   ]
   private pBottomTitle: React.RefObject<HTMLDivElement> = React.createRef();
@@ -74,9 +83,12 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
             {
               !this.props.projectinfo.isShowUpdateInfo && (
                 <>
-                  <div className="pbottom-left">
+                {
+                  (this.props.projectinfo.menuNum === 1||this.props.projectinfo.menuNum===2||this.props.projectinfo.menuNum===3) && (
+                    <>
+                    <div className="pbottom-left">
                     {
-                      this.props.projectinfo.menuNum !== 3 && <ProjectDetail {...this.props} />
+                      (this.props.projectinfo.menuNum === 1||this.props.projectinfo.menuNum===2) && <ProjectDetail {...this.props} />
                     }
                     {
                       this.props.projectinfo.menuNum === 3 && <UpdateList {...this.props} />
@@ -85,6 +97,12 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                   <div className="pbottom-right">
                     <RightTeam {...this.props} />
                   </div>
+                    </>
+                  )
+                }
+                  {
+                    this.props.projectinfo.menuNum===4 && <Transation {...this.props}/>
+                  }
                 </>
               )
             }
@@ -97,13 +115,14 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
   }
   // 菜单选择
   private mapUnderline = (item) => {
+    window.scrollTo(0,500);
+    this.props.projectinfo.menuNum = item.id;
+    this.props.projectinfo.isShowUpdateInfo = false;
+    this.props.projectinfo.updateId = '';
     if (item.id === 2) {
       // todo
       window.location.hash = 'message'
     }
-    this.props.projectinfo.menuNum = item.id;
-    this.props.projectinfo.isShowUpdateInfo = false;
-    this.props.projectinfo.updateId = '';
   }
   private handleNumCount = (id: number) => {
     if (id === 2) {
