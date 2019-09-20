@@ -1,5 +1,5 @@
 /**
- * 项目详情页
+ * 项目交易
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import RightTable from './transright';
 // import * as formatTime from '@/utils/formatTime';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
-// import projectinfoStore from './store/projectinfo.store';
+import Hint from '@/components/hint';
 @observer
 class Transation extends React.Component<IProjectInfoProps, any> {
     public state = {
@@ -63,8 +63,8 @@ class Transation extends React.Component<IProjectInfoProps, any> {
                                 <span className="li-th">区块高度</span>
                                 <span className="li-th">操作地址</span>
                                 <span className="li-th">操作</span>
-                                <span className="li-th">数量</span>
-                                <span className="li-th">总股数</span>
+                                <span className="li-th">资金</span>
+                                <span className="li-th">代币数</span>
                             </li>
                             <li className="table-li-td">
                                 <span className="li-td">9-11 11:30</span>
@@ -89,7 +89,13 @@ class Transation extends React.Component<IProjectInfoProps, any> {
                                 <span className="li-td purple-text">0x7f...abf6</span>
                                 <span className="li-td">3829889</span>
                                 <span className="li-td purple-text">AZ1u...s5Bg</span>
-                                <span className="li-td">利润回购</span>
+                                <span className="li-td">
+                                    买入失败
+                                    <Hint
+                                        text="如果多个用户同时发起交易，会导致交易价格在短期内发生变化。当交易确认时与交易发出时的价差超过2%时，交易将被拒绝，资金会被退还。"
+                                        hintType="right-hint"
+                                    />
+                                </span>
                                 <span className="li-td">9900 ETH</span>
                                 <span className="li-td red-text">- 1001 </span>
                             </li>

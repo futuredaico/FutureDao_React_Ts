@@ -12,8 +12,8 @@ interface IProps
 {
 	style?: object,
     text: string,
-    colortype:'c-purple'|'c-qpurple'|'c-green'|'c-red'|'c-gray',
-    cardsize?:'big-card'|'md-card'|'sm-card',
+    colortype:'c-purple'|'c-qpurple'|'c-green'|'c-red'|'c-gray'|'transparent-green'|'transparent-purple'|'transparent-red'|'transparent-gray'|'block-red'|'block-gray',
+    cardsize?:'big-card'|'md-card'|'sm-card'|'md-sm-card',
 }
 
 @observer

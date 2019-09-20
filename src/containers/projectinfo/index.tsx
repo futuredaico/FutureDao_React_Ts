@@ -7,7 +7,7 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
-import * as formatTime from '@/utils/formatTime';
+// import * as formatTime from '@/utils/formatTime';
 import QRCode from 'qrcode.react';
 interface IState {
     isShowVideo: boolean
@@ -106,7 +106,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                 }
                             </div>
                         </div>
-                        <p className="sm-gray-text">{this.intrl.projinfo.begintime} {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p>
+                        {/* <p className="sm-gray-text">{this.intrl.projinfo.begintime} {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p> */}
+                        <p className="sm-gray-text">本项目已在以太坊上发起代币融资</p>
                         <div className="ptop-share">
                             <span>{this.intrl.projinfo.share}</span>
                             <div className="share-icon">

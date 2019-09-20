@@ -1,0 +1,131 @@
+.proposal-page{
+    background: #fff;
+    height: 100%;
+    padding: 50px .7rem;
+    font-size: 16px;
+    color: #333333;
+    line-height: 16px;    
+    .proposal-top{
+        clear: both;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e5e5e5;
+        h2{
+            font-size: 22px;
+            display: inline-block;
+        }
+    }
+    h3{
+        font-size: 20px;
+    }
+    .proposal-content{
+        .proposal-title{
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        .proposal-step-title{
+            width: 500px;
+            height: 40px;
+            line-height: 40px;
+            border: 1px solid #E5E5E5;
+            border-radius: 3px;
+            margin: 0 auto;
+            display: flex;
+            .step-title{
+                flex:1;
+                width: 250px;
+                border-right: 1px solid #E5E5E5;
+                font-size: 14px;
+                color: #A0A0A0;
+                text-align: center;
+                img{
+                    width: 16px;
+                    height: 16px;
+                    vertical-align: middle;
+                    margin-right: 5px;
+                }
+                &:last-child{
+                    border-right: none;
+                }
+            }
+            .done-title{
+                color: #49CE26;
+                background: #FFFFFF;
+            }
+            .active-title{
+                background: #F6F6F6;
+                color: #333333;
+            }
+        }
+        .proposal-table{
+            width: 790px;
+            margin: 0 auto;
+            .proposal-line{
+                margin-top: 50px;
+                .proposal-line-left{
+                    width: 180px;
+                    display: inline-block;
+                    font-size: 16px;
+                    color: #A0A0A0;
+                    line-height: 44px;
+                }
+                .proposal-line-right{
+                    display: inline-block;
+                    font-size: 16px;
+                    color: #333333;
+                    position: relative;
+                    .proposal-input{
+                        width: 606px;
+                        height: 44px;
+                        background: #FFFFFF;
+                        border: 1px solid #E5E5E5;
+                        border-radius: 3px;
+                        padding: 15px;
+                        font-size: 16px;
+                        color: #333333;
+                    }
+                    .bf-container {
+                        border: 1px solid #E5E5E5 !important;
+                    }
+                    .bf-controlbar{
+                        box-shadow: inset 0 -1px 0 0 rgba(229,229,229,1) !important;
+                    }
+                    .bf-content {
+                        height: 260px;
+                        overflow: scroll;
+                        box-sizing: border-box;
+                    }
+                    .right-text{
+                        position: absolute;
+                        top: 15px;
+                        right: 15px;
+                        font-size: 16px;
+                        color: #A0A0A0;
+                    }
+                    .bottom-text{
+                        position: absolute;
+                        top: 50px;
+                        left: 0;
+                        font-size: 12px;
+                        color: #6C61C5;
+                    }
+                }
+                .line-top{
+                    vertical-align: top;
+                }
+            }
+            .proposal-tips{
+                background: #F6F6F6;
+                border-radius: 3px;
+                padding: 20px;
+                margin-top: 50px;
+                font-size: 14px;
+            }
+        }
+        .proposal-btn{
+            margin-top: 40px;
+            text-align: center;
+            padding-bottom:50px;
+        }
+    }
+}

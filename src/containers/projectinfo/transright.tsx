@@ -64,11 +64,11 @@ export default class RightTable extends React.Component<any, any> {
                             </div>
                             <div className="tran-line">
                                 <div className="line-left">
-                                    <div className="small-gray">当前总股数</div>
+                                    <div className="small-gray">已发行代币数</div>
                                     <div className="strong-text">100</div>
                                 </div>
                                 <div className="line-right">
-                                    <div className="small-gray">涨跌幅</div>
+                                    <div className="small-gray">24h涨跌幅</div>
                                     <div className="strong-text big-red">- 8%</div>
                                 </div>
                             </div>
