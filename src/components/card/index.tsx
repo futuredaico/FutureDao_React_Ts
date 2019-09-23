@@ -12,7 +12,7 @@ interface IProps
 {
 	style?: object,
     text: string,
-    colortype:'c-purple'|'c-qpurple'|'c-green'|'c-red'|'c-gray'|'transparent-green'|'transparent-purple'|'transparent-red'|'transparent-gray'|'block-red'|'block-gray',
+    colortype:'c-purple'|'c-qpurple'|'c-green'|'c-red'|'c-gray'|'transparent-green'|'transparent-purple'|'transparent-red'|'transparent-gray'|'block-red'|'block-gray'|'yitai-color'|'neo-color',
     cardsize?:'big-card'|'md-card'|'sm-card'|'md-sm-card',
 }
 

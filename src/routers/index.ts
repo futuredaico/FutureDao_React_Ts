@@ -7,6 +7,10 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/proposal')),
+    path: '/proposal/:projectId'
+  },
+  {
     component: asyncComponent(() => import('../containers/order')),
     path: '/order/:projectId'
   },

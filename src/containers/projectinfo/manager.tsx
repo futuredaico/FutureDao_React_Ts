@@ -7,9 +7,10 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
+import { IProjectInfoProps } from './interface/projectinfo.interface';
 
 @observer
-class Manager extends React.Component<any, any> {
+class Manager extends React.Component<IProjectInfoProps, any> {
     public render()
     {
         return (
@@ -51,7 +52,7 @@ class Manager extends React.Component<any, any> {
                         <span>治理池资金</span>
                         <span className="purple-price">145 ETH</span>
                     </div>
-                    <Button text="发起提案" btnSize="bg-bg-btn"  />
+                    <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="manager-des">
                         <strong>提案是什么</strong>
                         <p>提案是社区成员进行自治的方式。</p>
@@ -66,6 +67,9 @@ class Manager extends React.Component<any, any> {
                 </div>
             </div>
         );
+    }
+    private handleToProposal = () => {
+        this.props.history.push('/proposal/'+this.props.projectinfo.projId)
     }
     /**
      * 要修改数据

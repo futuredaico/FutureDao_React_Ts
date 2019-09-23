@@ -14,9 +14,19 @@ import Hint from '@/components/hint';
 class Transation extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
-        underBottom: 1
+        underBottom: 1,
+        timeType:1
     }
-
+    public timeOption = [
+        {
+            id: 1,
+            name: '1月'
+        },
+        {
+            id: 2,
+            name: '1周'
+        }
+    ]
     public menuBottom = [
         {
             id: 1,
@@ -34,6 +44,20 @@ class Transation extends React.Component<IProjectInfoProps, any> {
                 <div className="trans-top">
                     <div className="trans-price">
                         <h3 className="title-h3">历史价格</h3>
+                        <div className="right-toggle">
+                            <ul className="title-ul">
+                                {
+                                    this.timeOption.map((item, index) =>
+                                    {
+                                        return (
+                                            <li className={this.state.timeType === item.id ? "title-li active" : "title-li"} key={index} onClick={this.handleTimeChoice.bind(this, item)}>
+                                                {item.name}
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </div>
                         <div className="trans-echart">
                             折线图
                         </div>
@@ -47,7 +71,7 @@ class Transation extends React.Component<IProjectInfoProps, any> {
                                 this.menuBottom.map((item, index) =>
                                 {
                                     return (
-                                        <li className={this.state.underBottom === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapBottomUnderline.bind(this, item)}>
+                                        <li className={this.state.underBottom === item.id ? "title-li active" : "title-li"} key={index} onClick={this.handleHistoryType.bind(this, item)}>
                                             {item.name}
                                         </li>
                                     )
@@ -114,7 +138,7 @@ class Transation extends React.Component<IProjectInfoProps, any> {
     // }
 
     // 底部菜单选择
-    private mapBottomUnderline = (item) =>
+    private handleHistoryType = (item) =>
     {
         // if (item.id === 2)
         // {
@@ -126,6 +150,11 @@ class Transation extends React.Component<IProjectInfoProps, any> {
         // }
         this.setState({
             underBottom: item.id
+        })
+    }
+    private handleTimeChoice = (item)=>{
+        this.setState({
+            timeType:item.id
         })
     }
 }

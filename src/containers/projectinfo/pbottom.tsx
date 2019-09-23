@@ -12,7 +12,7 @@ import UpdateInfo from './updateinfo';
 import Transation from './transation';
 import Manager from './manager';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
-import classnames from 'classnames'
+import classnames from 'classnames';
 
 @observer
 class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
