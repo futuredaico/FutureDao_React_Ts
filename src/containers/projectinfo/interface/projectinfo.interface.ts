@@ -14,6 +14,7 @@ export interface IProjectInfoStore {
     // projDiscussReplyList:IDiscussReplyList[],
     updateDiscussList:IDiscussList[],
     // updateDiscussReplyList:IDiscussReplyList[],
+    isShowManagerInfo:boolean,
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,

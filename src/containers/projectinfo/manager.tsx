@@ -16,7 +16,7 @@ class Manager extends React.Component<IProjectInfoProps, any> {
         return (
             <div className="manager-wrapper">
                 <div className="manager-left">
-                    <div className="manager-list">
+                    <div className="manager-list" onClick={this.handleToInfo}>
                         <div className="mcontent-top">
                             <div className="mcontent-title">
                                 <Card text="已投票" colortype="block-gray" cardsize="sm-card" />
@@ -70,6 +70,9 @@ class Manager extends React.Component<IProjectInfoProps, any> {
     }
     private handleToProposal = () => {
         this.props.history.push('/proposal/'+this.props.projectinfo.projId)
+    }
+    private handleToInfo = () => {
+        this.props.projectinfo.isShowManagerInfo = true;
     }
     /**
      * 要修改数据

@@ -22,6 +22,7 @@ class ProjectInfo
   // @observable public projDiscussReplyList: IDiscussReplyList[] = []; // 项目评论列表回复列表
   @observable public updateDiscussList: IDiscussList[] = []; // 更新日志评论列表
   // @observable public updateDiscussReplyList: IDiscussReplyList[] = [];
+  @observable public isShowManagerInfo = false; // 是否显示治理详情
 
   /**
    * 获取项目基本详情

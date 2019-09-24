@@ -11,6 +11,7 @@ import RightTeam from './rightteam';
 import UpdateInfo from './updateinfo';
 import Transation from './transation';
 import Manager from './manager';
+import ManagerInfo from './managerinfo';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 import classnames from 'classnames';
 
@@ -82,7 +83,10 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
               this.props.projectinfo.isShowUpdateInfo && <UpdateInfo {...this.props} />
             }
             {
-              !this.props.projectinfo.isShowUpdateInfo && (
+              this.props.projectinfo.isShowManagerInfo && <ManagerInfo {...this.props} />
+            }
+            {
+              (!this.props.projectinfo.isShowUpdateInfo && !this.props.projectinfo.isShowManagerInfo) && (
                 <>
                 {
                   (this.props.projectinfo.menuNum === 1||this.props.projectinfo.menuNum===2||this.props.projectinfo.menuNum===3) && (
@@ -122,6 +126,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
     window.scrollTo(0,500);
     this.props.projectinfo.menuNum = item.id;
     this.props.projectinfo.isShowUpdateInfo = false;
+    this.props.projectinfo.isShowManagerInfo = false;
     this.props.projectinfo.updateId = '';
     if (item.id === 2) {
       // todo

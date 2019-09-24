@@ -72,7 +72,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                     }
                     <span className="zan-span">{this.props.projectinfo.updateInfo.zanCount}</span>
                 </div>
-                <div className="message-wrapper" id="message">
+                <div className="message-wrapper">
                     <div className="updateinfo-tips">
                         <span>{this.intrl.projinfo.comments}：{this.props.projectinfo.updateInfo.discussCount}</span>
                     </div>
