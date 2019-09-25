@@ -3,12 +3,12 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
 // import Select from '@/components/select';
-import { ICreateProjectProps, ITeamList, IMemberList } from './interface/createproject.interface'
+import { ICreateProjectProps, ITeamList, IMemberList } from '../interface/createproject.interface'
 
 type Identity = 'admin' | 'member';
 interface IState

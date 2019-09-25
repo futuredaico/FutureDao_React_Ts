@@ -3,14 +3,14 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Input, Upload, Icon } from 'antd';
 import Select from '@/components/select';
 import Button from '@/components/Button';
 import { RcFile } from 'antd/lib/upload';
 import commonStore from '@/store/common';
-import { ICreateProjectProps } from './interface/createproject.interface';
+import { ICreateProjectProps } from '../interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
 interface IState
 {

@@ -3,12 +3,12 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input } from 'antd';
 import EditTeam from './editteam';
-import { ICreateProjectProps } from './interface/createproject.interface';
+import { ICreateProjectProps } from '../interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
 interface IState
 {

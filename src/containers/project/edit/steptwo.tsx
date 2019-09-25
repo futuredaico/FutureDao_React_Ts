@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Upload, Icon } from 'antd';
 import Editor from '@/components/braftEditor';
@@ -11,7 +11,7 @@ import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import commonStore from '@/store/common';
 import { RcFile } from 'antd/lib/upload';
-import { ICreateProjectProps } from './interface/createproject.interface';
+import { ICreateProjectProps } from '../interface/createproject.interface';
 import { ProjSubState } from '@/store/interface/common.interface';
 interface IState
 {

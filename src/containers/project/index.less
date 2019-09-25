@@ -144,9 +144,17 @@
         .ant-input{
             height: 44px;
             // line-height: 44px;
-            border-radius: 3px;
+            border-radius: 3px;            
+            &:read-only{
+                background: #F0F0F0;
+                color:@t-b9;
+                border: 1px solid #E5E5E5;
+            }
             &.err-active{
                 border: 1px solid  @t-f13;
+                &:read-only{
+                    color: #F25151;
+                }
             }
         }
         .video-wrapper{
@@ -309,6 +317,55 @@
                 }
             }
         }
+        .gray-box{
+            margin-top: 10px;
+            background: #F6F6F6;
+            border-radius: 3px;
+            padding: 20px;
+            line-height: 18px;
+        }
+        .newgray-box{
+            margin-top: 20px;
+            padding: 20px 20px 50px 20px;     
+            .inline-title{
+                margin-top: 0
+            }
+            .tworow-line{
+                display: flex;
+                justify-content: space-between;
+                margin-top: 40px;
+                .firstrow{
+                    flex: 1;
+                    margin-right: 30px;
+                    min-width: 340px;
+                }
+                .secondrow{
+                    flex: 1;
+                }
+                .delete-line{
+                    margin-left: 20px;
+                    height: 30px;
+                    margin-top: 45px;                    
+                    .delete-icon{
+                        width: 30px;
+                        height: 30px;
+                        border: 1px solid #E5E5E5;
+                        box-shadow: 0 1px 4px 0 rgba(204,204,204,0.50);                        
+                        border-radius: 50%;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .add-wrapper{
+                margin-top: 50px;
+                text-align: center;
+                .purple-text{
+                    display: block;
+                    color: #8A7FE6;
+                    margin-top: 20px;
+                }
+            }
+        }
     }
     .inline-enter-btn{
         text-align: center;
@@ -318,6 +375,15 @@
         margin-top: 60px;
         margin-bottom: 90px;
         text-align: center;
+        .gray-box{
+            margin-top: 10px;
+            background: #F6F6F6;
+            border-radius: 3px;
+            padding: 20px;
+            line-height: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
     }
 }
 .invite-people-wrapper,.delete-people-wrapper{
@@ -431,5 +497,84 @@
                 margin-right: 20px;
             }
         }
+    }
+}
+.going-on-wrapper{
+    padding: 50px 0;
+    .going-on-content{
+      height: 476px;
+      width: 1080px;
+      box-sizing: border-box;
+      margin: 0 auto;    
+      background: @bg-ff;
+      border: 1px solid @bg-e5;
+      box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
+      border-radius: 5px;
+      text-align: center;    
+      position: relative;
+      text-align: center;      
+      .step-btn{      
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%); 
+        -o-transform: translateX(-50%); 
+        transform: translateX(-50%);
+        .white-purple{
+          margin-right: 30px;
+        }
+      }
+      .ant-spin {
+          color: #B2B2B2;
+          margin-right: 5px;
+          .anticon-loading{
+            svg{
+                width: 14px;
+                height: 14px;
+            }
+        }
+      }
+    }
+}
+.going-on-wrapper{
+    .going-on-content{
+        padding: 90px 0;
+        .going-bigtext{
+            display: block;
+            font-size: 22px;           
+        }
+        .loading-going{
+            margin-top: 20px;
+            margin-bottom: 50px;
+            color: #B2B2B2;
+        }
+        .going-p{
+            width: 308px;
+            margin: 0 auto;
+        }
+        .done-going{
+            img{
+                width: 14px;
+                height: 14px;
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+        }
+        .goon-btn{
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            margin-left: -90px;
+        }
+    }
+}
+.steptwo-page{
+    .noback-type{
+        margin:60px 0;
+        text-align: center;
+        color: #B2B2B2;
+        font-size: 18px;
     }
 }

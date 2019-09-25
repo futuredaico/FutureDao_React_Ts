@@ -51,14 +51,18 @@ class Project extends React.Component<IProps, IState> {
     public render()
     {
         const createClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/begin))/i) ? true : false }
+            { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/financing|\/order))/i) ? true : false }
         );
         const updateClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/update/i) ? true : false },
             { 'li-notallow': (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing) ? true : false }
         );
-        const beginClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick(/project\/begin/i) ? true : false },
+        const financingClassName = classnames('menu-li',
+            { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
+            { 'li-notallow': true }
+        );
+        const orderClassName = classnames('menu-li',
+            { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
             { 'li-notallow': true }
         );
         const deleteClassName = classnames('menu-li',
@@ -75,8 +79,9 @@ class Project extends React.Component<IProps, IState> {
                         <div className="left-menu-list">
                             <ul className="menu-list-ul">
                                 <li className={createClassName} onClick={this.mapUnderline.bind(this, '/project')}>{this.intrl.edit.editinfo}</li>
+                                <li className={financingClassName} onClick={this.mapUnderline.bind(this, '/project/financing')}>融资管理</li>
                                 <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>{this.intrl.update.update}</li>
-                                <li className={beginClassName} onClick={this.mapUnderline.bind(this, '/project/begin')}>{this.intrl.start.start}</li>
+                                <li className={orderClassName} onClick={this.mapUnderline.bind(this, '/project/order')}>订单管理</li>
                                 <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>{this.intrl.delete.deletetitle}</li>
                             </ul>
                         </div>
@@ -130,9 +135,15 @@ class Project extends React.Component<IProps, IState> {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }
         }
-        else if (str === '/project/begin')
+        else if (str === '/project/financing')
         {
-            return false;
+            if (this.props.createproject.createContent.role !== 'admin')
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
+            } else
+            {
+                this.props.history.push(str + '/' + this.props.project.projId);
+            }
         }
         else if (str === '/project/delete')
         {
@@ -143,6 +154,10 @@ class Project extends React.Component<IProps, IState> {
             {
                 this.handleShowDeleteProject();
             }
+        }
+        else if (str === '/project/order')
+        {
+            return false;
         }
         else
         {

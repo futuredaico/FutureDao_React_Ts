@@ -1382,6 +1382,19 @@
           color: #fff;
         }
       }
+      .stop-card{
+        display: inline-block;
+        width: 60px;
+        height: 20px;
+        line-height: 20px;
+        margin-right: 5px;
+        background: #FE6868;
+        color: #fff;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        font-weight: 400; 
+      }
     }
     .manager-info{
       margin-top: 30px;
@@ -1413,6 +1426,27 @@
       }
       .info-des{
         margin-top: 10px;
+        margin-bottom: 60px;
+        text-align: justify;
+      }
+      .stop-des{
+        margin-top: 10px;
+        margin-bottom: 40px;
+        text-align: justify;
+      }
+      .stop-infocontent{
+        margin-top: 10px;
+        background: #F6F6F6;
+        border-radius: 3px;
+        padding: 40px 30px;
+        .info-des{
+          margin-bottom: 40px;
+        }
+        .info-line{
+          &:last-child{
+            margin-bottom: 0;
+          }
+        }
       }
     }
   }
@@ -1433,6 +1467,7 @@
       }
     }
     .vote-box{
+      margin-top: 30px;
       border: 1px solid #E5E5E5;
       border-radius: 3px;
       .vote-title{
@@ -1450,32 +1485,42 @@
         display: flex;
         position: relative;
         .green-sai{
-            background: #5CDC3B;
-            border-radius: 3px 0px 0px 3px; 
-            height: 100%;                           
+          background: #5CDC3B;
+          border-radius: 3px 0px 0px 3px; 
+          height: 100%;                           
         }
         .red-sai{
-            background: #FE6868;
-            height: 100%;
-            border-radius: 0px 3px 3px 0px ; 
+          background: #FE6868;
+          height: 100%;
+          border-radius: 0px 3px 3px 0px ;             
+        }
+        .purple-sai{
+          background: #8A7FE6;
+          border-radius: 3px 0px 0px 3px; 
+          height: 100%;
+        }
+        .gray-sai{
+          background: #DDDDDD;
+          height: 100%;
+          border-radius: 0px 3px 3px 0px ; 
         }
         .left-top{
-            position: absolute;
-            top: -25px;
-            left: 0;
-            font-weight: 600;
+          position: absolute;
+          top: -25px;
+          left: 0;
+          font-weight: 600;
         }
         .right-top{
-            position: absolute;
-            top: -25px;
-            right:0;
-            font-weight: 600;
+          position: absolute;
+          top: -25px;
+          right:0;
+          font-weight: 600;
         }
         .qian-gray{
-           background: #C9C9C9;
+          background: #C9C9C9;
         }
         .shen-gray{
-            background: #A0A0A0;
+          background: #A0A0A0;
         }
       }
       .myvote{
@@ -1522,6 +1567,37 @@
     .fail-box{
       color: #FE6868;
       padding: 20px;
+    }
+    .stop-tips{
+      background: #F6F6F6;
+      border-radius: 3px;
+      text-align: justify;
+      font-weight: 600;
+      padding: 15px;
+    }
+    .settled-btn{
+      text-align: center;
+      margin-top: 30px;
+      margin-bottom: 50px;
+    }
+    .getprice-box{
+      margin-top: 30px;
+      margin-bottom: 50px;
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5;
+      border-radius: 3px;
+      padding: 30px 15px;
+      .getprice-line{
+        clear: both;
+        margin-bottom: 20px;
+        .gline-right{
+          float: right;
+          font-weight: 600;
+        }
+      }
+      .getprice-btn{
+        margin-top:30px;
+      }
     }
   }
 }

@@ -71,16 +71,20 @@ export default [
     path: '/project',
     children: [
       {
+        path: '/project/financing/:projectId',
+        component: asyncComponent(() => import('../containers/project/financing/financing')),
+      },
+      {
         path: '/project/update/:projectId',
         component: asyncComponent(() => import('../containers/project/updateproject')),
       },
       {
         path: '/project/:projectId',
-        component: asyncComponent(() => import('../containers/project/createproject')),
+        component: asyncComponent(() => import('../containers/project/edit/createproject')),
       },
       {
         path: '/project',
-        component: asyncComponent(() => import('../containers/project/createproject')),
+        component: asyncComponent(() => import('../containers/project/edit/createproject')),
       }
     ]
   },

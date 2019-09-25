@@ -17,7 +17,8 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         managerDiscuss: '',
         managerReply: '',
         managerReplyOther: '',
-        isOpenStopBox: false
+        isOpenStopBox: false,
+        showDeletBox:false
     }
     public render()
     {
@@ -25,49 +26,77 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
             <div className="manager-wrapper manager-info-wrapper">
                 <div className="manager-left">
                     <h3 className="title-h3">
+                        <span className="stop-card">已终止</span>
                         制作人工资支付的提案
                         <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>
                     </h3>
                     <div className="manager-info">
                         <div className="info-line">
                             <div className="iline-left">
-                                <strong>提案人</strong>
+                                <strong>处理人</strong>
                             </div>
                             <div className="iline-right">
                                 <img src={require('@/img/default.png')} alt="" className="people-headicon" />
                                 <span className="people-name">某某某</span>
-                            </div>
-                        </div>
-                        <div className="info-line">
-                            <div className="iline-left">
-                                <strong>申请资金</strong>
-                            </div>
-                            <div className="iline-right">
-                                <span>10 ETH</span>
-                            </div>
-                        </div>
-                        <div className="info-line">
-                            <div className="iline-left">
-                                <strong>接受人</strong>
-                            </div>
-                            <div className="iline-right">
-                                <img src={require('@/img/default.png')} alt="" className="people-headicon" />
-                                <span className="people-name">某某某</span>
-                                <span className="addr-str">AZqYuFAHkNkvvdCViZvdQG3uaPpGffZiD7</span>
-                            </div>
-                        </div>
-                        <div className="info-line">
-                            <div className="iline-left">
-                                <strong>发放方式</strong>
-                            </div>
-                            <div className="iline-right">
-                                <span>每天发放1ETH，共10天</span>
                             </div>
                         </div>
                         <div>
-                            <strong>详情</strong>
+                            <strong>终止理由</strong>
                         </div>
-                        <p className="info-des">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                        <p className="stop-des">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. </p>
+                        <div>
+                            <strong>终止内容</strong>
+                        </div>
+                        {/* 终止时显示  className="stop-infocontent" */}
+                        <div className="stop-infocontent">
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>提案人</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <img src={require('@/img/default.png')} alt="" className="people-headicon" />
+                                    <span className="people-name">某某某</span>
+                                </div>
+                            </div>
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>申请资金</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <span>10 ETH</span>
+                                </div>
+                            </div>
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>接受人</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <img src={require('@/img/default.png')} alt="" className="people-headicon" />
+                                    <span className="people-name">某某某</span>
+                                    <span className="addr-str">AZqYuFAHkNkvvdCViZvdQG3uaPpGffZiD7</span>
+                                </div>
+                            </div>
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>发放方式</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <span>每天发放1ETH，共10天</span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong>详情</strong>
+                            </div>
+                            <p className="info-des">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>执行结果</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <span>未执行</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="message-wrapper">
                         <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
@@ -198,6 +227,35 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                     <div className="back-btn">
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackManagerList} className="back-img" />
                     </div>
+                    <div className="stop-tips">
+                        <p>本提案已被管理员终止，提案已作废。</p>
+                        <p>如果您对处理结果有任何疑问，请与社区管理员沟通。</p>
+                    </div>
+                    <h3 className="title-h3">领取资金</h3>
+                    <div className="settled-btn">
+                        <Button text="结算提案" btnSize="vote-btn" />
+                    </div>
+                    <div className="getprice-box">
+                        <div className="getprice-line">
+                            <span className="gline-left">资金总额</span>
+                            <span className="gline-right">100 DAI</span>
+                        </div>
+                        <div className="getprice-line">
+                            <span className="gline-left">发放进度</span>
+                            <span className="gline-right">4/10 天I</span>
+                        </div>
+                        <div className="getprice-line">
+                            <span className="gline-left">已领取</span>
+                            <span className="gline-right">0 DAI</span>
+                        </div>
+                        <div className="getprice-line">
+                            <span className="gline-left">待领取</span>
+                            <span className="gline-right">40 DAI</span>
+                        </div>
+                        <div className="getprice-btn">
+                            <Button text="领取 40 DAI" btnSize="vote-btn" />
+                        </div>
+                    </div>
                     <h3 className="title-h3">
                         投票
                         <Hint
@@ -250,7 +308,20 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                                 <textarea name="stopinfo" className="stop-reason" />
                                 <div className="stopbtn-wrap">
                                     <Button text="取消" btnColor="red-btn" btnSize="stop-btn" />
-                                    <Button text="终止提案" btnSize="stop-btn" />
+                                    <Button text="终止提案" btnSize="stop-btn" onClick={this.handleToShowCheckStop} />
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+                {
+                    this.state.showDeletBox && (
+                        <div className="delete-info-wrapper">
+                            <div className="delete-content">
+                                <div className="delete-text">确认取消此提案？</div>
+                                <div className="delete-btn">
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleToCloseStop} />
+                                    <Button text={this.intrl.btn.comfirm} onClick={this.handleStopProposal} />
                                 </div>
                             </div>
                         </div>
@@ -268,8 +339,18 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
     private handleToCloseStop = () =>
     {
         this.setState({
-            isOpenStopBox: false
+            isOpenStopBox: false,
+            showDeletBox:false
         })
+    }
+    private handleToShowCheckStop = () => {
+        this.setState({
+            showDeletBox:true
+        })
+    }
+    private handleStopProposal = () => {
+        // todo
+        this.handleToCloseStop();
     }
     private handleBackManagerList = () =>
     {

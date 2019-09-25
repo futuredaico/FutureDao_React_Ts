@@ -3,14 +3,14 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import StepOne from './stepone';
 import StepTwo from './steptwo';
 import Button from '@/components/Button';
 import StepThree from './stepthree';
 import classnames from 'classnames';
-import { ICreateProjectProps } from './interface/createproject.interface'
+import { ICreateProjectProps } from '../interface/createproject.interface'
 import { ProjSubState } from '@/store/interface/common.interface';
 import { getQueryString } from '@/utils/function'
 interface IState{
