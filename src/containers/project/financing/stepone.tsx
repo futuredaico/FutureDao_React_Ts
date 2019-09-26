@@ -267,7 +267,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 </div>
                 <p className="going-p">处理这些事物可能需要较长时间，取决于网络状态处理期间请勿关闭本页</p>
                 <div className="goon-btn">
-                  <Button text="继续" btnSize="md-bg-btn" />
+                  <Button text="继续" btnSize="md-bg-btn" onClick={this.handleGoOn} />
                 </div>
               </div>
             </div>
@@ -315,9 +315,14 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   private handleComfirmFinancing = () =>
   {
     // todo
-    this.props.project.isEdit = false;
+    // this.props.project.isEdit = false;
     this.setState({
       isDoingContract:true
+    })
+  }
+  private handleGoOn = () => {
+    this.setState({
+      isDoingContract:false
     })
   }
 }

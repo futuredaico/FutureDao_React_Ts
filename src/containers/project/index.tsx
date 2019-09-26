@@ -59,11 +59,11 @@ class Project extends React.Component<IProps, IState> {
         );
         const financingClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
-            { 'li-notallow': true }
+            { 'li-notallow': false }
         );
         const orderClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
-            { 'li-notallow': true }
+            { 'li-notallow': false }
         );
         const deleteClassName = classnames('menu-li',
             // { 'li-active': this.props.project.menuNum === 4 },
@@ -106,7 +106,6 @@ class Project extends React.Component<IProps, IState> {
                         </div>
                     )
                 }
-
             </div>
         );
     }
@@ -155,10 +154,10 @@ class Project extends React.Component<IProps, IState> {
                 this.handleShowDeleteProject();
             }
         }
-        else if (str === '/project/order')
-        {
-            return false;
-        }
+        // else if (str === '/project/order')
+        // {
+        //     return false;
+        // }
         else
         {
             this.props.history.push(str + '/' + this.props.project.projId);

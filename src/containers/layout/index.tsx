@@ -78,7 +78,7 @@ export default class LayoutIndex extends React.Component<any, any> {
 
   private onMapping()
   {
-    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname))|| (/support/.test(location.pathname))|| (/order/.test(location.pathname)))
+    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname))|| (/support/.test(location.pathname))|| (/giftorder/.test(location.pathname)))
     {
       CommonStore.footer = false;
       return;

@@ -12,7 +12,7 @@ export default [
   },
   {
     component: asyncComponent(() => import('../containers/order')),
-    path: '/order/:projectId'
+    path: '/giftorder/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/support')),
@@ -70,6 +70,10 @@ export default [
     component: asyncComponent(() => import('../containers/project')),
     path: '/project',
     children: [
+      {
+        path: '/project/order/:projectId',
+        component: asyncComponent(() => import('../containers/project/order/order')),
+      },
       {
         path: '/project/financing/:projectId',
         component: asyncComponent(() => import('../containers/project/financing/financing')),

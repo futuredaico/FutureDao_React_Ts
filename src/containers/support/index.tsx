@@ -80,7 +80,7 @@ class Support extends React.Component<ISupportProps, IState> {
     }
     // 订单信息页
     private handleToOrderPage = () => {
-        this.props.history.push('/order/'+this.props.support.projId)
+        this.props.history.push('/giftorder/'+this.props.support.projId)
     }
 }
 export default injectIntl(Support)

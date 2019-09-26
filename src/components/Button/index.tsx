@@ -13,7 +13,7 @@ interface IProps
 	style?: object,
 	disabled?: boolean, // 按钮是否禁止点击
 	text: string,
-	btnSize?:'sm-btn'|'bg-btn'|'video-btn'|'md-btn'|'md-bg-btn'|'buy-btn'|'bg-bg-btn'|'vote-btn'|'stop-btn', // 按钮大小
+	btnSize?:'sm-btn'|'bg-btn'|'video-btn'|'md-btn'|'md-bg-btn'|'buy-btn'|'bg-bg-btn'|'vote-btn'|'stop-btn'|'vsm-btn'|'csm-btn', // 按钮大小
 	btnColor?:'white-btn'|'gray-btn'|''|'red-btn'|'white-purple'|'gray-red'|'gray-black'|'gray-black2'|'green-btn'|'red-red'|'bright-green'|'bright-red' // 按钮颜色
 	// intl:any
 }
