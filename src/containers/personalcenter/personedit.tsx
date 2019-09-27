@@ -193,6 +193,102 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                         }
                     </div>
                 </div>
+                <h2>钱包地址</h2>
+                <div className={infoClassName}>
+                    <div className={emailClassName}>
+                        <div className="edit-title">
+                            <strong><img src={require('@/img/neo.png/')} alt="neo.png" className="asset-icon" />NEO</strong>
+                            {
+                                !this.state.isEditEmail && (
+                                    <div className="edit-btn-wrapper" onClick={this.handleEditPerson.bind(this, 3)} >
+                                        <Button text="更改" />
+                                    </div>
+                                )
+                            }
+                        </div>
+                        {
+                            this.state.isEditEmail
+                                ? (
+                                    <>
+                                        <Input
+                                            placeholder={this.intrl.user.newemail}
+                                            className="edit-input"
+                                            value={this.state.emailInput}
+                                            onChange={this.handleToChangeEmail}
+                                            onBlur={this.handleTocheckEmail}
+                                        />
+                                        <Input.Password
+                                            placeholder={this.intrl.user.checkpwd}
+                                            className="edit-pwd"
+                                            value={this.state.emailPwd}
+                                            onChange={this.handleToEnterPwd}
+                                        />
+                                        {
+                                            this.props.personedit.newEmailCode && (
+                                                <span className="err-msg">
+                                                    <img src={require('@/img/attention.png')} alt="" />
+                                                    {this.props.personedit.newEmailCode === CodeType.invalidEmail && this.intrl.inputerr.eformaterr}
+                                                    {this.props.personedit.newEmailCode === CodeType.emailHasRegisted && this.intrl.inputerr.emailerr}
+                                                    {this.props.personedit.newEmailCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
+                                                </span>
+                                            )
+                                        }
+                                        <div className="personedit-btn">
+                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewEmail} btnColor={(this.state.isSaveEmail && this.state.emailPwd) ? '' : 'gray-btn'} />
+                                        </div>
+                                    </>
+                                )
+                                : <span>{this.props.common.userInfo && this.props.common.userInfo.email}</span>
+                        }
+                    </div>
+                    <div className={pwdClassName}>
+                        <div className="edit-title">
+                            <strong><img src={require('@/img/neo.png/')} alt="neo.png" className="asset-icon" />ETH</strong>
+                            {
+                                !this.state.isEditPwd && (
+                                    <div className="edit-btn-wrapper" onClick={this.handleEditPerson.bind(this, 3)} >
+                                        <Button text="更改" />
+                                    </div>
+                                )
+                            }
+
+                        </div>
+                        {
+                            this.state.isEditPwd
+                                ? (
+                                    <>
+                                        <Input.Password
+                                            placeholder={this.intrl.user.oldpwd}
+                                            className="edit-input"
+                                            value={this.state.oldPwd}
+                                            onChange={this.handleToChangeOldPwd}
+                                        />
+                                        <Input.Password
+                                            placeholder={this.intrl.user.newpwd}
+                                            className="edit-pwd"
+                                            value={this.state.newPwd}
+                                            onChange={this.handleToChangeNewPwd}
+                                        />
+                                        {
+                                            this.props.personedit.newPwdCode && (
+                                                <span className="err-msg">
+                                                    <img src={require('@/img/attention.png')} alt="" />
+                                                    {this.props.personedit.newPwdCode === CodeType.invalidPasswordLen && this.intrl.inputerr.pwderr}
+                                                    {this.props.personedit.newPwdCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
+                                                </span>
+                                            )
+                                        }
+                                        <div className="personedit-btn">
+                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewPwd} btnColor={(this.state.oldPwd && this.state.newPwd) ? '' : 'gray-btn'} />
+                                        </div>
+                                    </>
+                                )
+                                : <span>未绑定</span>
+                        }
+                    </div>
+                </div>
             </div>
         );
     }

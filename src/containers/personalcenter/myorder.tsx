@@ -3,11 +3,10 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import '../index.less';
+import './index.less';
 import { injectIntl } from 'react-intl';
 import { Input } from 'antd';
 import Button from '@/components/Button';
-import Select from '@/components/select';
 // import { getQueryString } from '@/utils/function'
 interface IState
 {
@@ -18,7 +17,7 @@ interface IState
 }
 @inject('common', 'updateproject', 'createproject', 'project')
 @observer
-class OrderProject extends React.Component<any, IState> {
+class MyOrder extends React.Component<any, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         isShowInfo: false,
@@ -26,65 +25,21 @@ class OrderProject extends React.Component<any, IState> {
         orderType: '1',
         isShowSendBox: false
     };
-    private orderOptions = [
-        {
-            id: "1",
-            name: "实物商品",
-        },
-        {
-            id: "2",
-            name: "虚拟商品",
-        }
-    ]
     public render()
     {
         return (
-            <div className="pro-order-wrapper">
-                <h3 className="right-title">订单管理</h3>
+            <div className="myorder-wrapper">
+                <h2>我的订单</h2>
                 {
                     !this.state.isShowInfo && (
                         <>
-                            <div className="order-menu">
-                                <ul className="title-ul">
-                                    <li className={this.state.orderMenu === 1 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 1)}>
-                                        待发货
-                                    </li>
-                                    <li className={this.state.orderMenu === 2 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 1)}>
-                                        已发货
-                                    </li>
-                                </ul>
-                                <div className="output-btn">
-                                    <Button text="导出收货人信息" />
-                                </div>
-                            </div>
-                            <div className="order-search-wrapper">
-                                <div className="order-search-smallbox">
-                                    <span className="search-type-text">收件人名称</span>
-                                    <Input className="search-input-order" />
-                                </div>
-                                <div className="order-search-smallbox">
-                                    <span className="search-type-text">买家名称</span>
-                                    <Input className="search-input-order" />
-                                </div>
-                                <div className="order-search-smallbox">
-                                    <span className="search-type-text">订单编号</span>
-                                    <Input className="search-input-order" />
-                                </div>
-                                <div className="order-search-smallbox">
-                                    <span className="search-type-text">订单类型</span>
-                                    <Select options={this.orderOptions} text='' onCallback={this.handleChoiceOrderType} defaultValue={this.state.orderType} />
-                                </div>
-                                <Button text="搜索" btnColor="white-btn" />
-                            </div>
                             <div className="order-table-title">
                                 <ul>
                                     <li>产品</li>
                                     <li>单价</li>
                                     <li>数量</li>
-                                    <li>实付款</li>
-                                    <li>买家</li>
-                                    <li>交易状况</li>
-                                    <li>操作</li>
+                                    <li>总价</li>
+                                    <li>状态</li>
                                 </ul>
                             </div>
                             <div className="order-table-content">
@@ -101,10 +56,8 @@ class OrderProject extends React.Component<any, IState> {
                                         <li><span>1000.0000 DAI</span></li>
                                         <li><span>1</span></li>
                                         <li><span>1000.0000 DAI</span></li>
-                                        <li><span>莉莉萨</span></li>
-                                        <li><span>待发货</span></li>
                                         <li>
-                                            <Button text="发货" btnSize="csm-btn" onClick={this.handleOpenSendBox} />
+                                            <span>等待确认</span>
                                             <span className="order-purple" onClick={this.handleOpenOrderInfo}>订单详情</span>
                                         </li>
                                     </ul>
@@ -123,20 +76,42 @@ class OrderProject extends React.Component<any, IState> {
                             </div>
                             <strong className="orderinfo-title first-title">当前订单状态</strong>
                             <div className="orderinfo-gray-box">
-                                <strong className="orderinfo-status">待发货/已发货</strong>
-                                <span className="orderinfo-span">买家已付款，请及时发货/等待买家收货</span>
+                                <strong className="orderinfo-status">等待确认/等待发货</strong>
+                                <span className="orderinfo-span">付款交易已发出，等待链上确认/等待买家收货</span>
+                                <p className="orderinfo-p">卖家延期未发货请与卖家进行沟通。申请退款需要卖家同意，请与卖家达成一致后再申请退款。</p>
+                            </div>
+                            <div className="orderinfo-gray-box">
+                                <strong className="orderinfo-status">等待付款</strong>
+                                <span className="orderinfo-span">请在9:59内付款，否则订单将自动取消</span>
+                                <div className="check-wrapper-btn">
+                                    <Button text="取消订单" btnColor="red-btn" />
+                                    <Button text="立即付款" />
+                                </div>
+                            </div>
+                            <div className="orderinfo-gray-box">
+                                <strong className="orderinfo-status">交易失败</strong>
+                                <span className="orderinfo-span">付款失败，订单已取消，请重新购买。</span>
+                            </div>
+                            <div className="orderinfo-idinput">
+                                <span className="gray-text">付款状态有误？</span><span className="purple-text">手动输入交易ID重新检测。</span>
+                            </div>
+                            <div className="orderinfo-idinput">
+                                <Input placeholder="输入付款的交易ID" className="search-orderid" />
+                                <Button text="重新检查" />
                             </div>
                             <strong className="orderinfo-title">收货信息</strong>
                             <div className="orderinfo-gray-box recieve-addr">
                                 <span className="orderinfo-span">收货人：<strong>莉莉萨</strong></span>
                                 <span className="orderinfo-span">手机：<strong>12312341234</strong></span>
+                                <span className="orderinfo-span">邮箱：<strong>1234567890@163.com</strong></span>
                                 <span className="orderinfo-span">收货地址：<strong>上海市XX区XX路123号501</strong></span>
                                 <span className="orderinfo-span">留言：<strong>留言留言留言留言留言留言留言留言留言</strong></span>
                             </div>
-                            <strong className="orderinfo-title">发货信息</strong>
-                            <div className="orderinfo-gray-box">
-                                <span className="orderinfo-span">暂未发货/顺丰快递：6554321</span>
-                                <Button text="发货/修改发货信息" onClick={this.handleOpenSendBox} />
+                            <strong className="orderinfo-title">卖家信息</strong>
+                            <div className="orderinfo-gray-box recieve-addr">
+                                <span className="orderinfo-span">发货人：<strong>莉莉萨</strong></span>
+                                <span className="orderinfo-span">联系方式：<strong>12312341234</strong></span>
+                                <span className="orderinfo-span">发货信息：<strong>暂无</strong></span>
                             </div>
                             <strong className="orderinfo-title">订单信息</strong>
                             <div className="order-id-line">
@@ -196,28 +171,10 @@ class OrderProject extends React.Component<any, IState> {
             </div>
         );
     }
-    private mapUnderline = (num: number) =>
-    {
-        this.setState({
-            orderMenu: num
-        })
-    }
-    private handleChoiceOrderType = (item) =>
-    {
-        this.setState({
-            orderType: item.id
-        })
-    }
     private handleOpenOrderInfo = () =>
     {
         this.setState({
             isShowInfo: true
-        })
-    }
-    private handleOpenSendBox = () =>
-    {
-        this.setState({
-            isShowSendBox: true
         })
     }
     private handleCloseSendBox = () =>
@@ -228,4 +185,4 @@ class OrderProject extends React.Component<any, IState> {
     }
 }
 
-export default injectIntl(OrderProject);
+export default injectIntl(MyOrder);

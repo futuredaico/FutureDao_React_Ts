@@ -53,6 +53,10 @@ export default [
     path: '/personalcenter',
     children: [
       {
+        path: '/personalcenter/myorder',
+        component: asyncComponent(() => import('../containers/personalcenter/myorder')),
+      },
+      {
         path: '/personalcenter/myproject',
         component: asyncComponent(() => import('../containers/personalcenter/myproject')),
       },
