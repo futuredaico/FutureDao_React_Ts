@@ -16,7 +16,7 @@ interface IState
     isEditDes: boolean, // 个人简介
     isEditEmail: boolean, // 邮箱
     isEditPwd: boolean, // 密码
-    isEditStatus: boolean, // 总的编辑
+    isEditStatus: boolean, // 编辑时态，若是有一个在编辑，其他都得置灰，true为置灰
     briefTextarea: string, // 个人简介内容
     emailInput: string, // 新的邮箱
     emailPwd: string,   // 修改邮箱输入的密码
@@ -24,8 +24,10 @@ interface IState
     newPwd: string,      // 新密码
     isSaveEmail: boolean,  // 确认邮箱修改
     isSavePwd: boolean, // 确认密码修改
+    isEditNeo:boolean, // neo钱包
+    isEditEth:boolean, // eth钱包
 }
-@inject('personedit', 'common')
+@inject('personedit', 'common','teemowallet')
 @observer
 class PersonalEidt extends React.Component<IPersonProps, IState> {
     public intrl = this.props.intl.messages;
@@ -40,7 +42,9 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
         oldPwd: '',
         newPwd: '',
         isSaveEmail: false,
-        isSavePwd: false
+        isSavePwd: false,
+        isEditNeo:false,
+        isEditEth:false,
     }
 
     public render()
@@ -49,16 +53,20 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
         const desClassName = classnames('info-line', this.state.isEditDes ? 'active-eidt' : '');
         const emailClassName = classnames('info-line', this.state.isEditEmail ? 'active-eidt' : '');
         const pwdClassName = classnames('info-line', this.state.isEditPwd ? 'active-eidt' : '');
-
+        if(!this.props.common.userInfo){
+            return null
+        }
         return (
             <div className="personedit-page">
+                {/* 编辑个人信息 */}
                 <h2>{this.intrl.user.info}</h2>
                 <div className="person-picture">
+                    {/* 编辑头像 */}
                     <div className="person-img">
-                        {(this.props.common.userInfo && this.props.common.userInfo.headIconUrl) ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img" src={require('@/img/default.png')} alt="" />}
+                        {this.props.common.userInfo.headIconUrl ? <img src={this.props.common.userInfo.headIconUrl} alt="" /> : <img className="no-img" src={require('@/img/default.png')} alt="" />}
                     </div>
                     <div className="person-name-img">
-                        <strong className="person-name">{this.props.common.userInfo && this.props.common.userInfo.username}</strong>
+                        <strong className="person-name">{this.props.common.userInfo.username}</strong>
                         {/* <Button text="修改头像" btnColor="white-purple" /> */}
                         <Upload
                             name="avatar"
@@ -74,6 +82,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                     </div>
                 </div>
                 <div className={infoClassName}>
+                    {/* 编辑个人简介 */}
                     <div className={desClassName}>
                         <div className="edit-title">
                             <strong>{this.intrl.user.profile}</strong>
@@ -102,11 +111,12 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                                 )
                                 : <div className="person-p">
                                     {
-                                        (this.props.common.userInfo && this.props.common.userInfo.brief !== '') ? this.props.common.userInfo.brief : this.intrl.user.noprofile
+                                        this.props.common.userInfo.brief !== '' ? this.props.common.userInfo.brief : this.intrl.user.noprofile
                                     }
                                 </div>
                         }
                     </div>
+                    {/* 编辑邮箱 */}
                     <div className={emailClassName}>
                         <div className="edit-title">
                             <strong>{this.intrl.user.email}</strong>
@@ -147,9 +157,10 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                                         </div>
                                     </>
                                 )
-                                : <span>{this.props.common.userInfo && this.props.common.userInfo.email}</span>
+                                : <span>{this.props.common.userInfo.email}</span>
                         }
                     </div>
+                    {/* 编辑密码 */}
                     <div className={pwdClassName}>
                         <div className="edit-title">
                             <strong>{this.intrl.user.password}</strong>
@@ -193,104 +204,61 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                         }
                     </div>
                 </div>
+                {/* 编辑钱包 */}
                 <h2>钱包地址</h2>
                 <div className={infoClassName}>
-                    <div className={emailClassName}>
+                    {/* 绑定neo钱包 */}
+                    <div className="info-line">
                         <div className="edit-title">
                             <strong><img src={require('@/img/neo.png/')} alt="neo.png" className="asset-icon" />NEO</strong>
-                            {
-                                !this.state.isEditEmail && (
-                                    <div className="edit-btn-wrapper" onClick={this.handleEditPerson.bind(this, 3)} >
-                                        <Button text="更改" />
-                                    </div>
-                                )
-                            }
+                            <div className="edit-btn-wrapper">
+                                <Button text={this.props.common.userInfo.neoAddress!==""?"更改":"绑定"} onClick={this.handleToBindNeoAddress.bind(this,'neo')} />
+                            </div>                               
                         </div>
                         {
-                            this.state.isEditEmail
-                                ? (
-                                    <>
-                                        <Input
-                                            placeholder={this.intrl.user.newemail}
-                                            className="edit-input"
-                                            value={this.state.emailInput}
-                                            onChange={this.handleToChangeEmail}
-                                            onBlur={this.handleTocheckEmail}
-                                        />
-                                        <Input.Password
-                                            placeholder={this.intrl.user.checkpwd}
-                                            className="edit-pwd"
-                                            value={this.state.emailPwd}
-                                            onChange={this.handleToEnterPwd}
-                                        />
-                                        {
-                                            this.props.personedit.newEmailCode && (
-                                                <span className="err-msg">
-                                                    <img src={require('@/img/attention.png')} alt="" />
-                                                    {this.props.personedit.newEmailCode === CodeType.invalidEmail && this.intrl.inputerr.eformaterr}
-                                                    {this.props.personedit.newEmailCode === CodeType.emailHasRegisted && this.intrl.inputerr.emailerr}
-                                                    {this.props.personedit.newEmailCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
-                                                </span>
-                                            )
-                                        }
-                                        <div className="personedit-btn">
-                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewEmail} btnColor={(this.state.isSaveEmail && this.state.emailPwd) ? '' : 'gray-btn'} />
-                                        </div>
-                                    </>
-                                )
-                                : <span>{this.props.common.userInfo && this.props.common.userInfo.email}</span>
+                            this.props.common.userInfo.neoAddress!==""
+                                ? <span>{this.props.common.userInfo.neoAddress}</span>                                
+                                : <span className="nobind-text">未绑定</span>
                         }
                     </div>
-                    <div className={pwdClassName}>
+                    {/* 绑定eth钱包 */}
+                    <div className="info-line">
                         <div className="edit-title">
-                            <strong><img src={require('@/img/neo.png/')} alt="neo.png" className="asset-icon" />ETH</strong>
-                            {
-                                !this.state.isEditPwd && (
-                                    <div className="edit-btn-wrapper" onClick={this.handleEditPerson.bind(this, 3)} >
-                                        <Button text="更改" />
-                                    </div>
-                                )
-                            }
-
+                            <strong><img src={require('@/img/eth.png/')} alt="eth.png" className="asset-icon" />Eth</strong>
+                            <div className="edit-btn-wrapper">
+                                <Button text={this.props.common.userInfo.ethAddress!==""?"更改":"绑定"} />
+                            </div>
                         </div>
                         {
-                            this.state.isEditPwd
-                                ? (
-                                    <>
-                                        <Input.Password
-                                            placeholder={this.intrl.user.oldpwd}
-                                            className="edit-input"
-                                            value={this.state.oldPwd}
-                                            onChange={this.handleToChangeOldPwd}
-                                        />
-                                        <Input.Password
-                                            placeholder={this.intrl.user.newpwd}
-                                            className="edit-pwd"
-                                            value={this.state.newPwd}
-                                            onChange={this.handleToChangeNewPwd}
-                                        />
-                                        {
-                                            this.props.personedit.newPwdCode && (
-                                                <span className="err-msg">
-                                                    <img src={require('@/img/attention.png')} alt="" />
-                                                    {this.props.personedit.newPwdCode === CodeType.invalidPasswordLen && this.intrl.inputerr.pwderr}
-                                                    {this.props.personedit.newPwdCode === CodeType.passwordError && this.intrl.inputerr.pwderr2}
-                                                </span>
-                                            )
-                                        }
-                                        <div className="personedit-btn">
-                                            <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveNewPwd} btnColor={(this.state.oldPwd && this.state.newPwd) ? '' : 'gray-btn'} />
-                                        </div>
-                                    </>
-                                )
-                                : <span>未绑定</span>
+                            this.props.common.userInfo.ethAddress!==""
+                                ? <span>{this.props.common.userInfo.ethAddress}</span>                                
+                                : <span className="nobind-text">未绑定</span>
                         }
                     </div>
                 </div>
             </div>
         );
+    }
+    private handleToBindNeoAddress = async (type:string)=>{
+        
+        if(type === 'neo'){
+            // 获取Teemo钱包上登陆的地址
+            await this.props.teemowallet.loginTeemo();
+            // 如果存在
+            if(!!this.props.teemowallet.teemoAddress){
+                //
+                this.props.personedit.bindWalletAddress(type,this.props.teemowallet.teemoAddress)
+            }
+        }
+        else{ 
+            // 获取MetaMask钱包上登陆的地址
+            await this.props.teemowallet.loginTeemo();
+            // 如果存在
+            if(!!this.props.teemowallet.teemoAddress){
+                //
+                this.props.personedit.bindWalletAddress(type,this.props.teemowallet.teemoAddress)
+            }
+        }
     }
     // 限制图片上传大小与格式
     private beforeUpload = (file: RcFile) =>

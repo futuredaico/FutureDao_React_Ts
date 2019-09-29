@@ -133,6 +133,36 @@ class PersonEdit
         }
         return true;
     }
+    @action public bindWalletAddress = async (type:string,address:string) =>
+    {
+        let result: any = [];
+        try
+        {
+            result = await Api.bindAddress(common.userId, common.token, type,address);
+        } catch (e)
+        {
+            return false;
+        }
+        if (result[0].resultCode === CodeType.success)
+        {
+            if (common.userInfo)
+            {
+                if(type==='neo'){
+                    common.userInfo.neoAddress = address;
+                }else{
+                    common.userInfo.ethAddress = address;
+                }
+            }
+            else
+            {
+                return false
+            }
+        } else
+        {
+            return false
+        }
+        return true;
+    }
 }
 
 export default new PersonEdit();

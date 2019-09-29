@@ -11,10 +11,14 @@ import { LocaleProvider } from 'antd';
 import storeCommon from '@/store/common';
 import Intl from 'intl';
 import { observer } from 'mobx-react';
-// import common from '@/store/common';
+import TeemoWallet from '@/store/teemowallet';
 
 global.Intl = Intl;
 window['Intl'] = Intl;
+window.addEventListener('Teemo.NEO.READY',()=>{
+  TeemoWallet.isLoadTeemo = true;
+  // common.initAccountBalance();
+});
 
 const ObserverRender = observer(() => {
   return (

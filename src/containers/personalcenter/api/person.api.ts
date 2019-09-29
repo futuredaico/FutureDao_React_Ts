@@ -127,3 +127,23 @@ export const getAttentionList = (userId: string,token:string,page:number,pageSiz
     }
     return request(opts);
 }
+/**
+ * 用户绑定钱包地址
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param type 地址类型 eth,neo
+ * @param address 地址
+ */
+export const bindAddress = (userId: string,token:string,type:string,address:string) =>
+{
+    const opts = {
+        method: 'bindAddress',
+        params: [
+            userId,
+            token,
+            type,
+            address
+        ]
+    }
+    return request(opts);
+}

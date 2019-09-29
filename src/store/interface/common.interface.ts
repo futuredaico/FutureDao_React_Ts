@@ -89,6 +89,8 @@ export interface IUserInfo
   headIconUrl: string, // 头像
   brief: string,  // 个人简介
   emailVerifyState: string, // 邮箱验证状态
+  neoAddress:string, // Teemo钱包的地址
+  ethAddress:string // 
 }
 
 export enum ProjectState
