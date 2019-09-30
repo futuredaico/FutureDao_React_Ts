@@ -7,6 +7,7 @@ export interface IFinancingStore {
   stepOneStatus: number,
   stepTwoStatus: number,
   stepThreeStatus: number,
+  financingContent:IFinancingContent
 }
 
 
@@ -15,4 +16,24 @@ export interface IFinancingProps extends RouteComponentProps<{ projectId: string
   financing: IFinancingStore,
   common: ICommonStore,
   intl: any
+}
+
+export interface IFinancingContent {
+  financingType:string,
+  blockType:string,
+  assetType:string,
+  managerAddr:string,
+  assetName:string,
+  assetSimpleName:string,
+  isSaveAsset:string,
+  saveAsset:ISaveAsset[]
+}
+
+export interface ISaveAsset {
+  address:string,
+  info:IInfo[]
+}
+export interface IInfo{
+  amt:number,
+  day:number
 }

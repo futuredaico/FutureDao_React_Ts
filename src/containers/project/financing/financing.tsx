@@ -9,7 +9,7 @@ import StepOne from './stepone';
 import StepTwo from './steptwo';
 import Button from '@/components/Button';
 import StepThree from './stepthree';
-// import classnames from 'classnames';
+import classnames from 'classnames';
 import { IFinancingProps } from '../interface/financing.interface'
 // import { ProjSubState } from '@/store/interface/common.interface';
 // import { getQueryString } from '@/utils/function'
@@ -22,20 +22,20 @@ class FinancingManager extends React.Component<IFinancingProps,any> {
     
     public render()
     {        
-        // const oneClassName = classnames('step-tab',
-        //     { 'edit-tab': this.props.financing.step === 1 ? true : false },
-        //     { 'success-tab': this.props.financing.stepOneStatus === 2 ? true : false }
-        // );
-        // const twoClassName = classnames('step-tab',
-        //     { 'disable-tab': this.props.financing.stepTwoStatus === 0 ? true : false },
-        //     { 'edit-tab': this.props.financing.step === 2 ? true : false },
-        //     { 'success-tab': this.props.financing.stepTwoStatus === 2 ? true : false }
-        // );
-        // const threeClassName = classnames('step-tab',
-        //     { 'disable-tab': this.props.financing.stepTwoStatus === 0 ? true : false },
-        //     { 'edit-tab': this.props.financing.step === 3 ? true : false },
-        //     { 'success-tab': this.props.financing.stepThreeStatus === 2 ? true : false }
-        // );
+        const oneClassName = classnames('step-tab',
+            { 'edit-tab': this.props.financing.step === 1 ? true : false },
+            { 'success-tab': this.props.financing.stepOneStatus === 2 ? true : false }
+        );
+        const twoClassName = classnames('step-tab',
+            { 'disable-tab': this.props.financing.stepTwoStatus === 0 ? true : false },
+            { 'edit-tab': this.props.financing.step === 2 ? true : false },
+            { 'success-tab': this.props.financing.stepTwoStatus === 2 ? true : false }
+        );
+        const threeClassName = classnames('step-tab',
+            { 'disable-tab': this.props.financing.stepTwoStatus === 0 ? true : false },
+            { 'edit-tab': this.props.financing.step === 3 ? true : false },
+            { 'success-tab': this.props.financing.stepThreeStatus === 2 ? true : false }
+        );
         // const isCanApply = (this.props.financing.stepOneStatus === 2 && this.props.financing.stepTwoStatus === 2 && this.props.financing.stepThreeStatus === 2) ? true : false
         return (
             <>
@@ -44,13 +44,13 @@ class FinancingManager extends React.Component<IFinancingProps,any> {
                 <Button text="启动融资" btnColor="gray-btn"  />
                 </div>
                 <div className="right-tab">
-                    <div className="step-tab" onClick={this.handleEditStep.bind(this, 1)}>
+                    <div className={oneClassName} onClick={this.handleEditStep.bind(this, 1)}>
                         <span className="step-span">部署合约</span>
                     </div>
-                    <div className="step-tab" onClick={this.handleEditStep.bind(this, 2)}>
+                    <div className={twoClassName} onClick={this.handleEditStep.bind(this, 2)}>
                         <span className="step-span">设置回报</span>
                     </div>
-                    <div className="step-tab" onClick={this.handleEditStep.bind(this, 3)}>
+                    <div className={threeClassName} onClick={this.handleEditStep.bind(this, 3)}>
                         <span className="step-span">融资信息</span>
                     </div>
                 </div>
@@ -64,20 +64,20 @@ class FinancingManager extends React.Component<IFinancingProps,any> {
     // 编辑步骤
     private handleEditStep = (number: number) =>
     {
-        // if (number === 2)
-        // {
-        //     if (this.props.financing.stepTwoStatus === 0)
-        //     {
-        //         return
-        //     }
-        // }
-        // else if (number === 3)
-        // {
-        //     if (this.props.financing.stepThreeStatus === 0)
-        //     {
-        //         return
-        //     }
-        // }
+        if (number === 2)
+        {
+            if (this.props.financing.stepTwoStatus === 0)
+            {
+                return
+            }
+        }
+        else if (number === 3)
+        {
+            if (this.props.financing.stepThreeStatus === 0)
+            {
+                return
+            }
+        }
         this.props.financing.step = number;
     }
     

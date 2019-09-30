@@ -27,10 +27,10 @@ class MetaMastWallet implements IMetaMastWalletStore
           try
           {
             // Request account access if needed
-            await ethereum.enable();
-            // Acccounts now exposed
-            this.web3 = new Web3(ethereum);
-            resolve(this.web3);
+            // await ethereum.enable();
+            // // Acccounts now exposed
+            // this.web3 = new Web3(ethereum);
+            // resolve(this.web3);
             // web3.eth.sendTransaction({/* ... */});
           } catch (error)
           {
@@ -40,7 +40,7 @@ class MetaMastWallet implements IMetaMastWalletStore
         // Legacy dapp browsers...
         else if (window['web3'])
         {
-          this.web3 = new Web3(web3.currentProvider);
+          // this.web3 = new Web3(web3.currentProvider);
           resolve(this.web3);
           // Acccounts always exposed
         }

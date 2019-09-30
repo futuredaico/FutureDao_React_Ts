@@ -59,7 +59,7 @@ class Project extends React.Component<IProps, IState> {
         );
         const financingClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
-            { 'li-notallow': false }
+            { 'li-notallow': (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing) ? true : false }
         );
         const orderClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
@@ -139,7 +139,12 @@ class Project extends React.Component<IProps, IState> {
             if (this.props.createproject.createContent.role !== 'admin')
             {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
-            } else
+            
+            }
+            else if( this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "此项目现在暂时还不能进行启动融资");
+            }
+             else
             {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }

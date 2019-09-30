@@ -5,62 +5,65 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
-import { Input,Spin, Icon } from 'antd';
+import { Input, Spin, Icon } from 'antd';
 import Select from '@/components/select';
 import Button from '@/components/Button';
 // import commonStore from '@/store/common';
-import { IFinancingProps } from '../interface/financing.interface';
+import { IFinancingProps, ISaveAsset} from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
 interface IState
 {
   financingType: string, // 融资类型
   blockType: string, // 选择区块链
-  yitaiAssetType: string, // 融资的代币
-  neoAssetType: string, // 融资的代币
+  assetType: string, // 融资的代币
+  // neoAssetType: string, // 融资的代币
   managerAddr: string, // 管理员钱包地址
   assetName: string, // 项目代币名称
   assetSimpleName: string, // 项目代币简称
   teamAsset: string, // 是否团队预留代币
-  isDoingContract:boolean, // 是否正在部署合于
+  saveAsset:ISaveAsset[], // 团队预留代币模块
+  isDoingContract: boolean, // 是否正在部署合于
 }
 
 @observer
 class StepOne extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
-    financingType: "1", // 融资类型
-    blockType: "1", // 选择区块链
-    yitaiAssetType: "eth", // 融资的代币
-    neoAssetType: "neo",
-    managerAddr: "", // 管理员钱包地址
-    assetName: "", // 项目代币名称
-    assetSimpleName: "", // 项目代币简称
-    teamAsset: '1', // 是否团队预留代币
+    financingType: this.props.financing.financingContent.financingType, // 融资类型
+    blockType: this.props.financing.financingContent.blockType, // 选择区块链
+    assetType: this.props.financing.financingContent.assetType, // 融资的代币
+    // neoAssetType: this.props.financing.financingContent.assetType,
+    managerAddr: this.props.financing.financingContent.managerAddr, // 管理员钱包地址
+    assetName: this.props.financing.financingContent.assetName, // 项目代币名称
+    assetSimpleName: this.props.financing.financingContent.assetSimpleName, // 项目代币简称
+    teamAsset: this.props.financing.financingContent.isSaveAsset, // 是否团队预留代币
+    saveAsset:[],
     isDoingContract: false
   };
   // 融资类型
   private financingOptions = [
     {
-      id: "1",
+      id: "daico",
       name: "DAICO众筹融资",
     },
     {
-      id: "2",
+      id: "gen",
       name: "普通代币发行众筹融资",
     }
   ]
   // 选择区块链
   private blockOptions = [
     {
-      id: "1",
+      id: "eth",
       name: "以太坊链",
     },
     {
-      id: "2",
+      id: "neo",
       name: "NEO",
     }
   ]
-  private yitaiOption =
+  // 融资代币
+  private assetOption =
     [
       {
         id: "eth",
@@ -69,8 +72,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       {
         id: "dai",
         name: "DAI"
-      }
+      },
+
     ]
+  // 融资代币
   private neoOption = [
     {
       id: "neo",
@@ -82,7 +87,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     }
   ]
 
-  // // 是否团队预留代币
+  // 是否团队预留代币
   private saveOptions = [
     {
       id: "1",
@@ -109,14 +114,14 @@ class StepOne extends React.Component<IFinancingProps, IState> {
               <div className="inline-enter">
                 <Select options={this.financingOptions} text='' onCallback={this.handleSelectFinancing} defaultValue={this.state.financingType} />
                 {
-                  this.state.financingType === '1' && (
+                  this.state.financingType === 'daico' && (
                     <div className="gray-box">
                       DAICO（去中心化自治代币发行）智能合约会自动发行代币，用户通过购买代币的方式参与DAICO融资。融资获得的资金暂存在DAICO合约中，由全体用户管理。项目方支取资金需要经过发起提案、投票表决的过程。为了吸引更多人投资，您可以在启动融资后设置一些不同档位的回报，以回馈项目的支持者们。
                     </div>
                   )
                 }
                 {
-                  this.state.financingType === '2' && (
+                  this.state.financingType === 'gen' && (
                     <div className="gray-box">
                       由智能合约自动发行代币，用户通过购买代币的方式参与融资。项目方可以随时从合约中提取已融到的资金。为了吸引更多人投资，您可以在启动融资后设置一些不同档位的回报，以回馈项目的支持者们。
                     </div>
@@ -137,11 +142,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 接受使用融资的代币 ）</span>
               </div>
               <div className="inline-enter">
-                {
-                  this.state.blockType === '1'
-                    ? <Select options={this.yitaiOption} text='' onCallback={this.handleSelectYitaiAsset} defaultValue={this.state.yitaiAssetType} />
-                    : <Select options={this.neoOption} text='' onCallback={this.handleSelectNeoAsset} defaultValue={this.state.neoAssetType} />
-                }
+                <Select options={this.state.assetType === "eth" ? this.assetOption : this.neoOption} text='' onCallback={this.handleSelectAsset} defaultValue={this.state.assetType} />
               </div>
               <div className="inline-title">
                 <strong>管理员钱包地址</strong>&nbsp;
@@ -157,7 +158,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 为您的项目代币起个名称，例如 Bitcoin ）</span>
               </div>
               <div className="inline-enter">
-                <Input value={this.state.assetName} />
+                <Input value={this.state.assetName} maxLength={20} />
               </div>
               <div className="inline-title">
                 <strong>项目代币简称</strong>&nbsp;
@@ -165,7 +166,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 您的项目代币的简称及单位，尽量使用大写字母，例如BTC ）</span>
               </div>
               <div className="inline-enter">
-                <Input value={this.state.assetSimpleName} />
+                <Input value={this.state.assetSimpleName} maxLength={10} />
               </div>
               <div className="inline-title">
                 <strong>团队预留代币</strong>&nbsp;
@@ -253,7 +254,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                   <span>请等待...</span>
                 </div>
                 <div className="done-going">
-                  <img src={require("@/img/done.png")} alt=""/>
+                  <img src={require("@/img/done.png")} alt="" />
                   <span>成功！</span>
                 </div>
                 <strong className="going-bigtext">正在部署治理合约</strong>
@@ -262,7 +263,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                   <span>请等待...</span>
                 </div>
                 <div className="done-going">
-                  <img src={require("@/img/done.png")} alt=""/>
+                  <img src={require("@/img/done.png")} alt="" />
                   <span>成功！</span>
                 </div>
                 <p className="going-p">处理这些事物可能需要较长时间，取决于网络状态处理期间请勿关闭本页</p>
@@ -277,52 +278,50 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       </div >
     );
   }
-  // 下拉框选择
-  private handleSelectYitaiAsset = (item) =>
+  // 融资代币的选择
+  private handleSelectAsset = (item) =>
   {
     // todo
     this.setState({
-      yitaiAssetType: item.id
+      assetType: item.id
     })
   }
-  private handleSelectNeoAsset = (item) =>
-  {
-    // todo
-    this.setState({
-      neoAssetType: item.id
-    })
-  }
+  // 融资类型的选择
   private handleSelectFinancing = (item) =>
   {
     this.setState({
       financingType: item.id,
     })
   }
+  // 区块链的选择
   private handleSelectBlock = (item) =>
   {
     this.setState({
       blockType: item.id,
-      yitaiAssetType: "eth",
-      neoAssetType: "neo"
     })
+    this.handleSelectAsset({id:item.id === "eth"?"eth":"neo"})
   }
+  // 团队预留币的选择
   private handleSelectSave = (item) =>
   {
     this.setState({
       teamAsset: item.id
     })
   }
+  // 提交部署合约
   private handleComfirmFinancing = () =>
   {
     // todo
     // this.props.project.isEdit = false;
     this.setState({
-      isDoingContract:true
+      isDoingContract: true
     })
   }
-  private handleGoOn = () => {
+  // 部署合约成功后继续
+  private handleGoOn = () =>
+  {
     this.setState({
-      isDoingContract:false
+      isDoingContract: false
     })
   }
 }

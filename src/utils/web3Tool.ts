@@ -1,4 +1,4 @@
-import common from "@/store/common";
+// import common from "@/store/common";
 import { TransactionConfig } from "web3-core";
 // import { AbiItem } from "web3-utils";
 import { fundAbi } from "./FundPoolAbi";
@@ -6,7 +6,7 @@ import { voteAbi } from "./VoteAbi";
 import { CONTRACT_CONFIG } from "@/config";
 import { AbiItem } from "web3-utils";
 // import { voteAbi } from "./VoteAbi";
-
+import MetaMask from "@/store/metamaskwallet";
 class Web3Tool
 {
     
@@ -16,7 +16,7 @@ class Web3Tool
      */
     public async getBalanceByAddr(addr:string){
         try {
-            return common.web3.eth.getBalance(addr)
+            return MetaMask.web3.eth.getBalance(addr)
         } catch (error) {
             throw error;            
         }
@@ -31,7 +31,7 @@ class Web3Tool
      */
     public async contractCall(name:'fundPool'|'vote',hash:string,methods:string,args?:any[]){
         const abi = name==='fundPool'?CONTRACT_CONFIG.fund_abi:CONTRACT_CONFIG.vote_abi;
-        const contract = new common.web3.eth.Contract(abi as AbiItem[],hash);
+        const contract = new MetaMask.web3.eth.Contract(abi as AbiItem[],hash);
         try {
             if(Array.isArray(args))
             {
@@ -69,7 +69,7 @@ class Web3Tool
         {
             abi=CONTRACT_CONFIG.jump_abi;
         }
-        const contract = new common.web3.eth.Contract(abi as AbiItem[],hash);
+        const contract = new MetaMask.web3.eth.Contract(abi as AbiItem[],hash);
         return new Promise<string>((r,j)=>{
             
             if(Array.isArray(args))
@@ -96,8 +96,8 @@ class Web3Tool
     public applyProposal = (votehash,name:string,recipient:string,value:any,timeConsuming:number,detail:string)=>{
         return new Promise<string>((r,j)=>{
             
-            const contract = new common.web3.eth.Contract(voteAbi,votehash);
-            contract.methods.applyProposal(name,recipient,common.web3.utils.toWei(value,"ether"),timeConsuming,detail).send({from:common.address})
+            const contract = new MetaMask.web3.eth.Contract(voteAbi,votehash);
+            contract.methods.applyProposal(name,recipient,MetaMask.web3.utils.toWei(value,"ether"),timeConsuming,detail).send({from:MetaMask.metamaskAddress})
             .on('transactionHash', (hash)=>{
                 console.log(hash);
                 r(hash);
@@ -115,8 +115,8 @@ class Web3Tool
     }
 
     public buy = (amount:number)=>{
-        const contract = new common.web3.eth.Contract(fundAbi,'0x4b967f989b9be3734bbe2a9096e0c0fc3c0f562a');
-        contract.methods.buy().send({from:common.address,to:'0x4b967f989b9be3734bbe2a9096e0c0fc3c0f562a',value:amount})
+        const contract = new MetaMask.web3.eth.Contract(fundAbi,'0x4b967f989b9be3734bbe2a9096e0c0fc3c0f562a');
+        contract.methods.buy().send({from:MetaMask.metamaskAddress,to:'0x4b967f989b9be3734bbe2a9096e0c0fc3c0f562a',value:amount})
         .on('transactionHash', (hash)=>{
             console.log(hash);
             
@@ -139,8 +139,8 @@ class Web3Tool
             const result = await this.contractCall('fundPool',CONTRACT_CONFIG.fund_hash,'balances',['0xb47076E7bD29bb62c6818Dbf83950F331845B5C6']);
             if(result['_hex'])
             {
-                console.log('result:' + common.web3.utils.hexToNumber(result['_hex']))
-                return common.web3.utils.hexToNumber(result['_hex'])
+                console.log('result:' + MetaMask.web3.utils.hexToNumber(result['_hex']))
+                return MetaMask.web3.utils.hexToNumber(result['_hex'])
             }
             else
             {
@@ -155,7 +155,7 @@ class Web3Tool
 
     public getProposalStateByIndex =async()=>{
         return new Promise<any>((r,j)=>{
-            const contract = new common.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
+            const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
             contract.methods.getProposalStateByIndex(1).call(undefined, function (error, result) {
                 console.log('error:' + error)            
                 if(!error)
@@ -169,13 +169,13 @@ class Web3Tool
 
     public deployContract = async(abi:any,contractBytecode:string,args?:any[]) =>
     {
-        const contract = new common.web3.eth.Contract(abi);
+        const contract = new MetaMask.web3.eth.Contract(abi);
         const data = args?{data:contractBytecode,arguments:args}:{data:contractBytecode}
         const deploy = contract.deploy(data)
         deploy.estimateGas()
         .then(value=>{
             console.log(value);
-            common.web3.eth.getGasPrice()
+            MetaMask.web3.eth.getGasPrice()
             .then(price=>{
                 console.log(price);
                 
@@ -205,7 +205,7 @@ class Web3Tool
      * @param result 
      */
     public async vote(proposalIndex:number,result:number){
-        const contract = new common.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
+        const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
         contract.methods.vote(proposalIndex,result).send({from:'0xb47076E7bD29bb62c6818Dbf83950F331845B5C6'})
         .on('transactionHash', (hash)=>{
             console.log(hash);
@@ -310,7 +310,7 @@ class Web3Tool
      */
     public transfer =(data:TransactionConfig)=>{
         return new Promise<string>((resolve,reject)=>{
-            common.web3.eth.sendTransaction(data,(error,txid:string)=>{
+            MetaMask.web3.eth.sendTransaction(data,(error,txid:string)=>{
                 if(error)
                 {
                     reject(error);

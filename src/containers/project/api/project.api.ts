@@ -229,3 +229,15 @@ export const commitProject = (userId:string,token:string,projId:string) =>
     }
     return request(opts);
 }
+/**
+ * 发布合约
+ * @param params 
+ */
+export const publishContract = (params:string[]) =>
+{
+    const opts = {
+        method: 'publishContract',
+        params: [...params]
+    }
+    return request(opts);
+}
