@@ -9,12 +9,11 @@ import { Input, Spin, Icon } from 'antd';
 import Select from '@/components/select';
 import Button from '@/components/Button';
 // import commonStore from '@/store/common';
-import { IFinancingProps, ISaveAsset} from '../interface/financing.interface';
+import { IFinancingProps, ISaveAsset, IInfo } from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
-import AssetSave from './assetsave';
+// import AssetSave from './assetsave';
 
-interface IState
-{
+interface IState {
   financingType: string, // 融资类型
   blockType: string, // 选择区块链
   assetType: string, // 融资的代币
@@ -23,7 +22,7 @@ interface IState
   assetName: string, // 项目代币名称
   assetSimpleName: string, // 项目代币简称
   teamAsset: string, // 是否团队预留代币
-  saveAsset:ISaveAsset[], // 团队预留代币模块
+  saveAsset: ISaveAsset[], // 团队预留代币模块
   isDoingContract: boolean, // 是否正在部署合于
 }
 
@@ -39,7 +38,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     assetName: this.props.financing.financingContent.assetName, // 项目代币名称
     assetSimpleName: this.props.financing.financingContent.assetSimpleName, // 项目代币简称
     teamAsset: this.props.financing.financingContent.isSaveAsset, // 是否团队预留代币
-    saveAsset:[],
+    saveAsset: [],
     isDoingContract: false
   };
   // 融资类型
@@ -101,8 +100,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     }
   ]
 
-  public render()
-  {
+  public render() {
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
     return (
       <div className="stepone-page" id="projectname">
@@ -185,29 +183,39 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                         <span className="tips-text">（ 预留代币发放的目标钱包地址，默认为你本人的钱包地址 ）</span>
                       </div>
                       <div className="inline-enter">
-                        <Input value={this.state.assetSimpleName} />
+                        <Input value={this.props.financing.financingContent.saveAsset.address} />
                       </div>
-                      <div className="tworow-line">
-                        <div className="firstrow">
-                          <div className="inline-title">
-                            <strong>解锁数量1</strong>
-                          </div>
-                          <div className="inline-enter">
-                            <Input value={1000} />
-                          </div>
-                        </div>
-                        <div className="secondrow">
-                          <div className="inline-title">
-                            <strong>锁定时长</strong>
-                          </div>
-                          <div className="inline-enter">
-                            <Input value={50} suffix="天" />
-                          </div>
-                        </div>
-                      </div>
-                      <AssetSave {...this.props} />
+                      {
+                        this.props.financing.financingContent.saveAsset.info.map((item: IInfo, index: number) => {
+                          return (
+                            <div className="tworow-line" key={index}>
+                              <div className="firstrow">
+                                <div className="inline-title">
+                                  <strong>解锁数量{index + 1}</strong>
+                                </div>
+                                <div className="inline-enter">
+                                  <Input value={item.amt} onChange={this.handleChangeAmt.bind(this, index)} />
+                                </div>
+                              </div>
+                              <div className="secondrow">
+                                <div className="inline-title">
+                                  <strong>锁定时长</strong>
+                                </div>
+                                <div className="inline-enter">
+                                  <Input value={item.days} suffix="天" onChange={this.handleChangeDays.bind(this, index)} />
+                                </div>
+                              </div>
+                              {
+                                index > 0 && <div className="delete-line" onClick={this.handleRemoveAsset.bind(this, index)}>
+                                  <img src={require("@/img/delete.png")} alt="delete.png" className="delete-icon" />
+                                </div>
+                              }
+                            </div>
+                          )
+                        })
+                      }
                       <div className="add-wrapper">
-                        <Button text="+ 增加批次" btnSize="bg-btn" btnColor="white-btn" />
+                        <Button text="+ 增加批次" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleAddAsset} />
                         <span className="purple-text">（ 总预留数量2000，在合约发布100天后全部解锁。 ）</span>
                       </div>
                     </div>
@@ -261,38 +269,33 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     );
   }
   // 融资代币的选择
-  private handleSelectAsset = (item) =>
-  {
+  private handleSelectAsset = (item) => {
     // todo
     this.setState({
       assetType: item.id
     })
   }
   // 融资类型的选择
-  private handleSelectFinancing = (item) =>
-  {
+  private handleSelectFinancing = (item) => {
     this.setState({
       financingType: item.id,
     })
   }
   // 区块链的选择
-  private handleSelectBlock = (item) =>
-  {
+  private handleSelectBlock = (item) => {
     this.setState({
       blockType: item.id,
     })
-    this.handleSelectAsset({id:item.id === "eth"?"eth":"neo"})
+    this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo" })
   }
   // 团队预留币的选择
-  private handleSelectSave = (item) =>
-  {
+  private handleSelectSave = (item) => {
     this.setState({
       teamAsset: item.id
     })
   }
   // 提交部署合约
-  private handleComfirmFinancing = () =>
-  {
+  private handleComfirmFinancing = () => {
     // todo
     // this.props.project.isEdit = false;
     this.setState({
@@ -301,11 +304,43 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.props.financing.financingProject();
   }
   // 部署合约成功后继续
-  private handleGoOn = () =>
-  {
+  private handleGoOn = () => {
     this.setState({
       isDoingContract: false
     })
+  }
+
+  private handleAddAsset = () => {
+    this.props.financing.financingContent.saveAsset.info.push({
+      amt: undefined,
+      days: undefined
+    })
+
+    console.log(this.props.financing.financingContent.saveAsset);
+  }
+
+  private handleRemoveAsset = (index: number) => {
+    this.props.financing.financingContent.saveAsset.info.splice(index, 1);
+  }
+
+  private handleChangeAmt = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
+    const value = ev.target.value as unknown as number;
+    if (isNaN(value)) {
+      return false;
+    }
+
+    this.props.financing.financingContent.saveAsset.info[index].amt = value;
+    return true;
+  }
+
+  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
+    const value = ev.target.value as unknown as number;
+    if (isNaN(value)) {
+      return false;
+    }
+
+    this.props.financing.financingContent.saveAsset.info[index].days = value;
+    return true;
   }
 }
 

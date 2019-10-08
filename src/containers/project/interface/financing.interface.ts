@@ -7,46 +7,46 @@ export interface IFinancingStore {
   stepOneStatus: number,
   stepTwoStatus: number,
   stepThreeStatus: number,
-  financingContent:IFinancingContent,
-  financingProject:()=>Promise<boolean>
+  financingContent: IFinancingContent,
+  financingProject: () => Promise<boolean>
 }
 
 
 export interface IFinancingProps extends RouteComponentProps<{ projectId: string }> {
-  project:IProjectStore,
+  project: IProjectStore,
   financing: IFinancingStore,
   common: ICommonStore,
   intl: any
 }
 
 export interface IFinancingContent {
-  financingType:string,
-  blockType:string,
-  assetType:string,
-  managerAddr:string,
-  assetName:string,
-  assetSimpleName:string,
-  isSaveAsset:string,
-  saveAsset:ISaveAsset[]
+  financingType: string,
+  blockType: string,
+  assetType: string,
+  managerAddr: string,
+  assetName: string,
+  assetSimpleName: string,
+  isSaveAsset: string,
+  saveAsset: ISaveAsset
 }
 
 export interface ISaveAsset {
-  address:string,
-  info:IInfo[]
+  address: string,
+  info: IInfo[]
 }
-export interface IInfo{
-  amt:number,
-  day:number
+export interface IInfo {
+  amt?: number,
+  days?: number
 }
 export interface IRewardFrom {
-  rewardId:string,
-  rewardName:string,
-  rewardDesc:string,
-  price:string,
-  limitFlag:string,
-  limitMax:string,
-  distributeTimeFlag:string,
-  distributeTime:string,
-  distributeWay:string,
-  note:string
+  rewardId: string,
+  rewardName: string,
+  rewardDesc: string,
+  price: string,
+  limitFlag: string,
+  limitMax: string,
+  distributeTimeFlag: string,
+  distributeTime: string,
+  distributeWay: string,
+  note: string
 }
