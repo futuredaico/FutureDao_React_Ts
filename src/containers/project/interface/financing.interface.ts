@@ -7,7 +7,8 @@ export interface IFinancingStore {
   stepOneStatus: number,
   stepTwoStatus: number,
   stepThreeStatus: number,
-  financingContent:IFinancingContent
+  financingContent:IFinancingContent,
+  financingProject:()=>Promise<boolean>
 }
 
 
@@ -36,4 +37,16 @@ export interface ISaveAsset {
 export interface IInfo{
   amt:number,
   day:number
+}
+export interface IRewardFrom {
+  rewardId:string,
+  rewardName:string,
+  rewardDesc:string,
+  price:string,
+  limitFlag:string,
+  limitMax:string,
+  distributeTimeFlag:string,
+  distributeTime:string,
+  distributeWay:string,
+  note:string
 }

@@ -12,11 +12,16 @@ import storeCommon from '@/store/common';
 import Intl from 'intl';
 import { observer } from 'mobx-react';
 import TeemoWallet from '@/store/teemowallet';
+import MetamaskWallet from '@/store/metamaskwallet';
 
 global.Intl = Intl;
 window['Intl'] = Intl;
 window.addEventListener('Teemo.NEO.READY',()=>{
   TeemoWallet.isLoadTeemo = true;
+  // common.initAccountBalance();
+});
+window.addEventListener('load',()=>{
+  MetamaskWallet.isLoadMetaMask = true;
   // common.initAccountBalance();
 });
 

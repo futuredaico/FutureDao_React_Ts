@@ -11,6 +11,8 @@ import Button from '@/components/Button';
 // import commonStore from '@/store/common';
 import { IFinancingProps, ISaveAsset} from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
+import AssetSave from './assetsave';
+
 interface IState
 {
   financingType: string, // 融资类型
@@ -180,7 +182,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                     <div className="gray-box newgray-box">
                       <div className="inline-title">
                         <strong>预留代币接收地址</strong>&nbsp;&nbsp;
-                  <span className="tips-text">（ 预留代币发放的目标钱包地址，默认为你本人的钱包地址 ）</span>
+                        <span className="tips-text">（ 预留代币发放的目标钱包地址，默认为你本人的钱包地址 ）</span>
                       </div>
                       <div className="inline-enter">
                         <Input value={this.state.assetSimpleName} />
@@ -203,27 +205,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                           </div>
                         </div>
                       </div>
-                      <div className="tworow-line">
-                        <div className="firstrow">
-                          <div className="inline-title">
-                            <strong>解锁数量2</strong>
-                          </div>
-                          <div className="inline-enter">
-                            <Input value={1000} />
-                          </div>
-                        </div>
-                        <div className="secondrow">
-                          <div className="inline-title">
-                            <strong>锁定时长</strong>
-                          </div>
-                          <div className="inline-enter">
-                            <Input value={100} suffix="天" />
-                          </div>
-                        </div>
-                        <div className="delete-line">
-                          <img src={require("@/img/delete.png")} alt="delete.png" className="delete-icon" />
-                        </div>
-                      </div>
+                      <AssetSave {...this.props} />
                       <div className="add-wrapper">
                         <Button text="+ 增加批次" btnSize="bg-btn" btnColor="white-btn" />
                         <span className="purple-text">（ 总预留数量2000，在合约发布100天后全部解锁。 ）</span>
@@ -316,6 +298,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.setState({
       isDoingContract: true
     })
+    this.props.financing.financingProject();
   }
   // 部署合约成功后继续
   private handleGoOn = () =>

@@ -27,7 +27,7 @@ interface IState
     isEditNeo:boolean, // neo钱包
     isEditEth:boolean, // eth钱包
 }
-@inject('personedit', 'common','teemowallet')
+@inject('personedit', 'common','teemowallet','metamaskwallet')
 @observer
 class PersonalEidt extends React.Component<IPersonProps, IState> {
     public intrl = this.props.intl.messages;
@@ -212,7 +212,11 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                         <div className="edit-title">
                             <strong><img src={require('@/img/neo.png/')} alt="neo.png" className="asset-icon" />NEO</strong>
                             <div className="edit-btn-wrapper">
-                                <Button text={this.props.common.userInfo.neoAddress!==""?"更改":"绑定"} onClick={this.handleToBindNeoAddress.bind(this,'neo')} />
+                                <Button 
+                                    text={this.props.common.userInfo.neoAddress!==""?"更改":"绑定"} 
+                                    onClick={this.handleToBindAddress.bind(this,'neo')} 
+                                    btnColor={this.state.isEditStatus?'gray-btn':''}
+                                />
                             </div>                               
                         </div>
                         {
@@ -226,7 +230,11 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                         <div className="edit-title">
                             <strong><img src={require('@/img/eth.png/')} alt="eth.png" className="asset-icon" />Eth</strong>
                             <div className="edit-btn-wrapper">
-                                <Button text={this.props.common.userInfo.ethAddress!==""?"更改":"绑定"} />
+                                <Button 
+                                    text={this.props.common.userInfo.ethAddress!==""?"更改":"绑定"} 
+                                    onClick={this.handleToBindAddress.bind(this,'eth')} 
+                                    btnColor={this.state.isEditStatus?'gray-btn':''}
+                                />
                             </div>
                         </div>
                         {
@@ -239,26 +247,37 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             </div>
         );
     }
-    private handleToBindNeoAddress = async (type:string)=>{
-        
+    // 钱包绑定
+    private handleToBindAddress = async (type:string)=>{
+        if(this.state.isEditStatus){
+            return false;
+        }
+        if(!this.props.common.userInfo){
+            return false;
+        }
         if(type === 'neo'){
             // 获取Teemo钱包上登陆的地址
             await this.props.teemowallet.loginTeemo();
+            if(this.props.common.userInfo.neoAddress === this.props.teemowallet.teemoAddress){
+                return false;
+            }
             // 如果存在
             if(!!this.props.teemowallet.teemoAddress){
-                //
                 this.props.personedit.bindWalletAddress(type,this.props.teemowallet.teemoAddress)
             }
         }
         else{ 
             // 获取MetaMask钱包上登陆的地址
-            await this.props.teemowallet.loginTeemo();
+            await this.props.metamaskwallet.inintWeb3();  
+            if(this.props.common.userInfo.ethAddress ===this.props.metamaskwallet.metamaskAddress){
+                return false;
+            }          
             // 如果存在
-            if(!!this.props.teemowallet.teemoAddress){
-                //
-                this.props.personedit.bindWalletAddress(type,this.props.teemowallet.teemoAddress)
+            if(!!this.props.metamaskwallet.metamaskAddress){
+                this.props.personedit.bindWalletAddress(type,this.props.metamaskwallet.metamaskAddress)
             }
         }
+        return true;
     }
     // 限制图片上传大小与格式
     private beforeUpload = (file: RcFile) =>

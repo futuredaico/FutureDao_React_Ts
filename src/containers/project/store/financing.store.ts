@@ -1,5 +1,9 @@
-import { observable } from 'mobx'
+import { observable, action } from 'mobx';
+import common from '@/store/common';
+import project from './project.store';
+// import * as Api from '../api/project.api'
 import { IFinancingContent } from '../interface/financing.interface';
+// import { CodeType } from '@/store/interface/common.interface';
 class Financing
 {
   @observable public step:number = 1; // 融资管理的菜单选择
@@ -15,6 +19,37 @@ class Financing
     assetSimpleName:'',
     isSaveAsset:'1',
     saveAsset:[]
+  }
+  @action public financingProject = async () =>
+  {
+    // let result: any = [];
+    const params: string[] = [
+      common.userId,
+      common.token,
+      project.projId,
+      this.financingContent.financingType,
+      this.financingContent.blockType,
+      this.financingContent.assetType,
+      this.financingContent.managerAddr,
+      this.financingContent.assetName,
+      this.financingContent.assetSimpleName,
+      this.financingContent.isSaveAsset,
+      this.financingContent.saveAsset.toString(),
+    ]
+    console.log(params);
+    // try
+    // {
+    //   result = await Api.publishContract(params);
+    // } catch (e)
+    // {
+    //   return false;
+    // }
+    // if (result[0].resultCode !== CodeType.success)
+    // {
+    //   return false
+    // }
+    
+    return true;
   }
 }
 

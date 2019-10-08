@@ -241,3 +241,76 @@ export const publishContract = (params:string[]) =>
     }
     return request(opts);
 }
+/**
+ * 查询合约
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const getContractData = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'queryContract',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}
+/**
+ * 设置回报
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id 
+ * @param name 联系人姓名
+ * @param tel 联系人方式
+ * @param backinfo 回报信息
+ */
+export const setReward = (userId:string,token:string,projId:string,name:string,tel:string,backinfo:[]) =>
+{
+    const opts = {
+        method: 'saveReward',
+        params: [userId,token,projId,name,tel,backinfo]
+    }
+    return request(opts);
+}
+/**
+ * 查询回报
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const getRewardData = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'queryReward',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}
+/**
+ * 查询已融资金
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const getFinanceFund = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'queryFinanceFund',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}
+/**
+ * 查询储备金比例
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const getReserveFund = (userId:string,token:string,projId:string) =>
+{
+    const opts = {
+        method: 'queryReserveFundRatio',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}
