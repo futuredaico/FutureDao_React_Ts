@@ -25,9 +25,10 @@ class MetaMastWallet implements IMetaMastWalletStore
           this.web3 = new Web3(ethereum);
           console.log('ethereum')
           console.log(this.web3)
-          await this.initAccount();
+          await this.initAccount();          
         } catch (error) {
           // User denied account access...
+          return false
         }
       }
       // Legacy dapp browsers...
@@ -42,6 +43,7 @@ class MetaMastWallet implements IMetaMastWalletStore
       else
       {
         console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        return false
       }
      
     }else{
@@ -54,8 +56,9 @@ class MetaMastWallet implements IMetaMastWalletStore
       }
       this.metamaskAddress = '';
       this.isLoginMetaMaskFlag = 1;
+      return false
     }
-    
+    return true;
   }
   // 获取MetaMask钱包上登陆的地址
   @action public initAccount = () =>

@@ -17,8 +17,7 @@ class TeemoWallet implements ITeemoWalletStore
         if (this.isLoadTeemo)
         {
             // 第二步 查看是否登陆了Teemo钱包
-            const loginFlag: any = await Wallet.getAccount();
-            console.log(loginFlag);            
+            const loginFlag: any = await Wallet.getAccount();         
             if (!loginFlag)
             {
                 if (common.language === 'zh')

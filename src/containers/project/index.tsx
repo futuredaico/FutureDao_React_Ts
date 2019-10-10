@@ -43,10 +43,18 @@ class Project extends React.Component<IProps, IState> {
     {
         const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
         if (projectId && projectId !== '/project')
-        {
-            this.props.project.projId = projectId;
-            this.props.project.isEdit = !!projectId;
+        {            
+            this.props.project.isEdit = !!projectId;  
+            const projId = projectId.split("/");            
+            if(projId.length>1){
+                this.props.createproject.getProject(projId[1]);
+                this.props.project.projId = projId[1];
+            }else{
+                this.props.createproject.getProject(projId[0]);
+                this.props.project.projId = projId[0];
+            }             
         }
+        // this.props.createproject.getProject(projectId);    
     }
     public render()
     {
@@ -136,15 +144,17 @@ class Project extends React.Component<IProps, IState> {
         }
         else if (str === '/project/financing')
         {
-            if (this.props.createproject.createContent.role !== 'admin')
+            if (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "此项目现在暂时还不能进行启动融资");
+                return false;
+            }
+            else if (this.props.createproject.createContent.role !== 'admin')
             {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
-            
+                return false;
             }
-            else if( this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing){
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "此项目现在暂时还不能进行启动融资");
-            }
-             else
+            else
             {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }

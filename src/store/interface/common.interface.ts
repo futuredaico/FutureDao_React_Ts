@@ -73,6 +73,12 @@ export enum CodeType
   T_HaveNotPermissionQueryTeamMember = "102344",  // 没有权限[查询]项目成员
   T_HaveNotPermissionDeleteTeamAdmin = "102345",  // 没有权限删除项目团队管理员
   T_HaveNotPermissionDeleteYourSelf = "102346",   // 没有权限删除项目团队成员自己
+  C_InvalidParamLen = "10401",        // 不合法的参数长度
+  C_InvalidParamFmt = "10402",        // 不合法的参数格式
+  C_InvalidFinanceType = "10403",     // 不合法的融资类型
+  C_InvalidPlatformType = "10404",    // 不合法的融资平台类型// 不合法的融资平台类型
+  RepeatOperate = "10405",            // 重复操作
+  InvalidOperate = "10406",           // 非法操作
 
 }
 export enum EmailVerify

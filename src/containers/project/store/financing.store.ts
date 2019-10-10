@@ -11,14 +11,14 @@ class Financing {
   @observable public stepThreeStatus: number = 0; // 融资信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public financingContent: IFinancingContent = {
     financingType: 'daico',
-    blockType: "",
-    assetType: '',
+    blockType: 'eth',
+    assetType: 'eth',
     managerAddr: '',
     assetName: '',
     assetSimpleName: '',
     isSaveAsset: '1',
     saveAsset: {
-      address: "",
+      address: '',
       info: [{
         amt: undefined,
         days: undefined

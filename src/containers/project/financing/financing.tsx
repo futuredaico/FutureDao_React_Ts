@@ -15,7 +15,7 @@ import { IFinancingProps } from '../interface/financing.interface'
 // import { getQueryString } from '@/utils/function'
 
 
-@inject('financing', 'common', 'project')
+@inject('financing', 'common', 'project','personedit','teemowallet','metamaskwallet')
 @observer
 class FinancingManager extends React.Component<IFinancingProps,any> {
     public intrl = this.props.intl.messages;
