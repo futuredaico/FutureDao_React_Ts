@@ -264,7 +264,7 @@ export const getContractData = (userId:string,token:string,projId:string) =>
  * @param tel 联系人方式
  * @param backinfo 回报信息
  */
-export const setReward = (userId:string,token:string,projId:string,name:string,tel:string,backinfo:[]) =>
+export const setReward = (userId:string,token:string,projId:string,name:string,tel:string,backinfo:string) =>
 {
     const opts = {
         method: 'saveReward',

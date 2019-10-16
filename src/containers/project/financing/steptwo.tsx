@@ -5,16 +5,24 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
-import { Input, Radio, DatePicker  } from 'antd';
+import { Input, Radio, DatePicker } from 'antd';
 import Button from '@/components/Button';
-import { IFinancingProps } from '../interface/financing.interface';
+import { IFinancingProps, IRewardInfo } from '../interface/financing.interface';
 import moment from 'moment';
+interface IState
+{
+  connectName: string,
+  connectTel: string,
+  isCanSave: boolean,
+}
 
 @observer
-class StepTwo extends React.Component<IFinancingProps, any> {
+class StepTwo extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
-    limitType:0
+    connectName: this.props.financing.rewardContent.connectorName,
+    connectTel: this.props.financing.rewardContent.connectTel,
+    isCanSave: false
   }
 
   public render()
@@ -22,123 +30,374 @@ class StepTwo extends React.Component<IFinancingProps, any> {
     const { MonthPicker } = DatePicker;
     return (
       <div className="steptwo-page">
-        <div className="noback-type">
-          <strong>当前无融资回报</strong>
-        </div>
-        <div className="inline-title">
-          <strong>回报发放联系人</strong>
-        </div>
-        <div className="inline-enter">
-          <div className="gray-box normalgray-box">
-            <div className="inline-title">
-              <strong>联系人姓名</strong>
-            </div>
-            <div className="inline-enter">
-              <Input />
-            </div>
-            <div className="inline-title">
-              <strong>联系方式</strong>
-            </div>
-            <div className="inline-enter">
-              <Input />
-            </div>
-          </div>
-        </div>
-        <div className="inline-title">
-          <strong>回报1</strong>
-          <span className="tips-text">&nbsp;&nbsp;已售22</span>
-        </div>
-        <div className="inline-enter">
-          <div className="gray-box normalgray-box">
-            <div className="inline-title">
-              <strong>回报名称</strong>
-            </div>
-            <div className="inline-enter">
-              <Input />
-            </div>
-            <div className="inline-title">
-              <strong>回报描述</strong>
-            </div>
-            <div className="inline-enter">
-              <textarea className="gift-textarea" />
-            </div>
-            <div className="inline-title">
-              <strong>价格</strong>
-            </div>
-            <div className="inline-enter">
-              <Input  suffix="ETH" />
-            </div>
-            <div className="inline-title">
-              <strong>是否限量</strong>
-            </div>
-            <div className="inline-enter">
-              <Radio.Group onChange={this.handleRadioLimit}>
-                <Radio value={1}>不限量</Radio>
-                <Radio value={2}>
-                  限量
-                  <Input className="small-input" />
-                </Radio>
-              </Radio.Group>
-            </div>
-            <div className="inline-title">
-              <strong>预计发放时间</strong>
-            </div>
-            <div className="inline-enter">
-              <Radio.Group onChange={this.handleRadioLimit}>
-                <Radio value={1}>
-                  定期
-                  <MonthPicker
-                    disabledDate={this.disabledDate} 
-                    placeholder="Select month" 
-                    locale={this.props.intl.locale} 
-                    format="YYYY/MM"
-                  />
-                </Radio>
-                <Radio value={2}>
-                  不定期
-                  <Input className="small-input" suffix="天内" />
-                </Radio>
-              </Radio.Group>
-            </div>
-            <div className="inline-title">
-              <strong>发放方式</strong>
-            </div>
-            <div className="inline-enter">
-              <Radio.Group onChange={this.handleRadioLimit}>
-                <Radio value={1}>虚拟发放</Radio>
-                <Radio value={2}>实物</Radio>
-              </Radio.Group>
-            </div>
-            <div className="inline-title">
-              <strong>特殊说明</strong>
-              <span className="tips-text">&nbsp;&nbsp;（ 需要提示购买者的注意事项，例如海外无法发货、产品可能存在的风险等。 ）</span>
-            </div>
-            <div className="inline-enter">
-              <Input />
-            </div>
-          </div>
-          <div className="delete-back">
-            <Button text="删除" btnColor="red-btn" btnSize="vsm-btn" />
-          </div>
-        </div>
+        {
+          this.props.financing.rewardContent.info.length === 0
+            ? (
+              <div className="noback-type">
+                <strong>当前无融资回报</strong>
+              </div>
+            )
+            : (
+              <>
+                <div className="inline-title">
+                  <strong>回报发放联系人</strong>
+                </div>
+                <div className="inline-enter">
+                  <div className="gray-box normalgray-box">
+                    <div className="inline-title">
+                      <strong>联系人姓名</strong>&nbsp;
+                      <span className="red-type">*</span>&nbsp;&nbsp;
+                    </div>
+                    <div className="inline-enter">
+                      <Input />
+                    </div>
+                    <div className="inline-title">
+                      <strong>联系方式</strong>&nbsp;
+                      <span className="red-type">*</span>&nbsp;&nbsp;
+                    </div>
+                    <div className="inline-enter">
+                      <Input />
+                    </div>
+                  </div>
+                </div>
+                {
+                  this.props.financing.rewardContent.info.map((item: IRewardInfo, index: number) =>
+                  {
+                    return (
+                      <React.Fragment key={index}>
+                        <div className="inline-title">
+                          <strong>回报{index + 1}</strong>
+                          <span className="tips-text">&nbsp;&nbsp;已售22</span>
+                        </div>
+                        <div className="inline-enter">
+                          <div className="gray-box normalgray-box">
+                            <div className="inline-title">
+                              <strong>回报名称</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <Input
+                                value={item.rewardName}
+                                onChange={this.handleChangeName.bind(this, index)}
+                                maxLength={40}
+                              />
+                            </div>
+                            <div className="inline-title">
+                              <strong>回报描述</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <textarea
+                                className="gift-textarea"
+                                value={item.rewardDesc}
+                                onChange={this.handleChangeDesc.bind(this, index)}
+                                maxLength={500}
+                              />
+                            </div>
+                            <div className="inline-title">
+                              <strong>价格</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <Input
+                                suffix={this.props.financing.financingContent.tokenName.toLocaleUpperCase()}
+                                value={item.price}
+                                onChange={this.handleChangePrice.bind(this, index)}
+                              />
+                            </div>
+                            <div className="inline-title">
+                              <strong>是否限量</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <Radio.Group onChange={this.handleChangeLimitType.bind(this, index)} value={item.limitFlag} >
+                                <Radio value={"0"}>不限量</Radio>
+                                <Radio value={"1"}>
+                                  限量
+                                  <Input
+                                    className="small-input"
+                                    value={item.limitMax}
+                                    onChange={this.handleChangeLimitNum.bind(this, index)}
+                                    maxLength={9}
+                                  />
+                                </Radio>
+                              </Radio.Group>
+                            </div>
+                            <div className="inline-title">
+                              <strong>预计发放时间</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <Radio.Group onChange={this.handleChangeTimeType.bind(this, index)} value={item.distributeTimeFlag}>
+                                <Radio value={"1"}>
+                                  定期
+                                  <MonthPicker
+                                    disabledDate={this.disabledDate}
+                                    placeholder="Select month"
+                                    locale={this.props.intl.locale}
+                                    format="YYYY/MM"
+                                    onChange={this.handleChangeMonth.bind(this, index)}
+                                    defaultValue={item.distributeTimeFixYes ? moment(item.distributeTimeFixYes, "YYYY/MM") : undefined}
+                                  />
+                                </Radio>
+                                <Radio value={"0"}>
+                                  不定期
+                                  <Input
+                                    className="small-input"
+                                    suffix="天内"
+                                    value={item.distributeTimeFixNot}
+                                    onChange={this.handleChangeDays.bind(this, index)}
+                                    maxLength={2}
+                                  />
+                                </Radio>
+                              </Radio.Group>
+                            </div>
+                            <div className="inline-title">
+                              <strong>发放方式</strong>&nbsp;
+                              <span className="red-type">*</span>&nbsp;&nbsp;
+                            </div>
+                            <div className="inline-enter">
+                              <Radio.Group onChange={this.handleChangeSendType.bind(this, index)} value={item.distributeWay}>
+                                <Radio value={"0"}>虚拟发放</Radio>
+                                <Radio value={"1"}>实物</Radio>
+                              </Radio.Group>
+                            </div>
+                            <div className="inline-title">
+                              <strong>特殊说明</strong>
+                              <span className="tips-text">&nbsp;&nbsp;（ 需要提示购买者的注意事项，例如海外无法发货、产品可能存在的风险等。 ）</span>
+                            </div>
+                            <div className="inline-enter">
+                              <Input value={item.note} onChange={this.handleChangeNote.bind(this, index)} maxLength={100} />
+                            </div>
+                          </div>
+                          <div className="delete-back">
+                            <Button text="删除" btnColor="red-btn" btnSize="vsm-btn" onClick={this.handleRemoveRewardForm.bind(this, index)} />
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    )
+                  })
+                }
+              </>
+            )
+        }
         <div className="inline-enter-btn">
-          <Button text="+ 增加回报" btnSize="bg-btn" btnColor="white-btn" />
+          <Button text="+ 增加回报" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleAddRewardForm} />
         </div>
         <div className="inline-btn">
-          <Button text="提交" btnSize="bg-btn" btnColor="gray-btn" />
+          <Button
+            text="提交"
+            btnSize="bg-btn"
+            btnColor={(this.props.financing.rewardContent.info.length === 0 || this.state.isCanSave) ? "" : "gray-btn"}
+            onClick={this.handleSetReward}
+          />
         </div>
       </div >
     );
   }
-  private handleRadioLimit = (ev) => {
-    this.setState({
-      limitType:ev.target.value
-    })
+  // 输入回报名称
+  private handleChangeName = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].rewardName = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入回报描述
+  private handleChangeDesc = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].rewardDesc = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入价格
+  private handleChangePrice = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    // 价格限制小数点后4位，小数点前9位 todo
+    const value = ev.target.value;
+    
+    const reg =/^\d{0,1}(\d{0,8})(\.\d{1,4})?$/ig;
+    if (value.toString().length > 0)
+    {
+      if (!reg.test(ev.target.value))
+      {
+        return false;
+      }
+    }
+    this.props.financing.rewardContent.info[index].price = value.toString();
+    this.handleCheckSetRewardInput();
+    return true;
+  }
+  // 选择是否限量
+  private handleChangeLimitType = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].limitFlag = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入限量数量
+  private handleChangeLimitNum = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    // 限量数量，只能填写整数，限制9位 todo
+    const value = ev.target.value as unknown as number;
+    if (isNaN(value))
+    {
+      return false;
+    }
+    const reg = /^[0-9]*[1-9][0-9]*$/;
+    if (value.toString().length > 0)
+    {
+      if (!reg.test(ev.target.value))
+      {
+        return false;
+      }
+    }
+    this.props.financing.rewardContent.info[index].limitMax = value.toString().replace(/\./g, '');
+    this.handleCheckSetRewardInput();
+    return true;
+  }
+  // 选择预计发放时间
+  private handleChangeTimeType = (index: number, ev) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].distributeTimeFlag = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入定期发放时间
+  private handleChangeMonth = (index: number, date, dateString) =>
+  {
+    console.log(date, dateString);
+    const value = date;
+    console.log(date)
+    this.props.financing.rewardContent.info[index].distributeTimeFixYes = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入不定期发放时间
+  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const value = ev.target.value as unknown as number;
+    console.log(value)
+    if (isNaN(value))
+    {
+      return false;
+    }
+    const reg = /^[0-9]*[1-9][0-9]*$/;
+    if (value.toString().length > 0)
+    {
+      if (!reg.test(ev.target.value))
+      {
+        return false;
+      }
+    }
+    this.props.financing.rewardContent.info[index].distributeTimeFixNot = value.toString().replace(/\./g, '');
+    console.log(value.toString())
+    this.handleCheckSetRewardInput();
+    return true;
+  }
+  // 选择发放方式
+  private handleChangeSendType = (index: number, ev) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].distributeWay = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入特殊说明
+  private handleChangeNote = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.info[index].note = value;
   }
   // 定期两年内
-  private disabledDate=(current)=> {
+  private disabledDate = (current) =>
+  {
     // Can not select days before today and today
-    return current && (current < moment().endOf('day') || current > moment().add(2,'years').endOf('day'));
+    return current && (current < moment().endOf('day') || current > moment().add(2, 'years').endOf('day'));
+  }
+  // 新增回报
+  private handleAddRewardForm = () =>
+  {
+    this.props.financing.rewardContent.info.push({
+      rewardId: '',
+      rewardName: '',
+      rewardDesc: '',
+      price: '',
+      limitFlag: '',
+      limitMax: '',
+      distributeTimeFlag: '',
+      distributeTimeFixYes: '',
+      distributeTimeFixNot: '',
+      distributeWay: '',
+      note: '',
+      giftTokenName: '',
+      hasSellCount: 0
+    })
+  }
+  // 删除回报
+  private handleRemoveRewardForm = (index: number) =>
+  {
+    this.props.financing.rewardContent.info.splice(index, 1)
+  }
+  private handleSetReward = async () =>
+  {
+    if (!this.state.isCanSave)
+    {
+      return false
+    }
+    await this.props.financing.setReward();
+    return true;
+  }
+  private handleCheckSetRewardInput = () =>
+  {
+    let isOk = true;
+    if (this.props.financing.rewardContent.info.length > 0)
+    {
+      if (!this.props.financing.rewardContent.connectorName)
+      {
+        isOk = false;
+      }
+      if (!this.props.financing.rewardContent.connectTel)
+      {
+        isOk = false;
+      }
+      this.props.financing.rewardContent.info.forEach((item: IRewardInfo) =>
+      {
+        if (!item.rewardName)
+        {
+          isOk = false;
+        }
+        if (!item.rewardDesc)
+        {
+          isOk = false;
+        }
+        if (!item.limitFlag)
+        {
+          isOk = false;
+        }
+        else if (item.limitFlag === '1' && !item.limitMax)
+        {
+          isOk = false;
+        }
+        if (!item.distributeTimeFlag)
+        {
+          isOk = false;
+        } else if (item.distributeTimeFlag === '1' && !item.distributeTimeFixYes)
+        {
+          isOk = false;
+        } else if (item.distributeTimeFlag === '0' && !item.distributeTimeFixNot)
+        {
+          isOk = false;
+        }
+        if (!item.distributeWay)
+        {
+          isOk = false;
+        }
+      })
+    }
+    if (isOk)
+    {
+      this.setState({
+        isCanSave: true
+      })
+    }
   }
 }
 
