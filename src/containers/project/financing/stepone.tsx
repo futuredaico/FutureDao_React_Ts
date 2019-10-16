@@ -14,8 +14,7 @@ import Web3 from 'web3';
 import { IFinancingProps, ISaveAsset, IInfo } from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
 
-interface IState
-{
+interface IState {
   financingType: string, // 融资类型
   platform: string, // 选择区块链
   tokenName: string, // 融资的代币
@@ -32,12 +31,13 @@ interface IState
   addrEnter: boolean, // 团队预留代币地址输入确认,true为格式错误
   addrInputErrMsg: string, // 代币地址输入错误提示
   isCanGoing: boolean, // 是否可以提交
+  hasShowAsset: boolean
 }
 
 @observer
 class StepOne extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
-  public state = {
+  public state: IState = {
     financingType: this.props.financing.financingContent.type, // 融资类型
     platform: this.props.financing.financingContent.platform, // 选择区块链
     tokenName: this.props.financing.financingContent.tokenName, // 融资的代币
@@ -53,7 +53,8 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     simpleNameEnter: false,
     addrEnter: false,
     addrInputErrMsg: "",
-    isCanGoing: false
+    isCanGoing: false,
+    hasShowAsset: true
   };
   // 融资类型
   private financingOptions = [
@@ -113,8 +114,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       name: "否",
     }
   ]
-  public render()
-  {
+  public render() {
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
     return (
       <div className="stepone-page" id="projectname">
@@ -148,7 +148,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 融资合约将部署在选择的链上 ）</span>
               </div>
               <div className="inline-enter">
-                <Select options={this.blockOptions} text='' onCallback={this.handleSelectBlock} defaultValue={this.state.platform} />
+                <Select
+                  options={this.blockOptions}
+                  text=''
+                  onCallback={this.handleSelectBlock} />
               </div>
               <div className="inline-title">
                 <strong>融资代币</strong>&nbsp;
@@ -157,7 +160,11 @@ class StepOne extends React.Component<IFinancingProps, IState> {
               </div>
               <div className="inline-enter">
                 {
-                  this.state.platform && <Select options={this.state.platform === "eth" ? this.assetOption : this.neoOption} text='' onCallback={this.handleSelectAsset} defaultValue={this.state.tokenName} />
+                  this.state.platform && this.state.hasShowAsset &&
+                  <Select
+                    options={this.state.platform === "eth" ? this.assetOption : this.neoOption}
+                    text=''
+                    onCallback={this.handleSelectAsset} />
                 }
               </div>
               <div className="inline-title">
@@ -218,8 +225,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                         }
                       </div>
                       {
-                        this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) =>
-                        {
+                        this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) => {
                           return (
                             <div className="tworow-line" key={index}>
                               <div className="firstrow">
@@ -253,7 +259,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                       }
                       <div className="add-wrapper">
                         <Button text="+ 增加批次" btnSize="bg-btn" btnColor="white-btn" onClick={this.handleAddAsset} />
-                        <span className="purple-text">（ 总预留数量2000，在合约发布100天后全部解锁。 ）</span>
+                        <span className="purple-text">（ 总预留数量{this.props.financing.totalAmt}，在合约发布{this.props.financing.totalDays}天后全部解锁。 ）</span>
                       </div>
                     </div>
                   )
@@ -329,37 +335,34 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   }
 
   // 融资类型的选择
-  private handleSelectFinancing = (item) =>
-  {
+  private handleSelectFinancing = (item) => {
     this.setState({
       financingType: item.id,
     })
   }
   // 区块链的选择
-  private handleSelectBlock = async (item) =>
-  {
+  private handleSelectBlock = async (item) => {
     // console.log(item)
     this.setState({
       platform: item.id,
-      adminAddress: ""
+      adminAddress: "",
+      hasShowAsset: false,
       // tokenName:item.id === "eth" ? "eth" : "neo"
-    }, () =>
-      {
-        // console.log(this.state.tokenName);
-        this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
+    }, () => {
+      this.setState({
+        hasShowAsset: true,
       })
+      // console.log(this.state.tokenName);
+      // this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
+    })
     this.props.financing.financingContent.reserveTokenInfo.address = "";
     // 选择了区块之后获取绑定地址
-    if (this.props.common.userInfo)
-    {
-      if (item.id === "eth")
-      {
-        if (this.props.common.userInfo.ethAddress === "")
-        {
+    if (this.props.common.userInfo) {
+      if (item.id === "eth") {
+        if (this.props.common.userInfo.ethAddress === "") {
           this.props.common.openNotificationWithIcon('info', "绑定地址", "您尚未绑定ETH或NEO钱包，正在获取钱包地址。");
           await this.props.metamaskwallet.inintWeb3();
-          if (!!this.props.metamaskwallet.metamaskAddress)
-          {
+          if (!!this.props.metamaskwallet.metamaskAddress) {
             await this.props.personedit.bindWalletAddress('eth', this.props.metamaskwallet.metamaskAddress)
           }
           await this.props.common.getUserInfo();
@@ -368,15 +371,12 @@ class StepOne extends React.Component<IFinancingProps, IState> {
           adminAddress: this.props.common.userInfo.ethAddress
         })
         this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.ethAddress
-      } else
-      {
-        if (this.props.common.userInfo.neoAddress === "")
-        {
+      } else {
+        if (this.props.common.userInfo.neoAddress === "") {
           this.props.common.openNotificationWithIcon('info', "绑定地址", "您尚未绑定ETH或NEO钱包，正在获取钱包地址。");
           const res = await this.props.teemowallet.loginTeemo();
           console.log(res)
-          if (!!this.props.teemowallet.teemoAddress)
-          {
+          if (!!this.props.teemowallet.teemoAddress) {
             await this.props.personedit.bindWalletAddress('neo', this.props.teemowallet.teemoAddress)
           }
           await this.props.common.getUserInfo();
@@ -390,26 +390,21 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     }
   }
   // 融资代币的选择
-  private handleSelectAsset = (item) =>
-  {
+  private handleSelectAsset = (item) => {
     // todo
 
     console.log(item)
     this.setState({
       tokenName: item.id
-    }, () =>
-      {
-        console.log(this.state.tokenName)
-      })
+    }, () => {
+      console.log(this.state.tokenName)
+    })
   }
   // 项目代币名称
-  private handleChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const reg = /^[a-zA-Z0-9 ]*$/;
-    if (ev.target.value)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (ev.target.value) {
+      if (!reg.test(ev.target.value)) {
         return false
       }
     }
@@ -420,13 +415,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 项目代币简称
-  private handleChangeSimpleName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeSimpleName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const reg = /^[a-zA-Z0-9 ]*$/;
-    if (ev.target.value)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (ev.target.value) {
+      if (!reg.test(ev.target.value)) {
         return false
       }
     }
@@ -437,15 +429,13 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 团队预留币的选择
-  private handleSelectSave = (item) =>
-  {
+  private handleSelectSave = (item) => {
     this.setState({
       reserveTokenFlag: item.id
     })
   }
   // 团队预留代币接收地址
-  private handleChangeReceiveAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeReceiveAddr = (ev: React.ChangeEvent<HTMLInputElement>) => {
     //
     const addr = ev.target.value.trim();
     this.props.financing.financingContent.reserveTokenInfo.address = addr;
@@ -455,37 +445,30 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     // this.handleCheckAddr(ev.target.value);
   }
   // 团队预留地址失去焦点时的校验
-  private handleBlurInpurAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleBlurInpurAddr = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const res = this.handleCheckAddr(ev.target.value);
     console.log(res);
-    if (!res)
-    {
+    if (!res) {
       this.setState({
         addrEnter: true
       })
     }
   }
   // 校验地址输入
-  private handleCheckAddr = (addr: string) =>
-  {
-    if (this.state.platform === 'neo')
-    {
+  private handleCheckAddr = (addr: string) => {
+    if (this.state.platform === 'neo') {
       return Neotool.verifyPublicKey(addr)
-    } else
-    {
+    } else {
       return Web3.utils.checkAddressChecksum(addr)
     }
   }
   // 提交部署合约
-  private handleComfirmFinancing = async () =>
-  {
+  private handleComfirmFinancing = async () => {
     // todo
     // this.props.project.isEdit = false;
     const res = this.handleCheckFinancingInput();
     console.log(res);
-    if (!res)
-    {
+    if (!res) {
       return false
     }
     this.props.financing.financingContent.type = this.state.financingType;
@@ -504,8 +487,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 部署合约成功后继续
-  private handleGoOn = () =>
-  {
+  private handleGoOn = () => {
     this.setState({
       isDoingContract: false
     })
@@ -513,8 +495,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.props.financing.stepOneStatus = 2
   }
   // 新增批次
-  private handleAddAsset = () =>
-  {
+  private handleAddAsset = () => {
     this.props.financing.financingContent.reserveTokenInfo.info.push({
       amt: undefined,
       days: undefined
@@ -523,99 +504,79 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     console.log(this.props.financing.financingContent.reserveTokenInfo);
   }
   // 删除批次
-  private handleRemoveAsset = (index: number) =>
-  {
+  private handleRemoveAsset = (index: number) => {
     this.props.financing.financingContent.reserveTokenInfo.info.splice(index, 1);
   }
   // 输入解锁数量
-  private handleChangeAmt = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeAmt = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value as unknown as number;
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
-    this.props.financing.financingContent.reserveTokenInfo.info[index].amt = value;
+    this.props.financing.financingContent.reserveTokenInfo.info[index].amt = parseInt(value.toString(), 10);
     return true;
   }
   // 输入锁定时长
-  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value as unknown as number;
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
-    this.props.financing.financingContent.reserveTokenInfo.info[index].days = value;
+    this.props.financing.financingContent.reserveTokenInfo.info[index].days = parseInt(value.toString(), 10);
     return true;
   }
   // 校验所有输入选项
-  private handleCheckFinancingInput = () =>
-  {
+  private handleCheckFinancingInput = () => {
     //
-    if (!this.state.adminAddress)
-    {
+    if (!this.state.adminAddress) {
       //
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.projTokenName)
-    {
+    if (!this.state.projTokenName) {
       window.scrollTo(0, 500);
       this.setState({
         nameEnter: true
       })
       return false
     }
-    if (!this.state.projTokenSymbol)
-    {
+    if (!this.state.projTokenSymbol) {
       window.scrollTo(0, 600);
       this.setState({
         simpleNameEnter: true
       })
       return false
     }
-    if (this.state.reserveTokenFlag === "1")
-    {
-      if (!this.props.financing.financingContent.reserveTokenInfo.address)
-      {
+    if (this.state.reserveTokenFlag === "1") {
+      if (!this.props.financing.financingContent.reserveTokenInfo.address) {
         this.props.common.openNotificationWithIcon('error', "操作失败", "请完成团队预留模块的填写");
         return false
       }
-      if (this.state.addrEnter)
-      {
+      if (this.state.addrEnter) {
         return false
       }
       let isEnter = true
-      this.props.financing.financingContent.reserveTokenInfo.info.forEach((item: IInfo) =>
-      {
-        if (!item.amt)
-        {
+      this.props.financing.financingContent.reserveTokenInfo.info.forEach((item: IInfo) => {
+        if (!item.amt) {
           isEnter = false;
         }
-        if (!item.days)
-        {
+        if (!item.days) {
           isEnter = false;
         }
       })
-      if (!isEnter)
-      {
+      if (!isEnter) {
         this.props.common.openNotificationWithIcon('error', "操作失败", "请完成团队预留模块的填写");
         return false;
       }

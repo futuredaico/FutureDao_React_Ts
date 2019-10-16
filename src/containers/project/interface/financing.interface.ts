@@ -5,23 +5,23 @@ import { IPersonEditStore } from "@/containers/personalcenter/interface/personed
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 
-export interface IFinancingStore
-{
+export interface IFinancingStore {
   step: number,
   stepOneStatus: number,
   stepTwoStatus: number,
   stepThreeStatus: number,
   financingContent: IFinancingContent,
-  rewardContent:IRewardContent,
+  rewardContent: IRewardContent,
+  totalAmt: number,
+  totalDays: number,
   financingProject: () => Promise<boolean>,
   getContractData: () => Promise<boolean>,
   getRewardData: () => Promise<boolean>,
-  setReward:() => Promise<boolean>,
+  setReward: () => Promise<boolean>,
 }
 
 
-export interface IFinancingProps extends RouteComponentProps<{ projectId: string }>
-{
+export interface IFinancingProps extends RouteComponentProps<{ projectId: string }> {
   project: IProjectStore,
   financing: IFinancingStore,
   common: ICommonStore,
@@ -31,8 +31,7 @@ export interface IFinancingProps extends RouteComponentProps<{ projectId: string
   intl: any
 }
 
-export interface IFinancingContent
-{
+export interface IFinancingContent {
   projId: string
   type: string,                 // 融资类型
   platform: string,             // 选择区块链
@@ -42,24 +41,21 @@ export interface IFinancingContent
   projTokenSymbol: string,      // 代币简称
   reserveTokenFlag: string,     // 是否预留代币
   reserveTokenInfo: ISaveAsset, // 预留代币详情
-  deployContractFlag:string,    // 发布合约标记，3为未操作，4为处理中，5为已完成
-  rewardSetFlag:string,         // 回报标记，同上
-  ratioSetFlag:string,          // 融资信息标记，同上
-  financeStartFlag:string       // 启动融资标记，同上
+  deployContractFlag: string,    // 发布合约标记，3为未操作，4为处理中，5为已完成
+  rewardSetFlag: string,         // 回报标记，同上
+  ratioSetFlag: string,          // 融资信息标记，同上
+  financeStartFlag: string       // 启动融资标记，同上
 }
 
-export interface ISaveAsset
-{
+export interface ISaveAsset {
   address: string,
   info: IInfo[]
 }
-export interface IInfo
-{
+export interface IInfo {
   amt?: number,
   days?: number
 }
-export interface IRewardInfo
-{
+export interface IRewardInfo {
   rewardId: string,
   rewardName: string,
   rewardDesc: string,
@@ -68,14 +64,14 @@ export interface IRewardInfo
   limitMax: string,
   distributeTimeFlag: string,
   distributeTimeFixYes: string,
-  distributeTimeFixNot:string,
+  distributeTimeFixNot: string,
   distributeWay: string,
   note: string,
-  giftTokenName:string,
-  hasSellCount:number
+  giftTokenName: string,
+  hasSellCount: number
 }
-export interface IRewardContent{
-  connectorName:string,
-  connectTel:string,
-  info:IRewardInfo[]
+export interface IRewardContent {
+  connectorName: string,
+  connectTel: string,
+  info: IRewardInfo[]
 }

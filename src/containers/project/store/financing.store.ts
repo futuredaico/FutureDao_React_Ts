@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import common from '@/store/common';
 import project from './project.store';
 import * as Api from '../api/project.api'
@@ -10,7 +10,7 @@ class Financing {
   @observable public stepTwoStatus: number = 0; // 设置回报完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public stepThreeStatus: number = 0; // 融资信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public financingContent: IFinancingContent = {
-    projId:'',
+    projId: '',
     type: 'daico',
     platform: 'eth',
     tokenName: 'eth',
@@ -25,15 +25,15 @@ class Financing {
         days: undefined
       }]
     },
-    deployContractFlag:'3',
-    rewardSetFlag:'3',
-    ratioSetFlag:'3',
-    financeStartFlag:'3'
+    deployContractFlag: '3',
+    rewardSetFlag: '3',
+    ratioSetFlag: '3',
+    financeStartFlag: '3'
   }
   @observable public rewardContent: IRewardContent = {
-    connectorName:'',
-    connectTel:'',
-    info:[
+    connectorName: '',
+    connectTel: '',
+    info: [
       {
         rewardId: '',
         rewardName: '',
@@ -43,13 +43,21 @@ class Financing {
         limitMax: '',
         distributeTimeFlag: '',
         distributeTimeFixYes: '',
-        distributeTimeFixNot:'',
+        distributeTimeFixNot: '',
         distributeWay: '',
         note: '',
-        giftTokenName:'',
-        hasSellCount:0
+        giftTokenName: '',
+        hasSellCount: 0
       }
     ]
+  }
+  @computed get totalAmt() {
+    const result = this.financingContent.reserveTokenInfo.info.map(v => v.amt).reduce((v1: number, v2: number) => (v1 + v2))
+    return result || 0;
+  }
+  @computed get totalDays() {
+    const result = this.financingContent.reserveTokenInfo.info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))
+    return result || 0;
   }
   @action public financingProject = async () => {
     let result: any = [];
@@ -64,19 +72,16 @@ class Financing {
       this.financingContent.projTokenName,
       this.financingContent.projTokenSymbol,
       this.financingContent.reserveTokenFlag,
-      this.financingContent.reserveTokenFlag==='1'?JSON.stringify(this.financingContent.reserveTokenInfo):'{}',
+      this.financingContent.reserveTokenFlag === '1' ? JSON.stringify(this.financingContent.reserveTokenInfo) : '{}',
     ]
     console.log(JSON.stringify(params));
-    try
-    {
+    try {
       result = await Api.publishContract(params);
-    } catch (e)
-    {
+    } catch (e) {
       return false;
     }
     console.log(result)
-    if (result[0].resultCode !== CodeType.success)
-    {
+    if (result[0].resultCode !== CodeType.success) {
       return false
     }
     this.getContractData();
@@ -85,29 +90,25 @@ class Financing {
   /**
    * 获取项目融资部署合约的详情
    */
-  @action public getContractData = async () =>
-  {
+  @action public getContractData = async () => {
     let result: any = [];
 
-    try
-    {
-      result = await Api.getContractData(common.userId,common.token,project.projId);
+    try {
+      result = await Api.getContractData(common.userId, common.token, project.projId);
       console.log(result)
-    } catch (e)
-    {
+    } catch (e) {
       return false;
     }
-    if (result[0].resultCode !== CodeType.success)
-    {
+    if (result[0].resultCode !== CodeType.success) {
       return false
     }
-    if(Object.keys(result[0].data).length  === 0){
+    if (Object.keys(result[0].data).length === 0) {
       return false
     }
     this.financingContent = result[0].data;
-    this.stepOneStatus=2;
-    this.stepTwoStatus=3;
-    this.stepThreeStatus=3;
+    this.stepOneStatus = 2;
+    this.stepTwoStatus = 3;
+    this.stepThreeStatus = 3;
     // if(this.financingContent.rewardSetFlag==='5'){
     //   this.stepTwoStatus=2;
     // }
@@ -117,47 +118,39 @@ class Financing {
     return true;
   }
 
-  @action public getRewardData = async () =>
-  {
+  @action public getRewardData = async () => {
     let result: any = [];
 
-    try
-    {
-      result = await Api.getRewardData(common.userId,common.token,project.projId);
+    try {
+      result = await Api.getRewardData(common.userId, common.token, project.projId);
       console.log(result)
-    } catch (e)
-    {
+    } catch (e) {
       return false;
     }
-    if (result[0].resultCode !== CodeType.success)
-    {
+    if (result[0].resultCode !== CodeType.success) {
       return false
     }
-    if(Object.keys(result[0].data).length  === 0){
+    if (Object.keys(result[0].data).length === 0) {
       return false
     }
     this.rewardContent = result[0].data;
     return true;
   }
-  @action public setReward = async () =>
-  {
+  @action public setReward = async () => {
     let result: any = [];
     let info = JSON.stringify(this.rewardContent.info);
-    if(this.rewardContent.info.length){
+    if (this.rewardContent.info.length) {
       info = '{}'
     }
-    try
-    {
-      result = await Api.setReward(common.userId,common.token,project.projId,this.rewardContent.connectorName,this.rewardContent.connectTel,info);
+    try {
+      result = await Api.setReward(common.userId, common.token, project.projId, this.rewardContent.connectorName, this.rewardContent.connectTel, info);
       console.log(result)
-    } catch (e)
-    {
+    } catch (e) {
       return false;
     }
-    if (result[0].resultCode !== CodeType.success)
-    {
+    if (result[0].resultCode !== CodeType.success) {
       return false
-    }    
+    }
     return true;
   }
 }

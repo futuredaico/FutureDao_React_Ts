@@ -9,8 +9,7 @@ import { Input, Radio, DatePicker } from 'antd';
 import Button from '@/components/Button';
 import { IFinancingProps, IRewardInfo } from '../interface/financing.interface';
 import moment from 'moment';
-interface IState
-{
+interface IState {
   connectName: string,
   connectTel: string,
   isCanSave: boolean,
@@ -25,8 +24,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     isCanSave: false
   }
 
-  public render()
-  {
+  public render() {
     const { MonthPicker } = DatePicker;
     return (
       <div className="steptwo-page">
@@ -61,8 +59,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                   </div>
                 </div>
                 {
-                  this.props.financing.rewardContent.info.map((item: IRewardInfo, index: number) =>
-                  {
+                  this.props.financing.rewardContent.info.map((item: IRewardInfo, index: number) => {
                     return (
                       <React.Fragment key={index}>
                         <div className="inline-title">
@@ -196,58 +193,60 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     );
   }
   // 输入回报名称
-  private handleChangeName = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeName = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].rewardName = value;
     this.handleCheckSetRewardInput();
   }
   // 输入回报描述
-  private handleChangeDesc = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeDesc = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].rewardDesc = value;
     this.handleCheckSetRewardInput();
   }
   // 输入价格
-  private handleChangePrice = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangePrice = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     // 价格限制小数点后4位，小数点前9位 todo
-    const value = ev.target.value;
-    
-    const reg =/^\d{0,1}(\d{0,8})(\.\d{1,4})?$/ig;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
-        return false;
-      }
+    const str = ev.target.value;
+    if (str[str.length - 1] !== '.' && isNaN(str as unknown as number)) {
+      console.log(1)
+      return false;
     }
-    this.props.financing.rewardContent.info[index].price = value.toString();
+    const num1 = Number(str);
+    const num2 = parseInt((num1 * 10000).toString(), 10) / 10000;
+    if (num2 > 999999999.9999 || num1 !== num2) {
+      console.log(2)
+      return false;
+    }
+
+    // const reg =/^\d{0,1}(\d{0,8})(\.\d{1,4})?$/ig;
+    // if (value.toString().length > 0)
+    // {
+    //   if (!reg.test(ev.target.value))
+    //   {
+    //     return false;
+    //   }
+    // }
+    this.props.financing.rewardContent.info[index].price = str.toString();
     this.handleCheckSetRewardInput();
     return true;
   }
   // 选择是否限量
-  private handleChangeLimitType = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeLimitType = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].limitFlag = value;
     this.handleCheckSetRewardInput();
   }
   // 输入限量数量
-  private handleChangeLimitNum = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeLimitNum = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     // 限量数量，只能填写整数，限制9位 todo
     const value = ev.target.value as unknown as number;
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
@@ -256,15 +255,13 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     return true;
   }
   // 选择预计发放时间
-  private handleChangeTimeType = (index: number, ev) =>
-  {
+  private handleChangeTimeType = (index: number, ev) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].distributeTimeFlag = value;
     this.handleCheckSetRewardInput();
   }
   // 输入定期发放时间
-  private handleChangeMonth = (index: number, date, dateString) =>
-  {
+  private handleChangeMonth = (index: number, date, dateString) => {
     console.log(date, dateString);
     const value = date;
     console.log(date)
@@ -272,19 +269,15 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     this.handleCheckSetRewardInput();
   }
   // 输入不定期发放时间
-  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value as unknown as number;
     console.log(value)
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
@@ -294,27 +287,23 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     return true;
   }
   // 选择发放方式
-  private handleChangeSendType = (index: number, ev) =>
-  {
+  private handleChangeSendType = (index: number, ev) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].distributeWay = value;
     this.handleCheckSetRewardInput();
   }
   // 输入特殊说明
-  private handleChangeNote = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeNote = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].note = value;
   }
   // 定期两年内
-  private disabledDate = (current) =>
-  {
+  private disabledDate = (current) => {
     // Can not select days before today and today
     return current && (current < moment().endOf('day') || current > moment().add(2, 'years').endOf('day'));
   }
   // 新增回报
-  private handleAddRewardForm = () =>
-  {
+  private handleAddRewardForm = () => {
     this.props.financing.rewardContent.info.push({
       rewardId: '',
       rewardName: '',
@@ -332,68 +321,51 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     })
   }
   // 删除回报
-  private handleRemoveRewardForm = (index: number) =>
-  {
+  private handleRemoveRewardForm = (index: number) => {
     this.props.financing.rewardContent.info.splice(index, 1)
   }
-  private handleSetReward = async () =>
-  {
-    if (!this.state.isCanSave)
-    {
+  private handleSetReward = async () => {
+    if (!this.state.isCanSave) {
       return false
     }
     await this.props.financing.setReward();
     return true;
   }
-  private handleCheckSetRewardInput = () =>
-  {
+  private handleCheckSetRewardInput = () => {
     let isOk = true;
-    if (this.props.financing.rewardContent.info.length > 0)
-    {
-      if (!this.props.financing.rewardContent.connectorName)
-      {
+    if (this.props.financing.rewardContent.info.length > 0) {
+      if (!this.props.financing.rewardContent.connectorName) {
         isOk = false;
       }
-      if (!this.props.financing.rewardContent.connectTel)
-      {
+      if (!this.props.financing.rewardContent.connectTel) {
         isOk = false;
       }
-      this.props.financing.rewardContent.info.forEach((item: IRewardInfo) =>
-      {
-        if (!item.rewardName)
-        {
+      this.props.financing.rewardContent.info.forEach((item: IRewardInfo) => {
+        if (!item.rewardName) {
           isOk = false;
         }
-        if (!item.rewardDesc)
-        {
+        if (!item.rewardDesc) {
           isOk = false;
         }
-        if (!item.limitFlag)
-        {
+        if (!item.limitFlag) {
           isOk = false;
         }
-        else if (item.limitFlag === '1' && !item.limitMax)
-        {
+        else if (item.limitFlag === '1' && !item.limitMax) {
           isOk = false;
         }
-        if (!item.distributeTimeFlag)
-        {
+        if (!item.distributeTimeFlag) {
           isOk = false;
-        } else if (item.distributeTimeFlag === '1' && !item.distributeTimeFixYes)
-        {
+        } else if (item.distributeTimeFlag === '1' && !item.distributeTimeFixYes) {
           isOk = false;
-        } else if (item.distributeTimeFlag === '0' && !item.distributeTimeFixNot)
-        {
+        } else if (item.distributeTimeFlag === '0' && !item.distributeTimeFixNot) {
           isOk = false;
         }
-        if (!item.distributeWay)
-        {
+        if (!item.distributeWay) {
           isOk = false;
         }
       })
     }
-    if (isOk)
-    {
+    if (isOk) {
       this.setState({
         isCanSave: true
       })
