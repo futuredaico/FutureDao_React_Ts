@@ -62,6 +62,9 @@ class Financing {
     const result = this.financingContent.reserveTokenInfo.info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
+  /**
+   * 部署合约
+   */
   @action public financingProject = async () => {
     let result: any = [];
     const params: string[] = [
@@ -206,7 +209,9 @@ class Financing {
     this.ratio = result[0].data.ratio;
     return true;
   }
-
+  /**
+   * 设置并修改储备金比例
+   */
   @action public saveReserveFundRatio = async (ratio:string) => {
     let result: any = [];
 
@@ -220,6 +225,21 @@ class Financing {
       return false
     }
     
+    return true;
+  }
+  /**
+   * 启动融资
+   */
+  @action public startFanance = async () => {
+    let result: any = [];
+    try {
+      result = await Api.startFinance(common.userId, common.token, project.projId);
+    } catch (e) {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success) {
+      return false
+    }    
     return true;
   }
 }

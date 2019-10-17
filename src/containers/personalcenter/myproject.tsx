@@ -195,7 +195,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
             return this.intrl.card.other
         }
     }
-    // 跳转到项目详情页todo
+    // 跳转到项目详情页
     private handleToProjectInfo = (projId: string) =>
     {
         this.props.history.push('/projectinfo/' + projId);

@@ -104,7 +104,11 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
             <>
                 <h3 className="right-title">融资管理</h3>
                 <div className="right-apply-btn">
-                    <Button text="启动融资" btnColor="gray-btn" />
+                    <Button 
+                        text="启动融资" 
+                        btnColor={(this.props.financing.financingContent.deployContractFlag==='5'&&this.props.financing.financingContent.rewardSetFlag==='5'&&this.props.financing.financingContent.ratioSetFlag==='5')?'':"gray-btn"}
+                        onClick={this.handleStartFanance}
+                    />
                 </div>
                 <div className="right-tab">
                     <div className={oneClassName} onClick={this.handleEditStep.bind(this, 1)}>
@@ -143,7 +147,15 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
         }
         this.props.financing.step = number;
     }
-
+    private handleStartFanance = async()=>{
+        if(this.props.financing.financingContent.deployContractFlag==='5'&&this.props.financing.financingContent.rewardSetFlag==='5'&&this.props.financing.financingContent.ratioSetFlag==='5'){
+            // const res = await this.props.financing.startFanance();
+            // if(res){
+            //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, "启动融资成功");
+            //     this.props.history.push('/projectinfo/' + this.props.project.projId);
+            // }
+        }
+    }
 }
 
 export default injectIntl(FinancingManager);

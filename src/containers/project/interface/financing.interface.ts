@@ -23,7 +23,8 @@ export interface IFinancingStore {
   setReward: () => Promise<boolean>,
   getFinanceFund: () => Promise<boolean>,
   getReserveFund: () => Promise<boolean>,
-  saveReserveFundRatio:(ratio:string)=> Promise<boolean>
+  saveReserveFundRatio:(ratio:string)=> Promise<boolean>,
+  startFanance:()=>Promise<boolean>
 }
 
 
