@@ -14,6 +14,7 @@ import { History } from 'history';
 import { IProjectStore } from './interface/project.interface';
 import { ICreateProjectStore } from './interface/createproject.interface';
 import { getQueryString } from '@/utils/function'
+import { IFinancingStore } from './interface/financing.interface';
 
 interface IProps extends RouteComponentProps<{ projectId: string }>
 {
@@ -24,6 +25,7 @@ interface IProps extends RouteComponentProps<{ projectId: string }>
     project: IProjectStore,
     createproject: ICreateProjectStore,
     common: ICommonStore,
+    financing:IFinancingStore
     intl: any
 }
 interface IState
@@ -31,7 +33,7 @@ interface IState
     showDeletProject: boolean
 }
 
-@inject('project', 'createproject', 'common')
+@inject('project', 'createproject', 'common','financing')
 @observer
 class Project extends React.Component<IProps, IState> {
     public intrl = this.props.intl.messages;
@@ -55,6 +57,46 @@ class Project extends React.Component<IProps, IState> {
             }             
         }
         // this.props.createproject.getProject(projectId);    
+    }
+    public componentWillUnmount()
+    {
+        this.props.createproject.createContent = {
+            projId: '',
+            projName: '',
+            projTitle: '',
+            projType: '',
+            projConverUrl: '',
+            projBrief: '',
+            projVideoUrl: '',
+            projDetail: '',
+            connectEmail: '',
+            officialWeb: '',
+            community: '',
+            projState: 'reading',
+            projSubState: 'init',
+            role: ''
+        }
+        this.props.financing.financingContent = {
+            projId: '',
+            type: 'daico',
+            platform: 'eth',
+            tokenName: '',
+            adminAddress: '',
+            projTokenName: '',
+            projTokenSymbol: '',
+            reserveTokenFlag: '1',
+            reserveTokenInfo: {
+                address: '',
+                info: [{
+                    amt: undefined,
+                    days: undefined
+                }]
+            },
+            deployContractFlag: '3',
+            rewardSetFlag: '3',
+            ratioSetFlag: '3',
+            financeStartFlag: '3'
+        }
     }
     public render()
     {

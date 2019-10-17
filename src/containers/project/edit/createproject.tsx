@@ -39,24 +39,8 @@ class CreateProject extends React.Component<ICreateProjectProps,IState> {
             }
         }
     }
-    public componentWillMount()
+    public componentWillUnmount()
     {
-        this.props.createproject.createContent = {
-            projId: '',
-            projName: '',
-            projTitle: '',
-            projType: '',
-            projConverUrl: '',
-            projBrief: '',
-            projVideoUrl: '',
-            projDetail: '',
-            connectEmail: '',
-            officialWeb: '',
-            community: '',
-            projState: 'reading',
-            projSubState: 'init',
-            role: ''
-        }
         this.props.createproject.step = 1;
         this.props.createproject.stepOneStatus = 1;
         this.props.createproject.stepTwoStatus = 0;

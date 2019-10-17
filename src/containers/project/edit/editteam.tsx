@@ -1,5 +1,5 @@
 /**
- * 创建项目
+ * 邀请成员
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';

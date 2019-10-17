@@ -1,5 +1,5 @@
 /**
- * 详细信息
+ * 设置回报
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
@@ -22,6 +22,11 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     connectName: this.props.financing.rewardContent.connectorName,
     connectTel: this.props.financing.rewardContent.connectTel,
     isCanSave: false
+  }
+  public componentDidMount(){
+    if(this.props.financing.financingContent.rewardSetFlag!=='3'){
+      this.props.financing.getRewardData();
+    }    
   }
 
   public render() {
@@ -47,14 +52,22 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                       <span className="red-type">*</span>&nbsp;&nbsp;
                     </div>
                     <div className="inline-enter">
-                      <Input />
+                      <Input
+                        value={this.props.financing.rewardContent.connectorName}
+                        onChange={this.handleChangeContractName}
+                        maxLength={40}
+                      />
                     </div>
                     <div className="inline-title">
                       <strong>联系方式</strong>&nbsp;
                       <span className="red-type">*</span>&nbsp;&nbsp;
                     </div>
                     <div className="inline-enter">
-                      <Input />
+                      <Input 
+                        value={this.props.financing.rewardContent.connectTel}
+                        onChange={this.handleChangeContractTel}
+                        maxLength={40}
+                      />
                     </div>
                   </div>
                 </div>
@@ -134,7 +147,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                                     locale={this.props.intl.locale}
                                     format="YYYY/MM"
                                     onChange={this.handleChangeMonth.bind(this, index)}
-                                    defaultValue={item.distributeTimeFixYes ? moment(item.distributeTimeFixYes, "YYYY/MM") : undefined}
+                                    value={item.distributeTimeFixYes ? moment(item.distributeTimeFixYes, "YYYY/MM") : undefined}
                                   />
                                 </Radio>
                                 <Radio value={"0"}>
@@ -183,7 +196,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
         </div>
         <div className="inline-btn">
           <Button
-            text="提交"
+            text={this.props.financing.financingContent.rewardSetFlag==='3'?"提交并继续":"提交"}
             btnSize="bg-btn"
             btnColor={(this.props.financing.rewardContent.info.length === 0 || this.state.isCanSave) ? "" : "gray-btn"}
             onClick={this.handleSetReward}
@@ -191,6 +204,18 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
         </div>
       </div >
     );
+  }
+  // 输入联系人姓名
+  private handleChangeContractName = ( ev: React.ChangeEvent<HTMLInputElement>) => {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.connectorName = value;
+    this.handleCheckSetRewardInput();
+  }
+  // 输入联系人方式
+  private handleChangeContractTel = ( ev: React.ChangeEvent<HTMLInputElement>) => {
+    const value = ev.target.value;
+    this.props.financing.rewardContent.connectTel = value;
+    this.handleCheckSetRewardInput();
   }
   // 输入回报名称
   private handleChangeName = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,15 +243,6 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
       console.log(2)
       return false;
     }
-
-    // const reg =/^\d{0,1}(\d{0,8})(\.\d{1,4})?$/ig;
-    // if (value.toString().length > 0)
-    // {
-    //   if (!reg.test(ev.target.value))
-    //   {
-    //     return false;
-    //   }
-    // }
     this.props.financing.rewardContent.info[index].price = str.toString();
     this.handleCheckSetRewardInput();
     return true;
@@ -235,6 +251,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
   private handleChangeLimitType = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].limitFlag = value;
+    this.props.financing.rewardContent.info[index].limitMax = '';
     this.handleCheckSetRewardInput();
   }
   // 输入限量数量
@@ -258,13 +275,15 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
   private handleChangeTimeType = (index: number, ev) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].distributeTimeFlag = value;
+    this.props.financing.rewardContent.info[index].distributeTimeFixYes = '';
+    this.props.financing.rewardContent.info[index].distributeTimeFixNot = '';
     this.handleCheckSetRewardInput();
   }
   // 输入定期发放时间
   private handleChangeMonth = (index: number, date, dateString) => {
     console.log(date, dateString);
-    const value = date;
-    console.log(date)
+    const value = dateString;
+    console.log(dateString)
     this.props.financing.rewardContent.info[index].distributeTimeFixYes = value;
     this.handleCheckSetRewardInput();
   }
@@ -297,7 +316,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     const value = ev.target.value;
     this.props.financing.rewardContent.info[index].note = value;
   }
-  // 定期两年内
+  // 定期两年内限制
   private disabledDate = (current) => {
     // Can not select days before today and today
     return current && (current < moment().endOf('day') || current > moment().add(2, 'years').endOf('day'));
@@ -319,18 +338,39 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
       giftTokenName: '',
       hasSellCount: 0
     })
+    this.setState({
+      isCanSave:false
+    })
   }
   // 删除回报
   private handleRemoveRewardForm = (index: number) => {
-    this.props.financing.rewardContent.info.splice(index, 1)
+    this.props.financing.rewardContent.info.splice(index, 1);
+    if(this.props.financing.rewardContent.info.length===0){
+      this.props.financing.rewardContent.connectorName="";
+      this.props.financing.rewardContent.connectTel="";
+    }
   }
+  // 提交回报信息
   private handleSetReward = async () => {
-    if (!this.state.isCanSave) {
+    // 有回报填写时注意填写
+    if(this.props.financing.rewardContent.info.length !== 0 && !this.state.isCanSave){
       return false
     }
-    await this.props.financing.setReward();
+    const res = await this.props.financing.setReward();
+    if(res && this.props.financing.financingContent.rewardSetFlag==='5'){
+      this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
+    }else if(res && this.props.financing.financingContent.rewardSetFlag==='3'){      
+      this.props.financing.step=3;
+      this.props.financing.stepTwoStatus=2;
+      this.props.financing.financingContent.rewardSetFlag = '5';
+    }
+    else if(!res){
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
+    }
+    this.props.financing.getRewardData();
     return true;
   }
+  // 校验必填项
   private handleCheckSetRewardInput = () => {
     let isOk = true;
     if (this.props.financing.rewardContent.info.length > 0) {

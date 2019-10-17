@@ -10,14 +10,20 @@ export interface IFinancingStore {
   stepOneStatus: number,
   stepTwoStatus: number,
   stepThreeStatus: number,
+  timer: NodeJS.Timer | null
   financingContent: IFinancingContent,
   rewardContent: IRewardContent,
   totalAmt: number,
   totalDays: number,
+  poolTotal:number,
+  ratio:string,
   financingProject: () => Promise<boolean>,
   getContractData: () => Promise<boolean>,
   getRewardData: () => Promise<boolean>,
   setReward: () => Promise<boolean>,
+  getFinanceFund: () => Promise<boolean>,
+  getReserveFund: () => Promise<boolean>,
+  saveReserveFundRatio:(ratio:string)=> Promise<boolean>
 }
 
 

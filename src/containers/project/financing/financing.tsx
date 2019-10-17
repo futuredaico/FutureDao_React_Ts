@@ -1,5 +1,5 @@
 /**
- * 创建项目
+ * 融资管理
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
@@ -21,13 +21,67 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
     public intrl = this.props.intl.messages;
     public async componentDidMount()
     {
-            const res = await this.props.financing.getContractData();
-            if (!res)
+        await this.props.financing.getContractData();
+        if (this.props.financing.financingContent.deployContractFlag === '4')
+        {
+            this.props.financing.timer = setInterval(async () =>
             {
-                //
-            }
-            console.log(res)
-        
+                await this.props.financing.getContractData();
+                if (this.props.financing.financingContent.deployContractFlag === '5')
+                {
+                    if(this.props.financing.timer){
+                        clearInterval(this.props.financing.timer);
+                    }
+                    this.props.financing.timer = null;
+                }
+            }, 10000)
+        }
+        else if (this.props.financing.financingContent.ratioSetFlag === '4')
+        {
+            this.props.financing.timer = setInterval(async () =>
+            {
+                await this.props.financing.getContractData();
+                if (this.props.financing.financingContent.ratioSetFlag === '5')
+                {
+                    if(this.props.financing.timer){
+                        clearInterval(this.props.financing.timer);
+                    }
+                    this.props.financing.timer = null;
+                }
+            }, 10000)
+        }
+    }
+    public componentWillUnmount()
+    {
+        this.props.financing.step = 1;
+        this.props.financing.stepOneStatus = 1;
+        this.props.financing.stepTwoStatus = 0;
+        this.props.financing.stepThreeStatus = 0; 
+        if(this.props.financing.timer){
+            clearInterval(this.props.financing.timer);
+        }  
+        this.props.financing.timer = null;     
+        this.props.financing.rewardContent = {
+            connectorName: '',
+            connectTel: '',
+            info: [
+                {
+                    rewardId: '',
+                    rewardName: '',
+                    rewardDesc: '',
+                    price: '',
+                    limitFlag: '',
+                    limitMax: '',
+                    distributeTimeFlag: '',
+                    distributeTimeFixYes: '',
+                    distributeTimeFixNot: '',
+                    distributeWay: '',
+                    note: '',
+                    giftTokenName: '',
+                    hasSellCount: 0
+                }
+            ]
+        }
     }
     public render()
     {
@@ -73,20 +127,20 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
     // 编辑步骤
     private handleEditStep = (number: number) =>
     {
-        // if (number === 2)
-        // {
-        //     if (this.props.financing.stepTwoStatus === 0)
-        //     {
-        //         return
-        //     }
-        // }
-        // else if (number === 3)
-        // {
-        //     if (this.props.financing.stepThreeStatus === 0)
-        //     {
-        //         return
-        //     }
-        // }
+        if (number === 2)
+        {
+            if (this.props.financing.stepTwoStatus === 0)
+            {
+                return
+            }
+        }
+        else if (number === 3)
+        {
+            if (this.props.financing.stepThreeStatus === 0)
+            {
+                return
+            }
+        }
         this.props.financing.step = number;
     }
 

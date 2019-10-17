@@ -314,3 +314,30 @@ export const getReserveFund = (userId:string,token:string,projId:string) =>
     }
     return request(opts);
 }
+/**
+ * 启动融资
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ */
+export const startFinance = (userId:string,token:string,projId:string)=>{
+    const opts = {
+        method: 'startFinance',
+        params: [userId,token,projId]
+    }
+    return request(opts);
+}
+/**
+ * 更改并提交储备金比例
+ * @param userId 用户ID
+ * @param token 访问令牌
+ * @param projId 项目id
+ * @param ratio 比例
+ */
+export const saveReserveFundRatio = (userId:string,token:string,projId:string,ratio:string)=>{
+    const opts = {
+        method: 'saveReserveFundRatio',
+        params: [userId,token,projId,ratio]
+    }
+    return request(opts);
+}
