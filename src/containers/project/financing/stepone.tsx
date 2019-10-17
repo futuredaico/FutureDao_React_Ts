@@ -14,8 +14,7 @@ import Web3 from 'web3';
 import { IFinancingProps, IInfo } from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
 
-interface IState
-{
+interface IState {
   financingType: string, // 融资类型
   platform: string, // 选择区块链
   tokenName: string, // 融资的代币
@@ -31,21 +30,21 @@ interface IState
   addrInputErrMsg: string, // 代币地址输入错误提示
   isCanGoing: boolean, // 是否可以提交
   hasShowAsset: boolean,
-  isDoingSave:boolean, // 是否正在修改储备金比例
+  isDoingSave: boolean, // 是否正在修改储备金比例
 }
 
 @observer
 class StepOne extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
   public state: IState = {
-    financingType: this.props.financing.financingContent.type, // 融资类型
-    platform: this.props.financing.financingContent.platform, // 选择区块链
-    tokenName: this.props.financing.financingContent.tokenName, // 融资的代币
+    financingType: 'daico', // 融资类型
+    platform: '', // 选择区块链
+    tokenName: '', // 融资的代币
     isBindAddress: false,
-    adminAddress: this.props.financing.financingContent.adminAddress, // 管理员钱包地址
-    projTokenName: this.props.financing.financingContent.projTokenName, // 项目代币名称
-    projTokenSymbol: this.props.financing.financingContent.projTokenSymbol, // 项目代币简称
-    reserveTokenFlag: this.props.financing.financingContent.reserveTokenFlag, // 是否团队预留代币
+    adminAddress: '', // 管理员钱包地址
+    projTokenName: '', // 项目代币名称
+    projTokenSymbol: '', // 项目代币简称
+    reserveTokenFlag: '1', // 是否团队预留代币
     isDoingContract: false,
     nameEnter: false,
     simpleNameEnter: false,
@@ -53,7 +52,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     addrInputErrMsg: "",
     isCanGoing: false,
     hasShowAsset: true,
-    isDoingSave:false
+    isDoingSave: false
   };
   // 融资类型
   private financingOptions = [
@@ -112,21 +111,35 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       name: "否",
     }
   ]
-  public async componentDidMount()
-  {
-    if (this.props.financing.financingContent.deployContractFlag === '4')
-    {
+  public async componentDidMount() {
+    if (!this.props.financing.financingContent) {
+      return false;
+    }
+    this.setState({
+      financingType: this.props.financing.financingContent.type, // 融资类型
+      platform: this.props.financing.financingContent.platform, // 选择区块链
+      tokenName: this.props.financing.financingContent.tokenName, // 融资的代币
+      adminAddress: this.props.financing.financingContent.adminAddress, // 管理员钱包地址
+      projTokenName: this.props.financing.financingContent.projTokenName, // 项目代币名称
+      projTokenSymbol: this.props.financing.financingContent.projTokenSymbol, // 项目代币简称
+      reserveTokenFlag: this.props.financing.financingContent.reserveTokenFlag, // 是否团队预留代币
+    })
+    if (this.props.financing.financingContent.deployContractFlag === '4') {
       this.setState({
         isDoingContract: true
       })
-    }else if(this.props.financing.financingContent.ratioSetFlag==='4'){
+    } else if (this.props.financing.financingContent.ratioSetFlag === '4') {
       this.setState({
-        isDoingSave:true
+        isDoingSave: true
       })
     }
+
+    return true;
   }
-  public render()
-  {
+  public render() {
+    if (!this.props.financing.financingContent) {
+      return null;
+    }
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
     return (
       <div className="stepone-page" id="projectname">
@@ -241,8 +254,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                         }
                       </div>
                       {
-                        this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) =>
-                        {
+                        this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) => {
                           return (
                             <div className="tworow-line" key={index}>
                               <div className="firstrow">
@@ -388,15 +400,13 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   }
 
   // 融资类型的选择
-  private handleSelectFinancing = (item) =>
-  {
+  private handleSelectFinancing = (item) => {
     this.setState({
       financingType: item.id,
     })
   }
   // 区块链的选择
-  private handleSelectBlock = async (item) =>
-  {
+  private handleSelectBlock = async (item) => {
     // console.log(item)
     this.setState({
       platform: item.id,
@@ -404,26 +414,23 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       tokenName: '',
       hasShowAsset: false,
       // tokenName:item.id === "eth" ? "eth" : "neo"
-    }, () =>
-      {
-        this.setState({
-          hasShowAsset: true,
-        })
-        // console.log(this.state.tokenName);
-        // this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
+    }, () => {
+      this.setState({
+        hasShowAsset: true,
       })
-    this.props.financing.financingContent.reserveTokenInfo.address = "";
+      // console.log(this.state.tokenName);
+      // this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
+    })
+    if (this.props.financing.financingContent) {
+      this.props.financing.financingContent.reserveTokenInfo.address = "";
+    }
     // 选择了区块之后获取绑定地址
-    if (this.props.common.userInfo)
-    {
-      if (item.id === "eth")
-      {
-        if (this.props.common.userInfo.ethAddress === "")
-        {
+    if (this.props.common.userInfo) {
+      if (item.id === "eth") {
+        if (this.props.common.userInfo.ethAddress === "") {
           this.props.common.openNotificationWithIcon('info', "绑定地址", "您尚未绑定ETH或NEO钱包，正在获取钱包地址。");
           await this.props.metamaskwallet.inintWeb3();
-          if (!!this.props.metamaskwallet.metamaskAddress)
-          {
+          if (!!this.props.metamaskwallet.metamaskAddress) {
             await this.props.personedit.bindWalletAddress('eth', this.props.metamaskwallet.metamaskAddress)
           }
           await this.props.common.getUserInfo();
@@ -431,16 +438,15 @@ class StepOne extends React.Component<IFinancingProps, IState> {
         this.setState({
           adminAddress: this.props.common.userInfo.ethAddress
         })
-        this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.ethAddress
-      } else
-      {
-        if (this.props.common.userInfo.neoAddress === "")
-        {
+        if (this.props.financing.financingContent) {
+          this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.ethAddress
+        }
+      } else {
+        if (this.props.common.userInfo.neoAddress === "") {
           this.props.common.openNotificationWithIcon('info', "绑定地址", "您尚未绑定ETH或NEO钱包，正在获取钱包地址。");
           const res = await this.props.teemowallet.loginTeemo();
           console.log(res)
-          if (!!this.props.teemowallet.teemoAddress)
-          {
+          if (!!this.props.teemowallet.teemoAddress) {
             await this.props.personedit.bindWalletAddress('neo', this.props.teemowallet.teemoAddress)
           }
           await this.props.common.getUserInfo();
@@ -449,31 +455,28 @@ class StepOne extends React.Component<IFinancingProps, IState> {
           adminAddress: this.props.common.userInfo.neoAddress,
           addrEnter: false
         })
-        this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.neoAddress
+        if (this.props.financing.financingContent) {
+          this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.neoAddress
+        }
       }
     }
   }
   // 融资代币的选择
-  private handleSelectAsset = (item) =>
-  {
+  private handleSelectAsset = (item) => {
     // todo
 
     console.log(item)
     this.setState({
       tokenName: item.id
-    }, () =>
-      {
-        console.log(this.state.tokenName)
-      })
+    }, () => {
+      console.log(this.state.tokenName)
+    })
   }
   // 项目代币名称
-  private handleChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const reg = /^[a-zA-Z0-9 ]*$/;
-    if (ev.target.value)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (ev.target.value) {
+      if (!reg.test(ev.target.value)) {
         return false
       }
     }
@@ -484,13 +487,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 项目代币简称
-  private handleChangeSimpleName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeSimpleName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const reg = /^[a-zA-Z0-9 ]*$/;
-    if (ev.target.value)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (ev.target.value) {
+      if (!reg.test(ev.target.value)) {
         return false
       }
     }
@@ -501,59 +501,54 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 团队预留币的选择
-  private handleSelectSave = (item) =>
-  {
+  private handleSelectSave = (item) => {
     this.setState({
       reserveTokenFlag: item.id
     })
   }
   // 团队预留代币接收地址
-  private handleChangeReceiveAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeReceiveAddr = (ev: React.ChangeEvent<HTMLInputElement>) => {
     //
     const addr = ev.target.value.trim();
-    this.props.financing.financingContent.reserveTokenInfo.address = addr;
+    if (this.props.financing.financingContent) {
+      this.props.financing.financingContent.reserveTokenInfo.address = addr;
+    }
     this.setState({
       addrEnter: false
     })
     // this.handleCheckAddr(ev.target.value);
   }
   // 团队预留地址失去焦点时的校验
-  private handleBlurInpurAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleBlurInpurAddr = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const res = this.handleCheckAddr(ev.target.value);
     console.log(res);
-    if (!res)
-    {
+    if (!res) {
       this.setState({
         addrEnter: true
       })
     }
   }
   // 校验地址输入
-  private handleCheckAddr = (addr: string) =>
-  {
-    if (this.state.platform === 'neo')
-    {
+  private handleCheckAddr = (addr: string) => {
+    if (this.state.platform === 'neo') {
       return Neotool.verifyPublicKey(addr)
-    } else
-    {
+    } else {
       return Web3.utils.checkAddressChecksum(addr)
     }
   }
   // 提交部署合约
-  private handleComfirmFinancing = async () =>
-  {
+  private handleComfirmFinancing = async () => {
     // todo
     // this.props.project.isEdit = false;
     const res = this.handleCheckFinancingInput();
     console.log(res);
-    if (!res)
-    {
+    if (!res) {
       return false
     }
-    if (this.props.financing.financingContent.deployContractFlag === "5")
-    {
+    if (!this.props.financing.financingContent) {
+      return false;
+    }
+    if (this.props.financing.financingContent.deployContractFlag === "5") {
       return false
     }
     this.props.financing.financingContent.type = this.state.financingType;
@@ -569,13 +564,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     })
     console.log(JSON.stringify(this.props.financing.financingContent))
     const publishRes = await this.props.financing.financingProject();
-    if (publishRes)
-    {
-      const timer = setInterval(async () =>
-      {
+    if (publishRes) {
+      const timer = setInterval(async () => {
         await this.props.financing.getContractData();
-        if (this.props.financing.financingContent.deployContractFlag === '5')
-        {
+        if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5') {
           clearInterval(timer)
         }
       }, 10000)
@@ -583,8 +575,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 部署合约成功后继续
-  private handleGoOn = () =>
-  {
+  private handleGoOn = () => {
     this.setState({
       isDoingContract: false
     })
@@ -592,124 +583,114 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.props.financing.stepOneStatus = 2
   }
   // 修改储备金比例成功后继续
-  private handleDoneOn = ()=>{
+  private handleDoneOn = () => {
     this.setState({
-      isDoingSave:false
+      isDoingSave: false
     })
     this.props.financing.stepThreeStatus = 2;
   }
   // 新增批次
-  private handleAddAsset = () =>
-  {
+  private handleAddAsset = () => {
+    if (!this.props.financing.financingContent) {
+      return false;
+    }
     this.props.financing.financingContent.reserveTokenInfo.info.push({
       amt: undefined,
       days: undefined
     })
 
-    console.log(this.props.financing.financingContent.reserveTokenInfo);
+    return true;
   }
   // 删除批次
-  private handleRemoveAsset = (index: number) =>
-  {
+  private handleRemoveAsset = (index: number) => {
+    if (!this.props.financing.financingContent) {
+      return false;
+    }
     this.props.financing.financingContent.reserveTokenInfo.info.splice(index, 1);
+    return true;
   }
   // 输入解锁数量
-  private handleChangeAmt = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeAmt = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value as unknown as number;
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
-    this.props.financing.financingContent.reserveTokenInfo.info[index].amt = parseInt(value.toString(), 10);
+    if (this.props.financing.financingContent) {
+      this.props.financing.financingContent.reserveTokenInfo.info[index].amt = parseInt(value.toString(), 10);
+    }
     return true;
   }
   // 输入锁定时长
-  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) =>
-  {
+  private handleChangeDays = (index: number, ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value as unknown as number;
-    if (isNaN(value))
-    {
+    if (isNaN(value)) {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0)
-    {
-      if (!reg.test(ev.target.value))
-      {
+    if (value.toString().length > 0) {
+      if (!reg.test(ev.target.value)) {
         return false;
       }
     }
-    this.props.financing.financingContent.reserveTokenInfo.info[index].days = parseInt(value.toString(), 10);
+    if (this.props.financing.financingContent) {
+      this.props.financing.financingContent.reserveTokenInfo.info[index].days = parseInt(value.toString(), 10);
+    }
     return true;
   }
   // 校验所有输入选项
-  private handleCheckFinancingInput = () =>
-  {
-    if (!this.state.platform)
-    {
+  private handleCheckFinancingInput = () => {
+    if (!this.state.platform) {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.tokenName)
-    {
+    if (!this.state.tokenName) {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.adminAddress)
-    {
+    if (!this.state.adminAddress) {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.projTokenName)
-    {
+    if (!this.state.projTokenName) {
       window.scrollTo(0, 500);
       this.setState({
         nameEnter: true
       })
       return false
     }
-    if (!this.state.projTokenSymbol)
-    {
+    if (!this.state.projTokenSymbol) {
       window.scrollTo(0, 600);
       this.setState({
         simpleNameEnter: true
       })
       return false
     }
-    if (this.state.reserveTokenFlag === "1")
-    {
-      if (!this.props.financing.financingContent.reserveTokenInfo.address)
-      {
+    if (this.state.reserveTokenFlag === "1") {
+      if (this.props.financing.financingContent && !this.props.financing.financingContent.reserveTokenInfo.address) {
         this.props.common.openNotificationWithIcon('error', "操作失败", "请完成团队预留模块的填写");
         return false
       }
-      if (this.state.addrEnter)
-      {
+      if (this.state.addrEnter) {
         return false
       }
       let isEnter = true
-      this.props.financing.financingContent.reserveTokenInfo.info.forEach((item: IInfo) =>
-      {
-        if (!item.amt)
-        {
-          isEnter = false;
-        }
-        if (!item.days)
-        {
-          isEnter = false;
-        }
-      })
-      if (!isEnter)
-      {
+      if (this.props.financing.financingContent) {
+        this.props.financing.financingContent.reserveTokenInfo.info.forEach((item: IInfo) => {
+          if (!item.amt) {
+            isEnter = false;
+          }
+          if (!item.days) {
+            isEnter = false;
+          }
+        })
+      }
+      if (!isEnter) {
         this.props.common.openNotificationWithIcon('error', "操作失败", "请完成团队预留模块的填写");
         return false;
       }

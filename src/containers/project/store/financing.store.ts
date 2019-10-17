@@ -4,33 +4,35 @@ import project from './project.store';
 import * as Api from '../api/project.api'
 import { IFinancingContent, IRewardContent, IRewardInfo } from '../interface/financing.interface';
 import { CodeType } from '@/store/interface/common.interface';
+
+const defaultContent = {
+  projId: '',
+  type: 'daico',
+  platform: 'eth',
+  tokenName: '',
+  adminAddress: '',
+  projTokenName: '',
+  projTokenSymbol: '',
+  reserveTokenFlag: '1',
+  reserveTokenInfo: {
+    address: '',
+    info: [{
+      amt: undefined,
+      days: undefined
+    }]
+  },
+  deployContractFlag: '3',
+  rewardSetFlag: '3',
+  ratioSetFlag: '3',
+  financeStartFlag: '3'
+}
 class Financing {
   @observable public step: number = 1; // 融资管理的菜单选择
   @observable public stepOneStatus: number = 1;// 部署合约完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public stepTwoStatus: number = 0; // 设置回报完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public stepThreeStatus: number = 0; // 融资信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
   @observable public timer: NodeJS.Timer | null = null;
-  @observable public financingContent: IFinancingContent = {
-    projId: '',
-    type: 'daico',
-    platform: 'eth',
-    tokenName: '',
-    adminAddress: '',
-    projTokenName: '',
-    projTokenSymbol: '',
-    reserveTokenFlag: '1',
-    reserveTokenInfo: {
-      address: '',
-      info: [{
-        amt: undefined,
-        days: undefined
-      }]
-    },
-    deployContractFlag: '3',
-    rewardSetFlag: '3',
-    ratioSetFlag: '3',
-    financeStartFlag: '3'
-  }
+  @observable public financingContent: IFinancingContent | null = null;
   @observable public rewardContent: IRewardContent = {
     connectorName: '',
     connectTel: '',
@@ -52,13 +54,19 @@ class Financing {
       }
     ]
   }
-  @observable public poolTotal:number = 20; // 已融资金
-  @observable public ratio:string = '0'; // 储备金比例
+  @observable public poolTotal: number = 20; // 已融资金
+  @observable public ratio: string = '0'; // 储备金比例
   @computed get totalAmt() {
+    if (!this.financingContent) {
+      return 0;
+    }
     const result = this.financingContent.reserveTokenInfo.info.map(v => v.amt).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
   @computed get totalDays() {
+    if (!this.financingContent) {
+      return 0;
+    }
     const result = this.financingContent.reserveTokenInfo.info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
@@ -66,6 +74,9 @@ class Financing {
    * 部署合约
    */
   @action public financingProject = async () => {
+    if (!this.financingContent) {
+      return false;
+    }
     let result: any = [];
     const params: string[] = [
       common.userId,
@@ -104,9 +115,11 @@ class Financing {
       return false;
     }
     if (result[0].resultCode !== CodeType.success) {
+      this.financingContent = defaultContent;
       return false
     }
     if (Object.keys(result[0].data).length === 0) {
+      this.financingContent = defaultContent;
       return false
     }
     this.financingContent = result[0].data;
@@ -114,11 +127,16 @@ class Financing {
     this.stepOneStatus = 2;
     this.stepTwoStatus = 3;
     this.stepThreeStatus = 3;
-    if(this.financingContent.rewardSetFlag==='5'){
-      this.stepTwoStatus=2;
+
+    // 这里是不可能存在的，只是为了骗过ts
+    if (!this.financingContent) {
+      return false;
     }
-    if(this.financingContent.ratioSetFlag==='5'){
-      this.stepThreeStatus=2;
+    if (this.financingContent.rewardSetFlag === '5') {
+      this.stepTwoStatus = 2;
+    }
+    if (this.financingContent.ratioSetFlag === '5') {
+      this.stepThreeStatus = 2;
     }
     return true;
   }
@@ -148,7 +166,7 @@ class Financing {
    */
   @action public setReward = async () => {
     let result: any = [];
-    this.rewardContent.info.map((item:IRewardInfo)=>{
+    this.rewardContent.info.map((item: IRewardInfo) => {
       item.price = parseFloat(item.price).toString();
     })
     const info = {
@@ -212,11 +230,11 @@ class Financing {
   /**
    * 设置并修改储备金比例
    */
-  @action public saveReserveFundRatio = async (ratio:string) => {
+  @action public saveReserveFundRatio = async (ratio: string) => {
     let result: any = [];
 
     try {
-      result = await Api.saveReserveFundRatio(common.userId, common.token, project.projId,ratio);
+      result = await Api.saveReserveFundRatio(common.userId, common.token, project.projId, ratio);
       console.log(result)
     } catch (e) {
       return false;
@@ -224,7 +242,7 @@ class Financing {
     if (result[0].resultCode !== CodeType.success) {
       return false
     }
-    
+
     return true;
   }
   /**
@@ -239,7 +257,7 @@ class Financing {
     }
     if (result[0].resultCode !== CodeType.success) {
       return false
-    }    
+    }
     return true;
   }
 }

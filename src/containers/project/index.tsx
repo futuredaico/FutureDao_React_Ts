@@ -16,8 +16,7 @@ import { ICreateProjectStore } from './interface/createproject.interface';
 import { getQueryString } from '@/utils/function'
 import { IFinancingStore } from './interface/financing.interface';
 
-interface IProps extends RouteComponentProps<{ projectId: string }>
-{
+interface IProps extends RouteComponentProps<{ projectId: string }> {
     route: {
         [key: string]: any
     };
@@ -25,15 +24,14 @@ interface IProps extends RouteComponentProps<{ projectId: string }>
     project: IProjectStore,
     createproject: ICreateProjectStore,
     common: ICommonStore,
-    financing:IFinancingStore
+    financing: IFinancingStore
     intl: any
 }
-interface IState
-{
+interface IState {
     showDeletProject: boolean
 }
 
-@inject('project', 'createproject', 'common','financing')
+@inject('project', 'createproject', 'common', 'financing')
 @observer
 class Project extends React.Component<IProps, IState> {
     public intrl = this.props.intl.messages;
@@ -41,25 +39,22 @@ class Project extends React.Component<IProps, IState> {
         showDeletProject: false,
     }
 
-    public componentDidMount()
-    {
+    public componentDidMount() {
         const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
-        if (projectId && projectId !== '/project')
-        {            
-            this.props.project.isEdit = !!projectId;  
-            const projId = projectId.split("/");            
-            if(projId.length>1){
+        if (projectId && projectId !== '/project') {
+            this.props.project.isEdit = !!projectId;
+            const projId = projectId.split("/");
+            if (projId.length > 1) {
                 this.props.createproject.getProject(projId[1]);
                 this.props.project.projId = projId[1];
-            }else{
+            } else {
                 this.props.createproject.getProject(projId[0]);
                 this.props.project.projId = projId[0];
-            }             
+            }
         }
         // this.props.createproject.getProject(projectId);    
     }
-    public componentWillUnmount()
-    {
+    public componentWillUnmount() {
         this.props.createproject.createContent = {
             projId: '',
             projName: '',
@@ -76,30 +71,9 @@ class Project extends React.Component<IProps, IState> {
             projSubState: 'init',
             role: ''
         }
-        this.props.financing.financingContent = {
-            projId: '',
-            type: 'daico',
-            platform: 'eth',
-            tokenName: '',
-            adminAddress: '',
-            projTokenName: '',
-            projTokenSymbol: '',
-            reserveTokenFlag: '1',
-            reserveTokenInfo: {
-                address: '',
-                info: [{
-                    amt: undefined,
-                    days: undefined
-                }]
-            },
-            deployContractFlag: '3',
-            rewardSetFlag: '3',
-            ratioSetFlag: '3',
-            financeStartFlag: '3'
-        }
+        this.props.financing.financingContent = null;
     }
-    public render()
-    {
+    public render() {
         const createClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/financing|\/order))/i) ? true : false }
         );
@@ -160,54 +134,40 @@ class Project extends React.Component<IProps, IState> {
         );
     }
     // 菜单选择
-    private mapUnderline = (str: string) =>
-    {
-        if (str === '/project')
-        {
+    private mapUnderline = (str: string) => {
+        if (str === '/project') {
             const updateId = getQueryString('updateid');
-            if (updateId)
-            {
+            if (updateId) {
                 window.location.href = str + '/' + this.props.project.projId;
-            } else
-            {
+            } else {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }
         }
-        else if (str === '/project/update')
-        {
+        else if (str === '/project/update') {
             //
-            if ((this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing))
-            {
+            if ((this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing)) {
                 return false;
-            } else
-            {
+            } else {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }
         }
-        else if (str === '/project/financing')
-        {
-            if (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing)
-            {
+        else if (str === '/project/financing') {
+            if (this.props.createproject.createContent.projState === ProjectState.Readying || this.props.createproject.createContent.projSubState === ProjSubState.Auditing) {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "此项目现在暂时还不能进行启动融资");
                 return false;
             }
-            else if (this.props.createproject.createContent.role !== 'admin')
-            {
+            else if (this.props.createproject.createContent.role !== 'admin') {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
                 return false;
             }
-            else
-            {
+            else {
                 this.props.history.push(str + '/' + this.props.project.projId);
             }
         }
-        else if (str === '/project/delete')
-        {
-            if (this.props.createproject.createContent.role !== 'admin')
-            {
+        else if (str === '/project/delete') {
+            if (this.props.createproject.createContent.role !== 'admin') {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
-            } else
-            {
+            } else {
                 this.handleShowDeleteProject();
             }
         }
@@ -215,50 +175,41 @@ class Project extends React.Component<IProps, IState> {
         // {
         //     return false;
         // }
-        else
-        {
+        else {
             this.props.history.push(str + '/' + this.props.project.projId);
         }
         return true;
     }
     // 菜单选择样式
-    private mapChildClick = (path) =>
-    {
+    private mapChildClick = (path) => {
         return path.test(this.props.history.location.pathname)
     }
     // 显示删除项目弹框
-    private handleShowDeleteProject = () =>
-    {
+    private handleShowDeleteProject = () => {
         this.setState({
             showDeletProject: !this.state.showDeletProject
         })
     }
     // 确认删除
-    private handleCheckDelete = async () =>
-    {
+    private handleCheckDelete = async () => {
 
         const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
-        if (projectId)
-        {
+        if (projectId) {
             const res = await this.props.project.deleteMember(projectId);
-            if (res)
-            {
+            if (res) {
                 this.handleShowDeleteProject();
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.deletesuccess);
                 this.handleGoBackPersonMenager();
-            } else
-            {
+            } else {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.deleteerr);
             }
-        } else
-        {
+        } else {
             return false;
         }
         return true;
     }
     // 跳到我的项目-管理中页面
-    private handleGoBackPersonMenager = () =>
-    {
+    private handleGoBackPersonMenager = () => {
         this.props.history.push('/personalcenter/myproject');
     }
 }

@@ -23,13 +23,16 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     connectTel: this.props.financing.rewardContent.connectTel,
     isCanSave: false
   }
-  public componentDidMount(){
-    if(this.props.financing.financingContent.rewardSetFlag!=='3'){
+  public componentDidMount() {
+    if (this.props.financing.financingContent && this.props.financing.financingContent.rewardSetFlag !== '3') {
       this.props.financing.getRewardData();
-    }    
+    }
   }
 
   public render() {
+    if (!this.props.financing.financingContent) {
+      return null;
+    }
     const { MonthPicker } = DatePicker;
     return (
       <div className="steptwo-page">
@@ -63,7 +66,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                       <span className="red-type">*</span>&nbsp;&nbsp;
                     </div>
                     <div className="inline-enter">
-                      <Input 
+                      <Input
                         value={this.props.financing.rewardContent.connectTel}
                         onChange={this.handleChangeContractTel}
                         maxLength={40}
@@ -73,6 +76,9 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                 </div>
                 {
                   this.props.financing.rewardContent.info.map((item: IRewardInfo, index: number) => {
+                    if (!this.props.financing.financingContent) {
+                      return null;
+                    }
                     return (
                       <React.Fragment key={index}>
                         <div className="inline-title">
@@ -196,7 +202,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
         </div>
         <div className="inline-btn">
           <Button
-            text={this.props.financing.financingContent.rewardSetFlag==='3'?"提交并继续":"提交"}
+            text={this.props.financing.financingContent.rewardSetFlag === '3' ? "提交并继续" : "提交"}
             btnSize="bg-btn"
             btnColor={(this.props.financing.rewardContent.info.length === 0 || this.state.isCanSave) ? "" : "gray-btn"}
             onClick={this.handleSetReward}
@@ -206,13 +212,13 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     );
   }
   // 输入联系人姓名
-  private handleChangeContractName = ( ev: React.ChangeEvent<HTMLInputElement>) => {
+  private handleChangeContractName = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.connectorName = value;
     this.handleCheckSetRewardInput();
   }
   // 输入联系人方式
-  private handleChangeContractTel = ( ev: React.ChangeEvent<HTMLInputElement>) => {
+  private handleChangeContractTel = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
     this.props.financing.rewardContent.connectTel = value;
     this.handleCheckSetRewardInput();
@@ -339,32 +345,32 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
       hasSellCount: 0
     })
     this.setState({
-      isCanSave:false
+      isCanSave: false
     })
   }
   // 删除回报
   private handleRemoveRewardForm = (index: number) => {
     this.props.financing.rewardContent.info.splice(index, 1);
-    if(this.props.financing.rewardContent.info.length===0){
-      this.props.financing.rewardContent.connectorName="";
-      this.props.financing.rewardContent.connectTel="";
+    if (this.props.financing.rewardContent.info.length === 0) {
+      this.props.financing.rewardContent.connectorName = "";
+      this.props.financing.rewardContent.connectTel = "";
     }
   }
   // 提交回报信息
   private handleSetReward = async () => {
     // 有回报填写时注意填写
-    if(this.props.financing.rewardContent.info.length !== 0 && !this.state.isCanSave){
+    if (this.props.financing.rewardContent.info.length !== 0 && !this.state.isCanSave) {
       return false
     }
     const res = await this.props.financing.setReward();
-    if(res && this.props.financing.financingContent.rewardSetFlag==='5'){
+    if (res && this.props.financing.financingContent && this.props.financing.financingContent.rewardSetFlag === '5') {
       this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
-    }else if(res && this.props.financing.financingContent.rewardSetFlag==='3'){      
-      this.props.financing.step=3;
-      this.props.financing.stepTwoStatus=2;
+    } else if (res && this.props.financing.financingContent && this.props.financing.financingContent.rewardSetFlag === '3') {
+      this.props.financing.step = 3;
+      this.props.financing.stepTwoStatus = 2;
       this.props.financing.financingContent.rewardSetFlag = '5';
     }
-    else if(!res){
+    else if (!res) {
       this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
     }
     this.props.financing.getRewardData();

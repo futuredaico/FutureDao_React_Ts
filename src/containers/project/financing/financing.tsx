@@ -19,48 +19,52 @@ import { IFinancingProps } from '../interface/financing.interface'
 @observer
 class FinancingManager extends React.Component<IFinancingProps, any> {
     public intrl = this.props.intl.messages;
-    public async componentDidMount()
-    {
+    public async componentDidMount() {
         await this.props.financing.getContractData();
-        if (this.props.financing.financingContent.deployContractFlag === '4')
-        {
-            this.props.financing.timer = setInterval(async () =>
-            {
+        if (!this.props.financing.financingContent) {
+            return false;
+        }
+        if (this.props.financing.financingContent.deployContractFlag === '4') {
+            this.props.financing.timer = setInterval(async () => {
                 await this.props.financing.getContractData();
-                if (this.props.financing.financingContent.deployContractFlag === '5')
-                {
-                    if(this.props.financing.timer){
+                if (!this.props.financing.financingContent) {
+                    return false;
+                }
+                if (this.props.financing.financingContent.deployContractFlag === '5') {
+                    if (this.props.financing.timer) {
                         clearInterval(this.props.financing.timer);
                     }
                     this.props.financing.timer = null;
                 }
+                return true;
             }, 10000)
         }
-        else if (this.props.financing.financingContent.ratioSetFlag === '4')
-        {
-            this.props.financing.timer = setInterval(async () =>
-            {
+        else if (this.props.financing.financingContent.ratioSetFlag === '4') {
+            this.props.financing.timer = setInterval(async () => {
                 await this.props.financing.getContractData();
-                if (this.props.financing.financingContent.ratioSetFlag === '5')
-                {
-                    if(this.props.financing.timer){
+                if (!this.props.financing.financingContent) {
+                    return false;
+                }
+                if (this.props.financing.financingContent.ratioSetFlag === '5') {
+                    if (this.props.financing.timer) {
                         clearInterval(this.props.financing.timer);
                     }
                     this.props.financing.timer = null;
                 }
+                return true;
             }, 10000)
         }
+        return true;
     }
-    public componentWillUnmount()
-    {
+    public componentWillUnmount() {
         this.props.financing.step = 1;
         this.props.financing.stepOneStatus = 1;
         this.props.financing.stepTwoStatus = 0;
-        this.props.financing.stepThreeStatus = 0; 
-        if(this.props.financing.timer){
+        this.props.financing.stepThreeStatus = 0;
+        if (this.props.financing.timer) {
             clearInterval(this.props.financing.timer);
-        }  
-        this.props.financing.timer = null;     
+        }
+        this.props.financing.timer = null;
         this.props.financing.rewardContent = {
             connectorName: '',
             connectTel: '',
@@ -83,8 +87,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
             ]
         }
     }
-    public render()
-    {
+    public render() {
         const oneClassName = classnames('step-tab',
             { 'edit-tab': this.props.financing.step === 1 ? true : false },
             { 'success-tab': this.props.financing.stepOneStatus === 2 ? true : false }
@@ -104,9 +107,9 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
             <>
                 <h3 className="right-title">融资管理</h3>
                 <div className="right-apply-btn">
-                    <Button 
-                        text="启动融资" 
-                        btnColor={(this.props.financing.financingContent.deployContractFlag==='5'&&this.props.financing.financingContent.rewardSetFlag==='5'&&this.props.financing.financingContent.ratioSetFlag==='5')?'':"gray-btn"}
+                    <Button
+                        text="启动融资"
+                        btnColor={(this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5') ? '' : "gray-btn"}
                         onClick={this.handleStartFanance}
                     />
                 </div>
@@ -122,39 +125,38 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                     </div>
                 </div>
 
-                {this.props.financing.step === 1 && <StepOne {...this.props} />}
-                {this.props.financing.step === 2 && <StepTwo {...this.props} />}
-                {this.props.financing.step === 3 && <StepThree {...this.props} />}
+                {this.props.financing.step === 1 && this.props.financing.financingContent && <StepOne {...this.props} />}
+                {this.props.financing.step === 2 && this.props.financing.financingContent && <StepTwo {...this.props} />}
+                {this.props.financing.step === 3 && this.props.financing.financingContent && <StepThree {...this.props} />}
             </>
         );
     }
     // 编辑步骤
-    private handleEditStep = (number: number) =>
-    {
-        if (number === 2)
-        {
-            if (this.props.financing.stepTwoStatus === 0)
-            {
+    private handleEditStep = (number: number) => {
+        if (number === 2) {
+            if (this.props.financing.stepTwoStatus === 0) {
                 return
             }
         }
-        else if (number === 3)
-        {
-            if (this.props.financing.stepThreeStatus === 0)
-            {
+        else if (number === 3) {
+            if (this.props.financing.stepThreeStatus === 0) {
                 return
             }
         }
         this.props.financing.step = number;
     }
-    private handleStartFanance = async()=>{
-        if(this.props.financing.financingContent.deployContractFlag==='5'&&this.props.financing.financingContent.rewardSetFlag==='5'&&this.props.financing.financingContent.ratioSetFlag==='5'){
+    private handleStartFanance = async () => {
+        if (!this.props.financing.financingContent) {
+            return false;
+        }
+        if (this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5') {
             // const res = await this.props.financing.startFanance();
             // if(res){
             //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, "启动融资成功");
             //     this.props.history.push('/projectinfo/' + this.props.project.projId);
             // }
         }
+        return true;
     }
 }
 
