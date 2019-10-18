@@ -54,17 +54,17 @@ class Financing {
       }
     ]
   }
-  @observable public poolTotal: number = 20; // 已融资金
+  @observable public poolTotal: number = 0; // 已融资金
   @observable public ratio: string = '0'; // 储备金比例
   @computed get totalAmt() {
-    if (!this.financingContent) {
+    if (!this.financingContent||Object.keys(this.financingContent.reserveTokenInfo).length === 0) {
       return 0;
     }
     const result = this.financingContent.reserveTokenInfo.info.map(v => v.amt).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
   @computed get totalDays() {
-    if (!this.financingContent) {
+    if (!this.financingContent||Object.keys(this.financingContent.reserveTokenInfo).length === 0) {
       return 0;
     }
     const result = this.financingContent.reserveTokenInfo.info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))

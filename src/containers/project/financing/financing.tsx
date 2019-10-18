@@ -37,7 +37,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                     this.props.financing.timer = null;
                 }
                 return true;
-            }, 10000)
+            }, 5000)
         }
         else if (this.props.financing.financingContent.ratioSetFlag === '4') {
             this.props.financing.timer = setInterval(async () => {
@@ -52,7 +52,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                     this.props.financing.timer = null;
                 }
                 return true;
-            }, 10000)
+            }, 5000)
         }
         return true;
     }
@@ -150,11 +150,11 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
             return false;
         }
         if (this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5') {
-            // const res = await this.props.financing.startFanance();
-            // if(res){
-            //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, "启动融资成功");
-            //     this.props.history.push('/projectinfo/' + this.props.project.projId);
-            // }
+            const res = await this.props.financing.startFanance();
+            if(res){
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, "启动融资成功");
+                this.props.history.push('/projectinfo/' + this.props.project.projId);
+            }
         }
         return true;
     }

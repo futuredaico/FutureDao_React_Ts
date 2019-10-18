@@ -124,6 +124,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       projTokenSymbol: this.props.financing.financingContent.projTokenSymbol, // 项目代币简称
       reserveTokenFlag: this.props.financing.financingContent.reserveTokenFlag, // 是否团队预留代币
     })
+    
     if (this.props.financing.financingContent.deployContractFlag === '4') {
       this.setState({
         isDoingContract: true
@@ -139,7 +140,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   public render() {
     if (!this.props.financing.financingContent) {
       return null;
-    }
+    }    
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
     return (
       <div className="stepone-page" id="projectname">
@@ -254,7 +255,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                         }
                       </div>
                       {
-                        this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) => {
+                        Object.keys(this.props.financing.financingContent.reserveTokenInfo).length !== 0 && this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) => {
                           return (
                             <div className="tworow-line" key={index}>
                               <div className="firstrow">
@@ -309,7 +310,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
         {
           this.state.isDoingContract && (
             <div className="going-on-wrapper">
-              <div className="going-on-content">
+              <div className={this.state.financingType === 'daico'?"going-on-content":"going-on-content going-on-edit"}>
                 {
                   this.props.financing.financingContent.deployContractFlag === '4' && (
                     <>
@@ -407,7 +408,6 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   }
   // 区块链的选择
   private handleSelectBlock = async (item) => {
-    // console.log(item)
     this.setState({
       platform: item.id,
       adminAddress: "",
@@ -418,7 +418,6 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       this.setState({
         hasShowAsset: true,
       })
-      // console.log(this.state.tokenName);
       // this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
     })
     if (this.props.financing.financingContent) {
@@ -444,8 +443,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       } else {
         if (this.props.common.userInfo.neoAddress === "") {
           this.props.common.openNotificationWithIcon('info', "绑定地址", "您尚未绑定ETH或NEO钱包，正在获取钱包地址。");
-          const res = await this.props.teemowallet.loginTeemo();
-          console.log(res)
+          await this.props.teemowallet.loginTeemo();
           if (!!this.props.teemowallet.teemoAddress) {
             await this.props.personedit.bindWalletAddress('neo', this.props.teemowallet.teemoAddress)
           }
@@ -463,13 +461,8 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   }
   // 融资代币的选择
   private handleSelectAsset = (item) => {
-    // todo
-
-    console.log(item)
     this.setState({
       tokenName: item.id
-    }, () => {
-      console.log(this.state.tokenName)
     })
   }
   // 项目代币名称
@@ -521,7 +514,6 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   // 团队预留地址失去焦点时的校验
   private handleBlurInpurAddr = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const res = this.handleCheckAddr(ev.target.value);
-    console.log(res);
     if (!res) {
       this.setState({
         addrEnter: true
@@ -541,7 +533,6 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     // todo
     // this.props.project.isEdit = false;
     const res = this.handleCheckFinancingInput();
-    console.log(res);
     if (!res) {
       return false
     }
@@ -562,15 +553,15 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.setState({
       isDoingContract: true
     })
-    console.log(JSON.stringify(this.props.financing.financingContent))
     const publishRes = await this.props.financing.financingProject();
     if (publishRes) {
+      this.props.financing.financingContent.deployContractFlag='4';
       const timer = setInterval(async () => {
         await this.props.financing.getContractData();
         if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5') {
           clearInterval(timer)
         }
-      }, 10000)
+      }, 5000)
     }
     return true
   }

@@ -9,7 +9,8 @@ import Button from '@/components/Button';
 import { Input, Spin, Icon } from 'antd';
 import { IFinancingProps } from '../interface/financing.interface';
 
-interface IState {
+interface IState
+{
   isDoingEdit: boolean,
   ratio: string,
 }
@@ -20,9 +21,11 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     isDoingEdit: false,
     ratio: ''
   }
-  public async componentDidMount() {
+  public async componentDidMount()
+  {
     // 普通融资的资金查询
-    if (this.props.financing.financingContent && this.props.financing.financingContent.type === 'gen') {
+    if (this.props.financing.financingContent && this.props.financing.financingContent.type === 'gen')
+    {
       this.props.financing.getFinanceFund();
     }
 
@@ -31,21 +34,29 @@ class StepThree extends React.Component<IFinancingProps, IState> {
       ratio: this.props.financing.ratio
     })
   }
-  public render() {
+  public render()
+  {
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
-    if (!this.props.financing.financingContent) {
+    if (!this.props.financing.financingContent)
+    {
       return null;
     }
     return (
       <div className="stepthree-page">
-        <div className="inline-title">
-          <strong>已融资金</strong>
-          <span className="tips-text">&nbsp;&nbsp;（ 只有部署合约时设置的融资代币接收地址持有者可以领取资金。如果您修改了绑定地址，请在个人中心重新绑定。 ）</span>
-        </div>
-        <div className="inline-enter">
-          <strong className="show-price">{this.props.financing.poolTotal} {this.props.financing.financingContent.tokenName.toLocaleUpperCase()}</strong>
-          <Button text="领取资金" btnColor={this.props.financing.poolTotal > 0 ? '' : 'gray-btn'} onClick={this.handleToGetMoney} />
-        </div>
+        {
+          this.props.financing.financingContent.type === 'gen' && (
+            <>
+              <div className="inline-title">
+                <strong>已融资金</strong>
+                <span className="tips-text">&nbsp;&nbsp;（ 只有部署合约时设置的融资代币接收地址持有者可以领取资金。如果您修改了绑定地址，请在个人中心重新绑定。 ）</span>
+              </div>
+              <div className="inline-enter">
+                <strong className="show-price">{this.props.financing.poolTotal} {this.props.financing.financingContent.tokenName.toLocaleUpperCase()}</strong>
+                <Button text="领取资金" btnColor={this.props.financing.poolTotal > 0 ? '' : 'gray-btn'} onClick={this.handleToGetMoney} />
+              </div>
+            </>
+          )
+        }
         <div className="inline-title">
           <strong>储备金比例</strong>
           <span className="tips-text-block">（ 将融资金额取一部分作为发行代币的储备金。储备金比例越高，代币买入、卖出价差越小，对投资者吸引力变大，但项目方可调用的资金将变少。 ）</span>
@@ -100,42 +111,54 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     );
   }
   // 普通融资领取资金
-  private handleToGetMoney = () => {
-    if (!this.props.financing.financingContent) {
+  private handleToGetMoney = () =>
+  {
+    if (!this.props.financing.financingContent)
+    {
       return false;
     }
     // 1.先检查绑定的地址是否是融资代币接收地址
-    if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'neo') {
-      if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.neoAddress) {
+    if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'neo')
+    {
+      if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.neoAddress)
+      {
         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '只有融资代币接收地址可以领取资金')
         return false;
       }
     }
-    else if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'eth') {
-      if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.ethAddress) {
+    else if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'eth')
+    {
+      if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.ethAddress)
+      {
         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '只有融资代币接收地址可以领取资金')
         return false;
       }
     }
     // 2.如果是，则检查钱包是否已连接
-    if (this.props.financing.financingContent.tokenName === 'neo') {
+    if (this.props.financing.financingContent.tokenName === 'neo')
+    {
       // todo
-    } else {
+    } else
+    {
       // todo
     }
 
     return true
   }
   // 修改储备金比例
-  private handleChangeRatio = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  private handleChangeRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>
+  {
     // 可以被修改成0-99的整数
     const value = ev.target.value as unknown as number;
-    if (isNaN(value)) {
+    if (isNaN(value))
+    {
       return false;
     }
     const reg = /^[0-9]*[1-9][0-9]*$/;
-    if (value.toString().length > 0) {
-      if (!reg.test(ev.target.value)) {
+    if (value.toString().length > 0)
+    {
+      if (!reg.test(ev.target.value))
+      {
         return false;
       }
     }
@@ -145,31 +168,38 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     return true
   }
   // 提交储备金比例
-  private handleSaveRatio = async () => {
+  private handleSaveRatio = async () =>
+  {
     // 
-    if (!this.state.ratio) {
+    if (!this.state.ratio)
+    {
       return false;
     }
     const res = await this.props.financing.saveReserveFundRatio(this.state.ratio);
-    if (res) {
+    if (res)
+    {
       this.setState({
         isDoingEdit: true
       })
-      if (this.props.financing.financingContent) {
+      if (this.props.financing.financingContent)
+      {
         this.props.financing.financingContent.ratioSetFlag = '4';
       }
-      const timer = setInterval(async () => {
+      const timer = setInterval(async () =>
+      {
         await this.props.financing.getContractData();
-        if (this.props.financing.financingContent && this.props.financing.financingContent.ratioSetFlag === '5') {
+        if (this.props.financing.financingContent && this.props.financing.financingContent.ratioSetFlag === '5')
+        {
           clearInterval(timer)
         }
-      }, 10000)
+      }, 5000)
     }
 
     return true;
   }
   // 继续按钮
-  private handleGoOn = () => {
+  private handleGoOn = () =>
+  {
     this.props.financing.step = 3;
     this.setState({
       isDoingEdit: false
