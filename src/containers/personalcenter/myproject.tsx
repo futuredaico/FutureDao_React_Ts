@@ -74,8 +74,8 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                                 <div className="project-status">
                                                     {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
                                                     {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
-                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
-                                                    {item.projState === ProjectState.Trading && <strong>交易中</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {/* {item.projState === ProjectState.Trading && <strong>交易中</strong>}
                                                     {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
                                                     <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
                                                 </div>
@@ -113,8 +113,8 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                                 <div className="project-status">
                                                     {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
                                                     {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
-                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
-                                                    {item.projState === ProjectState.Trading && <strong>交易中</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {/* {item.projState === ProjectState.Trading && <strong>交易中</strong>}
                                                     {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
                                                     {item.projSubState === ProjSubState.Auditing && <strong className="green-text">{this.intrl.myproject.review}</strong>}
                                                     {/* {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>} */}

@@ -127,10 +127,19 @@ class Financing {
     this.stepOneStatus = 2;
     this.stepTwoStatus = 3;
     this.stepThreeStatus = 3;
-
+    
     // 这里是不可能存在的，只是为了骗过ts
     if (!this.financingContent) {
       return false;
+    }
+    if(this.financingContent.reserveTokenFlag==='0'){
+      this.financingContent.reserveTokenInfo={
+        address: '',
+        info: [{
+          amt: undefined,
+          days: undefined
+        }]
+      }
     }
     if (this.financingContent.rewardSetFlag === '5') {
       this.stepTwoStatus = 2;

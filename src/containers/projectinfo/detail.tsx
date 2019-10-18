@@ -37,7 +37,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />
-                    <div className="contract-info">
+                    {/* <div className="contract-info">
                         <h3 className="title-h3">项目合约详情</h3>
                         <div className="two-row">
                             <div className="left-row">
@@ -53,7 +53,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                 <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>0.0001 ETH</strong></span>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="message-wrapper" id="message">
                     <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>

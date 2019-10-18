@@ -108,8 +108,8 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                 <h3 className="right-title">融资管理</h3>
                 <div className="right-apply-btn">
                     <Button
-                        text="启动融资"
-                        btnColor={(this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5') ? '' : "gray-btn"}
+                        text={this.props.financing.financingContent&&this.props.financing.financingContent.financeStartFlag==='5'?"已启动":"启动融资"}
+                        btnColor={((this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag !== '5' && this.props.financing.financingContent.rewardSetFlag !== '5' && this.props.financing.financingContent.ratioSetFlag !== '5')||(this.props.financing.financingContent&&this.props.financing.financingContent.financeStartFlag==='5')) ? "gray-btn" : ''}
                         onClick={this.handleStartFanance}
                     />
                 </div>
@@ -148,6 +148,9 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
     private handleStartFanance = async () => {
         if (!this.props.financing.financingContent) {
             return false;
+        }
+        if(this.props.financing.financingContent.financeStartFlag==='5'){
+            return false
         }
         if (this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5') {
             const res = await this.props.financing.startFanance();

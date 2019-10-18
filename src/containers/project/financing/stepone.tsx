@@ -37,14 +37,14 @@ interface IState {
 class StepOne extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
   public state: IState = {
-    financingType: 'daico', // 融资类型
+    financingType: '', // 融资类型
     platform: '', // 选择区块链
     tokenName: '', // 融资的代币
     isBindAddress: false,
     adminAddress: '', // 管理员钱包地址
     projTokenName: '', // 项目代币名称
     projTokenSymbol: '', // 项目代币简称
-    reserveTokenFlag: '1', // 是否团队预留代币
+    reserveTokenFlag: '', // 是否团队预留代币
     isDoingContract: false,
     nameEnter: false,
     simpleNameEnter: false,
@@ -111,7 +111,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       name: "否",
     }
   ]
-  public async componentDidMount() {
+  public async componentWillMount() {
     if (!this.props.financing.financingContent) {
       return false;
     }
@@ -134,7 +134,6 @@ class StepOne extends React.Component<IFinancingProps, IState> {
         isDoingSave: true
       })
     }
-
     return true;
   }
   public render() {
@@ -178,7 +177,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                   options={this.blockOptions}
                   text=''
                   onCallback={this.handleSelectBlock}
-                  defaultValue={this.state.platform ? this.state.platform : undefined}
+                  defaultValue={this.state.platform}
                 />
               </div>
               <div className="inline-title">
@@ -408,17 +407,16 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   }
   // 区块链的选择
   private handleSelectBlock = async (item) => {
+    console.log(item)
     this.setState({
       platform: item.id,
       adminAddress: "",
       tokenName: '',
       hasShowAsset: false,
-      // tokenName:item.id === "eth" ? "eth" : "neo"
     }, () => {
       this.setState({
         hasShowAsset: true,
       })
-      // this.handleSelectAsset({ id: item.id === "eth" ? "eth" : "neo", name: item.id === "eth" ? "ETH" : "NEO" })
     })
     if (this.props.financing.financingContent) {
       this.props.financing.financingContent.reserveTokenInfo.address = "";
