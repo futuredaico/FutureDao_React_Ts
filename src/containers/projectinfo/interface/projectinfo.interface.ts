@@ -15,6 +15,7 @@ export interface IProjectInfoStore {
     updateDiscussList:IDiscussList[],
     // updateDiscussReplyList:IDiscussReplyList[],
     isShowManagerInfo:boolean,
+    projContractInfo:IProjContractInfo|null,
     getProjInfo:(projId:string)=>Promise<boolean>,
     startAttention:()=>Promise<boolean>,
     cancelAttention:()=>Promise<boolean>,
@@ -32,6 +33,7 @@ export interface IProjectInfoStore {
     getProjDiscussReplyList:(childId:string) => Promise<[]>,
     getUpdateDiscussReplyList:(childId:string) => Promise<[]>,
     sendUpdateZanInfo:()=>Promise<boolean>,
+    getProjContractInfoData:()=>Promise<boolean>,
   }
   
   
@@ -39,6 +41,18 @@ export interface IProjectInfoStore {
     projectinfo:IProjectInfoStore,
     common:ICommonStore,
     intl:any
+  }
+
+  export interface IProjContractInfo {
+    projId:string,
+    tokenName:string,    // 项目代币名称
+    tokenIssueTotal:string,  // 发行总额
+    tokenUnlockNotAmount:string,  // 未解锁总额
+    tokenUnlockYesAmount:string,  // 已解锁总额
+    fundManagePoolTotal:string,  // 治理池金额
+    fundReservePoolTotal:string,  // 储备池总额
+    fundReserveRatio:string,  // 存储金比例
+    priceRaiseSpeed:string  // 价格增速
   }
 
   export interface IProjectInfo{
@@ -66,16 +80,16 @@ export interface IProjectInfoStore {
     zanCount:number
   }
   export interface IProjUpdateInfo{
-    updateTitle:string,
-    updateDetail:string,
-    lastUpdatorId:string,
-    lastUpdateTime:number,
-    discussCount:number,
-    zanCount:number,
+    updateTitle:string,  // 更新标题
+    updateDetail:string, // 更新内容
+    lastUpdatorId:string, // 最近更新者ID
+    lastUpdateTime:number,// 最近更新时间
+    discussCount:number, // 评论统计
+    zanCount:number,  // 点赞统计
     username:string,
     headIconUrl:string,
-    isMember:boolean,
-    rank:number,
+    isMember:boolean,  // 是否是成员
+    rank:number,       
     isZan:boolean
   }
   export interface IProjectTeam{

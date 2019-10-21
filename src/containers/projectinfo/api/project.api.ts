@@ -253,3 +253,15 @@ export const sendZanUpdateInfo = (userId:string,token:string,projId:string,updat
     }
     return request(opts);
 }
+/**
+ * 获取交易合约详情数据的统计
+ * @param projId 项目ID
+ */
+export const getProjContract = (projId:string) =>
+{
+    const opts = {
+        method: 'queryProjContract',
+        params: [projId]
+    }
+    return request(opts);
+}

@@ -2,7 +2,18 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
-import { IProjectInfo, IProjectUpdate, IProjectTeam, IProjUpdateInfo, IDiscussList, IDiscussReplyList } from '../interface/projectinfo.interface';
+import { IProjectInfo, IProjectUpdate, IProjectTeam, IProjUpdateInfo, IDiscussList, IDiscussReplyList, IProjContractInfo } from '../interface/projectinfo.interface';
+const defaultContract = {
+  projId:"",
+  tokenName:"0",    // 项目代币名称
+  tokenIssueTotal:"0",  // 发行总额
+  tokenUnlockNotAmount:"0",  // 未解锁总额
+  tokenUnlockYesAmount:"0",  // 已解锁总额
+  fundManagePoolTotal:"0",  // 治理池金额
+  fundReservePoolTotal:"0",  // 储备池总额
+  fundReserveRatio:"0",  // 存储金比例
+  priceRaiseSpeed:"0"  // 价格增速
+}
 class ProjectInfo
 {
   @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
@@ -23,7 +34,19 @@ class ProjectInfo
   @observable public updateDiscussList: IDiscussList[] = []; // 更新日志评论列表
   // @observable public updateDiscussReplyList: IDiscussReplyList[] = [];
   @observable public isShowManagerInfo = false; // 是否显示治理详情
-
+  @observable public projContractInfo:IProjContractInfo|null = null;
+  // public data = {
+  //   list: [
+  //     {
+  //       "name": "Buying",
+  //       "data": [1, 2, 3, 4, 5, 6]
+  //     },
+  //     {
+  //       "name": "Selling",
+  //       "data": [1, 2, 3, 4, 5, 6]
+  //     }
+  //   ]
+  // }
   /**
    * 获取项目基本详情
    */
@@ -207,11 +230,11 @@ class ProjectInfo
 
     const list = result[0].data.list.map((item: IDiscussList) =>
     {
-        return {
-          ...item,
-          isShowReply: false,
-          childredList:[]
-        }
+      return {
+        ...item,
+        isShowReply: false,
+        childredList: []
+      }
     })
     this.projDiscussList = list;
     return true;
@@ -278,14 +301,14 @@ class ProjectInfo
     {
       return false
     }
-    
+
     const list = result[0].data.list.map((item: IDiscussList) =>
     {
-        return {
-          ...item,
-          isShowReply: false,
-          childredList:[]
-        }
+      return {
+        ...item,
+        isShowReply: false,
+        childredList: []
+      }
     })
     this.updateDiscussList = list;
     // this.updateDiscussList = result[0].data.list;
@@ -374,6 +397,9 @@ class ProjectInfo
     }
     return true;
   }
+  /**
+   * 项目更新日志点赞
+   */
   @action public sendUpdateZanInfo = async () =>
   {
     let result: any = [];
@@ -388,6 +414,32 @@ class ProjectInfo
     {
       return false
     }
+    return true;
+  }
+  /**
+   * 获取项目合约详情
+   */
+  @action public getProjContractInfoData = async () =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.getProjContract(this.projId);
+    } catch (e)
+    {
+      this.projContractInfo = defaultContract;
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      this.projContractInfo = defaultContract;
+      return false
+    }
+    if (Object.keys(result[0].data).length === 0) {
+      this.projContractInfo = defaultContract;
+      return false
+    }
+    this.projContractInfo = result[0].data;
     return true;
   }
 }
