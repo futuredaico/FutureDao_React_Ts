@@ -265,3 +265,10 @@ export const getProjContract = (projId:string) =>
     }
     return request(opts);
 }
+export const getHistoryPriceList = (projId:string,type:string)=>{
+    const opts = {
+        method: 'queryTokenHistPrice',
+        params: [projId,type]
+    }
+    return request(opts);
+}

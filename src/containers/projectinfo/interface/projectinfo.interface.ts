@@ -69,6 +69,8 @@ export interface IProjectInfoStore {
     discussCount:number, // 留言人数
     updateCount:number, // 更新条数
     time:number // 创建时间
+    hasIssueAmt:string, // 已发行
+    hasSellAmt:string // 已出售
   }
 
   export interface IProjectUpdate{
@@ -121,3 +123,4 @@ export interface IProjectInfoStore {
     preUserId:string, // 被回复人ID
     preUsername:string // 被回复人名称
   }
+  
