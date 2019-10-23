@@ -265,10 +265,49 @@ export const getProjContract = (projId:string) =>
     }
     return request(opts);
 }
+/**
+ * 获取代币历史价格
+ * @param projId 项目Id
+ * @param type 截取时间 “w”为1周，“m”为1月
+ */
 export const getHistoryPriceList = (projId:string,type:string)=>{
     const opts = {
         method: 'queryTokenHistPrice',
         params: [projId,type]
+    }
+    return request(opts);
+}
+/**
+ * 查询项目购买价格和出售价格
+ * @param projId 项目ID
+ */
+export const getTokenPrice = (projId:string)=>{
+    const opts={
+        method:'queryTokenPrice',
+        params:[projId]
+    }
+    return request(opts);
+}
+/**
+ * 获取项目礼包列表
+ * @param projId 项目Id
+ */
+export const getRewardList = (projId:string)=>{
+    const opts={
+        method:'queryRewardList',
+        params:[projId]
+    }
+    return request(opts);
+}
+
+/**
+ * 查询预留代币
+ * @param projId 项目ID
+ */
+export const getReserveToken = (projId:string)=>{
+    const opts={
+        method:'queryReserveToken',
+        params:[projId]
     }
     return request(opts);
 }

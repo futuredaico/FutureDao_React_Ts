@@ -3,25 +3,26 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
-import { IProjectInfoProps, IProjectUpdate } from './interface/projectinfo.interface';
+import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import * as formatTime from 'utils/formatTime';
+import { IProjectUpdate } from '../interface/update.interface';
 
 @observer
-class UpdateList extends React.Component<IProjectInfoProps, any> {
+class ProjectUpdate extends React.Component<IProjectInfoProps, any> {
     public intrl = this.props.intl.messages;
     public componentDidMount()
     {
-        this.props.projectinfo.getUpdateData();
+        this.props.update.getUpdateData();
     }
     public render()
     {
         return (
             <div className="updatelist-wrapper">            
                 {
-                    this.props.projectinfo.projUpdateList.length > 0 
-                    ? this.props.projectinfo.projUpdateList.map((item: IProjectUpdate, index: number) =>
+                    this.props.update.projUpdateList.length > 0 
+                    ? this.props.update.projUpdateList.map((item: IProjectUpdate, index: number) =>
                     {
                         return (
                             <div className="updatelist-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
@@ -44,8 +45,8 @@ class UpdateList extends React.Component<IProjectInfoProps, any> {
     private handleToInfo = (item: IProjectUpdate) =>
     {
         this.props.projectinfo.isShowUpdateInfo = true;
-        this.props.projectinfo.updateId = item.updateId;
+        this.props.update.updateId = item.updateId;
     }
 }
 
-export default injectIntl(UpdateList);
+export default injectIntl(ProjectUpdate);

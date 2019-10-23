@@ -101,6 +101,7 @@ export interface IUserInfo
 
 export enum ProjectState
 {
+  // 一级状态
   Readying = "reading",  // 准备中
   IdeaPub = "ideapub",   // 创意发布
   CrowdFunding = "crowdfunding",  // 众筹中
@@ -110,7 +111,7 @@ export enum ProjectState
 
 export enum ProjSubState
 {
-  // 一级/二级关系
+  // 二级关系
   // * 准备中: 无状态/审核中/审核失败
   // * 众筹中: 无状态/预热中 
   Init = "init",          // 初始状态: 无状态

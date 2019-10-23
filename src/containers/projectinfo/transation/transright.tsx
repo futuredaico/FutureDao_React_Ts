@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import Button from '@/components/Button';
 // import Toast from '@/components/Toast';
 @observer

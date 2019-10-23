@@ -3,11 +3,11 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
-import { IProjectInfoProps } from './interface/projectinfo.interface';
+import { IProjectInfoProps } from '../interface/projectinfo.interface';
 
 @observer
 class Manager extends React.Component<IProjectInfoProps, any> {

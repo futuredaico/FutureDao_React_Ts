@@ -3,15 +3,15 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 // import Toast from '@/components/Toast';
 import RightTable from './transright';
 // import * as formatTime from '@/utils/formatTime';
-import { IProjectInfoProps } from './interface/projectinfo.interface';
+import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import Hint from '@/components/hint';
 @observer
-class Transation extends React.Component<IProjectInfoProps, any> {
+class ProjectTransation extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
         underBottom: 1,
@@ -39,25 +39,25 @@ class Transation extends React.Component<IProjectInfoProps, any> {
     ]
     public componentDidMount()
     {
-        this.props.projectinfo.getProjContractInfoData();
+        this.props.transation.getProjContractInfoData();
     }
     public render()
     {
         return (
             <div className="transation-wrapper">
                 {
-                    this.props.projectinfo.projContractInfo && (
+                    this.props.transation.projContractInfo && (
                         <div className="contract-info">
                             <h3 className="title-h3">合约详情</h3>
-                            <div className="two-row">
-                                <span className="block-span"><span title="">项目代币名称：</span><strong>{this.props.projectinfo.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>{this.props.projectinfo.projContractInfo.tokenIssueTotal}</strong></span>
-                                <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>{this.props.projectinfo.projContractInfo.tokenUnlockNotAmount}</strong></span>
-                                <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>{this.props.projectinfo.projContractInfo.tokenUnlockYesAmount}</strong></span>
-                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>{this.props.projectinfo.projContractInfo.fundManagePoolTotal} {this.props.projectinfo.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>{this.props.projectinfo.projContractInfo.fundReservePoolTotal} {this.props.projectinfo.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="购买代币所花费的资金，其中一定比例会被智能合约储存起来当作回购代币的储备金。">储备比例：</span><strong>{this.props.projectinfo.projContractInfo.fundReserveRatio}%</strong></span>
-                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>{this.props.projectinfo.projContractInfo.priceRaiseSpeed} {this.props.projectinfo.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
+                            <div className="three-row">
+                                <span className="block-span"><span title="">项目代币名称：</span><strong>{this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>{this.props.transation.projContractInfo.tokenIssueTotal}</strong></span>
+                                <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockNotAmount}</strong></span>
+                                <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockYesAmount}</strong></span>
+                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>{this.props.transation.projContractInfo.fundManagePoolTotal} {this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>{this.props.transation.projContractInfo.fundReservePoolTotal} {this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="购买代币所花费的资金，其中一定比例会被智能合约储存起来当作回购代币的储备金。">储备比例：</span><strong>{this.props.transation.projContractInfo.fundReserveRatio}%</strong></span>
+                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>{this.props.transation.projContractInfo.priceRaiseSpeed} {this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
                             </div>
                         </div>
                     )
@@ -182,4 +182,4 @@ class Transation extends React.Component<IProjectInfoProps, any> {
     }
 }
 
-export default injectIntl(Transation);
+export default injectIntl(ProjectTransation);

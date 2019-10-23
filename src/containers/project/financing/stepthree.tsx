@@ -149,7 +149,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
   private handleChangeRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>
   {
     // 可以被修改成0-99的整数
-    const value = ev.target.value as unknown as number;
+    const value = ev.target.value as unknown as number;    
     if (isNaN(value))
     {
       return false;
@@ -174,6 +174,9 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     if (!this.state.ratio)
     {
       return false;
+    }
+    if(parseFloat(this.state.ratio)<=0){
+      return false
     }
     const res = await this.props.financing.saveReserveFundRatio(this.state.ratio);
     if (res)

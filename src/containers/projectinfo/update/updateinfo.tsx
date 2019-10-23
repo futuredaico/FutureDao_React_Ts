@@ -3,10 +3,10 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/projectinfo.interface';
+import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from '../interface/projectinfo.interface';
 // import RightTable from './transright';
 import * as formatTime from '@/utils/formatTime';
 interface IState
@@ -27,16 +27,16 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     }
     public componentDidMount()
     {
-        this.props.projectinfo.getUpdateInfo();
+        this.props.update.getUpdateInfo();
         this.handleGetUpdateDiscussList('');
     }
     public componentWillUnmount()
     {
-        this.props.projectinfo.updateInfo = null;
+        this.props.update.updateInfo = null;
     }
     public render()
     {
-        if (!this.props.projectinfo.updateInfo)
+        if (!this.props.update.updateInfo)
         {
             return <div />;
         }
@@ -44,17 +44,17 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
             <div className="updateinfo-wrapper">
                 <div className="updateinfo-top" >
                     <div className="updateinfo-tips">
-                        <span>{formatTime.format('yyyy-MM-dd ', this.props.projectinfo.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
+                        <span>{formatTime.format('yyyy-MM-dd ', this.props.update.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>#{this.props.projectinfo.updateInfo.rank} {this.intrl.projinfo.update}</span>
+                        <span>#{this.props.update.updateInfo.rank} {this.intrl.projinfo.update}</span>
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackUpdateList} className="back-img" />
                     </div>
-                    <strong className="update-title">{this.props.projectinfo.updateInfo.updateTitle}</strong>
+                    <strong className="update-title">{this.props.update.updateInfo.updateTitle}</strong>
                     <div className="update-people">
-                        <img src={this.props.projectinfo.updateInfo.headIconUrl ? this.props.projectinfo.updateInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                        <strong>{this.props.projectinfo.updateInfo.username}</strong>
+                        <img src={this.props.update.updateInfo.headIconUrl ? this.props.update.updateInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
+                        <strong>{this.props.update.updateInfo.username}</strong>
                         {
-                            this.props.projectinfo.updateInfo.isMember && (
+                            this.props.update.updateInfo.isMember && (
                                 <div className="right-update">
                                     <span onClick={this.handleToUpdateEdit}>{this.intrl.projinfo.edit}</span>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -64,17 +64,17 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                         }
 
                     </div>
-                    <div className="updateinfo-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.updateInfo.updateDetail }} />
+                    <div className="updateinfo-p" dangerouslySetInnerHTML={{ '__html': this.props.update.updateInfo.updateDetail }} />
                     {
-                        this.props.projectinfo.updateInfo.isZan
+                        this.props.update.updateInfo.isZan
                             ? <img src={require('@/img/zan.png')} className="zan-img" alt="zan.png" />
                             : <img src={require('@/img/zan-un.png')} className="zan-img" alt="zan-un.png" onClick={this.handleSendUpdateZanInfo} />
                     }
-                    <span className="zan-span">{this.props.projectinfo.updateInfo.zanCount}</span>
+                    <span className="zan-span">{this.props.update.updateInfo.zanCount}</span>
                 </div>
                 <div className="message-wrapper">
                     <div className="updateinfo-tips">
-                        <span>{this.intrl.projinfo.comments}：{this.props.projectinfo.updateInfo.discussCount}</span>
+                        <span>{this.intrl.projinfo.comments}：{this.props.update.updateInfo.discussCount}</span>
                     </div>
                     {
                         (this.props.common.userInfo && this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.isSupport)
@@ -118,7 +118,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                     }
                     <div className="message-comment">
                         {
-                            this.props.projectinfo.updateDiscussList.length > 0 && this.props.projectinfo.updateDiscussList.map((item: IDiscussList, index: number) =>
+                            this.props.update.updateDiscussList.length > 0 && this.props.update.updateDiscussList.map((item: IDiscussList, index: number) =>
                             {
                                 return (
                                     <div className="comment-list" key={index}>
@@ -230,9 +230,9 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     // 删除更新
     private handleDeleteUpdate = () =>
     {
-        this.props.projectinfo.deletUpdateInfo();
+        this.props.update.deletUpdateInfo();
         this.props.projectinfo.isShowUpdateInfo = false;
-        this.props.projectinfo.updateId = '';
+        this.props.update.updateId = '';
         this.handleShowDelete();
         return true;
     }
@@ -240,7 +240,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     private handleToUpdateEdit = () =>
     {
         // todo
-        this.props.history.push('/project/update/' + this.props.projectinfo.projId + '?updateid=' + this.props.projectinfo.updateId)
+        this.props.history.push('/project/update/' + this.props.projectinfo.projId + '?updateid=' + this.props.update.updateId)
     }
     // 更新日志的点赞
     private handleSendUpdateZanInfo = async () =>
@@ -250,12 +250,12 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendUpdateZanInfo();
+        const res = await this.props.update.sendUpdateZanInfo();
         if (res)
         {
-            if (this.props.projectinfo.updateInfo)
+            if (this.props.update.updateInfo)
             {
-                this.props.projectinfo.updateInfo.isZan = true;
+                this.props.update.updateInfo.isZan = true;
             }
         }
         return true;
@@ -266,10 +266,10 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     // 获取列表
     private handleGetUpdateDiscussList = async (discussId: string) =>
     {
-        await this.props.projectinfo.getUpdateDiscussList(discussId);
-        if (this.props.projectinfo.updateDiscussList.length > 0)
+        await this.props.update.getUpdateDiscussList(discussId);
+        if (this.props.update.updateDiscussList.length > 0)
         {
-            this.props.projectinfo.updateDiscussList.map((item: IDiscussList) =>
+            this.props.update.updateDiscussList.map((item: IDiscussList) =>
             {
                 if (item.subSize > 0)
                 {
@@ -281,7 +281,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     // 获取回复列表
     private handleGetUpdateReplayList = async (item: IDiscussList) =>
     {
-        const replyList = await this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
+        const replyList = await this.props.update.getUpdateDiscussReplyList(item.childrenId);
         item.childredList = [...replyList]
     }
     // 一切操作之前的验证 
@@ -321,7 +321,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendUpdateDiscuss('', this.state.updateDiscuss);
+        const res = await this.props.update.sendUpdateDiscuss('', this.state.updateDiscuss);
         if (res)
         {
             this.setState({
@@ -342,7 +342,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendUpdateZan(item.discussId);
+        const res = await this.props.update.sendUpdateZan(item.discussId);
         if (res)
         {
             item.isZan = true;
@@ -358,7 +358,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
+        this.props.update.updateDiscussList.forEach((list: IDiscussList) =>
         {
             if (list.discussId === item.discussId)
             {
@@ -383,7 +383,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
+        this.props.update.updateDiscussList.forEach((list: IDiscussList) =>
         {
             list.isShowReply = false;
             list.childredList.forEach((replyList: IDiscussReplyList) =>
@@ -425,7 +425,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.sendUpdateDiscuss(item.discussId, this.state.updateReply);
+        this.props.update.sendUpdateDiscuss(item.discussId, this.state.updateReply);
         item.isShowReply = false;
         setTimeout(() =>
         {
@@ -440,7 +440,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.sendUpdateDiscuss(replyItem.discussId, this.state.updateReplyOther);
+        this.props.update.sendUpdateDiscuss(replyItem.discussId, this.state.updateReplyOther);
         replyItem.isShowReply = false;
         setTimeout(() =>
         {

@@ -3,10 +3,10 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from './interface/projectinfo.interface';
+import { IProjectInfoProps, IDiscussList, IDiscussReplyList } from '../interface/projectinfo.interface';
 import Hint from '@/components/hint';
 import * as formatTime from '@/utils/formatTime';
 
@@ -142,7 +142,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                         }
                         <div className="message-comment">
                             {
-                                this.props.projectinfo.updateDiscussList.length > 0 && this.props.projectinfo.updateDiscussList.map((item: IDiscussList, index: number) =>
+                                this.props.update.updateDiscussList.length > 0 && this.props.update.updateDiscussList.map((item: IDiscussList, index: number) =>
                                 {
                                     return (
                                         <div className="comment-list" key={index}>
@@ -381,7 +381,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
     // 获取回复列表
     private handleGetManagerReplyList = async (item: IDiscussList) =>
     {
-        const replyList = await this.props.projectinfo.getUpdateDiscussReplyList(item.childrenId);
+        const replyList = await this.props.update.getUpdateDiscussReplyList(item.childrenId);
         item.childredList = [...replyList]
     }
     // 一切操作之前的验证 
@@ -435,7 +435,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendUpdateZan(item.discussId);
+        const res = await this.props.update.sendUpdateZan(item.discussId);
         if (res)
         {
             item.isZan = true;
@@ -451,7 +451,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
+        this.props.update.updateDiscussList.forEach((list: IDiscussList) =>
         {
             if (list.discussId === item.discussId)
             {
@@ -476,7 +476,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        this.props.projectinfo.updateDiscussList.forEach((list: IDiscussList) =>
+        this.props.update.updateDiscussList.forEach((list: IDiscussList) =>
         {
             list.isShowReply = false;
             list.childredList.forEach((replyList: IDiscussReplyList) =>
@@ -518,7 +518,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        this.props.projectinfo.sendUpdateDiscuss(item.discussId, this.state.managerReply);
+        this.props.update.sendUpdateDiscuss(item.discussId, this.state.managerReply);
         item.isShowReply = false;
         setTimeout(() =>
         {
@@ -533,7 +533,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
         {
             return false;
         }
-        this.props.projectinfo.sendUpdateDiscuss(replyItem.discussId, this.state.managerReplyOther);
+        this.props.update.sendUpdateDiscuss(replyItem.discussId, this.state.managerReplyOther);
         replyItem.isShowReply = false;
         setTimeout(() =>
         {

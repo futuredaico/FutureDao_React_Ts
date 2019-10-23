@@ -2,7 +2,7 @@ import {action, observable} from 'mobx';
 import * as Api from '../api/project.api'
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
-import { IProjUpdateInfo } from '@/containers/projectinfo/interface/projectinfo.interface';
+import { IProjUpdateInfo } from '@/containers/projectinfo/interface/update.interface';
 class CreateProject {
   @observable public updateInfo:IProjUpdateInfo|null = null;
   @action public sendUpdate = async (projId:string,title:string,detail:string) =>
