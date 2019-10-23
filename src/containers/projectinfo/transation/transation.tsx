@@ -10,6 +10,8 @@ import RightTable from './transright';
 // import * as formatTime from '@/utils/formatTime';
 import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import Hint from '@/components/hint';
+import chartsOptions from './test';
+import Echarts from 'echarts';
 @observer
 class ProjectTransation extends React.Component<IProjectInfoProps, any> {
     public state = {
@@ -17,7 +19,8 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
         underBottom: 1,
         timeType: 1
     }
-    public timeOption = [
+    private myCahrt: Echarts.ECharts | null = null;
+    private timeOption = [
         {
             id: 1,
             name: '1月'
@@ -27,7 +30,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
             name: '1周'
         }
     ]
-    public menuBottom = [
+    private menuBottom = [
         {
             id: 1,
             name: '我的记录'
@@ -37,12 +40,21 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
             name: '全部记录'
         }
     ]
-    public componentDidMount()
-    {
+    public componentDidMount() {
+        const echartsEl = document.getElementById('transEcharts') as HTMLDivElement;
+        if (echartsEl) {
+            const myChart = Echarts.init(echartsEl);
+            myChart.setOption(chartsOptions as any)
+            this.myCahrt = myChart;
+        }
         this.props.transation.getProjContractInfoData();
     }
-    public render()
-    {
+    public componentWillUnmount() {
+        if (this.myCahrt) {
+            this.myCahrt.dispose();
+        }
+    }
+    public render() {
         return (
             <div className="transation-wrapper">
                 {
@@ -62,15 +74,14 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
                         </div>
                     )
                 }
-                
+
                 <div className="trans-top">
                     <div className="trans-price">
                         <h3 className="title-h3">历史价格</h3>
                         <div className="right-toggle">
                             <ul className="title-ul">
                                 {
-                                    this.timeOption.map((item, index) =>
-                                    {
+                                    this.timeOption.map((item, index) => {
                                         return (
                                             <li className={this.state.timeType === item.id ? "title-li active" : "title-li"} key={index} onClick={this.handleTimeChoice.bind(this, item)}>
                                                 {item.name}
@@ -80,7 +91,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
                                 }
                             </ul>
                         </div>
-                        <div className="trans-echart">
+                        <div className="trans-echart" id="transEcharts">
                             折线图
                         </div>
                     </div>
@@ -90,8 +101,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
                     <div className="bottom-title">
                         <ul className="title-ul">
                             {
-                                this.menuBottom.map((item, index) =>
-                                {
+                                this.menuBottom.map((item, index) => {
                                     return (
                                         <li className={this.state.underBottom === item.id ? "title-li active" : "title-li"} key={index} onClick={this.handleHistoryType.bind(this, item)}>
                                             {item.name}
@@ -160,8 +170,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
     // }
 
     // 底部菜单选择
-    private handleHistoryType = (item) =>
-    {
+    private handleHistoryType = (item) => {
         // if (item.id === 2)
         // {
         //     projectinfoStore.getMyTrades();
@@ -174,8 +183,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
             underBottom: item.id
         })
     }
-    private handleTimeChoice = (item) =>
-    {
+    private handleTimeChoice = (item) => {
         this.setState({
             timeType: item.id
         })
