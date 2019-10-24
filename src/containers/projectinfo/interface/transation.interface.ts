@@ -2,8 +2,10 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 export interface IProjectTransationStore
 {
-  projContractInfo: IProjectContractInfo | null,
-  getProjContractInfoData: () => Promise<boolean>,
+  projContractInfo: IProjectContractInfo | null, // 合约详情
+  historyPrice:IHistoryPrice, // 历史价格的数据
+  getProjContractInfoData: () => Promise<boolean>, // 获取合约详情数据
+  getHistoryData:(type:string)=>Promise<boolean>, // 获取历史价格的数据
 }
 
 
@@ -29,7 +31,7 @@ export interface IProjectContractInfo
 
 export interface IHistoryPrice
 {
-  buyInfo: string[],
-  sellInfo: string[],
-  timeInfo: string[],
+  buyInfo: [],
+  sellInfo: [],
+  timeInfo: [],
 }

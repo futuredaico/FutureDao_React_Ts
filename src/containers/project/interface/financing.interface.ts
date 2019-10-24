@@ -47,7 +47,7 @@ export interface IFinancingContent {
   projTokenName: string,        // 代币名称
   projTokenSymbol: string,      // 代币简称
   reserveTokenFlag: string,     // 是否预留代币
-  reserveTokenInfo: ISaveAsset, // 预留代币详情
+  reserveTokenInfo: ISaveAsset[], // 预留代币详情
   deployContractFlag: string,    // 发布合约标记，3为未操作，4为处理中，5为已完成
   rewardSetFlag: string,         // 回报标记，同上
   ratioSetFlag: string,          // 融资信息标记，同上

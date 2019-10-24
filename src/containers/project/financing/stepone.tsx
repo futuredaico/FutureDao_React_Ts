@@ -244,7 +244,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                       <div className="inline-enter">
                         <Input
                           placeholder={this.state.adminAddress ? "" : "未绑定钱包地址，请手动填写"}
-                          value={this.props.financing.financingContent.reserveTokenInfo.address}
+                          value={this.props.financing.financingContent.reserveTokenInfo[0].address}
                           onChange={this.handleChangeReceiveAddr}
                           onBlur={this.handleBlurInpurAddr}
                           className={this.state.addrEnter ? "err-active" : ''}
@@ -254,7 +254,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                         }
                       </div>
                       {
-                        Object.keys(this.props.financing.financingContent.reserveTokenInfo).length !== 0 && this.props.financing.financingContent.reserveTokenInfo.info.map((item: IInfo, index: number) => {
+                        Object.keys(this.props.financing.financingContent.reserveTokenInfo).length !== 0 && this.props.financing.financingContent.reserveTokenInfo[0].info.map((item: IInfo, index: number) => {
                           return (
                             <div className="tworow-line" key={index}>
                               <div className="firstrow">
@@ -419,7 +419,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       })
     })
     if (this.props.financing.financingContent) {
-      this.props.financing.financingContent.reserveTokenInfo.address = "";
+      this.props.financing.financingContent.reserveTokenInfo[0].address = "";
     }
     // 选择了区块之后获取绑定地址
     if (this.props.common.userInfo) {
@@ -436,7 +436,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
           adminAddress: this.props.common.userInfo.ethAddress
         })
         if (this.props.financing.financingContent) {
-          this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.ethAddress
+          this.props.financing.financingContent.reserveTokenInfo[0].address = this.props.common.userInfo.ethAddress
         }
       } else {
         if (this.props.common.userInfo.neoAddress === "") {
@@ -452,7 +452,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
           addrEnter: false
         })
         if (this.props.financing.financingContent) {
-          this.props.financing.financingContent.reserveTokenInfo.address = this.props.common.userInfo.neoAddress
+          this.props.financing.financingContent.reserveTokenInfo[0].address = this.props.common.userInfo.neoAddress
         }
       }
     }
@@ -502,7 +502,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     //
     const addr = ev.target.value.trim();
     if (this.props.financing.financingContent) {
-      this.props.financing.financingContent.reserveTokenInfo.address = addr;
+      this.props.financing.financingContent.reserveTokenInfo[0].address = addr;
     }
     this.setState({
       addrEnter: false
@@ -583,7 +583,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     if (!this.props.financing.financingContent) {
       return false;
     }
-    this.props.financing.financingContent.reserveTokenInfo.info.push({
+    this.props.financing.financingContent.reserveTokenInfo[0].info.push({
       amt: undefined,
       days: undefined
     })
@@ -595,7 +595,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     if (!this.props.financing.financingContent) {
       return false;
     }
-    this.props.financing.financingContent.reserveTokenInfo.info.splice(index, 1);
+    this.props.financing.financingContent.reserveTokenInfo[0].info.splice(index, 1);
     return true;
   }
   // 输入解锁数量
@@ -611,7 +611,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       }
     }
     if (this.props.financing.financingContent) {
-      this.props.financing.financingContent.reserveTokenInfo.info[index].amt = parseInt(value.toString(), 10);
+      this.props.financing.financingContent.reserveTokenInfo[0].info[index].amt = parseInt(value.toString(), 10);
     }
     return true;
   }
@@ -628,7 +628,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       }
     }
     if (this.props.financing.financingContent) {
-      this.props.financing.financingContent.reserveTokenInfo.info[index].days = parseInt(value.toString(), 10);
+      this.props.financing.financingContent.reserveTokenInfo[0].info[index].days = parseInt(value.toString(), 10);
     }
     return true;
   }
@@ -661,7 +661,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       return false
     }
     if (this.state.reserveTokenFlag === "1") {
-      if (this.props.financing.financingContent && !this.props.financing.financingContent.reserveTokenInfo.address) {
+      if (this.props.financing.financingContent && !this.props.financing.financingContent.reserveTokenInfo[0].address) {
         this.props.common.openNotificationWithIcon('error', "操作失败", "请完成团队预留模块的填写");
         return false
       }
@@ -670,7 +670,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       }
       let isEnter = true
       if (this.props.financing.financingContent) {
-        this.props.financing.financingContent.reserveTokenInfo.info.forEach((item: IInfo) => {
+        this.props.financing.financingContent.reserveTokenInfo[0].info.forEach((item: IInfo) => {
           if (!item.amt) {
             isEnter = false;
           }

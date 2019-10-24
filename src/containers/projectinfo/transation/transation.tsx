@@ -10,23 +10,23 @@ import RightTable from './transright';
 // import * as formatTime from '@/utils/formatTime';
 import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import Hint from '@/components/hint';
-import chartsOptions from './test';
+import chartsOptions from './historyechart';
 import Echarts from 'echarts';
 @observer
 class ProjectTransation extends React.Component<IProjectInfoProps, any> {
     public state = {
         underPrice: 4,
         underBottom: 1,
-        timeType: 1
+        timeType: "w"
     }
     private myCahrt: Echarts.ECharts | null = null;
     private timeOption = [
         {
-            id: 1,
+            id: "m",
             name: '1月'
         },
         {
-            id: 2,
+            id: "w",
             name: '1周'
         }
     ]
@@ -40,10 +40,16 @@ class ProjectTransation extends React.Component<IProjectInfoProps, any> {
             name: '全部记录'
         }
     ]
-    public componentDidMount() {
+    public async componentDidMount() {
+        await this.props.transation.getHistoryData(this.state.timeType)
+        console.log(JSON.stringify(this.props.transation.historyPrice))
+        console.log(chartsOptions)
         const echartsEl = document.getElementById('transEcharts') as HTMLDivElement;
         if (echartsEl) {
             const myChart = Echarts.init(echartsEl);
+            chartsOptions.xAxis.data=this.props.transation.historyPrice.timeInfo;
+            chartsOptions.series[0].data =this.props.transation.historyPrice.buyInfo;
+            chartsOptions.series[1].data=this.props.transation.historyPrice.sellInfo;
             myChart.setOption(chartsOptions as any)
             this.myCahrt = myChart;
         }

@@ -13,6 +13,7 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
     public componentDidMount()
     {
         this.props.projectinfo.getTeamData();
+        this.props.projectinfo.getTokenPriceData();
         this.props.projectinfo.getRewardData();
         this.props.projectinfo.getReserveTokenData();
     }
@@ -74,8 +75,8 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                                                         <span className="s-gray">获得约14代币</span>
                                                         <strong className="m-block">{item.rewardName}</strong>
                                                         <p className="m-gray">{item.rewardDesc}</p>
-                                                        <p className="m-gray">产品1X1</p>
-                                                        <p className="m-gray">产品2X2</p>
+                                                        {/* <p className="m-gray">产品1X1</p>
+                                                        <p className="m-gray">产品2X2</p> */}
                                                         <strong className="m-block">预计交货  {item.distributeTimeFlag === "1" ? item.distributeTimeFixYes : item.distributeTimeFixNot + "天内"}</strong>
                                                         {/* <strong className="m-block">预计交货  3天内</strong> */}
                                                         {

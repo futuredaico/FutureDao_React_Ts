@@ -14,13 +14,13 @@ const defaultContent = {
   projTokenName: '',
   projTokenSymbol: '',
   reserveTokenFlag: '1',
-  reserveTokenInfo: {
+  reserveTokenInfo: [{
     address: '',
     info: [{
       amt: undefined,
       days: undefined
     }]
-  },
+  }],
   deployContractFlag: '3',
   rewardSetFlag: '3',
   ratioSetFlag: '3',
@@ -60,14 +60,14 @@ class Financing {
     if (!this.financingContent||Object.keys(this.financingContent.reserveTokenInfo).length === 0) {
       return 0;
     }
-    const result = this.financingContent.reserveTokenInfo.info.map(v => v.amt).reduce((v1: number, v2: number) => (v1 + v2))
+    const result = this.financingContent.reserveTokenInfo[0].info.map(v => v.amt).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
   @computed get totalDays() {
     if (!this.financingContent||Object.keys(this.financingContent.reserveTokenInfo).length === 0) {
       return 0;
     }
-    const result = this.financingContent.reserveTokenInfo.info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))
+    const result = this.financingContent.reserveTokenInfo[0].info.map(v => v.days).reduce((v1: number, v2: number) => (v1 + v2))
     return result || 0;
   }
   /**
@@ -89,7 +89,7 @@ class Financing {
       this.financingContent.projTokenName,
       this.financingContent.projTokenSymbol,
       this.financingContent.reserveTokenFlag,
-      this.financingContent.reserveTokenFlag === '1' ? JSON.stringify(this.financingContent.reserveTokenInfo) : '{}',
+      this.financingContent.reserveTokenFlag === '1' ? JSON.stringify(this.financingContent.reserveTokenInfo) : '[]',
     ]
     console.log(JSON.stringify(params));
     try {
@@ -133,13 +133,13 @@ class Financing {
       return false;
     }
     if(this.financingContent.reserveTokenFlag==='0'){
-      this.financingContent.reserveTokenInfo={
+      this.financingContent.reserveTokenInfo=[{
         address: '',
         info: [{
           amt: undefined,
           days: undefined
         }]
-      }
+      }]
     }
     if (this.financingContent.rewardSetFlag === '5') {
       this.stepTwoStatus = 2;
