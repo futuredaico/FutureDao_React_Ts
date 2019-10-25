@@ -1,4 +1,8 @@
-import request from 'utils/request';
+import request from "@/utils/request";
+import web3Tool from "@/utils/web3Tool";
+import common from "@/store/common";
+// import { CONTRACT_CONFIG } from "@/config";
+// import { AbiItem } from "web3-utils";
 /**
  * 获取项目详情基本信息
  * @param projId 项目ID
@@ -310,4 +314,62 @@ export const getReserveToken = (projId:string)=>{
         params:[projId]
     }
     return request(opts);
+}
+/**
+ * 
+ * @param projId 项目ID
+ * @param addr 地址
+ * @param page 分页索引
+ * @param size 分页大小
+ */
+export const getTxList = (projId:string,addr:string,page:number,size:number)=>{
+    const opts = {
+        method:'queryTxList',
+        params:[projId,addr,page,size]
+    }
+    return request(opts);
+}
+
+/**
+ * 获得fnd的发行总量
+ * @param hash 
+ */
+export const totalSupply=(hash:string)=>{
+    return web3Tool.contractCall('fundPool',hash,'totalSupply');
+}
+
+/**
+ * 购买fnd
+ * @param hash 项目hash
+ * @param amount 金额
+ */
+export const buy = (hash:string,amount:any)=>{
+    if(!common.userInfo){
+        return
+    }
+    return web3Tool.contractSend('fundPool',hash,'buy',undefined,{from:common.userInfo.ethAddress,to:hash,value:amount})
+}
+
+/**
+ * 卖出方法
+ * @param hash 
+ * @param amount 
+ */
+export const sell=(hash:string,amount:any)=>{
+    if(!common.userInfo){
+        return
+    }
+    return web3Tool.contractSend('fundPool',hash,"sell",[amount],{from:common.userInfo.ethAddress});
+}
+
+/**
+ * 根据hash获得项目股份的购买斜率
+ * @param hash 
+ */
+export const getSlope=(hash:string)=>{
+    return web3Tool.contractCall('fundPool',hash,"slope");
+}
+
+export const getFndBalancesByAddress=(hash:string,address:string)=>{
+    return web3Tool.contractCall('fundPool',hash,'balances',[address]);
 }

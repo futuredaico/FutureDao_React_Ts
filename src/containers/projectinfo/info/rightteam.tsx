@@ -7,9 +7,15 @@ import { IProjectInfoProps, IProjectTeam, IProjReward, IProjReserveList } from '
 import Hint from '@/components/hint';
 import { ProjectState } from '@/store/interface/common.interface';
 import * as formatTime from '@/utils/formatTime';
+interface IState {
+    priceType:number
+}
 @observer
-class RightTeam extends React.Component<IProjectInfoProps, any> {
+class RightTeam extends React.Component<IProjectInfoProps, IState> {
     public intrl = this.props.intl.messages;
+    public state:IState = {
+        priceType:1
+    }
     public componentDidMount()
     {
         this.props.projectinfo.getTeamData();
@@ -43,16 +49,19 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                     }
                 </div>
                 {
-                    this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && (
+                    this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && this.props.projectinfo.priceInfo && (
                         <>
                             <div className="price-wrapper">
                                 <h3 className="title-h3">项目代币价格</h3>
                                 <div className="price-btn">
-                                    <Button text="购买价格" btnSize="md-btn" btnColor="white-btn" />
-                                    <Button text="出售价格" btnSize="md-btn" btnColor="gray-black2" />
+                                    <Button text="购买价格" btnSize="md-btn" btnColor={this.state.priceType===1?"white-btn":"gray-black2"} onClick={this.handleShowPriceType.bind(this,1)} />
+                                    <Button text="出售价格" btnSize="md-btn" btnColor={this.state.priceType===2?"white-btn":"gray-black2"} onClick={this.handleShowPriceType.bind(this,2)} />
                                 </div>
                                 <div className="line-picture">
-                                    线性图表
+                                    <span className="gray-str set-one">当前价格（{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/币）</span>
+                                    <span className="gray-str set-two">代币数量</span>
+                                    <span className="set-three">{this.state.priceType===1?this.props.projectinfo.priceInfo.ob_fundAmt:this.props.projectinfo.priceInfo.os_fundAmt}</span>
+                                    <span className="set-four">{this.state.priceType===1?this.props.projectinfo.priceInfo.ob_tokenAmt:this.props.projectinfo.priceInfo.os_tokenAmt}</span>
                                 </div>
                                 <p className="price-tips">项目代币由智能合约管理，会在投资者买入时增发，卖出时销毁。代币价格由智能合约自动计算给出，会随着代币发行数量的增加不断变高。因此购买越早，买入价格越低，后期涨的越多。</p>
                             </div>
@@ -75,18 +84,17 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                                                         <span className="s-gray">获得约14代币</span>
                                                         <strong className="m-block">{item.rewardName}</strong>
                                                         <p className="m-gray">{item.rewardDesc}</p>
-                                                        {/* <p className="m-gray">产品1X1</p>
-                                                        <p className="m-gray">产品2X2</p> */}
-                                                        <strong className="m-block">预计交货  {item.distributeTimeFlag === "1" ? item.distributeTimeFixYes : item.distributeTimeFixNot + "天内"}</strong>
-                                                        {/* <strong className="m-block">预计交货  3天内</strong> */}
+                                                        <strong className="m-block">预计交货  {item.distributeTimeFlag === "1" ? item.distributeTimeFixYes : item.distributeTimeFixNot + "天内"}</strong>                                                        
                                                         {
                                                             item.limitFlag === '1' && <strong className="m-block">限量{item.limitMax}（剩余{parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10)}）</strong>
                                                         }
-
-                                                        <Button text="购买" />
+                                                        {
+                                                            parseInt(item.limitMax, 10) !== item.hasSellCount ?  <Button text="购买" />:(parseInt(item.hasSellCount.toString(), 10) > 0 && <span className="s-gray">{item.hasSellCount}支持</span>)
+                                                        }
+                                                       
                                                         {/* <Button text="已抢光" btnColor="gray-btn" /> */}
                                                         {
-                                                            parseInt(item.hasSellCount.toString(), 10) > 0 && <span className="s-gray">67支持</span>
+                                                            
                                                         }
                                                     </div>
                                                 )
@@ -129,6 +137,11 @@ class RightTeam extends React.Component<IProjectInfoProps, any> {
                 }
             </>
         )
+    }
+    private handleShowPriceType = (num:number)=>{
+        this.setState({
+            priceType:num
+        })
     }
 }
 
