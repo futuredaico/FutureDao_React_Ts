@@ -111,7 +111,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                         </div>
                         <div className="trans-echart" id="transEcharts" />
                     </div>
-                    <RightTable />
+                    <RightTable {...this.props} />
                 </div>
                 <div className="trans-Bottom-table">
                     <div className="bottom-title">

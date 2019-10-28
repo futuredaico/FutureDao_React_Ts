@@ -329,6 +329,19 @@ export const getTxList = (projId:string,addr:string,page:number,size:number)=>{
     }
     return request(opts);
 }
+/**
+ * 获取奖金池里的数据
+ * @param projId 项目ID
+ * @param addr 地址
+ */
+export const getTokenBalanceInfo = (projId:string,addr:string)=>{
+    const opts = {
+        method:'queryTokenBalanceInfo',
+        params:[projId,addr]
+    }
+    return request(opts);
+}
+
 
 /**
  * 获得fnd的发行总量

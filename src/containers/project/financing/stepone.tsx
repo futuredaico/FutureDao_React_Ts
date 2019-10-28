@@ -125,11 +125,11 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       reserveTokenFlag: this.props.financing.financingContent.reserveTokenFlag, // 是否团队预留代币
     })
     
-    if (this.props.financing.financingContent.deployContractFlag === '4') {
+    if (this.props.financing.financingContent.deployContractFlag === '4'||this.props.financing.financingContent.deployContractFlag === '6') {
       this.setState({
         isDoingContract: true
       })
-    } else if (this.props.financing.financingContent.ratioSetFlag === '4') {
+    } else if (this.props.financing.financingContent.ratioSetFlag === '4' ||this.props.financing.financingContent.ratioSetFlag === '6') {
       this.setState({
         isDoingSave: true
       })
@@ -311,7 +311,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
             <div className="going-on-wrapper">
               <div className={this.state.financingType === 'daico'?"going-on-content":"going-on-content going-on-edit"}>
                 {
-                  this.props.financing.financingContent.deployContractFlag === '4' && (
+                  (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6')&& (
                     <>
                       <strong className="going-bigtext">正在部署融资合约</strong>
                       <div className="loading-going">
@@ -368,7 +368,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
               <div className="going-on-content going-on-edit">
                 <strong className="going-bigtext">正在修改储备金比例</strong>
                 {
-                  this.props.financing.financingContent.ratioSetFlag === '4' && (
+                  (this.props.financing.financingContent.ratioSetFlag === '4'|| this.props.financing.financingContent.ratioSetFlag === '6') && (
                     <>
                       <div className="loading-going">
                         <Spin indicator={antIcon} size="small" />

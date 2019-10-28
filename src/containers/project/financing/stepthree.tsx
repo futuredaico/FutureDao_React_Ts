@@ -79,7 +79,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
               <div className="going-on-content going-on-edit">
                 <strong className="going-bigtext">正在修改储备金比例</strong>
                 {
-                  this.props.financing.financingContent.ratioSetFlag === '4' && (
+                  (this.props.financing.financingContent.ratioSetFlag === '4' || this.props.financing.financingContent.ratioSetFlag === '6') && (
                     <>
                       <div className="loading-going">
                         <Spin indicator={antIcon} size="small" />

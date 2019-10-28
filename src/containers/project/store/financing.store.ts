@@ -122,6 +122,15 @@ class Financing {
       this.financingContent = defaultContent;
       return false
     }
+    if(result[0].data.reserveTokenFlag==='0'){
+      result[0].data.reserveTokenInfo=[{
+        address: '',
+        info: [{
+          amt: undefined,
+          days: undefined
+        }]
+      }]
+    }
     this.financingContent = result[0].data;
     // 3为可编辑状态,2为编辑已保存状态，0为不可编辑状态
     this.stepOneStatus = 2;
@@ -132,21 +141,22 @@ class Financing {
     if (!this.financingContent) {
       return false;
     }
-    if(this.financingContent.reserveTokenFlag==='0'){
-      this.financingContent.reserveTokenInfo=[{
-        address: '',
-        info: [{
-          amt: undefined,
-          days: undefined
-        }]
-      }]
-    }
+    // if(this.financingContent.reserveTokenFlag==='0'){
+    //   this.financingContent.reserveTokenInfo=[{
+    //     address: '',
+    //     info: [{
+    //       amt: undefined,
+    //       days: undefined
+    //     }]
+    //   }]
+    // }
     if (this.financingContent.rewardSetFlag === '5') {
       this.stepTwoStatus = 2;
     }
     if (this.financingContent.ratioSetFlag === '5') {
       this.stepThreeStatus = 2;
     }
+    console.log(JSON.stringify(this.financingContent))
     return true;
   }
   /**

@@ -8,9 +8,21 @@ export interface IProjectTransationStore
   transCount:number,// 交易总数
   transPage:number,// 当前页
   transPageSize:number, // 每页条数
+  hash:string,
+  totalSupply:string,
+  storeEth:string,
+  fndBalances:string,      // fnd的余额
+  tokenBalanceInfo:ITokenBanlance,
   getProjContractInfoData: () => Promise<boolean>, // 获取合约详情数据
   getHistoryData:(type:string)=>Promise<boolean>, // 获取历史价格的数据
-  getTxListData:(addr:string)=>Promise<boolean>
+  getTxListData:(addr:string)=>Promise<boolean>,  // 获取交易记录
+  getTokenBalance:(addr:string)=>Promise<boolean>, // 获取奖金池的数据
+  buy:(amount: string)=>void,
+  sell:(amount: string)=>void,
+  getBuyFndCountFromEther:(amount: string)=>Promise<IAssetCount>,
+  getPayEtherFromFndCount:(count: string)=>Promise<IAssetPrice>,
+  getFndCountFromSellEther:(amount: string)=>Promise<IAssetCount>,
+  getSellEtherFromFndCount:(count: string)=>Promise<IAssetPrice>
 }
 
 
@@ -19,6 +31,15 @@ export interface IProjectInfoProps extends RouteComponentProps<{ projectId: stri
   transation: IProjectTransationStore,
   common: ICommonStore,
   intl: any
+}
+
+export interface IAssetCount {
+  count:string,
+  price:string
+}
+export interface IAssetPrice{
+  amount:string,
+  price:string
 }
 
 export interface IProjectContractInfo
@@ -48,4 +69,11 @@ export interface ITransationList{
   address:string,   // 操作地址
   event:string,   // 操作
   blockTime:number // 交易时间
+}
+export interface ITokenBanlance{
+  tokenAmt:number,
+  shareAmt:number,
+  availableAmt:number,
+  lockAmt:number,
+  chg24h:number
 }

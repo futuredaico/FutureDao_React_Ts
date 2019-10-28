@@ -3,7 +3,7 @@ import * as Api from '../api/project.api';
 import { CodeType } from '@/store/interface/common.interface';
 import projectinfoStore from './projectinfo.store';
 import * as formatTime from '@/utils/formatTime';
-import { IProjectContractInfo, IHistoryPrice, ITransationList } from '../interface/transation.interface';
+import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber } from "@/utils/numberTool";
@@ -35,6 +35,13 @@ class ProjectTransation
   @observable public hash="";
   @observable public totalSupply:string="";       // 发行量
   @observable public storeEth:string="0";          // 存储池的金额
+  @observable public tokenBalanceInfo:ITokenBanlance = {
+    tokenAmt:0,
+    shareAmt:0,
+    availableAmt:0,
+    lockAmt:0,
+    chg24h:0
+  };
   /**
    * 获取项目合约详情
    */
@@ -119,7 +126,27 @@ class ProjectTransation
     this.transList = result[0].data.list || [];
     return true;
   }
-
+  @action public getTokenBalance = async (addr: string) =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.getTokenBalanceInfo(projectinfoStore.projId, addr);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.tokenBalanceInfo = result[0].data;
+    return true;
+  }
+  
+  /**
+   * 买入
+   */
   @action public buy = async (amount: string) =>
   {
     try
@@ -132,7 +159,9 @@ class ProjectTransation
       throw error;
     }
   }
-
+  /**
+   * 卖出
+   */
   @action public sell = async (amount: string) =>
   {
     try
@@ -174,19 +203,11 @@ class ProjectTransation
    */
   @action public getPayEtherFromFndCount = async (count: string) =>
   {
-    // // const slope =common.web3.utils.hexToNumberString((await getSlope(this.hash))._hex);
-    // const countbn = common.web3.utils.toBN(count);
-    // const totalbn = common.web3.utils.toBN(this.totalSupply);
-    // // const slopebn = common.web3.utils.toBN(slope);
-    // // const weicount = totalbn.add(countbn).sqr().mul(slopebn).sub(totalbn.sqr().mul(slopebn)).divn(2);
-    // const weicount = totalbn.add(countbn).sqr().sub(totalbn.sqr()).divn(2);
-    // console.log('wei count',weicount);
     const mycount = toMyNumber(count);
     const total = toMyNumber(await Api.totalSupply(this.hash));
     const weicount = total.add(mycount.value).sqr().sub(total.sqr()).div(2);
     const amount = web3.fromWei(weicount.toString(), "ether");
     const price = web3.fromWei(weicount.div(mycount).toString())
-    // return common.web3.utils.fromWei(weicount.toString(),"ether");
     return { amount, price }
   }
 
@@ -196,11 +217,9 @@ class ProjectTransation
    */
   @action public getFndCountFromSellEther = async (amount: string) =>
   {
-    // const weicount = common.web3.utils.toWei(amount.toString(),"ether");
     const weicount = web3.toWei(amount, "ether");
     const myamount = toMyNumber(weicount);
     const total = toMyNumber(await Api.totalSupply(this.hash));
-    // const store = toMyNumber(common.web3.utils.toWei(this.storeEth,"ether"));
     const store = toMyNumber(web3.toWei(this.storeEth, "ether"));
     const x1 = store.sub(myamount).div(store).mul(total.sqr().value).sqrt()
     // console.log('x1',x1);        
@@ -222,7 +241,6 @@ class ProjectTransation
   {
     const mycount = toMyNumber(count);
     const total = toMyNumber(this.totalSupply);
-    // const store = toMyNumber(common.web3.utils.toWei(this.storeEth,"ether"));
     const store = toMyNumber(web3.toWei(this.storeEth, "ether"));
     if (store.value === 0)
     {
