@@ -76,7 +76,10 @@ class MyNumber
     public toString(){
         return this.value.toString();
     }
-
+    /**
+     * 加
+     * @param arg 
+     */
     public add(...arg) {
         // tslint:disable-next-line:one-variable-per-declaration
         let r1, r2, m, result = this.value;
@@ -92,6 +95,10 @@ class MyNumber
         });
         return new MyNumber(result);
     }
+    /**
+     * 减
+     * @param arg 
+     */
     public sub (...arg) {
         // tslint:disable-next-line:one-variable-per-declaration
         let r1, r2, m, result = this.value;
@@ -108,7 +115,10 @@ class MyNumber
         });
         return new MyNumber(result);
     };
-
+    /**
+     * 乘
+     * @param arg 
+     */
     public mul(...arg) {
         let result = this.value;
         arg.forEach(value => {
@@ -125,7 +135,10 @@ class MyNumber
         });
         return new MyNumber(result);
     };
-
+    /**
+     * 除
+     * @param arg 
+     */
     public div(...arg) {
         let result = this.value;
         arg.forEach(value => {
@@ -142,7 +155,7 @@ class MyNumber
     /**
      * 平方
      */
-    public sqr(){
+    public sqr(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
         return this.mul(this.value);
     }
 

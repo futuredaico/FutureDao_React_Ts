@@ -22,28 +22,6 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
   public state = {
     fixed: false,
   }
-  // private menuOne = [
-  //   {
-  //     id: 1,
-  //     name: this.intrl.projinfo.info
-  //   },
-  //   {
-  //     id: 2,
-  //     name: this.intrl.projinfo.comment
-  //   },
-  //   {
-  //     id: 3,
-  //     name: this.intrl.projinfo.update
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "交易"
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "治理"
-  //   }
-  // ]
   private pBottomTitle: React.RefObject<HTMLDivElement> = React.createRef();
 
   public componentDidMount()

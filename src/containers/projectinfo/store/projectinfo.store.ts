@@ -2,11 +2,12 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
+import { toMyNumber } from "@/utils/numberTool";
 import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken } from '../interface/projectinfo.interface';
 
 class ProjectInfo
 {
-  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
+  @observable public menuNum = 4; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
   @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IProjectInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID
@@ -16,21 +17,11 @@ class ProjectInfo
   @observable public projUpdateCount: number = 0; // 项目更新日志总数
   @observable public projDiscussList: IDiscussList[] = []; // 项目评论列表
   @observable public isShowManagerInfo = false; // 是否显示治理详情
-  @observable public priceInfo:IProjAssetPrice|null = null;
-  @observable public rewardList:IProjReward[] = [];
+  @observable public priceInfo: IProjAssetPrice | null = null;
+  @observable public rewardList: IProjReward[] = [];
   @observable public reserveData: IProjReserveToken | null = null;
-  // public data = {
-  //   list: [
-  //     {
-  //       "name": "Buying",
-  //       "data": [1, 2, 3, 4, 5, 6]
-  //     },
-  //     {
-  //       "name": "Selling",
-  //       "data": [1, 2, 3, 4, 5, 6]
-  //     }
-  //   ]
-  // }
+  @observable public buyPrice: string = '0'; // 项目代币当前购买价格
+  @observable public sellPrice: string = '0'; // 项目代币当前出售价格
   /**
    * 获取项目基本详情
    */
@@ -260,15 +251,15 @@ class ProjectInfo
       result = await Api.getRewardList("8f3728ed73a240b50dfb12d524eac9df");
     } catch (e)
     {
-      this.rewardList=[];
+      this.rewardList = [];
       return false;
     }
     if (result[0].resultCode !== CodeType.success)
     {
-      this.rewardList=[];
+      this.rewardList = [];
       return false
     }
-    this.rewardList= result[0].data.list||[];
+    this.rewardList = result[0].data.list || [];
     return true;
   }
   /**
@@ -290,14 +281,51 @@ class ProjectInfo
       this.reserveData = null;
       return false
     }
-    if(result[0].data.length===0){
+    if (result[0].data.length === 0)
+    {
       this.reserveData = null;
       return false
     }
-    this.reserveData = result[0].data||null;
+    this.reserveData = result[0].data || null;
     return true;
   }
-  
+
+  /**
+   * 计算项目代币当前购买价格
+   */
+  @action public computeCurrentBuyPrice = async () =>
+  {
+    if (this.projInfo && this.projInfo.hasIssueAmt !== '0')
+    {
+      // 10^-9*（发行代币数量+0.5）
+      const mycount = toMyNumber(this.projInfo.hasIssueAmt);
+      const slope = Math.pow(10, -9);  // 斜率
+      const price = web3.toBigNumber(mycount.mul(slope)).toString(10)
+      this.buyPrice = price.toString();
+    } else
+    {
+      this.buyPrice = '0'
+    }
+  }
+  /**
+   * 计算项目代币当前出售价格
+   */
+  @action public computeCurrentSellPrice = async () =>
+  {
+    if (this.projInfo && parseFloat(this.projInfo.hasIssueAmt) !== 0 && parseFloat(this.projInfo.fundReservePoolTotal) !== 0)
+    {
+      // （2*储备金余额）/发行代币数量*（1-1/（2*发行代币数量））
+      // 1.（2*储备金余额）/发行代币数量
+      const num1 = toMyNumber(this.projInfo.fundReservePoolTotal).mul(2).div(this.projInfo.hasIssueAmt) 
+      // 2.（1-1/（2*发行代币数量）
+      const num2 = toMyNumber(1).sub(toMyNumber(1).div(toMyNumber(this.projInfo.hasIssueAmt).mul(2)))
+      const price = web3.toBigNumber(num1.mul(num2)).toString(10);
+      this.sellPrice = price.toString();
+    } else
+    {
+      this.sellPrice = '0'
+    }
+  }
 }
 
 export default new ProjectInfo();

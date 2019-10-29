@@ -15,6 +15,8 @@ export interface IProjectInfoStore
   priceInfo:IProjAssetPrice|null,  // 代币的价格
   rewardList:IProjReward[],  // 礼包列表
   reserveData: IProjReserveToken | null,    // 预留代币数据
+  buyPrice:string,
+  sellPrice:string,
   getProjInfo: (projId: string) => Promise<boolean>,
   startAttention: () => Promise<boolean>,
   cancelAttention: () => Promise<boolean>,
@@ -26,7 +28,9 @@ export interface IProjectInfoStore
   getProjDiscussReplyList: (childId: string) => Promise<[]>,
   getTokenPriceData:()=>Promise<boolean>,
   getRewardData:()=>Promise<boolean>,
-  getReserveTokenData:()=>Promise<boolean>
+  getReserveTokenData:()=>Promise<boolean>,
+  computeCurrentBuyPrice:()=>void,
+  computeCurrentSellPrice:()=>void,
 }
 
 
@@ -62,6 +66,7 @@ export interface IProjectInfo
   type:string, // 众筹类型
   platform:string, // 上链类型
   fundName:string, // 单位
+  fundReservePoolTotal:string // 储备池资金
 }
 
 export interface IProjectTeam

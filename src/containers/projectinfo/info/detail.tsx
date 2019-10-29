@@ -25,6 +25,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
     }
     public componentDidMount()
     {
+        // 获取留言列表
         this.handleGetDataList('');
     }
     public render()

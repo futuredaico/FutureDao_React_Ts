@@ -330,7 +330,7 @@ export const getTxList = (projId:string,addr:string,page:number,size:number)=>{
     return request(opts);
 }
 /**
- * 获取奖金池里的数据
+ * 获取资金池里的数据
  * @param projId 项目ID
  * @param addr 地址
  */

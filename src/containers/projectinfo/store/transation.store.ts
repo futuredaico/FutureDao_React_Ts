@@ -40,7 +40,9 @@ class ProjectTransation
     shareAmt:0,
     availableAmt:0,
     lockAmt:0,
-    chg24h:0
+    chg24h:0,
+    lastBuyPrice:0,
+    lastSellPrice:0
   };
   /**
    * 获取项目合约详情
@@ -126,6 +128,9 @@ class ProjectTransation
     this.transList = result[0].data.list || [];
     return true;
   }
+  /**
+   * 获取资金池
+   */
   @action public getTokenBalance = async (addr: string) =>
   {
     let result: any = [];
@@ -141,6 +146,7 @@ class ProjectTransation
       return false
     }
     this.tokenBalanceInfo = result[0].data;
+    console.log(this.tokenBalanceInfo)
     return true;
   }
   
