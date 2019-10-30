@@ -6,30 +6,34 @@ import { IProjectInfoProps } from '../interface/projectinfo.interface';
 interface IState
 {
     underRight: number,
-    buySpend: string,   // 买入花费
+    buyPrice: string,   // 买入花费
     buyCount: string,   // 买入数量
-    buyPrice: string,   // 买入花费单价
+    buyOnePrice: string,   // 买入花费单价
     sellSpend: string,  // 卖出所得金额
     sellCount: string,  // 卖出数量
-    sellPrice: string,  // 卖出所得单价
+    sellPrice: string,  // 卖出单价
     buyingPrice: string,     // Trade Info 当前买入价
     sellingPrice: string,    // Trade Info 当前卖出价
     myEquityValue: string,   // 我当前的股份价值ETH
+    isCanBuyBtn: boolean, // 是否可以买入
+    isCanSellBtn: boolean // 是否可以卖出
 }
 
 @observer
 export default class RightTable extends React.Component<IProjectInfoProps, IState> {
-    public state:IState = {
+    public state: IState = {
         underRight: 1,
-        buySpend: '',
-        buyCount: '',
         buyPrice: '',
+        buyCount: '',
+        buyOnePrice: '',
         sellSpend: '',
         sellCount: '',
         sellPrice: '',
-        buyingPrice: '',     
-        sellingPrice: '',    
+        buyingPrice: '',
+        sellingPrice: '',
         myEquityValue: '',
+        isCanBuyBtn: false,
+        isCanSellBtn: false
     }
     public menuRight = [
         {
@@ -45,8 +49,21 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             name: '卖出'
         }
     ]
-    public componentDidMount(){
-        this.props.transation.getTokenBalance('');
+    public componentDidMount()
+    {
+        if (this.props.common.userInfo && this.props.projectinfo.projInfo)
+        {
+            if (this.props.projectinfo.projInfo.platform === 'eth')
+            {
+                this.props.transation.getTokenBalance(this.props.common.userInfo.ethAddress);
+            } else if (this.props.projectinfo.projInfo.platform === 'neo')
+            {
+                this.props.transation.getTokenBalance(this.props.common.userInfo.neoAddress);
+            }
+        } else
+        {
+            this.props.transation.getTokenBalance('');
+        }
     }
     public render()
     {
@@ -122,19 +139,19 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             <div className="buy-line">
                                 <div className="buy-left">花费</div>
                                 <div className="buy-right">
-                                    <input type="text" className="normal-buy-input" onChange={this.onChangeBuySpend} value={this.state.buySpend} />
-                                    <span className="asset-text">DAI</span>
+                                    <input type="text" className="normal-buy-input" onChange={this.onChangeBuySpend} value={this.state.buyPrice} />
+                                    <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             <div className="buy-line">
                                 <div className="buy-left">均价</div>
                                 <div className="buy-right">
-                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={this.state.buyPrice} />
-                                    <span className="asset-text">DAI</span>
+                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={this.state.buyOnePrice} />
+                                    <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             <div className="doing-btn">
-                                <Button text="Buy" btnColor="green-btn" btnSize="buy-btn" onClick={this.onBuy} />
+                                <Button text="Buy" btnColor={this.state.isCanBuyBtn ? "green-btn" : 'gray-btn'} btnSize="buy-btn" onClick={this.onBuy} />
                             </div>
                         </div>
                     )
@@ -153,18 +170,18 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                 <div className="buy-left">获得</div>
                                 <div className="buy-right">
                                     <input type="text" className="normal-buy-input" onChange={this.onChangeSellSpend} value={this.state.sellSpend} />
-                                    <span className="asset-text">DAI</span>
+                                    <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             <div className="buy-line">
                                 <div className="buy-left">均价</div>
                                 <div className="buy-right">
                                     <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={this.state.sellPrice} />
-                                    <span className="asset-text">DAI</span>
+                                    <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             <div className="doing-btn">
-                                <Button text="Sell" btnColor="red-red" btnSize="buy-btn" onClick={this.onSell} />
+                                <Button text="Sell" btnColor={this.state.isCanSellBtn ? "red-red" : 'gray-btn'} btnSize="buy-btn" onClick={this.onSell} />
                             </div>
                         </div>
                     )
@@ -176,123 +193,146 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     private mapRightUnderline = (item) =>
     {
         this.setState({
-            underRight: item.id
+            underRight: item.id,
+            isCanBuyBtn: false,
+            isCanSellBtn: false
         })
-        if (item.id === 1)
+        if (item.id !== 1)
         {
-            this.initTradeInfo()
+            this.handleCheckLinkWallet();
         }
     }
-    // 初始化数据
-    private initTradeInfo = () =>
+    // 检验是否连接了钱包
+    private handleCheckLinkWallet = async () =>
     {
-        this.props.transation.getPayEtherFromFndCount('1')
-            .then(value =>
-            {
-                console.log(value)
-                this.setState({ buyingPrice: value.amount })
-            })
-        this.props.transation.getSellEtherFromFndCount('1')
-            .then(value =>
-            {
-                this.setState({ sellingPrice: value.amount })
-            })
-        this.props.transation.getSellEtherFromFndCount(this.props.transation.fndBalances)
-            .then(value =>
-            {
-                this.setState({ myEquityValue: value.amount })
-            })
-    }
-    // 买入的花费
-    private onChangeBuySpend = (event: any) =>
-    {
-        this.setState({ buySpend: event.target.value }, () =>
+        if (this.props.common.userInfo)
         {
-            if (parseFloat(this.state.buySpend) > 0)
+            // 检测是否连接钱包
+            if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
             {
-                console.log('buySpend', parseFloat(this.state.buySpend).toString());
-
-                this.props.transation.getBuyFndCountFromEther(parseFloat(this.state.buySpend).toString())
-                    .then(value =>
-                    {
-                        this.setState({ buyCount: parseFloat(value.count).toFixed().toString(), buyPrice: value.price })
-                    })
-            }
-            else
-            {
-                this.setState({ buyCount: '', buyPrice: '' })
-            }
-        })
-
-    }
-    // 买入量的输入
-    private onChangeBuyCount = (event: any) =>
-    {
-        this.setState({ buyCount: event.target.value }, () =>
-        {
-            if (parseFloat(this.state.buyCount) > 0)
-            {
-                const arr = this.state.buyCount.split('.');
-                if (arr.length > 1 && arr[1].length > 17)
+                // 获取Teemo钱包上登陆的地址
+                await this.props.teemowallet.loginTeemo();
+                if (!this.props.teemowallet.teemoAddress)
                 {
-                    arr[1] = arr[1].substr(0, 17);
-                    const count = arr.join('.'); this.setState({ buyCount: count })
-                    this.props.transation.getPayEtherFromFndCount(count)
-                        .then(value =>
-                        {
-                            this.setState({ buySpend: value.amount, buyPrice: value.price });
-                        })
+                    return false;
                 }
-                else
-                {
-                    this.props.transation.getPayEtherFromFndCount(parseFloat(this.state.buyCount).toString())
-                        .then(value =>
-                        {
-                            this.setState({ buySpend: value.amount, buyPrice: value.price });
-                        })
-                }
-            }
-            else
-            {
-                this.setState({ buySpend: '', buyPrice: '' });
-            }
-        })
-    }
-    // 卖出的获得
-    private onChangeSellSpend = (event: any) =>
-    {
-        this.setState({ sellSpend: event.target.value }, () =>
-        {
-            let sellspend = parseFloat(this.state.sellSpend)
-            if (sellspend > 0)
-            {
-                console.log('sellspend', sellspend);
-
-                if (parseFloat(this.props.transation.storeEth) < sellspend)
-                {
-                    sellspend = parseFloat(this.props.transation.storeEth);
-                    this.setState({ sellSpend: sellspend.toString() })
-                }
-                this.props.transation.getFndCountFromSellEther(sellspend.toString())
-                    .then(value =>
-                    {
-                        this.setState({
-                            sellCount: value.count, sellPrice: value.price
-                        })
-                    });
-            }
-            else
-            {
+                // 如果存在
                 this.setState({
-                    sellCount: '', sellPrice: ''
+                    isCanBuyBtn: true,
+                    isCanSellBtn: true
                 })
             }
+            else
+            {
+                // 获取MetaMask钱包上登陆的地址
+                await this.props.metamaskwallet.inintWeb3();
+                if (!this.props.metamaskwallet.metamaskAddress)
+                {
+                    return false;
+                }
+                // 如果存在
+                this.setState({
+                    isCanBuyBtn: true,
+                    isCanSellBtn: true
+                })
+            }
+        }
+        else
+        {
+            // 假如没有登陆
+            this.setState({
+                isCanBuyBtn: false,
+                isCanSellBtn: false
+            })
+        }
+        return true;
+    }
+    // 买入量的输入
+    private onChangeBuyCount = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        // 只能输入数字，整数
+        const value = ev.target.value as unknown as number;
+        if (isNaN(value))
+        {
+            return false;
+        }
+        const reg = /^[0-9]*[1-9][0-9]*$/;
+        if (value.toString().length > 0)
+        {
+            if (!reg.test(ev.target.value))
+            {
+                return false;
+            }
+        }
+        this.setState({ buyCount: value.toString() }, async() =>
+        {
+            // 计算购买代币需要花费多少eth, eth保留小数6位
+            const res = await this.props.transation.computeBuyCountSpendPrice(this.state.buyCount);
+            this.setState({
+                buyPrice:res
+            })
         })
+        return true;
+    }
+
+    // 买入的花费
+    private onChangeBuySpend = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        // this.setState({ buyPrice: ev.target.value }, () =>
+        // {
+        //     if (parseFloat(this.state.buySpend) > 0)
+        //     {
+        //         console.log('buySpend', parseFloat(this.state.buySpend).toString());
+
+        //         this.props.transation.getBuyFndCountFromEther(parseFloat(this.state.buySpend).toString())
+        //             .then(value =>
+        //             {
+        //                 this.setState({ buyCount: parseFloat(value.count).toFixed().toString(), buyPrice: value.price })
+        //             })
+        //     }
+        //     else
+        //     {
+        //         this.setState({ buyCount: '', buyPrice: '' })
+        //     }
+        // })
+
+    }
+
+    // 卖出的获得
+    private onChangeSellSpend = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        // this.setState({ sellSpend: ev.target.value }, () =>
+        // {
+        //     let sellspend = parseFloat(this.state.sellSpend)
+        //     if (sellspend > 0)
+        //     {
+        //         console.log('sellspend', sellspend);
+
+        //         if (parseFloat(this.props.transation.storeEth) < sellspend)
+        //         {
+        //             sellspend = parseFloat(this.props.transation.storeEth);
+        //             this.setState({ sellSpend: sellspend.toString() })
+        //         }
+        //         this.props.transation.getFndCountFromSellEther(sellspend.toString())
+        //             .then(value =>
+        //             {
+        //                 this.setState({
+        //                     sellCount: value.count, sellPrice: value.price
+        //                 })
+        //             });
+        //     }
+        //     else
+        //     {
+        //         this.setState({
+        //             sellCount: '', sellPrice: ''
+        //         })
+        //     }
+        // })
     }
     // 卖出量的输入
-    private onChangeSellCount = (event: any) =>
+    private onChangeSellCount = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        this.setState({ sellCount: event.target.value }, () =>
+        this.setState({ sellCount: ev.target.value }, () =>
         {
             if (parseFloat(this.state.sellCount) > 0)
             {
@@ -317,8 +357,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     {
         try
         {
-            const txid = await this.props.transation.buy(this.state.buySpend);
-            console.log(txid);
+            // const txid = await this.props.transation.buy(this.state.buyPrice);
+            // console.log(txid);
             this.props.common.openNotificationWithIcon('success', "操作成功", "买入成功");
         } catch (error)
         {

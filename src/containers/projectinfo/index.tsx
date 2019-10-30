@@ -14,7 +14,7 @@ interface IState
 {
     isShowVideo: boolean
 }
-@inject('projectinfo', 'common', 'update','transation')
+@inject('projectinfo', 'common', 'update','transation','teemowallet','metamaskwallet')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     public intrl = this.props.intl.messages;

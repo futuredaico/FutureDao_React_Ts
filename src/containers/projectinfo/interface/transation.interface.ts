@@ -22,11 +22,12 @@ export interface IProjectTransationStore
   getBuyFndCountFromEther:(amount: string)=>Promise<IAssetCount>,
   getPayEtherFromFndCount:(count: string)=>Promise<IAssetPrice>,
   getFndCountFromSellEther:(amount: string)=>Promise<IAssetCount>,
-  getSellEtherFromFndCount:(count: string)=>Promise<IAssetPrice>
+  getSellEtherFromFndCount:(count: string)=>Promise<IAssetPrice>,
+  computeBuyCountSpendPrice:(count:string)=>Promise<string>
 }
 
 
-export interface IProjectInfoProps extends RouteComponentProps<{ projectId: string }>
+export interface IProjectTransationProps extends RouteComponentProps<{ projectId: string }>
 {
   transation: IProjectTransationStore,
   common: ICommonStore,
@@ -71,11 +72,11 @@ export interface ITransationList{
   blockTime:number // 交易时间
 }
 export interface ITokenBanlance{
-  tokenAmt:number,
-  shareAmt:number,
-  availableAmt:number,
-  lockAmt:number,
-  chg24h:number,
-  lastBuyPrice:number,
-  lastSellPrice:number,
+  tokenAmt:string,
+  shareAmt:string,
+  availableAmt:string,  // 可用股数
+  lockAmt:string,  // 锁定股数
+  chg24h:string,  // 24h涨跌幅
+  lastBuyPrice:string,   // 最近买入价
+  lastSellPrice:string,  // 最近卖出价
 }

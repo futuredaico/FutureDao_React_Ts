@@ -36,13 +36,13 @@ class ProjectTransation
   @observable public totalSupply:string="";       // 发行量
   @observable public storeEth:string="0";          // 存储池的金额
   @observable public tokenBalanceInfo:ITokenBanlance = {
-    tokenAmt:0,
-    shareAmt:0,
-    availableAmt:0,
-    lockAmt:0,
-    chg24h:0,
-    lastBuyPrice:0,
-    lastSellPrice:0
+    tokenAmt:"0",
+    shareAmt:"0",
+    availableAmt:"0",
+    lockAmt:"0",
+    chg24h:"0",
+    lastBuyPrice:"0",
+    lastSellPrice:"0"
   };
   /**
    * 获取项目合约详情
@@ -146,7 +146,6 @@ class ProjectTransation
       return false
     }
     this.tokenBalanceInfo = result[0].data;
-    console.log(this.tokenBalanceInfo)
     return true;
   }
   
@@ -179,6 +178,23 @@ class ProjectTransation
     {
       throw error;
     }
+  }
+  /**
+   * 计算购买代币需要花费多少eth
+   * @param count 购买多少个代币
+   */
+  @action public computeBuyCountSpendPrice = async (count:string)=>{
+    if(!projectinfoStore.projInfo||projectinfoStore.projInfo.hasIssueAmt==='0'){
+      return '0'
+    }
+    console.log(toMyNumber(1).add(2).sqr())
+    // （ ( Y + 已发行代币数 )^2 - 已发行代币数^2）*0.0000000005
+    const mycount = toMyNumber(count);
+    const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    const num3 = num1.sub(num2).mul(0.0000000005)
+    console.log(num3)
+    return web3.toBigNumber(num3).toString(10);
   }
 
   /**

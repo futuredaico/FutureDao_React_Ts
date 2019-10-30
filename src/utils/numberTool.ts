@@ -44,7 +44,7 @@ export function asNumber(str:string,decimal?:number)
     value = value.replace(/^\./g,"");
 
     // 保证.只出现一次，而不能出现两次以上
-
+ 
     value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
 
     if(decimal)

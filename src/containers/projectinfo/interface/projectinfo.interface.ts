@@ -2,6 +2,8 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IProjectUpdateStore } from "./update.interface";
 import { IProjectTransationStore } from "./transation.interface";
+import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 export interface IProjectInfoStore
 {
   menuNum: number,
@@ -40,6 +42,8 @@ export interface IProjectInfoProps extends RouteComponentProps<{ projectId: stri
   update: IProjectUpdateStore,
   transation: IProjectTransationStore,
   common: ICommonStore,
+  teemowallet:ITeemoWalletStore,
+  metamaskwallet:IMetaMastWalletStore,
   intl: any
 }
 
