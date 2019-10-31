@@ -77,6 +77,12 @@ class MetaMastWallet implements IMetaMastWalletStore
       })
     })
   }
+  @action public getMetamaskBalance = async ()=>{
+    const balance = await this.web3.eth.getBalance(this.metamaskAddress);
+    // const dai = await this.web3.d
+    console.log(balance)
+    return balance;
+  }
 }
 
 // 外部使用require

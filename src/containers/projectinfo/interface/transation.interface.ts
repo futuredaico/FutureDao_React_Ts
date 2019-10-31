@@ -19,11 +19,10 @@ export interface IProjectTransationStore
   getTokenBalance:(addr:string)=>Promise<boolean>, // 获取奖金池的数据  
   buy:(amount: string)=>void,
   sell:(amount: string)=>void,
-  getBuyFndCountFromEther:(amount: string)=>Promise<IAssetCount>,
-  getPayEtherFromFndCount:(count: string)=>Promise<IAssetPrice>,
-  getFndCountFromSellEther:(amount: string)=>Promise<IAssetCount>,
-  getSellEtherFromFndCount:(count: string)=>Promise<IAssetPrice>,
-  computeBuyCountSpendPrice:(count:string)=>Promise<string>
+  computeBuyCountSpendPrice:(count:string)=>Promise<string>,
+  computeSpendPriceGetCount:(amount:string)=>Promise<string>,
+  computeGetPriaceSellCount:(amount:string)=>Promise<string>,
+  computeSellCountGetPriace:(amount:string)=>Promise<string>
 }
 
 
@@ -32,15 +31,6 @@ export interface IProjectTransationProps extends RouteComponentProps<{ projectId
   transation: IProjectTransationStore,
   common: ICommonStore,
   intl: any
-}
-
-export interface IAssetCount {
-  count:string,
-  price:string
-}
-export interface IAssetPrice{
-  amount:string,
-  price:string
 }
 
 export interface IProjectContractInfo

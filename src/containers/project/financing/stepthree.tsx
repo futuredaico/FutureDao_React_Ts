@@ -28,11 +28,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     {
       this.props.financing.getFinanceFund();
     }
-
-    await this.props.financing.getReserveFund();
-    this.setState({
-      ratio: this.props.financing.ratio
-    })
+    this.handleGetRatio();
   }
   public render()
   {
@@ -109,6 +105,13 @@ class StepThree extends React.Component<IFinancingProps, IState> {
         }
       </div>
     );
+  }
+  // 获取修改储备金比例数据
+  private handleGetRatio = async ()=> {
+    await this.props.financing.getReserveFund();
+    this.setState({
+      ratio: this.props.financing.ratio
+    })
   }
   // 普通融资领取资金
   private handleToGetMoney = () =>
@@ -193,6 +196,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
         await this.props.financing.getContractData();
         if (this.props.financing.financingContent && this.props.financing.financingContent.ratioSetFlag === '5')
         {
+          this.handleGetRatio();
           clearInterval(timer)
         }
       }, 5000)

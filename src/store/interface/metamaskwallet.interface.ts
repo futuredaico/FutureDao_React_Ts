@@ -4,7 +4,8 @@ export interface IMetaMastWalletStore
     isLoadMetaMask: boolean,
     isLoginMetaMaskFlag: number,
     inintWeb3: () => Promise<boolean>,
-    initAccount: () => Promise<string>
+    initAccount: () => Promise<string>,
+    getMetamaskBalance:()=> Promise<string>
 }
 export interface IMetaMastWalletProps
 {

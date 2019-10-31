@@ -14,6 +14,8 @@ import chartsOptions from './historyechart';
 import Echarts from 'echarts';
 import { Pagination } from 'antd';
 import { ITransationList } from '../interface/transation.interface';
+import { saveDecimal } from '../../../utils/numberTool';
+
 interface IState {
     underBottom:number, // 交易列表的菜单
     timeType:string, // 历史价格的时间选择
@@ -38,26 +40,16 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
     private menuBottom = [
         {
             id: 1,
-            name: '我的记录'
+            name: '全部记录'
         },
         {
             id: 2,
-            name: '全部记录'
+            name: '我的记录'
         }
     ]
     public async componentDidMount()
     {
-        await this.props.transation.getHistoryData(this.state.timeType)
-        const echartsEl = document.getElementById('transEcharts') as HTMLDivElement;
-        if (echartsEl)
-        {
-            const myChart = Echarts.init(echartsEl);
-            chartsOptions.xAxis.data = this.props.transation.historyPrice.timeInfo;
-            chartsOptions.series[0].data = this.props.transation.historyPrice.buyInfo;
-            chartsOptions.series[1].data = this.props.transation.historyPrice.sellInfo;
-            myChart.setOption(chartsOptions as any)
-            this.myCahrt = myChart;
-        }
+        this.handleGetPriceData();
         this.props.transation.getProjContractInfoData();
         this.handleGetData();
     }
@@ -85,10 +77,10 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                                 <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>{this.props.transation.projContractInfo.tokenIssueTotal}</strong></span>
                                 <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockNotAmount}</strong></span>
                                 <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockYesAmount}</strong></span>
-                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>{this.props.transation.projContractInfo.fundManagePoolTotal} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>{this.props.transation.projContractInfo.fundReservePoolTotal} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>{saveDecimal(this.props.transation.projContractInfo.fundManagePoolTotal,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>{saveDecimal(this.props.transation.projContractInfo.fundReservePoolTotal,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
                                 <span className="block-span"><span title="购买代币所花费的资金，其中一定比例会被智能合约储存起来当作回购代币的储备金。">储备比例：</span><strong>{this.props.transation.projContractInfo.fundReserveRatio}%</strong></span>
-                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>{this.props.transation.projContractInfo.priceRaiseSpeed} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>{saveDecimal(this.props.transation.projContractInfo.priceRaiseSpeed,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
                             </div>
                         </div>
                     )
@@ -185,7 +177,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                                                     </span>
                                                 )
                                             }
-                                            <span className="li-td">{item.fundAmt} ETH</span>
+                                            <span className="li-td">{saveDecimal(item.fundAmt,6)} {this.props.projectinfo.projInfo&&this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                             {
                                                 item.event === 'OnSell' && <span className="li-td green-text">+{item.tokenAmt}</span>
                                             }
@@ -210,13 +202,29 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
             </div>
         );
     }
+    // 获取历史价格数据
+    private handleGetPriceData = async () => {
+        this.myCahrt = null;
+        await this.props.transation.getHistoryData(this.state.timeType)
+        const echartsEl = document.getElementById('transEcharts') as HTMLDivElement;
+        if (echartsEl)
+        {
+            const myChart = Echarts.init(echartsEl);
+            chartsOptions.xAxis.data = this.props.transation.historyPrice.timeInfo;
+            chartsOptions.series[0].data = this.props.transation.historyPrice.buyInfo;
+            chartsOptions.series[1].data = this.props.transation.historyPrice.sellInfo;
+            chartsOptions.yAxis.name = this.props.projectinfo.projInfo?this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()+'/单位':'';
+            myChart.setOption(chartsOptions as any)
+            this.myCahrt = myChart;
+        }
+    }
    
     // 获取交易列表数据
     private handleGetData = () =>
     {
         this.props.transation.transList = [];
         let addr = '';
-        if (this.state.underBottom === 1)
+        if (this.state.underBottom === 2)
         {
             if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             {
@@ -252,6 +260,9 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
     {
         this.setState({
             timeType: item.id
+        },()=>{
+            //
+            this.handleGetPriceData();            
         })
     }
     // 交易列表的分页

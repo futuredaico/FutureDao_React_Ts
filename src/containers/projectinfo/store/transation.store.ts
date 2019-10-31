@@ -6,7 +6,7 @@ import * as formatTime from '@/utils/formatTime';
 import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
-import { toMyNumber } from "@/utils/numberTool";
+import { toMyNumber, saveDecimal } from "@/utils/numberTool";
 
 
 const defaultContract = {
@@ -32,17 +32,17 @@ class ProjectTransation
   @observable public transCount: number = 0;
   @observable public transPage: number = 1;
   @observable public transPageSize: number = 10;
-  @observable public hash="";
-  @observable public totalSupply:string="";       // 发行量
-  @observable public storeEth:string="0";          // 存储池的金额
-  @observable public tokenBalanceInfo:ITokenBanlance = {
-    tokenAmt:"0",
-    shareAmt:"0",
-    availableAmt:"0",
-    lockAmt:"0",
-    chg24h:"0",
-    lastBuyPrice:"0",
-    lastSellPrice:"0"
+  @observable public hash = "";
+  @observable public totalSupply: string = "";       // 发行量
+  @observable public storeEth: string = "0";          // 存储池的金额
+  @observable public tokenBalanceInfo: ITokenBanlance = {
+    tokenAmt: "0",
+    shareAmt: "0",
+    availableAmt: "0",
+    lockAmt: "0",
+    chg24h: "0",
+    lastBuyPrice: "0",
+    lastSellPrice: "0"
   };
   /**
    * 获取项目合约详情
@@ -90,17 +90,28 @@ class ProjectTransation
     }
     if (Object.keys(result[0].data).length === 0)
     {
+      this.historyPrice = {
+        buyInfo: [],
+        sellInfo: [],
+        timeInfo: []
+      }
       return false
     }
     const timeArr = result[0].data.timeInfo.map((item) =>
     {
       return formatTime.format('MM/dd hh:mm', item, common.language)
     })
-    this.historyPrice = {
-      buyInfo: result[0].data.buyInfo,
-      sellInfo: result[0].data.sellInfo,
-      timeInfo: timeArr
-    };
+    const arr = result[0].data.buyInfo.map((value: string) =>
+    {
+      return saveDecimal(value, 6)
+    })
+    const arr2 = result[0].data.sellInfo.map((value: string) =>
+    {
+      return saveDecimal(value, 6)
+    })
+    this.historyPrice.buyInfo = arr;
+    this.historyPrice.sellInfo = arr2;
+    this.historyPrice.timeInfo = timeArr
     return true;
   }
   /**
@@ -148,7 +159,7 @@ class ProjectTransation
     this.tokenBalanceInfo = result[0].data;
     return true;
   }
-  
+
   /**
    * 买入
    */
@@ -183,97 +194,84 @@ class ProjectTransation
    * 计算购买代币需要花费多少eth
    * @param count 购买多少个代币
    */
-  @action public computeBuyCountSpendPrice = async (count:string)=>{
-    if(!projectinfoStore.projInfo||projectinfoStore.projInfo.hasIssueAmt==='0'){
+  @action public computeBuyCountSpendPrice = (count: string) =>
+  {
+    if (!projectinfoStore.projInfo || projectinfoStore.projInfo.hasIssueAmt === '0')
+    {
       return '0'
     }
-    console.log(toMyNumber(1).add(2).sqr())
     // （ ( Y + 已发行代币数 )^2 - 已发行代币数^2）*0.0000000005
     const mycount = toMyNumber(count);
     const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num3 = num1.sub(num2).mul(0.0000000005)
-    console.log(num3)
+    // console.log(toMyNumber(130601).add(1314).sqr().sub(toMyNumber(1314).sqr()).mul(0.0000000005))// 8.6999203145
     return web3.toBigNumber(num3).toString(10);
   }
-
   /**
-   * 根据eth计算买入的fnd数量
-   * @param amount 
-   * @param total 
+   * 计算花费eth可以购买多少个代币
+   * @param amount 花费多少钱（eth,dai,neo,gas...)
    */
-  @action public getBuyFndCountFromEther = async (amount: string) =>
+  @action public computeSpendPriceGetCount = (amount: string) =>
   {
-    const weiamount = web3.toWei(amount, "ether");
-    const myamount = toMyNumber(weiamount);
-    const total = toMyNumber(await Api.totalSupply(this.hash));
-    const fndcount = myamount.mul(2).add(total.sqr().value).sqrt().sub(total.value);
-    const count = fndcount.toString()
-    const price = web3.fromWei(myamount.div(count).toString(), 'ether');
-    // console.log('eth',amount);
-
-    // console.log('wei',weiamount);
-    // // console.log('斜率',slope);
-    // console.log('发行量',total.value);
-    // console.log('购买量',count);
-    return { count, price };
-  }
-
-  /**
-   * 根据eth计算买入的fnd数量
-   * @param count 
-   */
-  @action public getPayEtherFromFndCount = async (count: string) =>
-  {
-    const mycount = toMyNumber(count);
-    const total = toMyNumber(await Api.totalSupply(this.hash));
-    const weicount = total.add(mycount.value).sqr().sub(total.sqr()).div(2);
-    const amount = web3.fromWei(weicount.toString(), "ether");
-    const price = web3.fromWei(weicount.div(mycount).toString())
-    return { amount, price }
-  }
-
-  /**
-   * 根据想要卖出的钱算出该卖的fnd的数量
-   * @param amount Ether的数量
-   */
-  @action public getFndCountFromSellEther = async (amount: string) =>
-  {
-    const weicount = web3.toWei(amount, "ether");
-    const myamount = toMyNumber(weicount);
-    const total = toMyNumber(await Api.totalSupply(this.hash));
-    const store = toMyNumber(web3.toWei(this.storeEth, "ether"));
-    const x1 = store.sub(myamount).div(store).mul(total.sqr().value).sqrt()
-    // console.log('x1',x1);        
-    const count = total.sub(x1);
-    // console.log('ether',amount);
-    // console.log('wei',weicount);
-    // console.log('发行量',total.toString());
-    // console.log('存储池',store.toString());
-    // console.log('FND 数量',count.toString());
-    const price = web3.fromWei(myamount.div(count));
-    return { count: count.value.toFixed(), price }
-  }
-
-  /**
-   * 根据卖出的fnd数量算出得到的Ether
-   * @param count fnd的数量
-   */
-  @action public getSellEtherFromFndCount = async (count: string) =>
-  {
-    const mycount = toMyNumber(count);
-    const total = toMyNumber(this.totalSupply);
-    const store = toMyNumber(web3.toWei(this.storeEth, "ether"));
-    if (store.value === 0)
+    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
     {
-      return { amount: 0, price: 0 };
+      return '0'
     }
-    const x = total.sub(mycount).sqr().div(total.sqr()).mul(store);
-    const amount = store.sub(x);
-
-    const ether = web3.fromWei(amount.toString(), "ether");
-    const price = web3.fromWei(amount.div(mycount));
-    return { amount: ether, price };
+    // (2x / 0.000000001 + 已发行代币数^2 )^0.5 - 已发行代币数
+    const myamount = toMyNumber(amount);
+    const num1 = myamount.mul(2).div(0.000000001);
+    const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    const num3 = parseFloat(web3.toBigNumber(num1.add(num2)).toString(10));
+    const num4 = Math.pow(num3, 0.5)
+    const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
+    // 130601.60406562978
+    // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
+    return web3.toBigNumber(num5).toString(10);
+  }
+  /**
+   * 已知要获得X个ETH，求需要出售多少个代币
+   * @param amount 想要得到多少钱（eth,dai,neo,gas...)
+   */
+  @action public computeGetPriaceSellCount = (amount: string) =>
+  {
+    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0 || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
+    {
+      return '0'
+    }
+    // 已发行代币数-已发行代币数*（1-x/储备池资金数)^0.5
+    const myamount = toMyNumber(amount);
+    const num1 = myamount.div(projectinfoStore.projInfo.fundReservePoolTotal);
+    let num2 = parseFloat(web3.toBigNumber(toMyNumber(1).sub(num1)).toString(10));
+    let fuhao = ''
+    if(num2<0){
+      fuhao = '-';
+      num2 = Math.abs(num2);
+    }
+    const num3 = fuhao + Math.pow(num2, 0.5);
+    const num4 = toMyNumber(num3).mul(projectinfoStore.projInfo.hasIssueAmt);
+    const num5 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sub(num4);
+    // console.log(toMyNumber(500).sub(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(1).sub(toMyNumber(3.6).div(10))).toString(10)), 0.5)).mul(500)))    
+    return web3.toBigNumber(num5).toString(10);
+  }
+  /**
+   * 已知要出售Y个代币，求能够获得多少ETH
+   * @param count 出售多少个代币
+   */
+  @action public computeSellCountGetPriace = (count: string) =>
+  {
+    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0 || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
+    {
+      return '0'
+    }
+    // 2*储备池资金数*Y *（1-Y/（2*已发行代币数））/ 已发行代币数
+    const myamount = toMyNumber(count);
+    const num1 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).mul(2);
+    const num2 = toMyNumber(1).sub(myamount.div(num1));
+    const num3 = num2.mul(myamount).mul(projectinfoStore.projInfo.fundReservePoolTotal).mul(2).div(projectinfoStore.projInfo.hasIssueAmt);
+    
+    console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))    
+    return web3.toBigNumber(num3).toString(10);
   }
 }
 

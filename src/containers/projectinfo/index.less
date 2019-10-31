@@ -1056,11 +1056,11 @@
         box-sizing: border-box;
         margin-top: 30px;
         width: 300px;
-        height: 260px;
+        height: 291px;
       }
       .tran-line{
           font-size: 14px;
-          margin-top: 40px;
+          margin-top: 57px;
           line-height: 20px;
           &:first-child{
             margin-top: 30px;
@@ -1091,7 +1091,7 @@
       .buy-in{
           font-size: 14px;
           .buy-line{
-              margin-top: 20px;
+              margin-top: 25px;
               display: flex;
               &:first-child{
                 margin-top: 25px;
@@ -1108,24 +1108,57 @@
                       border-radius: 3px;
                       width: 200px;
                       height: 36px;
-                      padding: 10px;
+                      padding: 10px 40px 10px 10px;
                       box-sizing: border-box;
+                  }
+                  .error-input{
+                    border: 1px solid #F25151;
+                    color: #F25151;
+                  }
+                  .input-otherpadding{
+                    padding: 10px;
                   }
                   .readonly-input{
                       background: #F6F6F6;
                       border: 1px solid #E5E5E5;
+                      cursor: not-allowed;
                   }
                   .asset-text{
                       position: absolute;
                       top: 10px;
                       right: 10px;
-                      color: #A0A0A0;
+                      color: #333;
+                  }
+                  .amount-text{
+                    position: absolute;
+                    bottom: -16px;
+                    right: 0;
+                    font-size: 12px;
+                    color: #B2B2B2;
                   }
               }
           }
+          .attention-wrapper{
+            margin-top: 10px;
+            .hint-box{
+              margin-left: 0;
+            }
+            .attention-textdiv{
+              vertical-align: middle;
+              display: inline-block;
+              font-size: 12px;
+              color: #B2B2B2;
+              margin-left: 5px;
+              .sm-p{
+                .purple-text{
+                  color: #8A7FE6;
+                }
+              }
+            }
+          }
           .doing-btn{
               text-align: center;
-              margin-top: 25px;
+              margin-top: 10px;
               .bg-btn{
                   width: 100% !important;
               }
