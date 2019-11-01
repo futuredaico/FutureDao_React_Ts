@@ -19,6 +19,7 @@ export interface IProjectInfoStore
   reserveData: IProjReserveToken | null,    // 预留代币数据
   buyPrice:string,
   sellPrice:string,
+  hashList:IContractHash[],
   getProjInfo: (projId: string) => Promise<boolean>,
   startAttention: () => Promise<boolean>,
   cancelAttention: () => Promise<boolean>,
@@ -33,6 +34,7 @@ export interface IProjectInfoStore
   getReserveTokenData:()=>Promise<boolean>,
   computeCurrentBuyPrice:()=>void,
   computeCurrentSellPrice:()=>void,
+  getContractHash:()=>Promise<boolean>
 }
 
 
@@ -137,6 +139,7 @@ export interface IProjReward
   projId: string, // 项目ID
   giftTokenName: string, // 单位
   hasSellCount: number // 已出售数量
+  rewardPrice:string
 }
 
 export interface IProjReserveToken
@@ -151,4 +154,9 @@ export interface IProjReserveList
   timestamp: string,  // 到期时间
   order: number,  // 第几批次
   unlockFlag: string,  // 解锁标识，true为已解锁，false为未解锁
+}
+export interface IContractHash {
+  contractHash:string,   // 合约hash
+  contractName:string,   // 合约作用名
+  projId:string
 }

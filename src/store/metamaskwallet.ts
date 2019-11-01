@@ -3,6 +3,7 @@ import { observable, action } from 'mobx';
 import { IMetaMastWalletStore } from './interface/metamaskwallet.interface';
 import Web3 from 'web3';
 import common from './common'
+import { toMyNumber } from '@/utils/numberTool';
 
 class MetaMastWallet implements IMetaMastWalletStore
 {
@@ -77,11 +78,13 @@ class MetaMastWallet implements IMetaMastWalletStore
       })
     })
   }
+  /**
+   * 获取eth的余额
+   */
   @action public getMetamaskBalance = async ()=>{
     const balance = await this.web3.eth.getBalance(this.metamaskAddress);
-    // const dai = await this.web3.d
-    console.log(balance)
-    return balance;
+    const num = toMyNumber(balance).mul(Math.pow(10, -18))
+    return web3.toBigNumber(num).toString(10)
   }
 }
 

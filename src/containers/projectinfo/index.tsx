@@ -28,6 +28,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         if (projectId)
         {
             this.props.projectinfo.getProjInfo(projectId);
+            this.props.projectinfo.getContractHash();
         }
     }
     public componentWillUnmount()

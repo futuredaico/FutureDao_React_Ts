@@ -20,7 +20,7 @@ export interface IProjectTransationStore
   buy:(amount: string)=>void,
   sell:(amount: string)=>void,
   computeBuyCountSpendPrice:(count:string)=>Promise<string>,
-  computeSpendPriceGetCount:(amount:string)=>Promise<string>,
+  computeSpendPriceBuyCount:(amount:string)=>Promise<string>,
   computeGetPriaceSellCount:(amount:string)=>Promise<string>,
   computeSellCountGetPriace:(amount:string)=>Promise<string>
 }

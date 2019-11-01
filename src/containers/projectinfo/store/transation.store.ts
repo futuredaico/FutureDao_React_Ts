@@ -7,6 +7,7 @@ import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } 
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber, saveDecimal } from "@/utils/numberTool";
+import { IContractHash } from '../interface/projectinfo.interface';
 
 
 const defaultContract = {
@@ -165,9 +166,20 @@ class ProjectTransation
    */
   @action public buy = async (amount: string) =>
   {
+    console.log(projectinfoStore.hashList);
+    let hashStr = '';
+    projectinfoStore.hashList.forEach((item:IContractHash)=>{
+      //
+      if(item.contractName === 'TradeFundPool'){
+        hashStr = item.contractHash
+      }
+    })
+    if(!hashStr){
+      return false
+    }
     try
     {
-      const txid = await Api.buy(this.hash, metamaskwallet.web3.utils.toWei(amount, "ether"));
+      const txid = await Api.buy(hashStr, metamaskwallet.web3.utils.toWei(amount, "ether"));
       return txid;
     } catch (error)
     {
@@ -212,7 +224,7 @@ class ProjectTransation
    * 计算花费eth可以购买多少个代币
    * @param amount 花费多少钱（eth,dai,neo,gas...)
    */
-  @action public computeSpendPriceGetCount = (amount: string) =>
+  @action public computeSpendPriceBuyCount = (amount: string) =>
   {
     if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
     {

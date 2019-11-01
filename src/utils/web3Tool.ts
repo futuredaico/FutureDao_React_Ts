@@ -2,7 +2,6 @@
 import { TransactionConfig } from "web3-core";
 // import { AbiItem } from "web3-utils";
 import { fundAbi } from "./FundPoolAbi";
-import { voteAbi } from "./VoteAbi";
 import { CONTRACT_CONFIG } from "@/config";
 import { AbiItem } from "web3-utils";
 // import { voteAbi } from "./VoteAbi";
@@ -96,21 +95,21 @@ class Web3Tool
     public applyProposal = (votehash,name:string,recipient:string,value:any,timeConsuming:number,detail:string)=>{
         return new Promise<string>((r,j)=>{
             
-            const contract = new MetaMask.web3.eth.Contract(voteAbi,votehash);
-            contract.methods.applyProposal(name,recipient,MetaMask.web3.utils.toWei(value,"ether"),timeConsuming,detail).send({from:MetaMask.metamaskAddress})
-            .on('transactionHash', (hash)=>{
-                console.log(hash);
-                r(hash);
-            })
-            // .on('confirmation', (confirmationNumber, receipt)=>{
-            //     console.log('receipt',receipt);
+            // const contract = new MetaMask.web3.eth.Contract(voteAbi,votehash);
+            // contract.methods.applyProposal(name,recipient,MetaMask.web3.utils.toWei(value,"ether"),timeConsuming,detail).send({from:MetaMask.metamaskAddress})
+            // .on('transactionHash', (hash)=>{
+            //     console.log(hash);
+            //     r(hash);
+            // })
+            // // .on('confirmation', (confirmationNumber, receipt)=>{
+            // //     console.log('receipt',receipt);
                 
-            // })
-            // .on('receipt', (receipt)=>{
-            //     // receipt example
-            //     console.log(receipt); // 查询这里可以得到结果
-            // })
-            .on('error', err=>j(err)); // If a out of gas error, the second parameter is the receipt.
+            // // })
+            // // .on('receipt', (receipt)=>{
+            // //     // receipt example
+            // //     console.log(receipt); // 查询这里可以得到结果
+            // // })
+            // .on('error', err=>j(err)); // If a out of gas error, the second parameter is the receipt.
         })
     }
 
@@ -154,17 +153,17 @@ class Web3Tool
     }
 
     public getProposalStateByIndex =async()=>{
-        return new Promise<any>((r,j)=>{
-            const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
-            contract.methods.getProposalStateByIndex(1).call(undefined, function (error, result) {
-                console.log('error:' + error)            
-                if(!error)
-                {
-                    r(result)
-                    console.log('result',result)
-                }
-            })
-        })
+        // return new Promise<any>((r,j)=>{
+        //     const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
+        //     contract.methods.getProposalStateByIndex(1).call(undefined, function (error, result) {
+        //         console.log('error:' + error)            
+        //         if(!error)
+        //         {
+        //             r(result)
+        //             console.log('result',result)
+        //         }
+        //     })
+        // })
     }
 
     public deployContract = async(abi:any,contractBytecode:string,args?:any[]) =>
@@ -205,19 +204,19 @@ class Web3Tool
      * @param result 
      */
     public async vote(proposalIndex:number,result:number){
-        const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
-        contract.methods.vote(proposalIndex,result).send({from:'0xb47076E7bD29bb62c6818Dbf83950F331845B5C6'})
-        .on('transactionHash', (hash)=>{
-            console.log(hash);
-        })
-        .on('confirmation', (confirmationNumber, receipt)=>{
-            console.log('receipt',receipt);            
-        })
-        .on('receipt', (receipt)=>{
-            // receipt example
-            console.log(receipt); // 查询这里可以得到结果
-        })
-        .on('error', err=>console.error(err)); // If a out of gas error, the second parameter is the receipt.
+        // const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
+        // contract.methods.vote(proposalIndex,result).send({from:'0xb47076E7bD29bb62c6818Dbf83950F331845B5C6'})
+        // .on('transactionHash', (hash)=>{
+        //     console.log(hash);
+        // })
+        // .on('confirmation', (confirmationNumber, receipt)=>{
+        //     console.log('receipt',receipt);            
+        // })
+        // .on('receipt', (receipt)=>{
+        //     // receipt example
+        //     console.log(receipt); // 查询这里可以得到结果
+        // })
+        // .on('error', err=>console.error(err)); // If a out of gas error, the second parameter is the receipt.
     }
 
     /**

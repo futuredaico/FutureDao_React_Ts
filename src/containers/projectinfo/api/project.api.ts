@@ -8,11 +8,11 @@ import common from "@/store/common";
  * @param projId 项目ID
  * @param userId 用户ID
  */
-export const getProjInfo = (projId:string,userId:string) =>
+export const getProjInfo = (projId: string, userId: string) =>
 {
     const opts = {
         method: 'queryProjDetail',
-        params: [projId,userId]
+        params: [projId, userId]
     }
     return request(opts);
 }
@@ -22,11 +22,11 @@ export const getProjInfo = (projId:string,userId:string) =>
  * @param page 当前页
  * @param pageSize 每页显示条数
  */
-export const getUpdateList = (projId:string,page:number,pageSize:number) =>
+export const getUpdateList = (projId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'queryUpdateList',
-        params: [projId,page,pageSize]
+        params: [projId, page, pageSize]
     }
     return request(opts);
 }
@@ -37,11 +37,11 @@ export const getUpdateList = (projId:string,page:number,pageSize:number) =>
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
  */
-export const deleteUpdate = (userId:string,token:string,projId:string,proUpdateId:string) =>
+export const deleteUpdate = (userId: string, token: string, projId: string, proUpdateId: string) =>
 {
     const opts = {
         method: 'deleteUpdate',
-        params: [userId,token,projId,proUpdateId]
+        params: [userId, token, projId, proUpdateId]
     }
     return request(opts);
 }
@@ -52,11 +52,11 @@ export const deleteUpdate = (userId:string,token:string,projId:string,proUpdateI
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
  */
-export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string) =>
+export const getUpdateInfoById = (projId: string, proUpdateId: string, userId: string) =>
 {
     const opts = {
         method: 'queryUpdate',
-        params: [projId,proUpdateId,userId]
+        params: [projId, proUpdateId, userId]
     }
     return request(opts);
 }
@@ -66,11 +66,11 @@ export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string
  * @param token 访问令牌
  * @param projId 项目ID
  */
-export const startAttention = (userId:string,token:string,projId:string) =>
+export const startAttention = (userId: string, token: string, projId: string) =>
 {
     const opts = {
         method: 'startStarProj',
-        params: [userId,token,projId]
+        params: [userId, token, projId]
     }
     return request(opts);
 }
@@ -80,11 +80,11 @@ export const startAttention = (userId:string,token:string,projId:string) =>
  * @param token 访问令牌
  * @param projId 项目ID
  */
-export const cancelAttention = (userId:string,token:string,projId:string) =>
+export const cancelAttention = (userId: string, token: string, projId: string) =>
 {
     const opts = {
         method: 'cancelStarProj',
-        params: [userId,token,projId]
+        params: [userId, token, projId]
     }
     return request(opts);
 }
@@ -94,11 +94,11 @@ export const cancelAttention = (userId:string,token:string,projId:string) =>
  * @param token 访问令牌
  * @param projId 项目ID
  */
-export const startSupport = (userId:string,token:string,projId:string) =>
+export const startSupport = (userId: string, token: string, projId: string) =>
 {
     const opts = {
         method: 'startSupportProj',
-        params: [userId,token,projId]
+        params: [userId, token, projId]
     }
     return request(opts);
 }
@@ -108,11 +108,11 @@ export const startSupport = (userId:string,token:string,projId:string) =>
  * @param page 当前页
  * @param pageSize 每页显示条数
  */
-export const getTeamList = (projId:string,page:number,pageSize:number) =>
+export const getTeamList = (projId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'queryProjTeamBrief',
-        params: [projId,page,pageSize]
+        params: [projId, page, pageSize]
     }
     return request(opts);
 }
@@ -124,11 +124,11 @@ export const getTeamList = (projId:string,page:number,pageSize:number) =>
  * @param prevousId 上一条评论ID（可为空，表示一级评论）
  * @param discussStr 评论内容
  */
-export const sendDiscussToProj = (userId:string,token:string,projId:string,prevousId:string,discussStr:string) =>
+export const sendDiscussToProj = (userId: string, token: string, projId: string, prevousId: string, discussStr: string) =>
 {
     const opts = {
         method: 'addProjDiscuss',
-        params: [userId,token,projId,prevousId,discussStr]
+        params: [userId, token, projId, prevousId, discussStr]
     }
     return request(opts);
 }
@@ -140,11 +140,11 @@ export const sendDiscussToProj = (userId:string,token:string,projId:string,prevo
  * @param page 当前页码
  * @param pageSize 每页条数
  */
-export const getProjDiscussList = (projId:string,discussId:string,userId:string,page:number,pageSize:number) =>
+export const getProjDiscussList = (projId: string, discussId: string, userId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'getProjSubDiscussList',
-        params: [projId,discussId,userId,page,pageSize]
+        params: [projId, discussId, userId, page, pageSize]
     }
     return request(opts);
 }
@@ -155,11 +155,11 @@ export const getProjDiscussList = (projId:string,discussId:string,userId:string,
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getProjDiscussChildList = (childId:string,userId:string,page:number,pageSize:number) =>
+export const getProjDiscussChildList = (childId: string, userId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'getProjSubChildDiscussList',
-        params: [childId,userId,page,pageSize]
+        params: [childId, userId, page, pageSize]
     }
     return request(opts);
 }
@@ -172,11 +172,11 @@ export const getProjDiscussChildList = (childId:string,userId:string,page:number
  * @param prevousId 上一条评论ID（可为空，表示一级评论）
  * @param discussStr 评论内容
  */
-export const sendDiscussToUpdate = (userId:string,token:string,projId:string,updateId:string,prevousId:string,discussStr:string) =>
+export const sendDiscussToUpdate = (userId: string, token: string, projId: string, updateId: string, prevousId: string, discussStr: string) =>
 {
     const opts = {
         method: 'addUpdateDiscuss',
-        params: [userId,token,projId,updateId,prevousId,discussStr]
+        params: [userId, token, projId, updateId, prevousId, discussStr]
     }
     return request(opts);
 }
@@ -188,11 +188,11 @@ export const sendDiscussToUpdate = (userId:string,token:string,projId:string,upd
  * @param page 当前页码
  * @param pageSize 每页条数 
  */
-export const getUpdateDiscussList = (updateId:string,discussId:string,userId:string,page:number,pageSize:number) =>
+export const getUpdateDiscussList = (updateId: string, discussId: string, userId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'getUpdateSubDiscussList',
-        params: [updateId,discussId,userId,page,pageSize]
+        params: [updateId, discussId, userId, page, pageSize]
     }
     return request(opts);
 }
@@ -203,11 +203,11 @@ export const getUpdateDiscussList = (updateId:string,discussId:string,userId:str
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getUpdateDiscussChildList = (childId:string,userId:string,page:number,pageSize:number) =>
+export const getUpdateDiscussChildList = (childId: string, userId: string, page: number, pageSize: number) =>
 {
     const opts = {
         method: 'getUpdateSubChildDiscussList',
-        params: [childId,userId,page,pageSize]
+        params: [childId, userId, page, pageSize]
     }
     return request(opts);
 }
@@ -218,11 +218,11 @@ export const getUpdateDiscussChildList = (childId:string,userId:string,page:numb
  * @param projId 项目ID
  * @param discussId 评论ID
  */
-export const sendZanProj = (userId:string,token:string,projId:string,discussId:string) =>
+export const sendZanProj = (userId: string, token: string, projId: string, discussId: string) =>
 {
     const opts = {
         method: 'zanProjDiscuss',
-        params: [userId,token,projId,discussId]
+        params: [userId, token, projId, discussId]
     }
     return request(opts);
 }
@@ -234,11 +234,11 @@ export const sendZanProj = (userId:string,token:string,projId:string,discussId:s
  * @param updateId 更新ID
  * @param discussId 评论ID
  */
-export const sendZanUpdate = (userId:string,token:string,projId:string,updateId:string,discussId:string) =>
+export const sendZanUpdate = (userId: string, token: string, projId: string, updateId: string, discussId: string) =>
 {
     const opts = {
         method: 'zanUpdateDiscuss',
-        params: [userId,token,projId,updateId,discussId]
+        params: [userId, token, projId, updateId, discussId]
     }
     return request(opts);
 }
@@ -249,11 +249,11 @@ export const sendZanUpdate = (userId:string,token:string,projId:string,updateId:
  * @param projId 项目ID
  * @param updateId 更新ID
  */
-export const sendZanUpdateInfo = (userId:string,token:string,projId:string,updateId:string) =>
+export const sendZanUpdateInfo = (userId: string, token: string, projId: string, updateId: string) =>
 {
     const opts = {
         method: 'zanUpdate',
-        params: [userId,token,projId,updateId]
+        params: [userId, token, projId, updateId]
     }
     return request(opts);
 }
@@ -261,7 +261,7 @@ export const sendZanUpdateInfo = (userId:string,token:string,projId:string,updat
  * 获取交易合约详情数据的统计
  * @param projId 项目ID
  */
-export const getProjContract = (projId:string) =>
+export const getProjContract = (projId: string) =>
 {
     const opts = {
         method: 'queryProjContract',
@@ -274,10 +274,11 @@ export const getProjContract = (projId:string) =>
  * @param projId 项目Id
  * @param type 截取时间 “w”为1周，“m”为1月
  */
-export const getHistoryPriceList = (projId:string,type:string)=>{
+export const getHistoryPriceList = (projId: string, type: string) =>
+{
     const opts = {
         method: 'queryTokenHistPrice',
-        params: [projId,type]
+        params: [projId, type]
     }
     return request(opts);
 }
@@ -285,10 +286,11 @@ export const getHistoryPriceList = (projId:string,type:string)=>{
  * 查询项目购买价格和出售价格
  * @param projId 项目ID
  */
-export const getTokenPrice = (projId:string)=>{
-    const opts={
-        method:'queryTokenPrice',
-        params:[projId]
+export const getTokenPrice = (projId: string) =>
+{
+    const opts = {
+        method: 'queryTokenPrice',
+        params: [projId]
     }
     return request(opts);
 }
@@ -296,10 +298,11 @@ export const getTokenPrice = (projId:string)=>{
  * 获取项目礼包列表
  * @param projId 项目Id
  */
-export const getRewardList = (projId:string)=>{
-    const opts={
-        method:'queryRewardList',
-        params:[projId]
+export const getRewardList = (projId: string) =>
+{
+    const opts = {
+        method: 'queryRewardList',
+        params: [projId]
     }
     return request(opts);
 }
@@ -308,10 +311,11 @@ export const getRewardList = (projId:string)=>{
  * 查询预留代币
  * @param projId 项目ID
  */
-export const getReserveToken = (projId:string)=>{
-    const opts={
-        method:'queryReserveToken',
-        params:[projId]
+export const getReserveToken = (projId: string) =>
+{
+    const opts = {
+        method: 'queryReserveToken',
+        params: [projId]
     }
     return request(opts);
 }
@@ -322,10 +326,11 @@ export const getReserveToken = (projId:string)=>{
  * @param page 分页索引
  * @param size 分页大小
  */
-export const getTxList = (projId:string,addr:string,page:number,size:number)=>{
+export const getTxList = (projId: string, addr: string, page: number, size: number) =>
+{
     const opts = {
-        method:'queryTxList',
-        params:[projId,addr,page,size]
+        method: 'queryTxList',
+        params: [projId, addr, page, size]
     }
     return request(opts);
 }
@@ -334,10 +339,11 @@ export const getTxList = (projId:string,addr:string,page:number,size:number)=>{
  * @param projId 项目ID
  * @param addr 地址
  */
-export const getTokenBalanceInfo = (projId:string,addr:string)=>{
+export const getTokenBalanceInfo = (projId: string, addr: string) =>
+{
     const opts = {
-        method:'queryTokenBalanceInfo',
-        params:[projId,addr]
+        method: 'queryTokenBalanceInfo',
+        params: [projId, addr]
     }
     return request(opts);
 }
@@ -347,8 +353,9 @@ export const getTokenBalanceInfo = (projId:string,addr:string)=>{
  * 获得fnd的发行总量
  * @param hash 
  */
-export const totalSupply=(hash:string)=>{
-    return web3Tool.contractCall('fundPool',hash,'totalSupply');
+export const totalSupply = (hash: string) =>
+{
+    return web3Tool.contractCall('fundPool', hash, 'totalSupply');
 }
 
 /**
@@ -356,11 +363,13 @@ export const totalSupply=(hash:string)=>{
  * @param hash 项目hash
  * @param amount 金额
  */
-export const buy = (hash:string,amount:any)=>{
-    if(!common.userInfo){
+export const buy = (hash: string, amount: any) =>
+{
+    if (!common.userInfo)
+    {
         return
     }
-    return web3Tool.contractSend('fundPool',hash,'buy',undefined,{from:common.userInfo.ethAddress,to:hash,value:amount})
+    return web3Tool.contractSend('fundPool', hash, 'buy', undefined, { from: common.userInfo.ethAddress, to: hash, value: amount })
 }
 
 /**
@@ -368,21 +377,34 @@ export const buy = (hash:string,amount:any)=>{
  * @param hash 
  * @param amount 
  */
-export const sell=(hash:string,amount:any)=>{
-    if(!common.userInfo){
+export const sell = (hash: string, amount: any) =>
+{
+    if (!common.userInfo)
+    {
         return
     }
-    return web3Tool.contractSend('fundPool',hash,"sell",[amount],{from:common.userInfo.ethAddress});
+    return web3Tool.contractSend('fundPool', hash, "sell", [amount], { from: common.userInfo.ethAddress });
 }
 
 /**
  * 根据hash获得项目股份的购买斜率
  * @param hash 
  */
-export const getSlope=(hash:string)=>{
-    return web3Tool.contractCall('fundPool',hash,"slope");
+export const getSlope = (hash: string) =>
+{
+    return web3Tool.contractCall('fundPool', hash, "slope");
 }
 
-export const getFndBalancesByAddress=(hash:string,address:string)=>{
-    return web3Tool.contractCall('fundPool',hash,'balances',[address]);
+export const getFndBalancesByAddress = (hash: string, address: string) =>
+{
+    return web3Tool.contractCall('fundPool', hash, 'balances', [address]);
+}
+
+export const getProjectContractHash = (projId: string) =>
+{
+    const opts = {
+        method: 'queryContractHash',
+        params: [projId]
+    }
+    return request(opts);
 }

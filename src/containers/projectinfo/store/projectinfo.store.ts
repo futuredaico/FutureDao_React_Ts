@@ -3,11 +3,12 @@ import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { toMyNumber } from "@/utils/numberTool";
-import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken } from '../interface/projectinfo.interface';
+import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/projectinfo.interface';
+import transationStore from './transation.store';
 
 class ProjectInfo
 {
-  @observable public menuNum = 4; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
+  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
   @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IProjectInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID
@@ -22,6 +23,7 @@ class ProjectInfo
   @observable public reserveData: IProjReserveToken | null = null;
   @observable public buyPrice: string = '0'; // 项目代币当前购买价格
   @observable public sellPrice: string = '0'; // 项目代币当前出售价格
+  @observable public hashList:IContractHash[] = [];
   /**
    * 获取项目基本详情
    */
@@ -41,6 +43,27 @@ class ProjectInfo
       return false
     }
     this.projInfo = result[0].data;
+    return true;
+  }
+  /**
+   * 获取项目的合约hash
+   */
+  @action public getContractHash = async () =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.getProjectContractHash(this.projId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.hashList = result[0].data
     return true;
   }
   /**
@@ -259,7 +282,14 @@ class ProjectInfo
       this.rewardList = [];
       return false
     }
-    this.rewardList = result[0].data.list || [];
+    const list:IProjReward[] = result[0].data.list.map((item)=>{
+      const num = transationStore.computeSpendPriceBuyCount(item.price);
+      return {
+        ...item,
+        rewardPrice:parseInt(num,10)
+      }
+    });
+    this.rewardList = list
     return true;
   }
   /**
