@@ -443,15 +443,15 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         if(this.state.isError){
             return false
         }
-        try
-        {
-            const txid = await this.props.transation.buy(this.state.buyPrice);
-            console.log(txid);
-            this.props.common.openNotificationWithIcon('success', "操作成功", "买入成功");
-        } catch (error)
-        {
-            this.props.common.openNotificationWithIcon('error', "操作失败", "买入失败");
-        }
+        // try
+        // {
+        //     const txid = await this.props.transation.buy(this.state.buyPrice);
+        //     console.log(txid);
+        //     this.props.common.openNotificationWithIcon('success', "操作成功", "买入成功");
+        // } catch (error)
+        // {
+        //     this.props.common.openNotificationWithIcon('error', "操作失败", "买入失败");
+        // }
         return true;
     }
     // 卖出
@@ -460,15 +460,15 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         if(this.state.isError){
             return false
         }
-        try
-        {
-            const txid = await this.props.transation.sell(this.state.sellCount);
-            console.log(txid);
-            this.props.common.openNotificationWithIcon('success', "操作成功", "卖出成功");
-        } catch (error)
-        {
-            this.props.common.openNotificationWithIcon('error', "操作失败", "卖出失败");
-        }
+        // try
+        // {
+        //     const txid = await this.props.transation.sell(this.state.sellCount);
+        //     console.log(txid);
+        //     this.props.common.openNotificationWithIcon('success', "操作成功", "卖出成功");
+        // } catch (error)
+        // {
+        //     this.props.common.openNotificationWithIcon('error', "操作失败", "卖出失败");
+        // }
         return true
     }
 }

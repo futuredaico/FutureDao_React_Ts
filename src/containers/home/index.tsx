@@ -9,7 +9,7 @@ import Card from '@/components/card';
 // import Slider from '@/components/slider';
 import { Pagination } from 'antd';
 import { IHomeProps, IProjList } from './interface/home.interface';
-import { ProjType } from '@/store/interface/common.interface';
+import { ProjType, ProjectState } from '@/store/interface/common.interface';
 
 @inject('home')
 @observer
@@ -64,14 +64,22 @@ class Home extends React.Component<IHomeProps, any> {
                           <div className="sbox-card">
                             <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
                           </div>
-                          <div className="sbox-showtype">
-                            <div className="showtype-text"><strong>{this.intrl.home.display}</strong></div>
-                            <div className="kanhao-count">{item.supportCount}{this.intrl.home.supporttips}</div>
-                          </div>
-                          {/* <div className="sbox-line">
-                              <div className="sbox-line-left">已售出 3427股</div>
-                              <div className="sbox-line-right">1120 人参与</div>                              
-                            </div> */}
+                          {
+                            item.projState === ProjectState.IdeaPub && (
+                              <div className="sbox-showtype">
+                                <div className="showtype-text"><strong>{this.intrl.home.display}</strong></div>
+                                <div className="kanhao-count">{item.supportCount}{this.intrl.home.supporttips}</div>
+                              </div>
+                            )
+                          }
+                          {
+                            item.projState === ProjectState.Trading && (
+                              <div className="sbox-line">
+                                <div className="sbox-line-left">已售出 0股</div>
+                                <div className="sbox-line-right">0 人参与</div>
+                              </div>
+                            )
+                          }
                           {/* <div className="sbox-line">
                               <div className="sbox-line-left">5天后开启众筹</div>                             
                             </div> */}

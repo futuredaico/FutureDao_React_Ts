@@ -19,5 +19,8 @@ export interface IProjList {
     projTitle:string,
     projType:string,
     projConverUrl:string,
-    supportCount:number
+    supportCount:number,
+    lastUpdateTime:number,
+    projState:string,
+    projSubState:string,    
 }
