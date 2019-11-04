@@ -100,9 +100,9 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                 </>
                             )
                         }
-                        {/* 众筹中 */}
+                        {/* 交易中 */}
                         {
-                            this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && (
+                            this.props.projectinfo.projInfo.projState === ProjectState.Trading && (
                                 <>
                                     <div className="going-wrapper">
                                         <div className="going-line">

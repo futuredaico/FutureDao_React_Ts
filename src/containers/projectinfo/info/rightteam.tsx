@@ -57,7 +57,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                     }
                 </div>
                 {
-                    this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && this.props.projectinfo.priceInfo && (
+                    this.props.projectinfo.projInfo.projState === ProjectState.Trading && this.props.projectinfo.priceInfo && (
                         <>
                             {/* 项目代币价格模块 */}
                             <div className="price-wrapper">

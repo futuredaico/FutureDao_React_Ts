@@ -57,14 +57,14 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                   {this.intrl.projinfo.update + ' ' + this.handleNumCount(3)}
                 </li>
                 {
-                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && (
+                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.Trading && (
                     <li className={this.props.projectinfo.menuNum === 4 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 4)}>
                       交易
                     </li>
                   )
                 }
                 {
-                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.CrowdFunding && this.props.projectinfo.projInfo.type === 'daico' && (
+                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.Trading && this.props.projectinfo.projInfo.type === 'daico' && (
                     <li className={this.props.projectinfo.menuNum === 5 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 5)}>
                       治理
                     </li>
