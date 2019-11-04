@@ -55,6 +55,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                 {
                     return false;
                 }
+                console.log(this.props.financing.financingContent.ratioSetFlag)
                 if (this.props.financing.financingContent.ratioSetFlag === '5')
                 {
                     if (this.props.financing.timer)

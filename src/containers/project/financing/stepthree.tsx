@@ -67,7 +67,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
           <span className="gray-text">（ 当前 {this.props.financing.ratio}% ）</span>
         </div>
         <div className="inline-btn">
-          <Button text="提交" btnSize="bg-btn" onClick={this.handleSaveRatio} />
+          <Button text="提交" btnSize="bg-btn" onClick={this.handleSaveRatio} btnColor={(!this.state.ratio || parseFloat(this.state.ratio) === 0||this.state.ratio === this.props.financing.ratio) ? 'gray-btn' : ''} />
         </div>
         {
           this.state.isDoingEdit && (
@@ -107,11 +107,13 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     );
   }
   // 获取修改储备金比例数据
-  private handleGetRatio = async ()=> {
+  private handleGetRatio = async () =>
+  {
     await this.props.financing.getReserveFund();
     this.setState({
       ratio: this.props.financing.ratio
     })
+    console.log(!this.state.ratio || parseFloat(this.state.ratio) === 0)
   }
   // 普通融资领取资金
   private handleToGetMoney = () =>
@@ -152,7 +154,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
   private handleChangeRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>
   {
     // 可以被修改成0-99的整数
-    const value = ev.target.value as unknown as number;    
+    const value = ev.target.value as unknown as number;
     if (isNaN(value))
     {
       return false;
@@ -178,7 +180,11 @@ class StepThree extends React.Component<IFinancingProps, IState> {
     {
       return false;
     }
-    if(parseFloat(this.state.ratio)<=0){
+    if (parseFloat(this.state.ratio) <= 0)
+    {
+      return false
+    }
+    if(this.state.ratio === this.props.financing.ratio){
       return false
     }
     const res = await this.props.financing.saveReserveFundRatio(this.state.ratio);
@@ -191,13 +197,17 @@ class StepThree extends React.Component<IFinancingProps, IState> {
       {
         this.props.financing.financingContent.ratioSetFlag = '4';
       }
-      const timer = setInterval(async () =>
+      this.props.financing.timer = setInterval(async () =>
       {
         await this.props.financing.getContractData();
         if (this.props.financing.financingContent && this.props.financing.financingContent.ratioSetFlag === '5')
         {
           this.handleGetRatio();
-          clearInterval(timer)
+          if (this.props.financing.timer)
+          {
+            clearInterval(this.props.financing.timer);
+          }
+          this.props.financing.timer = null;
         }
       }, 5000)
     }

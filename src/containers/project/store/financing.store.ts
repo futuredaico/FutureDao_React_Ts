@@ -110,7 +110,6 @@ class Financing {
 
     try {
       result = await Api.getContractData(common.userId, common.token, project.projId);
-      console.log(result)
     } catch (e) {
       return false;
     }

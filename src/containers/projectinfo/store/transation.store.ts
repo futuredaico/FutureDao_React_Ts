@@ -164,7 +164,7 @@ class ProjectTransation
   /**
    * 买入
    */
-  @action public buy = async (amount: string) =>
+  @action public buy = async (count: string,amount:string) =>
   {
     console.log(projectinfoStore.hashList);
     let hashStr = '';
@@ -177,9 +177,12 @@ class ProjectTransation
     if(!hashStr){
       return false
     }
+    const timeNum = new Date().getTime();    
+    console.log(timeNum)
     try
     {
-      const txid = await Api.buy(hashStr, metamaskwallet.web3.utils.toWei(amount, "ether"));
+      const txid = await Api.buy(hashStr, parseInt(count,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      console.log(txid)
       return txid;
     } catch (error)
     {
@@ -208,7 +211,7 @@ class ProjectTransation
    */
   @action public computeBuyCountSpendPrice = (count: string) =>
   {
-    if (!projectinfoStore.projInfo || projectinfoStore.projInfo.hasIssueAmt === '0')
+    if (!projectinfoStore.projInfo)
     {
       return '0'
     }
@@ -217,7 +220,8 @@ class ProjectTransation
     const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num3 = num1.sub(num2).mul(0.0000000005)
-    // console.log(toMyNumber(130601).add(1314).sqr().sub(toMyNumber(1314).sqr()).mul(0.0000000005))// 8.6999203145
+    // console.log(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005))
+    // console.log(web3.toBigNumber(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005)).toString(10))
     return web3.toBigNumber(num3).toString(10);
   }
   /**
@@ -226,7 +230,7 @@ class ProjectTransation
    */
   @action public computeSpendPriceBuyCount = (amount: string) =>
   {
-    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
+    if (!projectinfoStore.projInfo)
     {
       return '0'
     }
@@ -245,9 +249,9 @@ class ProjectTransation
    * 已知要获得X个ETH，求需要出售多少个代币
    * @param amount 想要得到多少钱（eth,dai,neo,gas...)
    */
-  @action public computeGetPriaceSellCount = (amount: string) =>
+  @action public computeGetPriceSellCount = (amount: string) =>
   {
-    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0 || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
+    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
     {
       return '0'
     }
@@ -272,7 +276,7 @@ class ProjectTransation
    */
   @action public computeSellCountGetPriace = (count: string) =>
   {
-    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0 || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
+    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
     {
       return '0'
     }

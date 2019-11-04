@@ -271,7 +271,7 @@ class ProjectInfo
     let result: any = [];
     try
     {
-      result = await Api.getRewardList("8f3728ed73a240b50dfb12d524eac9df");
+      result = await Api.getRewardList(this.projId);
     } catch (e)
     {
       this.rewardList = [];
@@ -279,6 +279,10 @@ class ProjectInfo
     }
     if (result[0].resultCode !== CodeType.success)
     {
+      this.rewardList = [];
+      return false
+    }
+    if (Object.keys(result[0].data).length === 0) {
       this.rewardList = [];
       return false
     }
@@ -325,7 +329,7 @@ class ProjectInfo
    */
   @action public computeCurrentBuyPrice = async () =>
   {
-    if (this.projInfo && this.projInfo.hasIssueAmt !== '0')
+    if (this.projInfo)
     {
       // 10^-9*（发行代币数量+0.5）
       const mycount = toMyNumber(this.projInfo.hasIssueAmt);
@@ -342,7 +346,7 @@ class ProjectInfo
    */
   @action public computeCurrentSellPrice = async () =>
   {
-    if (this.projInfo && parseFloat(this.projInfo.hasIssueAmt) !== 0 && parseFloat(this.projInfo.fundReservePoolTotal) !== 0)
+    if (this.projInfo && parseFloat(this.projInfo.hasIssueAmt) !== 0)
     {
       // （2*储备金余额）/发行代币数量*（1-1/（2*发行代币数量））
       // 1.（2*储备金余额）/发行代币数量

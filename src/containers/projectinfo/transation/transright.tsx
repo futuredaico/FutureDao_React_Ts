@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import '../index.less';
 import Button from '@/components/Button';
 import { IProjectInfoProps } from '../interface/projectinfo.interface';
-import { saveDecimal } from '../../../utils/numberTool';
+import { saveDecimal, toMyNumber } from '../../../utils/numberTool';
 import Hint from '@/components/hint';
 
 interface IState
@@ -20,9 +20,9 @@ interface IState
     myEquityValue: string,   // 我当前的股份价值ETH
     isCanBuyBtn: boolean, // 是否可以买入
     isCanSellBtn: boolean, // 是否可以卖出
-    isShowBalance:boolean, // 是否显示余额
-    isError:boolean // 是否余额超支
-    balance:string // 当前连接账户余额
+    isShowBalance: boolean, // 是否显示余额
+    isError: boolean // 是否余额超支
+    balance: string // 当前连接账户余额
 }
 
 @observer
@@ -40,9 +40,9 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         myEquityValue: '',
         isCanBuyBtn: false,
         isCanSellBtn: false,
-        isShowBalance:false,
-        isError:false,
-        balance:'0'
+        isShowBalance: false,
+        isError: false,
+        balance: '0'
     }
     public menuRight = [
         {
@@ -72,15 +72,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         } else
         {
             this.props.transation.getTokenBalance('');
-        }        
-        // 计算单个代币预计花费多少
-        const oneBuyPrice = await this.props.transation.computeBuyCountSpendPrice('1');
-        // 鸡蛋单个代币出售得多少
-        const oneSellPrice = await this.props.transation.computeSellCountGetPriace('1');
-        this.setState({
-            buyOnePrice: saveDecimal(oneBuyPrice, 6),
-            sellOnePrice:saveDecimal(oneSellPrice,6)
-        })
+        }
     }
     public render()
     {
@@ -112,11 +104,11 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             <div className="tran-line">
                                 <div className="line-left">
                                     <div className="small-gray">最近买入价</div>
-                                    <div className="strong-text">{parseFloat(buyNum)===0?'0':buyNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
+                                    <div className="strong-text">{parseFloat(buyNum) === 0 ? '0' : buyNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
                                 </div>
                                 <div className="line-right">
                                     <div className="small-gray">最近卖出价</div>
-                                    <div className="strong-text">{parseFloat(sellNum)===0?'0':sellNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
+                                    <div className="strong-text">{parseFloat(sellNum) === 0 ? '0' : sellNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
                                 </div>
                             </div>
                             <div className="tran-line">
@@ -158,17 +150,17 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             <div className="buy-line">
                                 <div className="buy-left">花费</div>
                                 <div className="buy-right">
-                                    <input type="text" className={this.state.isError?"normal-buy-input error-input":"normal-buy-input"} onChange={this.onChangeBuySpend} value={this.state.buyPrice} />
+                                    <input type="text" className={this.state.isError ? "normal-buy-input error-input" : "normal-buy-input"} onChange={this.onChangeBuySpend} value={this.state.buyPrice} />
                                     <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                     {
                                         this.state.isShowBalance && <span className="amount-text">余额：{this.state.balance} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
-                                    }                                    
+                                    }
                                 </div>
                             </div>
                             <div className="buy-line">
                                 <div className="buy-left">均价</div>
                                 <div className="buy-right">
-                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={parseFloat(this.state.buyOnePrice)===0?'0':this.state.buyOnePrice} />
+                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={parseFloat(this.state.buyOnePrice) === 0 ? '0' : this.state.buyOnePrice} />
                                     <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
@@ -179,12 +171,12 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                     type='2'
                                 />
                                 <div className="attention-textdiv">
-                                    <p className="sm-p">您将花费 <span className="purple-text">{this.state.buyPrice?this.state.buyPrice:'0'} {this.props.projectinfo.projInfo&&this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
-                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount?this.state.buyCount:'0'} {this.props.transation.projContractInfo&&this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">您将花费 <span className="purple-text">{this.state.buyPrice ? this.state.buyPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount ? this.state.buyCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
                                 </div>
                             </div>
                             <div className="doing-btn">
-                                <Button text="Buy" btnColor={(this.state.isCanBuyBtn&&!this.state.isError) ? "green-btn" : 'gray-btn'} btnSize="buy-btn" onClick={this.onBuy} />
+                                <Button text="Buy" btnColor={(this.state.isCanBuyBtn && !this.state.isError) ? "green-btn" : 'gray-btn'} btnSize="buy-btn" onClick={this.onBuy} />
                             </div>
                         </div>
                     )
@@ -195,7 +187,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             <div className="buy-line">
                                 <div className="buy-left">卖出量</div>
                                 <div className="buy-right">
-                                    <input type="text" className={this.state.isError?"normal-buy-input input-otherpadding error-input":"normal-buy-input input-otherpadding"} onChange={this.onChangeSellCount} value={this.state.sellCount} />
+                                    <input type="text" className={this.state.isError ? "normal-buy-input input-otherpadding error-input" : "normal-buy-input input-otherpadding"} onChange={this.onChangeSellCount} value={this.state.sellCount} />
                                 </div>
                             </div>
                             <div className="buy-line">
@@ -208,7 +200,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             <div className="buy-line">
                                 <div className="buy-left">均价</div>
                                 <div className="buy-right">
-                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={parseFloat(this.state.sellOnePrice)===0?'0':this.state.sellOnePrice} />
+                                    <input type="text" className="normal-buy-input readonly-input" readOnly={true} value={parseFloat(this.state.sellOnePrice) === 0 ? '0' : this.state.sellOnePrice} />
                                     <span className="asset-text">{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
@@ -219,12 +211,12 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                     type='2'
                                 />
                                 <div className="attention-textdiv">
-                                    <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount?this.state.sellCount:'0'} {this.props.transation.projContractInfo&&this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
-                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.sellPrice?this.state.sellPrice:'0'} {this.props.projectinfo.projInfo&&this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount ? this.state.sellCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.sellPrice ? this.state.sellPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
                                 </div>
                             </div>
                             <div className="doing-btn">
-                                <Button text="Sell" btnColor={(this.state.isCanSellBtn&&!this.state.isError) ? "red-red" : 'gray-btn'} btnSize="buy-btn" onClick={this.onSell} />
+                                <Button text="Sell" btnColor={(this.state.isCanSellBtn && !this.state.isError) ? "red-red" : 'gray-btn'} btnSize="buy-btn" onClick={this.onSell} />
                             </div>
                         </div>
                     )
@@ -239,7 +231,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             underRight: item.id,
             isCanBuyBtn: false,
             isCanSellBtn: false,
-            isError:false
+            isError: false
         })
         if (item.id !== 1)
         {
@@ -264,7 +256,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                 this.setState({
                     isCanBuyBtn: true,
                     isCanSellBtn: true,
-                    isShowBalance:true
+                    isShowBalance: true
                 })
             }
             else
@@ -280,9 +272,9 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                 this.setState({
                     isCanBuyBtn: true,
                     isCanSellBtn: true,
-                    isShowBalance:true,
-                    balance:ethBalance
-                })                
+                    isShowBalance: true,
+                    balance: saveDecimal(ethBalance, 6)
+                })
             }
         }
         else
@@ -291,7 +283,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             this.setState({
                 isCanBuyBtn: false,
                 isCanSellBtn: false,
-                isShowBalance:false
+                isShowBalance: false
             })
         }
         return true;
@@ -317,16 +309,19 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         {
             if (this.state.buyCount === '')
             {
-                this.setState({ buyPrice: '' })
+                this.setState({ buyPrice: '' ,buyOnePrice:''})
             } else
             {
                 // 计算购买代币需要花费多少eth, eth保留小数6位
                 const res = await this.props.transation.computeBuyCountSpendPrice(this.state.buyCount);
                 this.setState({
                     buyPrice: saveDecimal(res, 6),
-                    isError:false
-                },()=>{
-                    if(this.state.isShowBalance){
+                    isError: false
+                }, () =>
+                {
+                    this.handleComputeOneBuyPrice();
+                    if (this.state.isShowBalance)
+                    {
                         // 有余额时
                         this.handleCheckBalance()
                     }
@@ -337,12 +332,14 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         return true;
     }
     // 检测花费的余额够不够
-    private handleCheckBalance = ()=>{
+    private handleCheckBalance = () =>
+    {
         const num1 = parseFloat(this.state.buyPrice);
         const num2 = parseFloat(this.state.balance);
-        if(num2-num1<0){
+        if (num2 - num1 < 0)
+        {
             this.setState({
-                isError:true
+                isError: true
             })
         }
     }
@@ -358,24 +355,37 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         }
         this.setState({
             buyPrice: saveDecimal(value.toString(), 6),
-            isError:false
+            isError: false
         }, async () =>
             {
                 if (this.state.buyPrice === '')
                 {
-                    this.setState({ buyCount: '' })
+                    this.setState({ buyCount: '',buyOnePrice:'' })
                 } else
                 {
                     // 计算花费多少eth购买得到多少代币, 取整
                     const count = await this.props.transation.computeSpendPriceBuyCount(this.state.buyPrice);
-                    this.setState({ buyCount: parseInt(count, 10).toString() });
-                    if(this.state.isShowBalance){
+                    this.setState({ buyCount: parseInt(count, 10).toString() }, () =>
+                    {
+                        this.handleComputeOneBuyPrice();
+                    });
+                    if (this.state.isShowBalance)
+                    {
                         // 有余额时
                         this.handleCheckBalance()
                     }
                 }
             })
         return true;
+    }
+    // 计算代币买入的均价
+    private handleComputeOneBuyPrice = () =>
+    {
+        const buyNum = toMyNumber(this.state.buyPrice).div(this.state.buyCount);
+        const oneBuyPrice = web3.toBigNumber(buyNum).toString(10);
+        this.setState({
+            buyOnePrice: saveDecimal(oneBuyPrice, 6)
+        })
     }
 
     // 卖出的获得的输入
@@ -393,12 +403,15 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             {
                 if (this.state.sellPrice === '')
                 {
-                    this.setState({ sellCount: '' })
+                    this.setState({ sellCount: '',sellOnePrice:'' })
                 } else
                 {
                     // 计算获得多少eth需卖出多少代币, 取整
-                    const count = await this.props.transation.computeGetPriaceSellCount(this.state.sellPrice);
-                    this.setState({ sellCount: parseInt(count, 10).toString() })
+                    const count = await this.props.transation.computeGetPriceSellCount(this.state.sellPrice);
+                    this.setState({ sellCount: parseInt(count, 10).toString() }, () =>
+                    {
+                        this.handleComputeOneSellPrice();
+                    })
                 }
             })
         return true;
@@ -424,40 +437,58 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         {
             if (this.state.sellCount === '')
             {
-                this.setState({ sellPrice: '' })
+                this.setState({ sellPrice: '',sellOnePrice:'' })
             } else
             {
                 // 计算出售代币获得多少eth, eth保留小数6位
                 const res = await this.props.transation.computeSellCountGetPriace(this.state.sellCount);
                 this.setState({
                     sellPrice: saveDecimal(res, 6)
+                }, () =>
+                {
+                    this.handleComputeOneSellPrice();
                 })
             }
 
         })
         return true;
     }
+    // 计算代币出售的均价
+    private handleComputeOneSellPrice = () =>
+    {
+        let oneSellPrice = '0';
+        if (this.state.sellCount && this.state.sellCount !== '0')
+        {
+            const sellNum = toMyNumber(this.state.sellPrice).div(this.state.sellCount);
+            oneSellPrice = web3.toBigNumber(sellNum).toString(10);
+        }
+        this.setState({
+            sellOnePrice: saveDecimal(oneSellPrice, 6)
+        })
+    }
     // 买入
     private onBuy = async () =>
     {
-        if(this.state.isError){
+        if (this.state.isError)
+        {
             return false
         }
-        // try
-        // {
-        //     const txid = await this.props.transation.buy(this.state.buyPrice);
-        //     console.log(txid);
-        //     this.props.common.openNotificationWithIcon('success', "操作成功", "买入成功");
-        // } catch (error)
-        // {
-        //     this.props.common.openNotificationWithIcon('error', "操作失败", "买入失败");
-        // }
+        try
+        {
+            const txid = await this.props.transation.buy(this.state.buyCount, this.state.buyPrice);
+            console.log(txid);
+            this.props.common.openNotificationWithIcon('success', "操作成功", "买入成功");
+        } catch (error)
+        {
+            this.props.common.openNotificationWithIcon('error', "操作失败", "买入失败");
+        }
         return true;
     }
     // 卖出
     private onSell = async () =>
     {
-        if(this.state.isError){
+        if (this.state.isError)
+        {
             return false
         }
         // try

@@ -348,28 +348,21 @@ export const getTokenBalanceInfo = (projId: string, addr: string) =>
     return request(opts);
 }
 
-
 /**
- * 获得fnd的发行总量
- * @param hash 
- */
-export const totalSupply = (hash: string) =>
-{
-    return web3Tool.contractCall('fundPool', hash, 'totalSupply');
-}
-
-/**
- * 购买fnd
+ * 购买
  * @param hash 项目hash
+ * @param count 购买数量
+ * @param token 标识
  * @param amount 金额
  */
-export const buy = (hash: string, amount: any) =>
+export const buy = (hash: string, count:any,token:any,amount: any) =>
 {
     if (!common.userInfo)
     {
         return
     }
-    return web3Tool.contractSend('fundPool', hash, 'buy', undefined, { from: common.userInfo.ethAddress, to: hash, value: amount })
+    console.log('fundPool'+'*****'+ hash+'*****'+ 'buy'+'*****'+ [count+'*****'+token]+'*****'+ common.userInfo.ethAddress+'*****'+ hash+'*****'+ amount );
+    return web3Tool.contractSend('fundPool', hash, 'buy', [count,token], { from: common.userInfo.ethAddress, to: hash, value: amount })
 }
 
 /**
