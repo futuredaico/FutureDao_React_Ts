@@ -167,7 +167,11 @@ class Project extends React.Component<IProps, IState> {
         else if (str === '/project/delete') {
             if (this.props.createproject.createContent.role !== 'admin') {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
-            } else {
+            }
+            else if(this.props.createproject.createContent.projState===ProjectState.Trading) {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '项目已启动融资不可删除');
+            }
+            else {
                 this.handleShowDeleteProject();
             }
         }

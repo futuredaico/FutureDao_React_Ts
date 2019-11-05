@@ -362,7 +362,7 @@ export const buy = (hash: string, count:any,token:any,amount: any) =>
         return
     }
     console.log('fundPool'+'*****'+ hash+'*****'+ 'buy'+'*****'+ [count+'*****'+token]+'*****'+ common.userInfo.ethAddress+'*****'+ hash+'*****'+ amount );
-    return web3Tool.contractSend('fundPool', hash, 'buy', [count,token], { from: common.userInfo.ethAddress, to: hash, value: amount })
+    return web3Tool.contractSend('fundPool', hash, 'buy', [count,token], { from: common.userInfo.ethAddress, to: hash, value: amount,gas: 5500000})
 }
 
 /**

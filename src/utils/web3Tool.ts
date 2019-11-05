@@ -78,7 +78,7 @@ class Web3Tool
                     console.log(txid);
                     r(txid);
                 })
-                .on('error', err=>j(err)); // If a out of gas error, the second parameter is the receipt.
+                .on('error', err=>{console.log(err)}); // If a out of gas error, the second parameter is the receipt.
             }
             else
             {

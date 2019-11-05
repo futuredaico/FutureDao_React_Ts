@@ -219,7 +219,7 @@ class ProjectTransation
     const mycount = toMyNumber(count);
     const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    const num3 = num1.sub(num2).mul(0.0000000005)
+    const num3 = num1.sub(num2).mul(0.0000000005).add(0.000001);
     // console.log(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005))
     // console.log(web3.toBigNumber(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005)).toString(10))
     return web3.toBigNumber(num3).toString(10);
