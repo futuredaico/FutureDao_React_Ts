@@ -36,7 +36,7 @@ export interface IProjectTransationProps extends RouteComponentProps<{ projectId
 export interface IProjectContractInfo
 {
   projId: string,
-  tokenName: string,    // 项目代币名称
+  tokenSymbol: string,    // 项目代币简称
   tokenIssueTotal: string,  // 发行总额
   tokenUnlockNotAmount: string,  // 未解锁总额
   tokenUnlockYesAmount: string,  // 已解锁总额

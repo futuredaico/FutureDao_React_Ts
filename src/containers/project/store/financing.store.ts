@@ -9,10 +9,10 @@ const defaultContent = {
   projId: '',
   type: 'daico',
   platform: 'eth',
-  tokenName: '',
+  fundName: '',
   adminAddress: '',
-  projTokenName: '',
-  projTokenSymbol: '',
+  tokenName: '',
+  tokenSymbol: '',
   reserveTokenFlag: '1',
   reserveTokenInfo: [{
     address: '',
@@ -24,7 +24,8 @@ const defaultContent = {
   deployContractFlag: '3',
   rewardSetFlag: '3',
   ratioSetFlag: '3',
-  financeStartFlag: '3'
+  financeStartFlag: '3',
+  reserveTokenSetFlag:''
 }
 class Financing {
   @observable public step: number = 1; // 融资管理的菜单选择
@@ -84,10 +85,10 @@ class Financing {
       project.projId,
       this.financingContent.type,
       this.financingContent.platform,
-      this.financingContent.tokenName,
+      this.financingContent.fundName,
       this.financingContent.adminAddress,
-      this.financingContent.projTokenName,
-      this.financingContent.projTokenSymbol,
+      this.financingContent.tokenName,
+      this.financingContent.tokenSymbol,
       this.financingContent.reserveTokenFlag,
       this.financingContent.reserveTokenFlag === '1' ? JSON.stringify(this.financingContent.reserveTokenInfo) : '[]',
     ]

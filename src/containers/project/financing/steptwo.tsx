@@ -116,7 +116,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                             </div>
                             <div className="inline-enter">
                               <Input
-                                suffix={this.props.financing.financingContent.tokenName.toLocaleUpperCase()}
+                                suffix={this.props.financing.financingContent.fundName.toLocaleUpperCase()}
                                 value={item.price}
                                 onChange={this.handleChangePrice.bind(this, index)}
                               />

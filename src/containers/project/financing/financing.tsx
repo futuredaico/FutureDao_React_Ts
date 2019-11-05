@@ -26,7 +26,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
         {
             return false;
         }
-        if (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6')
+        if (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6'|| this.props.financing.financingContent.reserveTokenSetFlag==='4' )
         {
             this.props.financing.timer = setInterval(async () =>
             {
@@ -35,7 +35,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                 {
                     return false;
                 }
-                if (this.props.financing.financingContent.deployContractFlag === '5')
+                if (this.props.financing.financingContent.deployContractFlag === '5'&& this.props.financing.financingContent.reserveTokenSetFlag==='5')
                 {
                     if (this.props.financing.timer)
                     {
@@ -183,6 +183,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
         if (this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.rewardSetFlag === '5' && this.props.financing.financingContent.ratioSetFlag === '5')
         {
             const res = await this.props.financing.startFanance();
+            this.props.financing.financingContent.financeStartFlag = '4';
             if (res)
             {
                 const timer = setInterval(async () =>

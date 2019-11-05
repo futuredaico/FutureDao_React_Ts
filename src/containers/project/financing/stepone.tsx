@@ -18,11 +18,11 @@ interface IState
 {
   financingType: string, // 融资类型
   platform: string, // 选择区块链
-  tokenName: string, // 融资的代币
+  fundName: string, // 融资的代币
   isBindAddress: boolean,// 是否绑定了地址, 绑了就为true，没绑就是false
   adminAddress: string, // 管理员钱包地址
-  projTokenName: string, // 项目代币名称
-  projTokenSymbol: string, // 项目代币简称
+  tokenName: string, // 项目代币名称
+  tokenSymbol: string, // 项目代币简称
   reserveTokenFlag: string, // 是否团队预留代币
   isDoingContract: boolean, // 是否正在部署合于
   nameEnter: boolean,// 确认是否输入了项目代币名称，false为输入了，反之
@@ -40,11 +40,11 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   public state: IState = {
     financingType: '', // 融资类型
     platform: '', // 选择区块链
-    tokenName: '', // 融资的代币
+    fundName: '', // 融资的代币
     isBindAddress: false,
     adminAddress: '', // 管理员钱包地址
-    projTokenName: '', // 项目代币名称
-    projTokenSymbol: '', // 项目代币简称
+    tokenName: '', // 项目代币名称
+    tokenSymbol: '', // 项目代币简称
     reserveTokenFlag: '', // 是否团队预留代币
     isDoingContract: false,
     nameEnter: false,
@@ -121,10 +121,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.setState({
       financingType: this.props.financing.financingContent.type, // 融资类型
       platform: this.props.financing.financingContent.platform, // 选择区块链
-      tokenName: this.props.financing.financingContent.tokenName, // 融资的代币
+      fundName: this.props.financing.financingContent.fundName, // 融资的代币
       adminAddress: this.props.financing.financingContent.adminAddress, // 管理员钱包地址
-      projTokenName: this.props.financing.financingContent.projTokenName, // 项目代币名称
-      projTokenSymbol: this.props.financing.financingContent.projTokenSymbol, // 项目代币简称
+      tokenName: this.props.financing.financingContent.tokenName, // 项目代币名称
+      tokenSymbol: this.props.financing.financingContent.tokenSymbol, // 项目代币简称
       reserveTokenFlag: this.props.financing.financingContent.reserveTokenFlag, // 是否团队预留代币
     })
 
@@ -199,7 +199,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                     options={this.state.platform === "eth" ? this.assetOption : this.neoOption}
                     text=''
                     onCallback={this.handleSelectAsset}
-                    defaultValue={this.state.tokenName ? this.state.tokenName : undefined}
+                    defaultValue={this.state.fundName ? this.state.fundName : undefined}
                   />
                 }
               </div>
@@ -217,7 +217,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 为您的项目代币起个名称，例如 Bitcoin ）</span>
               </div>
               <div className="inline-enter">
-                <Input value={this.state.projTokenName} maxLength={20} onChange={this.handleChangeName} className={this.state.nameEnter ? "err-active" : ''} />
+                <Input value={this.state.tokenName} maxLength={20} onChange={this.handleChangeName} className={this.state.nameEnter ? "err-active" : ''} />
                 {
                   this.state.nameEnter && <span className="err-span">{this.intrl.edit.error}</span>
                 }
@@ -228,7 +228,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">（ 您的项目代币的简称及单位，尽量使用大写字母，例如BTC ）</span>
               </div>
               <div className="inline-enter">
-                <Input value={this.state.projTokenSymbol} maxLength={10} onChange={this.handleChangeSimpleName} className={this.state.simpleNameEnter ? "err-active" : ''} />
+                <Input value={this.state.tokenSymbol} maxLength={10} onChange={this.handleChangeSimpleName} className={this.state.simpleNameEnter ? "err-active" : ''} />
                 {
                   this.state.simpleNameEnter && <span className="err-span">{this.intrl.edit.error}</span>
                 }
@@ -307,7 +307,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                 <Button
                   text={this.props.financing.financingContent.deployContractFlag === "5" ? "已提交" : "提交并继续"}
                   btnSize="bg-btn"
-                  btnColor={(!this.state.adminAddress || !this.state.projTokenName || !this.state.projTokenSymbol || this.props.financing.financingContent.deployContractFlag === "5") ? 'gray-btn' : ''}
+                  btnColor={(!this.state.adminAddress || !this.state.tokenName || !this.state.tokenSymbol || this.props.financing.financingContent.deployContractFlag === "5") ? 'gray-btn' : ''}
                   onClick={this.handleComfirmFinancing}
                 />
               </div>
@@ -319,7 +319,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
             <div className="going-on-wrapper">
               <div className={this.state.financingType === 'daico' ? "going-on-content" : "going-on-content going-on-edit"}>
                 {
-                  (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6') && (
+                  (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6'|| this.props.financing.financingContent.reserveTokenSetFlag==='4') && (
                     <>
                       <strong className="going-bigtext">正在部署融资合约</strong>
                       <div className="loading-going">
@@ -342,7 +342,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                   )
                 }
                 {
-                  this.props.financing.financingContent.deployContractFlag === '5' && (
+                  this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.reserveTokenSetFlag==='5' && (
                     <>
                       <strong className="going-bigtext">正在部署融资合约</strong>
                       <div className="done-going">
@@ -421,7 +421,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     this.setState({
       platform: item.id,
       adminAddress: "",
-      tokenName: '',
+      fundName: '',
       hasShowAsset: false,
     }, () =>
       {
@@ -482,7 +482,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   private handleSelectAsset = (item) =>
   {
     this.setState({
-      tokenName: item.id
+      fundName: item.id
     })
   }
   // 项目代币名称
@@ -497,7 +497,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       }
     }
     this.setState({
-      projTokenName: ev.target.value,
+      tokenName: ev.target.value,
       nameEnter: false
     })
     return true
@@ -514,7 +514,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       }
     }
     this.setState({
-      projTokenSymbol: ev.target.value,
+      tokenSymbol: ev.target.value,
       simpleNameEnter: false
     })
     return true
@@ -582,10 +582,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
     }
     this.props.financing.financingContent.type = this.state.financingType;
     this.props.financing.financingContent.platform = this.state.platform;
-    this.props.financing.financingContent.tokenName = this.state.tokenName;
+    this.props.financing.financingContent.fundName = this.state.fundName;
     this.props.financing.financingContent.adminAddress = this.state.adminAddress;
-    this.props.financing.financingContent.projTokenName = this.state.projTokenName;
-    this.props.financing.financingContent.projTokenSymbol = this.state.projTokenSymbol;
+    this.props.financing.financingContent.tokenName = this.state.tokenName;
+    this.props.financing.financingContent.tokenSymbol = this.state.tokenSymbol;
     this.props.financing.financingContent.reserveTokenFlag = this.state.reserveTokenFlag;
 
     this.setState({
@@ -598,7 +598,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       this.props.financing.timer = setInterval(async () =>
       {
         await this.props.financing.getContractData();
-        if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5')
+        if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5'&& this.props.financing.financingContent.reserveTokenSetFlag==='5')
         {
           if (this.props.financing.timer)
           {
@@ -703,7 +703,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.tokenName)
+    if (!this.state.fundName)
     {
       window.scrollTo(0, 0);
       return false
@@ -713,7 +713,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       window.scrollTo(0, 0);
       return false
     }
-    if (!this.state.projTokenName)
+    if (!this.state.tokenName)
     {
       window.scrollTo(0, 500);
       this.setState({
@@ -721,7 +721,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       })
       return false
     }
-    if (!this.state.projTokenSymbol)
+    if (!this.state.tokenSymbol)
     {
       window.scrollTo(0, 600);
       this.setState({

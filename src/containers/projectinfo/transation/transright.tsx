@@ -172,7 +172,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                 />
                                 <div className="attention-textdiv">
                                     <p className="sm-p">您将花费 <span className="purple-text">{this.state.buyPrice ? this.state.buyPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
-                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount ? this.state.buyCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount ? this.handleComputePriceDiff.bind(this,this.state.buyCount) : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
                                 </div>
                             </div>
                             <div className="doing-btn">
@@ -211,8 +211,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                     type='2'
                                 />
                                 <div className="attention-textdiv">
-                                    <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount ? this.state.sellCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</span></p>
-                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.sellPrice ? this.state.sellPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount ? this.state.sellCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
+                                    <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.sellPrice ? this.handleComputePriceDiff.bind(this,this.state.sellPrice ): '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
                                 </div>
                             </div>
                             <div className="doing-btn">
@@ -501,6 +501,11 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         //     this.props.common.openNotificationWithIcon('error', "操作失败", "卖出失败");
         // }
         return true
+    }
+    // 计算价格差
+    private handleComputePriceDiff = (num:string)=>{
+        const count = toMyNumber(num).mul(0.98);
+        return web3.toBigNumber(count).toString(10);
     }
 }
 

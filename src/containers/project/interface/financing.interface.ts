@@ -42,16 +42,17 @@ export interface IFinancingContent {
   projId: string
   type: string,                 // 融资类型
   platform: string,             // 选择区块链
-  tokenName: string,            // 融资的代币
+  fundName: string,            // 融资的代币
   adminAddress: string,         // 管理员地址
-  projTokenName: string,        // 代币名称
-  projTokenSymbol: string,      // 代币简称
+  tokenName: string,        // 代币名称
+  tokenSymbol: string,      // 代币简称
   reserveTokenFlag: string,     // 是否预留代币
   reserveTokenInfo: ISaveAsset[], // 预留代币详情
   deployContractFlag: string,    // 发布合约标记，3为未操作，4为处理中，5为已完成
   rewardSetFlag: string,         // 回报标记，同上
   ratioSetFlag: string,          // 融资信息标记，同上
   financeStartFlag: string       // 启动融资标记，同上
+  reserveTokenSetFlag:string     // 是否发布成功可设置参数 4为处理中，5为完成
 }
 
 export interface ISaveAsset {

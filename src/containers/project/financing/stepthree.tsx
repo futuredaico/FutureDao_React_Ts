@@ -47,7 +47,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
                 <span className="tips-text">&nbsp;&nbsp;（ 只有部署合约时设置的融资代币接收地址持有者可以领取资金。如果您修改了绑定地址，请在个人中心重新绑定。 ）</span>
               </div>
               <div className="inline-enter">
-                <strong className="show-price">{this.props.financing.poolTotal} {this.props.financing.financingContent.tokenName.toLocaleUpperCase()}</strong>
+                <strong className="show-price">{this.props.financing.poolTotal} {this.props.financing.financingContent.fundName.toLocaleUpperCase()}</strong>
                 <Button text="领取资金" btnColor={this.props.financing.poolTotal > 0 ? '' : 'gray-btn'} onClick={this.handleToGetMoney} />
               </div>
             </>
@@ -123,7 +123,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
       return false;
     }
     // 1.先检查绑定的地址是否是融资代币接收地址
-    if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'neo')
+    if (this.props.common.userInfo && this.props.financing.financingContent.platform === 'neo')
     {
       if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.neoAddress)
       {
@@ -131,7 +131,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
         return false;
       }
     }
-    else if (this.props.common.userInfo && this.props.financing.financingContent.tokenName === 'eth')
+    else if (this.props.common.userInfo && this.props.financing.financingContent.platform === 'eth')
     {
       if (this.props.financing.financingContent.adminAddress !== this.props.common.userInfo.ethAddress)
       {
@@ -140,7 +140,7 @@ class StepThree extends React.Component<IFinancingProps, IState> {
       }
     }
     // 2.如果是，则检查钱包是否已连接
-    if (this.props.financing.financingContent.tokenName === 'neo')
+    if (this.props.financing.financingContent.platform === 'neo')
     {
       // todo
     } else

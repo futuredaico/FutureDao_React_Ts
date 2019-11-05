@@ -12,7 +12,7 @@ import { IContractHash } from '../interface/projectinfo.interface';
 
 const defaultContract = {
   projId: "",
-  tokenName: "",    // 项目代币名称
+  tokenSymbol: "",    // 项目代币名称
   tokenIssueTotal: "0",  // 发行总额
   tokenUnlockNotAmount: "0",  // 未解锁总额
   tokenUnlockYesAmount: "0",  // 已解锁总额

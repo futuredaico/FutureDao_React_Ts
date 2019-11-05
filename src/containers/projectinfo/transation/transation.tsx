@@ -73,7 +73,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                         <div className="contract-info">
                             <h3 className="title-h3">合约详情</h3>
                             <div className="three-row">
-                                <span className="block-span"><span title="">项目代币名称：</span><strong>{this.props.transation.projContractInfo.tokenName.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">项目代币简称：</span><strong>{this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</strong></span>
                                 <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>{this.props.transation.projContractInfo.tokenIssueTotal}</strong></span>
                                 <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockNotAmount}</strong></span>
                                 <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockYesAmount}</strong></span>
