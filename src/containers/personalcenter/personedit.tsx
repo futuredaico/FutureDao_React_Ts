@@ -267,9 +267,9 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             }
         }
         else{ 
-            // 获取MetaMask钱包上登陆的地址
+            // 获取MetaMask钱包上登陆的地址,并自动绑定地址
             await this.props.metamaskwallet.inintWeb3();  
-            if(this.props.common.userInfo.ethAddress ===this.props.metamaskwallet.metamaskAddress){
+            if(this.props.common.userInfo.ethAddress ===this.props.metamaskwallet.metamaskAddress.toLocaleLowerCase()){
                 return false;
             }          
             // 如果存在

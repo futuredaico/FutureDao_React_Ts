@@ -179,10 +179,10 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                                             }
                                             <span className="li-td">{saveDecimal(item.fundAmt,6)} {this.props.projectinfo.projInfo&&this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                             {
-                                                item.event === 'OnSell' && <span className="li-td green-text">+{item.tokenAmt}</span>
+                                                item.event === 'OnBuy' && <span className="li-td green-text">+{item.tokenAmt}</span>
                                             }
                                             {
-                                                item.event === 'OnBuy' && <span className="li-td red-text">-{item.tokenAmt}</span>
+                                                item.event === 'OnSell' && <span className="li-td red-text">-{item.tokenAmt}</span>
                                             }
                                         </li>
                                     )

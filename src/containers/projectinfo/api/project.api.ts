@@ -350,48 +350,39 @@ export const getTokenBalanceInfo = (projId: string, addr: string) =>
 
 /**
  * 购买
- * @param hash 项目hash
- * @param count 购买数量
+ * @param addr 购买地址
+ * @param hash 项目合约hash
+ * @param minMount 购买最少数量
  * @param token 标识
  * @param amount 金额
  */
-export const buy = (hash: string, count:any,token:any,amount: any) =>
+export const buy = (addr:string,hash: string, minMount:number,token:number,amount: string) =>
 {
     if (!common.userInfo)
     {
         return
     }
-    console.log('fundPool'+'*****'+ hash+'*****'+ 'buy'+'*****'+ [count+'*****'+token]+'*****'+ common.userInfo.ethAddress+'*****'+ hash+'*****'+ amount );
-    return web3Tool.contractSend('fundPool', hash, 'buy', [count,token], { from: common.userInfo.ethAddress, to: hash, value: amount,gas: 5500000})
+    return web3Tool.contractSend('fundPool', hash, 'buy', [minMount,token], { from: addr, to: hash, value: amount,gas: 5500000})
 }
 
 /**
  * 卖出方法
- * @param hash 
- * @param amount 
+ * @param addr 出售地址
+ * @param hash 项目合约hash
+ * @param count 出售多少
+ * @param minAmount 最少获得多少 
  */
-export const sell = (hash: string, amount: any) =>
+export const sell = (addr:string,hash: string, count: number,minAmount:string) =>
 {
     if (!common.userInfo)
     {
         return
     }
-    return web3Tool.contractSend('fundPool', hash, "sell", [amount], { from: common.userInfo.ethAddress });
+    const minAmountNum = parseFloat(minAmount)
+    return web3Tool.contractSend('fundPool', hash, "sell", [count,minAmountNum], { from: addr ,gas: 5500000});
 }
 
-/**
- * 根据hash获得项目股份的购买斜率
- * @param hash 
- */
-export const getSlope = (hash: string) =>
-{
-    return web3Tool.contractCall('fundPool', hash, "slope");
-}
 
-export const getFndBalancesByAddress = (hash: string, address: string) =>
-{
-    return web3Tool.contractCall('fundPool', hash, 'balances', [address]);
-}
 
 export const getProjectContractHash = (projId: string) =>
 {

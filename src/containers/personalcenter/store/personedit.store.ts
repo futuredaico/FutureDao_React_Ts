@@ -145,18 +145,7 @@ class PersonEdit
         }
         if (result[0].resultCode === CodeType.success)
         {
-            if (common.userInfo)
-            {
-                if(type==='neo'){
-                    common.userInfo.neoAddress = address;
-                }else{
-                    common.userInfo.ethAddress = address;
-                }
-            }
-            else
-            {
-                return false
-            }
+            common.getUserInfo();
         } else
         {
             return false

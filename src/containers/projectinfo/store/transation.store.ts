@@ -163,10 +163,12 @@ class ProjectTransation
 
   /**
    * 买入
+   * @param addr 购买地址
+   * @param minCount 最少能买多少
+   * @param amount 购买金额
    */
-  @action public buy = async (count: string,amount:string) =>
+  @action public buy = async (addr:string,minCount: string,amount:string) =>
   {
-    console.log(projectinfoStore.hashList);
     let hashStr = '';
     projectinfoStore.hashList.forEach((item:IContractHash)=>{
       //
@@ -175,13 +177,12 @@ class ProjectTransation
       }
     })
     if(!hashStr){
-      return false
+      return ''
     }
-    const timeNum = new Date().getTime();    
-    console.log(timeNum)
+    const timeNum = new Date().getTime();
     try
     {
-      const txid = await Api.buy(hashStr, parseInt(count,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
       console.log(txid)
       return txid;
     } catch (error)
@@ -192,16 +193,29 @@ class ProjectTransation
   }
   /**
    * 卖出
+   * @param addr 卖出地址
+   * @param count 卖出多少
+   * @param minAmount 最少获得多少
    */
-  @action public sell = async (amount: string) =>
+  @action public sell = async (addr:string,count: string,minAmount:string) =>
   {
+    let hashStr = '';
+    projectinfoStore.hashList.forEach((item:IContractHash)=>{
+      //
+      if(item.contractName === 'TradeFundPool'){
+        hashStr = item.contractHash
+      }
+    })
+    if(!hashStr){
+      return ''
+    }
     try
     {
-      // tslint:disable-next-line:radix
-      const txid = await Api.sell(this.hash, parseInt(amount));
+      const txid = await Api.sell(addr,hashStr, parseInt(count,10),metamaskwallet.web3.utils.toWei(minAmount,"ether"));
       return txid
     } catch (error)
     {
+      console.log(error);
       throw error;
     }
   }

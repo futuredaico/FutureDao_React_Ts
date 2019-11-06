@@ -24,7 +24,11 @@ window.addEventListener('load',()=>{
   MetamaskWallet.isLoadMetaMask = true;
   // common.initAccountBalance();
 });
-
+ethereum.on("accountsChanged",accounts=>{
+  console.log(accounts[0]);
+  MetamaskWallet.metamaskAddress=accounts[0];
+  MetamaskWallet.checkIsCurrendBindAddress();
+})
 const ObserverRender = observer(() => {
   return (
     <App />

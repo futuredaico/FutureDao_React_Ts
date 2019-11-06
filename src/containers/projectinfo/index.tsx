@@ -10,6 +10,8 @@ import { IProjectInfoProps } from './interface/projectinfo.interface';
 import * as formatTime from '@/utils/formatTime';
 import QRCode from 'qrcode.react';
 import { ProjectState } from '@/store/interface/common.interface';
+import { saveDecimal } from '../../utils/numberTool';
+
 interface IState
 {
     isShowVideo: boolean
@@ -107,7 +109,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                     <div className="going-wrapper">
                                         <div className="going-line">
                                             <div className="going-purple">
-                                                <strong className="purple-big">{this.props.projectinfo.projInfo.hasSellAmt}</strong><strong className="purple-sm"> {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong>
+                                                <strong className="purple-big">{saveDecimal(this.props.projectinfo.projInfo.hasSellAmt,6)}</strong><strong className="purple-sm"> {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong>
                                             </div>
                                             <div className="going-gray">已售出</div>
                                         </div>

@@ -3,6 +3,7 @@ import { observable, action } from 'mobx';
 import { IMetaMastWalletStore } from './interface/metamaskwallet.interface';
 import Web3 from 'web3';
 import common from './common'
+import PersonEdit from '../containers/personalcenter/store/personedit.store';
 import { toMyNumber } from '@/utils/numberTool';
 
 class MetaMastWallet implements IMetaMastWalletStore
@@ -25,7 +26,6 @@ class MetaMastWallet implements IMetaMastWalletStore
           await ethereum.enable();
           this.web3 = new Web3(ethereum);
           console.log('ethereum')
-          console.log(this.web3)
           await this.initAccount();          
         } catch (error) {
           // User denied account access...
@@ -36,7 +36,6 @@ class MetaMastWallet implements IMetaMastWalletStore
       else if (window['web3']) {
         this.web3 = new Web3(web3.currentProvider);
         console.log('web3')
-        console.log(this.web3)
         await this.initAccount();
         // Acccounts always exposed
       }
@@ -66,14 +65,10 @@ class MetaMastWallet implements IMetaMastWalletStore
   {
     return new Promise<string>((r, j) =>
     {
-      // console.log(this.web3.eth.getAccounts);
       this.web3.eth.getAccounts((err, account) =>
       {
-        // console.log(account);
         this.metamaskAddress = account[0];
         this.isLoginMetaMaskFlag = 0;
-        console.log(this.metamaskAddress)
-        // web3Tool.invoke();
         r(this.metamaskAddress)
       })
     })
@@ -85,6 +80,33 @@ class MetaMastWallet implements IMetaMastWalletStore
     const balance = await this.web3.eth.getBalance(this.metamaskAddress);
     const num = toMyNumber(balance).mul(Math.pow(10, -18))
     return web3.toBigNumber(num).toString(10)
+  }
+  /**
+   * 校验是否与当前绑定地址一致，若不一致则提示重新绑定
+   * 若从未绑定过地址则自动绑定，
+   */
+  @action public checkIsCurrendBindAddress = async ()=>{
+    console.log(this.metamaskAddress);
+    
+    if(common.userInfo){
+      console.log(common.userInfo.ethAddress)
+      if(common.userInfo.ethAddress===''){
+        // 自动走一下绑定接口
+        const res = await PersonEdit.bindWalletAddress('eth',this.metamaskAddress);
+        if(res){
+          common.openNotificationWithIcon('success',"绑定地址","绑定地址成功");
+        }else{
+          common.openNotificationWithIcon('error',"绑定地址","绑定地址失败");
+        }
+      }
+      else if(common.userInfo.ethAddress!==this.metamaskAddress.toLocaleLowerCase()){
+        common.openNotificationWithIcon('info', "与绑定地址不一致", "您使用了新的钱包， 请切换至已绑定的钱包或前往个人中心更改绑定")
+        return false
+      }else{
+        return true
+      }
+    }
+    return false
   }
 }
 

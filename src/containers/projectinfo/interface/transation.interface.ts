@@ -17,12 +17,12 @@ export interface IProjectTransationStore
   getHistoryData:(type:string)=>Promise<boolean>, // 获取历史价格的数据
   getTxListData:(addr:string)=>Promise<boolean>,  // 获取交易记录
   getTokenBalance:(addr:string)=>Promise<boolean>, // 获取奖金池的数据  
-  buy:(count: string,amount:string)=>void,
-  sell:(amount: string)=>void,
-  computeBuyCountSpendPrice:(count:string)=>Promise<string>,
-  computeSpendPriceBuyCount:(amount:string)=>Promise<string>,
-  computeGetPriceSellCount:(amount:string)=>Promise<string>,
-  computeSellCountGetPriace:(amount:string)=>Promise<string>
+  buy:(addr:string,count: string,amount:string)=>Promise<boolean>,
+  sell:(addr:string,count:string,minamount:string)=>Promise<boolean>,
+  computeBuyCountSpendPrice:(count:string)=>string,
+  computeSpendPriceBuyCount:(amount:string)=>string,
+  computeGetPriceSellCount:(amount:string)=>string,
+  computeSellCountGetPriace:(amount:string)=>string
 }
 
 
