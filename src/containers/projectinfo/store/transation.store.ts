@@ -8,6 +8,9 @@ import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber, saveDecimal } from "@/utils/numberTool";
 import { IContractHash } from '../interface/projectinfo.interface';
+import { CONTRACT_CONFIG } from '@/config';
+import { AbiItem } from 'web3-utils';
+// import { IContractHash } from '../interface/projectinfo.interface';
 
 
 const defaultContract = {
@@ -161,30 +164,78 @@ class ProjectTransation
     return true;
   }
 
+  // /**
+  //  * 买入
+  //  * @param addr 购买地址
+  //  * @param minCount 最少能买多少
+  //  * @param amount 购买金额
+  //  */
+  // @action public buy = async (addr:string,minCount: string,amount:string) =>
+  // {
+  //   let hashStr = '';
+
+  //   for (const item of projectinfoStore.hashList) {
+  //     if(item.contractName === 'TradeFundPool'){
+  //       hashStr = item.contractHash
+  //     }
+  //   }
+
+  //   if(!hashStr){
+  //     return ''
+  //   }
+  //   const timeNum = new Date().getTime();
+  //   try
+  //   {
+  //     const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+  //     console.log(txid)
+  //     return txid;
+  //   } catch (error)
+  //   {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  // }
   /**
    * 买入
    * @param addr 购买地址
    * @param minCount 最少能买多少
    * @param amount 购买金额
    */
-  @action public buy = async (addr:string,minCount: string,amount:string) =>
+  @action public buy = (addr: string, minCount: string, amount: string) =>
   {
-    let hashStr = '';
-    projectinfoStore.hashList.forEach((item:IContractHash)=>{
-      //
-      if(item.contractName === 'TradeFundPool'){
-        hashStr = item.contractHash
-      }
-    })
-    if(!hashStr){
-      return ''
-    }
-    const timeNum = new Date().getTime();
     try
     {
-      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
-      console.log(txid)
-      return txid;
+      let hashStr = '';
+      projectinfoStore.hashList.forEach((item: IContractHash) =>
+      {
+        //
+        if (item.contractName === 'TradeFundPool')
+        {
+          hashStr = item.contractHash
+        }
+      })
+      return new Promise<string>((r, j) =>
+      {
+        if (!hashStr)
+        {
+          return j(new Error("the hash is unfined"))
+        }
+        const timeNum = new Date().getTime();
+        const contract = new metamaskwallet.web3.eth.Contract(CONTRACT_CONFIG.fund_abi as AbiItem[], hashStr);
+        console.log(parseInt(minCount, 10), timeNum)
+console.log("sendarg",JSON.stringify({ from: addr, to: hashStr, value: amount, gas: 5500000 }));
+
+        contract.methods.buy(parseInt(minCount, 10), timeNum).send({ from: addr, to: hashStr, value: metamaskwallet.web3.utils.toWei(amount,"ether"), gas: 5500000 })
+          .on('transactionHash', (txid) =>
+          {
+            console.log(txid);
+            r(txid);
+          })
+          .on('error', err => { console.log(err); j(err) });
+      })
+      // const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      // console.log(txid)
+      // return txid;
     } catch (error)
     {
       console.log(error);
@@ -197,21 +248,23 @@ class ProjectTransation
    * @param count 卖出多少
    * @param minAmount 最少获得多少
    */
-  @action public sell = async (addr:string,count: string,minAmount:string) =>
+  @action public sell = async (addr: string, count: string, minAmount: string) =>
   {
     let hashStr = '';
-    projectinfoStore.hashList.forEach((item:IContractHash)=>{
-      //
-      if(item.contractName === 'TradeFundPool'){
+    for (const item of projectinfoStore.hashList)
+    {
+      if (item.contractName === 'TradeFundPool')
+      {
         hashStr = item.contractHash
       }
-    })
-    if(!hashStr){
+    }
+    if (!hashStr)
+    {
       return ''
     }
     try
     {
-      const txid = await Api.sell(addr,hashStr, parseInt(count,10),metamaskwallet.web3.utils.toWei(minAmount,"ether"));
+      const txid = await Api.sell(addr, hashStr, parseInt(count, 10), metamaskwallet.web3.utils.toWei(minAmount, "ether"));
       return txid
     } catch (error)
     {
@@ -274,7 +327,8 @@ class ProjectTransation
     const num1 = myamount.div(projectinfoStore.projInfo.fundReservePoolTotal);
     let num2 = parseFloat(web3.toBigNumber(toMyNumber(1).sub(num1)).toString(10));
     let fuhao = ''
-    if(num2<0){
+    if (num2 < 0)
+    {
       fuhao = '-';
       num2 = Math.abs(num2);
     }
@@ -299,8 +353,8 @@ class ProjectTransation
     const num1 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).mul(2);
     const num2 = toMyNumber(1).sub(myamount.div(num1));
     const num3 = num2.mul(myamount).mul(projectinfoStore.projInfo.fundReservePoolTotal).mul(2).div(projectinfoStore.projInfo.hasIssueAmt);
-    
-    console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))    
+
+    console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))
     return web3.toBigNumber(num3).toString(10);
   }
 }

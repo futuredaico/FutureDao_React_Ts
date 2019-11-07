@@ -19,10 +19,12 @@ interface IState
     minSellPrice: string, // 至少获得多少资金（卖出）
     wholeMinSell: string, // 至少获得多少资金（卖出）(完整的数据)
     address: string // 当前登陆的地址
+    idDoingSell:boolean // 是否点击了卖出按钮
 }
 
 @observer
 export default class RightTable extends React.Component<IProjectInfoProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         sellPrice: '',
         wholeSellPrice: '',
@@ -34,7 +36,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         balance: '0',
         minSellPrice: '',
         wholeMinSell: '',
-        address: ''
+        address: '',
+        idDoingSell:false
     }
     public async componentDidMount()
     {
@@ -92,6 +95,11 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     {
         if (this.props.common.userInfo)
         {
+            if (this.props.common.isVerifyEmail)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+                return false;
+            }
             // 检测是否连接钱包
             if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             {
@@ -138,6 +146,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                 isShowBalance: false,
                 address: ''
             })
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
         }
         return true;
     }
@@ -282,10 +291,19 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         {
             return false;
         }
+        if(this.state.idDoingSell){
+            return false;
+        }
         try
         {
+            this.setState({
+                idDoingSell:true
+            })
             const txid = await this.props.transation.sell(this.state.address, this.state.sellCount, this.state.wholeMinSell);
             console.log(txid);
+            this.setState({
+                idDoingSell:false
+            })
             if (!!txid)
             {
                 this.props.common.openNotificationWithIcon('success', "操作成功", "卖出操作已发送，请等待确认");

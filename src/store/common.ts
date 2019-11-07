@@ -107,10 +107,9 @@ class Common implements ICommonStore
   // 登出
   @action public logoutFutureDao = () =>
   {
-    this.clearUserInfo();
-    // sessionStorage.removeItem("user");
     Cookie.removeCookie("user");
     Cookie.removeCookie("token");
+    this.clearUserInfo();
     window.location.href = "/"
   }
   // 清空用户信息

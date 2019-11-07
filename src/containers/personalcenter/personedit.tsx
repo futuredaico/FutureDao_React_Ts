@@ -253,6 +253,12 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             return false;
         }
         if(!this.props.common.userInfo){
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (this.props.common.isVerifyEmail)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
             return false;
         }
         if(type === 'neo'){

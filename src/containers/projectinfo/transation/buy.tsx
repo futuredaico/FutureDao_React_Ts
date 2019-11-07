@@ -19,10 +19,12 @@ interface IState
     wholeBalance: string, // 当前连接账户余额(也就是完整的数据)
     minBuyCount: string,   // 至少获得多少代币（买入）
     address:string, // 当前登陆的地址
+    idDoingBuy:boolean // 是否点击了按钮
 }
 
 @observer
 export default class RightTable extends React.Component<IProjectInfoProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         buyPrice: '',
         wholeBuyPrice: '',
@@ -34,7 +36,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         balance: '0',
         wholeBalance: '0',
         minBuyCount: '',
-        address:''
+        address:'',
+        idDoingBuy:false
     }
     public componentDidMount()
     {
@@ -109,6 +112,11 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     {
         if (this.props.common.userInfo)
         {
+            if (this.props.common.isVerifyEmail)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+                return false;
+            }
             // 检测是否连接钱包
             if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             {
@@ -154,6 +162,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                 isShowBalance: false,
                 address:''
             })
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false
         }
         return true;
     }
@@ -305,10 +315,20 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
         {
             return false;
         }
+        if(this.state.idDoingBuy){
+            return false;
+        }
         try
         {
+            // 点击了
+            this.setState({
+                idDoingBuy:true
+            })
             const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice);
             console.log(txid);
+            this.setState({
+                idDoingBuy:false
+            })
             if(!!txid){
                 this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
                 this.initState();

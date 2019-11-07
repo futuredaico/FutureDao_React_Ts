@@ -79,9 +79,9 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                                 <div className="line-right">
                                     <div className="small-gray">24h涨跌幅</div>
                                     {
-                                        parseFloat(this.props.transation.tokenBalanceInfo.chg24h.toString()) > 0
-                                            ? <div className="strong-text big-green">+ {this.props.transation.tokenBalanceInfo.chg24h.toString()}%</div>
-                                            : <div className="strong-text big-red">- {this.props.transation.tokenBalanceInfo.chg24h.toString()}%</div>
+                                        parseFloat(this.props.transation.tokenBalanceInfo.chg24h) > 0
+                                            ? <div className="strong-text big-green">+ {parseFloat(this.props.transation.tokenBalanceInfo.chg24h)}%</div>
+                                            : <div className="strong-text big-red">- {parseFloat(this.props.transation.tokenBalanceInfo.chg24h)}%</div>
                                     }
                                 </div>
                             </div>
