@@ -341,7 +341,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
       distributeTimeFixNot: '',
       distributeWay: '',
       note: '',
-      giftTokenName: '',
+      fundName: '',
       hasSellCount: 0
     })
     this.setState({

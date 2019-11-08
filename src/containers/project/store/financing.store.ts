@@ -50,7 +50,7 @@ class Financing {
         distributeTimeFixNot: '',
         distributeWay: '',
         note: '',
-        giftTokenName: '',
+        fundName: '',
         hasSellCount: 0
       }
     ]

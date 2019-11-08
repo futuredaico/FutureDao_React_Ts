@@ -220,7 +220,7 @@ class ProjectTransation
         {
           return j(new Error("the hash is unfined"))
         }
-        const timeNum = new Date().getTime();
+        const timeNum = 0;
         const contract = new metamaskwallet.web3.eth.Contract(CONTRACT_CONFIG.fund_abi as AbiItem[], hashStr);
         console.log(parseInt(minCount, 10), timeNum)
 console.log("sendarg",JSON.stringify({ from: addr, to: hashStr, value: amount, gas: 5500000 }));

@@ -363,7 +363,6 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             wholeBuyPrice: '',
             buyCount: '',
             buyOnePrice: '',
-            isShowBalance: false,
             isError: false,
             minBuyCount: '',
         })

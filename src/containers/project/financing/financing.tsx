@@ -96,7 +96,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
                     distributeTimeFixNot: '',
                     distributeWay: '',
                     note: '',
-                    giftTokenName: '',
+                    fundName: '',
                     hasSellCount: 0
                 }
             ]

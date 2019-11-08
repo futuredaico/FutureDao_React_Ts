@@ -137,7 +137,7 @@ export interface IProjReward
   distributeWay: string, // 发放方式，0为虚拟发放，1为实物发放
   note: string, // 特殊说明
   projId: string, // 项目ID
-  giftTokenName: string, // 单位
+  fundName: string, // 单位
   hasSellCount: number // 已出售数量
   rewardPrice:string
 }

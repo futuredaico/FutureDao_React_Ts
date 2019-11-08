@@ -75,7 +75,7 @@ export interface IRewardInfo {
   distributeTimeFixNot: string, // 不定期
   distributeWay: string, // 发放方式，0为虚拟发放，1为实物发放
   note: string, // 特殊说明
-  giftTokenName: string, // 单位
+  fundName: string, // 单位
   hasSellCount: number // 已出售数量
 }
 export interface IRewardContent {

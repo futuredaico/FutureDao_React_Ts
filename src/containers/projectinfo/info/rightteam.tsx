@@ -90,7 +90,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                             {
                                                 return (
                                                     <div className="gift-smallbox" key={index}>
-                                                        <strong className="b-block">{item.price} {item.giftTokenName.toLocaleUpperCase()}</strong>
+                                                        <strong className="b-block">{item.price} {item.fundName.toLocaleUpperCase()}</strong>
                                                         <span className="s-gray">获得约{item.rewardPrice}代币</span>
                                                         <strong className="m-block">{item.rewardName}</strong>
                                                         <p className="m-gray">{item.rewardDesc}</p>
