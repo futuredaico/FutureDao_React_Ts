@@ -8,8 +8,7 @@ import { injectIntl } from 'react-intl';
 import { Input, Spin, Icon } from 'antd';
 import Select from '@/components/select';
 import Button from '@/components/Button';
-import * as Neotool from '@/utils/neotool';
-import Web3 from 'web3';
+// import Web3 from 'web3';
 // import commonStore from '@/store/common';
 import { IFinancingProps, IInfo } from '../interface/financing.interface';
 // import { ProjSubState } from '@/store/interface/common.interface';
@@ -319,7 +318,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
             <div className="going-on-wrapper">
               <div className={this.state.financingType === 'daico' ? "going-on-content" : "going-on-content going-on-edit"}>
                 {
-                  (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6'|| this.props.financing.financingContent.reserveTokenSetFlag==='4') && (
+                  (this.props.financing.financingContent.deployContractFlag === '4' || this.props.financing.financingContent.deployContractFlag === '6' || this.props.financing.financingContent.reserveTokenSetFlag === '4') && (
                     <>
                       <strong className="going-bigtext">正在部署融资合约</strong>
                       <div className="loading-going">
@@ -342,7 +341,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
                   )
                 }
                 {
-                  this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.reserveTokenSetFlag==='5' && (
+                  this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.reserveTokenSetFlag === '5' && (
                     <>
                       <strong className="going-bigtext">正在部署融资合约</strong>
                       <div className="done-going">
@@ -556,10 +555,10 @@ class StepOne extends React.Component<IFinancingProps, IState> {
   {
     if (this.state.platform === 'neo')
     {
-      return Neotool.verifyPublicKey(addr)
+      return Teemo.NEO.TOOLS.validateAddress(addr).then(res => res).catch(err => console.log(err))
     } else
     {
-      return Web3.utils.checkAddressChecksum(addr)
+      return web3.isAddress(addr)
     }
   }
   // 提交部署合约
@@ -598,7 +597,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       this.props.financing.timer = setInterval(async () =>
       {
         await this.props.financing.getContractData();
-        if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5'&& this.props.financing.financingContent.reserveTokenSetFlag==='5')
+        if (this.props.financing.financingContent && this.props.financing.financingContent.deployContractFlag === '5' && this.props.financing.financingContent.reserveTokenSetFlag === '5')
         {
           if (this.props.financing.timer)
           {

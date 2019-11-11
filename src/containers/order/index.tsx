@@ -7,6 +7,7 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import { IOrderProps } from './interface/order.interface';
 import Button from '@/components/Button';
+import { getQueryString } from '@/utils/function'
 // import * as formatTime from '@/utils/formatTime';
 interface IState
 {
@@ -17,14 +18,27 @@ interface IState
 class Order extends React.Component<IOrderProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
-        isShowVideo: false
+        isShowVideo: false,
     }
     public componentDidMount()
     {
-        // const projectId = this.props.match.params.projectId;
+        const projectId = this.props.match.params.projectId;
+        console.log(projectId)
+        const rewardId = getQueryString('rewardid')||''
+        // const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
+        if (projectId && rewardId)
+        {
+            // const projId = projectId.split("/");
+            this.props.order.projId = projectId;
+            this.props.order.rewardId = rewardId;
+            this.props.order.getRewardInfo(rewardId);
+        }
     }
     public render()
     {
+        if(!this.props.order.rewardDetail){
+            return null;
+        }
         return (
             <>
                 {

@@ -16,7 +16,7 @@ interface IState
 {
     isShowVideo: boolean
 }
-@inject('projectinfo', 'common', 'update','transation','teemowallet','metamaskwallet')
+@inject('projectinfo', 'common', 'update', 'transation', 'teemowallet', 'metamaskwallet')
 @observer
 class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     public intrl = this.props.intl.messages;
@@ -109,7 +109,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                     <div className="going-wrapper">
                                         <div className="going-line">
                                             <div className="going-purple">
-                                                <strong className="purple-big">{saveDecimal(this.props.projectinfo.projInfo.hasSellAmt,6)}</strong><strong className="purple-sm"> {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong>
+                                                <strong className="purple-big">{saveDecimal(this.props.projectinfo.projInfo.hasSellAmt, 6)}</strong><strong className="purple-sm"> {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong>
                                             </div>
                                             <div className="going-gray">已售出</div>
                                         </div>
@@ -147,7 +147,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                             }
                                         </div>
                                     </div>
-                                    <p className="sm-gray-text">本项目已在{this.props.projectinfo.projInfo.platform==='eth'?'以太坊':'Neo'}上发起代币融资</p>
+                                    <p className="sm-gray-text">本项目已在{this.props.projectinfo.projInfo.platform === 'eth' ? '以太坊' : 'Neo'}上发起代币融资</p>
                                 </>
                             )
                         }
@@ -233,10 +233,19 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
     // 支持众筹详情产品预售页
     private handleToOtherSupport = () =>
     {
-        //
+        // 跳转前检测下有木有礼包
+        if (this.props.projectinfo.rewardList.length > 0)
+        {
+            const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+            window.open(url + '/support/' + this.props.projectinfo.projId)
+        } else
+        {
+            this.props.projectinfo.menuNum = 4;
+            window.scrollTo(0, 800);
+            this.props.transation.tradeMenu = 2;
+        }
 
-        const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
-        window.open(url + '/support/' + this.props.projectinfo.projId)
+
     }
 }
 export default injectIntl(ProjectInfo)

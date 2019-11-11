@@ -7,9 +7,9 @@ import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } 
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber, saveDecimal } from "@/utils/numberTool";
-import { IContractHash } from '../interface/projectinfo.interface';
-import { CONTRACT_CONFIG } from '@/config';
-import { AbiItem } from 'web3-utils';
+// import { IContractHash } from '../interface/projectinfo.interface';
+// import { CONTRACT_CONFIG } from '@/config';
+// import { AbiItem } from 'web3-utils';
 // import { IContractHash } from '../interface/projectinfo.interface';
 
 
@@ -26,6 +26,7 @@ const defaultContract = {
 }
 class ProjectTransation
 {
+  @observable public tradeMenu:number=1;
   @observable public projContractInfo: IProjectContractInfo | null = null;
   @observable public historyPrice: IHistoryPrice = {
     buyInfo: [],
@@ -170,72 +171,25 @@ class ProjectTransation
   //  * @param minCount 最少能买多少
   //  * @param amount 购买金额
   //  */
-  // @action public buy = async (addr:string,minCount: string,amount:string) =>
-  // {
-  //   let hashStr = '';
-
-  //   for (const item of projectinfoStore.hashList) {
-  //     if(item.contractName === 'TradeFundPool'){
-  //       hashStr = item.contractHash
-  //     }
-  //   }
-
-  //   if(!hashStr){
-  //     return ''
-  //   }
-  //   const timeNum = new Date().getTime();
-  //   try
-  //   {
-  //     const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
-  //     console.log(txid)
-  //     return txid;
-  //   } catch (error)
-  //   {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
-  /**
-   * 买入
-   * @param addr 购买地址
-   * @param minCount 最少能买多少
-   * @param amount 购买金额
-   */
-  @action public buy = (addr: string, minCount: string, amount: string) =>
+  @action public buy = async (addr:string,minCount: string,amount:string) =>
   {
+    let hashStr = '';
+
+    for (const item of projectinfoStore.hashList) {
+      if(item.contractName === 'TradeFundPool'){
+        hashStr = item.contractHash
+      }
+    }
+
+    if(!hashStr){
+      return ''
+    }
+    const timeNum = 0;
     try
     {
-      let hashStr = '';
-      projectinfoStore.hashList.forEach((item: IContractHash) =>
-      {
-        //
-        if (item.contractName === 'TradeFundPool')
-        {
-          hashStr = item.contractHash
-        }
-      })
-      return new Promise<string>((r, j) =>
-      {
-        if (!hashStr)
-        {
-          return j(new Error("the hash is unfined"))
-        }
-        const timeNum = 0;
-        const contract = new metamaskwallet.web3.eth.Contract(CONTRACT_CONFIG.fund_abi as AbiItem[], hashStr);
-        console.log(parseInt(minCount, 10), timeNum)
-console.log("sendarg",JSON.stringify({ from: addr, to: hashStr, value: amount, gas: 5500000 }));
-
-        contract.methods.buy(parseInt(minCount, 10), timeNum).send({ from: addr, to: hashStr, value: metamaskwallet.web3.utils.toWei(amount,"ether"), gas: 5500000 })
-          .on('transactionHash', (txid) =>
-          {
-            console.log(txid);
-            r(txid);
-          })
-          .on('error', err => { console.log(err); j(err) });
-      })
-      // const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
-      // console.log(txid)
-      // return txid;
+      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      console.log(txid)
+      return txid;
     } catch (error)
     {
       console.log(error);

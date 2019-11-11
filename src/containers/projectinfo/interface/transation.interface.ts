@@ -2,6 +2,7 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 export interface IProjectTransationStore
 {
+  tradeMenu:number, // 1为资金池，2为买入，3为卖出
   projContractInfo: IProjectContractInfo | null, // 合约详情
   historyPrice:IHistoryPrice, // 历史价格的数据
   transList:ITransationList[],// 交易列表

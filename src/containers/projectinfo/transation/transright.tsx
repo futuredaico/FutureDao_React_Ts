@@ -6,16 +6,10 @@ import { saveDecimal } from '../../../utils/numberTool';
 import Buy from './buy';
 import Sell from './sell';
 
-interface IState
-{
-    underRight: number
-}
 
 @observer
-export default class RightTable extends React.Component<IProjectInfoProps, IState> {
-    public state: IState = {
-        underRight: 1
-    }
+export default class RightTable extends React.Component<IProjectInfoProps> {
+    
     public menuRight = [
         {
             id: 1,
@@ -50,7 +44,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                             this.menuRight.map((item, index) =>
                             {
                                 return (
-                                    <li className={this.state.underRight === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapRightUnderline.bind(this, item)}>
+                                    <li className={this.props.transation.tradeMenu === item.id ? "title-li active" : "title-li"} key={index} onClick={this.mapRightUnderline.bind(this, item)}>
                                         {item.name}
                                     </li>
                                 )
@@ -59,7 +53,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     </ul>
                 </div>
                 {
-                    this.state.underRight === 1 && (
+                    this.props.transation.tradeMenu === 1 && (
                         <div className="tran-des">
                             <div className="tran-line">
                                 <div className="line-left">
@@ -99,12 +93,12 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     )
                 }
                 {
-                    this.state.underRight === 2 && (
+                    this.props.transation.tradeMenu === 2 && (
                         <Buy {...this.props}/>
                     )
                 }
                 {
-                    this.state.underRight === 3 && (
+                    this.props.transation.tradeMenu === 3 && (
                         <Sell {...this.props}/>
                     )
                 }
@@ -114,9 +108,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     // 右边菜单选择
     private mapRightUnderline = (item) =>
     {
-        this.setState({
-            underRight: item.id
-        })
+        this.props.transation.tradeMenu = item.id;
         if (item.id === 1)
         {
             this.handleGetTokenData();

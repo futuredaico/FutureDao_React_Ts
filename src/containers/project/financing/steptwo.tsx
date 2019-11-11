@@ -329,21 +329,23 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
   }
   // 新增回报
   private handleAddRewardForm = () => {
-    this.props.financing.rewardContent.info.push({
-      rewardId: '',
-      rewardName: '',
-      rewardDesc: '',
-      price: '',
-      limitFlag: '',
-      limitMax: '',
-      distributeTimeFlag: '',
-      distributeTimeFixYes: '',
-      distributeTimeFixNot: '',
-      distributeWay: '',
-      note: '',
-      fundName: '',
-      hasSellCount: 0
-    })
+    if(this.props.financing.financingContent){
+      this.props.financing.rewardContent.info.push({
+        rewardId: '',
+        rewardName: '',
+        rewardDesc: '',
+        price: '',
+        limitFlag: '',
+        limitMax: '',
+        distributeTimeFlag: '',
+        distributeTimeFixYes: '',
+        distributeTimeFixNot: '',
+        distributeWay: '',
+        note: '',
+        fundName: this.props.financing.financingContent.fundName,
+        hasSellCount: 0
+      })
+    }    
     this.setState({
       isCanSave: false
     })

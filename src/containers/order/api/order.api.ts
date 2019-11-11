@@ -1,14 +1,13 @@
 import request from 'utils/request';
 /**
- * 获取项目详情基本信息
- * @param projId 项目ID
- * @param userId 用户ID
+ * 获取回报详情的基本信息
+ * @param rewardId 礼包ID
  */
-export const getProjInfo = (projId:string,userId:string) =>
+export const getRewardInfo = (rewardId:string) =>
 {
     const opts = {
-        method: 'queryProjDetail',
-        params: [projId,userId]
+        method: 'queryRewardDetail',
+        params: [rewardId]
     }
     return request(opts);
 }

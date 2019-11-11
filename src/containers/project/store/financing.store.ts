@@ -188,10 +188,26 @@ class Financing {
     this.rewardContent.info.map((item: IRewardInfo) => {
       item.price = parseFloat(item.price).toString();
     })
+    const list = this.rewardContent.info.map((item:IRewardInfo)=>{
+      return {
+        rewardId: item.rewardId,
+        rewardName: item.rewardName,
+        rewardDesc: item.rewardDesc,
+        price: item.price,
+        limitFlag: item.limitFlag,
+        limitMax: item.limitMax,
+        distributeTimeFlag: item.distributeTimeFlag,
+        distributeTimeFixYes: item.distributeTimeFixYes,
+        distributeTimeFixNot: item.distributeTimeFixNot,
+        distributeWay: item.distributeWay,
+        note: item.note,
+        fundName: item.fundName
+      }
+    })
     const info = {
-      info: this.rewardContent.info
+      info: list
     }
-    const infoStr = JSON.stringify(info)
+    const infoStr = JSON.stringify(info);
     console.log(infoStr)
     try {
       result = await Api.setReward(common.userId, common.token, project.projId, this.rewardContent.connectorName, this.rewardContent.connectTel, infoStr);

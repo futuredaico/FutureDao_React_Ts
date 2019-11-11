@@ -70,7 +70,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                     <span className="gray-str set-one">当前价格（{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/币）</span>
                                     <span className="gray-str set-two">代币数量</span>
                                     <span className="set-three">{this.state.priceType === 1 ? this.props.projectinfo.buyPrice : this.props.projectinfo.sellPrice}</span>
-                                    <span className="set-four">{ this.props.projectinfo.projInfo.hasIssueAmt }</span>
+                                    <span className="set-four">{this.props.projectinfo.projInfo.hasIssueAmt}</span>
                                 </div>
                                 <p className="price-tips">项目代币由智能合约管理，会在投资者买入时增发，卖出时销毁。代币价格由智能合约自动计算给出，会随着代币发行数量的增加不断变高。因此购买越早，买入价格越低，后期涨的越多。</p>
                             </div>
@@ -98,13 +98,16 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                                         {
                                                             item.limitFlag === '1' && <strong className="m-block">限量{item.limitMax}（剩余{parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10)}）</strong>
                                                         }
+                                                        {/* {
+                                                            item.limitFlag === '0' && <Button text="购买" />
+                                                        } */}
                                                         {
-                                                            parseInt(item.limitMax, 10) !== item.hasSellCount ? <Button text="购买" /> : (parseInt(item.hasSellCount.toString(), 10) > 0 && <span className="s-gray">{item.hasSellCount}支持</span>)
-                                                        }
-
-                                                        {/* <Button text="已抢光" btnColor="gray-btn" /> */}
-                                                        {
-
+                                                            ((item.limitFlag === '1' && parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10) === 0))
+                                                                ? <Button text="已抢光" btnColor="gray-btn" />
+                                                                : <>
+                                                                    <Button text="购买" />
+                                                                    <span className="s-gray">{item.hasSellCount}支持</span>
+                                                                </>
                                                         }
                                                     </div>
                                                 )

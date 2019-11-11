@@ -139,7 +139,7 @@ export interface IProjReward
   projId: string, // 项目ID
   fundName: string, // 单位
   hasSellCount: number // 已出售数量
-  rewardPrice:string
+  rewardPrice:string  // 计算出可获得的礼包
 }
 
 export interface IProjReserveToken
