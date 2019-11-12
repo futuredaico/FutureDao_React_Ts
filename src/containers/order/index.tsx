@@ -7,36 +7,70 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import { IOrderProps } from './interface/order.interface';
 import Button from '@/components/Button';
-import { getQueryString } from '@/utils/function'
+import { getQueryString } from '@/utils/function';
+import { saveDecimal, toMyNumber } from '../../utils/numberTool';
+import * as Cookie from '@/utils/cookie';
+
 // import * as formatTime from '@/utils/formatTime';
 interface IState
 {
-    isShowVideo: boolean
+    isCanBuyBtn: boolean, // 是否可购买(是否连接上钱包)
+    isCheckOk: boolean, // 是否可购买(是否填写了相关信息)
+    myBalance: string,   // 我的余额
+    address: string,  // 当前连接地址
+    buyNum: string,  // 购买数量
+    isMaxBuy: boolean, // 是否为最大购买数量
+    spendPrice: string, // 花费的资金
+    canGetCount: string // 可获得多少代币
+    minBuyCount: string, // 最少可获得的代币
+    contactName: string, // 联系人姓名
+    contactTel: string, // 号码
+    contactAddr: string, // 收货地址
+    contactEmail: string, // 邮箱
+    contactMsg: string, // 留言
 }
-@inject('order', 'common')
+@inject('order', 'common', 'projectinfo', 'transation', 'teemowallet', 'metamaskwallet')
 @observer
 class Order extends React.Component<IOrderProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
-        isShowVideo: false,
+    public state: IState = {
+        isCanBuyBtn: false,
+        isCheckOk: false,
+        myBalance: '0',
+        address: '',
+        buyNum: '1',
+        isMaxBuy: false,
+        spendPrice: '0',
+        canGetCount: '0',
+        minBuyCount: '0',
+        contactName: '',
+        contactTel: '',
+        contactAddr: '',
+        contactEmail: '',
+        contactMsg: ''
     }
-    public componentDidMount()
+    public async componentDidMount()
     {
         const projectId = this.props.match.params.projectId;
         console.log(projectId)
-        const rewardId = getQueryString('rewardid')||''
+        const rewardId = getQueryString('rewardid') || ''
         // const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
         if (projectId && rewardId)
         {
             // const projId = projectId.split("/");
             this.props.order.projId = projectId;
             this.props.order.rewardId = rewardId;
-            this.props.order.getRewardInfo(rewardId);
+            await this.props.projectinfo.getProjInfo(projectId);
+            await this.props.order.getRewardInfo(rewardId);
+            this.handleCheckLinkWallet();
+            this.handleComputeGetData();
         }
+
     }
     public render()
     {
-        if(!this.props.order.rewardDetail){
+        if (!this.props.order.rewardDetail || !this.props.projectinfo.projInfo)
+        {
             return null;
         }
         return (
@@ -49,67 +83,81 @@ class Order extends React.Component<IOrderProps, IState> {
                                 <div className="order-info-box">
                                     <div className="order-line">
                                         <div className="oline-left">项目</div>
-                                        <div className="oline-right">SS历险记</div>
+                                        <div className="oline-right">{this.props.projectinfo.projInfo.projName}</div>
                                     </div>
                                     <div className="order-line">
                                         <div className="oline-left">回报名称</div>
-                                        <div className="oline-right">ZHE SHI YI GE HUI BAO BIAO TI</div>
+                                        <div className="oline-right">{this.props.order.rewardDetail.rewardName}</div>
                                     </div>
                                     <div className="order-line">
                                         <div className="oline-left">价格</div>
-                                        <div className="oline-right">10 DAI</div>
+                                        <div className="oline-right">{this.props.order.rewardDetail.price} {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
                                     </div>
                                     <div className="order-line">
                                         <div className="oline-left">购买数量</div>
                                         <div className="oline-right">
-                                            <img src="" alt="" />
-                                            <input type="text" className="input-count" />
-                                            <img src="" alt="" />
+                                            {
+                                                (this.state.buyNum && parseInt(this.state.buyNum, 10) > 1) ? <img src={require('@/img/minus-yes.png')} alt="" onClick={this.handleToMinusCount} className="count-icon left-cicon" /> : <img src={require('@/img/minus-no.png')} alt="" className="count-icon left-cicon" />
+                                            }
+                                            <input type="text" className="input-count" value={this.state.buyNum} onChange={this.handleChangeBuyCount} />
+                                            {
+                                                this.state.isMaxBuy
+                                                    ? <img src={require('@/img/plus-no.png')} alt="" className="count-icon right-cicon" />
+                                                    : <img src={require('@/img/plus-yes.png')} alt="" onClick={this.handleToPlusCount} className="count-icon right-cicon" />
+                                            }
                                         </div>
                                     </div>
                                     <div className="order-line">
                                         <div className="oline-left">获得代币</div>
-                                        <div className="oline-right">14（ 估计 ）</div>
+                                        <div className="oline-right">{this.state.canGetCount}（ 估计 ）</div>
                                     </div>
                                     <div className="order-big-line">
                                         <div className="oline-left">总价</div>
-                                        <div className="oline-right">10 DAI</div>
+                                        <div className="oline-right">{this.state.spendPrice}  {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
                                     </div>
                                 </div>
-                                <div className="attention-please">
-                                    <img src={require("@/img/attention.png")} alt="" />
-                                    <span>注意：本产品中国海外无法发货</span>
-                                </div>
+                                {
+                                    this.props.order.rewardDetail.note !== '' && (
+                                        <div className="attention-please">
+                                            <img src={require("@/img/attention.png")} alt="" />
+                                            <span>注意：{this.props.order.rewardDetail.note}</span>
+                                        </div>
+                                    )
+                                }
+
                                 <h2 className="order-title">收货信息</h2>
                                 <div className="order-info-box">
                                     <div className="order-line order-line-input">
                                         <div className="oline-left">联系人姓名 <span className="red-xin">*</span></div>
                                         <div className="oline-right">
-                                            <input type="text" className="input-text" />
-
+                                            <input type="text" className="input-text" value={this.state.contactName} onChange={this.handleChangeName} maxLength={50} />
                                         </div>
                                     </div>
                                     <div className="order-line order-line-input">
                                         <div className="oline-left">手机号 <span className="red-xin">*</span></div>
                                         <div className="oline-right">
                                             <div className="input-str">
-                                                <input type="text" className="input-text" />
+                                                <input type="text" className="input-text" value={this.state.contactTel} onChange={this.handleChangeTel} maxLength={50} />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="order-line order-line-input">
-                                        <div className="oline-left">收货地址 <span className="red-xin">*</span></div>
-                                        <div className="oline-right">
-                                            <div className="input-str">
-                                                <input type="text" className="input-text" />
+                                    {
+                                        this.props.order.rewardDetail.distributeWay === '1' && (
+                                            <div className="order-line order-line-input">
+                                                <div className="oline-left">收货地址 <span className="red-xin">*</span></div>
+                                                <div className="oline-right">
+                                                    <div className="input-str">
+                                                        <input type="text" className="input-text" value={this.state.contactAddr} onChange={this.handleChangeAddress} maxLength={50} />
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        )
+                                    }
                                     <div className="order-line order-line-input">
                                         <div className="oline-left">联系邮箱</div>
                                         <div className="oline-right">
                                             <div className="input-str">
-                                                <input type="text" className="input-text" />
+                                                <input type="text" className="input-text" maxLength={50} value={this.state.contactEmail} onChange={this.handleChangeEmail} />
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +165,7 @@ class Order extends React.Component<IOrderProps, IState> {
                                         <div className="oline-left">留言</div>
                                         <div className="oline-right">
                                             <div className="input-str">
-                                                <input type="text" placeholder="您对商品有什么特殊要求" className="input-text" />
+                                                <input type="text" placeholder="您对商品有什么特殊要求" className="input-text" value={this.state.contactMsg} onChange={this.handleChangeMessage} maxLength={50} />
                                             </div>
                                         </div>
                                     </div>
@@ -131,8 +179,9 @@ class Order extends React.Component<IOrderProps, IState> {
                             </div>
                             <div className="order-footer">
                                 <Button
-                                    text="立即付款  10 DAI"
+                                    text={"立即付款  " + this.state.spendPrice + " " + this.props.order.rewardDetail.fundName.toLocaleUpperCase()}
                                     btnSize="bg-btn"
+                                    btnColor={(this.state.isCanBuyBtn && this.state.isCheckOk) ? '' : 'gray-btn'}
                                     onClick={this.handleToCreateOrder}
                                 />
                             </div>
@@ -216,13 +265,311 @@ class Order extends React.Component<IOrderProps, IState> {
             </>
         );
     }
+    // 检验是否连接了钱包
+    private handleCheckLinkWallet = async () =>
+    {
+        const user = Cookie.getCookie("user")
+        if (user)
+        {
+            if (this.props.common.isVerifyEmail)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+                return false;
+            }
+            // 检测是否连接钱包
+            if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
+            {
+                // 获取MetaMask钱包上登陆的地址
+                await this.props.metamaskwallet.inintWeb3();
+                const checkRes = await this.props.metamaskwallet.checkIsCurrendBindAddress();
+                // 若与绑定的地址不一致
+                if (!checkRes)
+                {
+                    this.setState({
+                        isCanBuyBtn: false
+                    })
+                    return false
+                }
+                if (!this.props.metamaskwallet.metamaskAddress)
+                {
+                    this.setState({
+                        isCanBuyBtn: false
+                    })
+                    return false;
+                }
+                // 如果存在（现在只获取了eth的余额）
+                const ethBalance = await this.props.metamaskwallet.getMetamaskBalance();
+                this.setState({
+                    isCanBuyBtn: true,
+                    myBalance: saveDecimal(ethBalance, 18),
+                    address: this.props.metamaskwallet.metamaskAddress
+                })
+            }
+            else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
+            {
+                // 获取Teemo钱包上登陆的地址                
+            }
+        }
+        else
+        {
+            // 假如没有登陆
+            this.setState({
+                isCanBuyBtn: false,
+                address: ''
+            })
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false
+        }
+        return true;
+    }
+    // 减数量
+    private handleToMinusCount = () =>
+    {
+        const num = parseInt(this.state.buyNum, 10);
+        console.log(num)
+        if (num <= 1)
+        {
+            this.setState({
+                buyNum: '1',
+                isMaxBuy: false
+            }, () =>
+                {
+                    this.handleComputeGetData();
+                    this.handleCheckAllInput();
+                })
+        } else
+        {
+            this.setState({
+                buyNum: (num - 1).toString(),
+                isMaxBuy: false
+            }, () =>
+                {
+                    this.handleComputeGetData();
+                    this.handleCheckAllInput();
+                })
+        }
+    }
+    // 加数量
+    private handleToPlusCount = () =>
+    {
+        const num = parseInt(this.state.buyNum, 10);
+        if (this.props.order.rewardDetail && this.props.order.rewardDetail.limitFlag === '0')
+        {
+            // 不限量
+            this.setState({
+                buyNum: (num + 1).toString(),
+                isMaxBuy: false
+            }, () =>
+                {
+                    this.handleComputeGetData();
+                    this.handleCheckAllInput();
+                })
+        } else if (this.props.order.rewardDetail && this.props.order.rewardDetail.limitFlag === '1')
+        {
+            // 限量
+            const addNum = num + 1;
+            const maxNum = parseFloat(this.props.order.rewardDetail.limitMax) - parseFloat(this.props.order.rewardDetail.hasSellCount.toString())
+            if (addNum >= maxNum)
+            {
+                this.setState({
+                    buyNum: maxNum.toString(),
+                    isMaxBuy: true
+                }, () =>
+                    {
+                        this.handleComputeGetData();
+                        this.handleCheckAllInput();
+                    })
+            } else
+            {
+                this.setState({
+                    buyNum: (num + 1).toString(),
+                    isMaxBuy: false
+                }, () =>
+                    {
+                        this.handleComputeGetData();
+                        this.handleCheckAllInput();
+                    })
+            }
+        }
+    }
+    // 修改购买数量
+    private handleChangeBuyCount = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        // 只能输入数字
+        const value = ev.target.value as unknown as number;
+        if (isNaN(value))
+        {
+            return false;
+        }
+        const reg = /^[0-9]*[1-9][0-9]*$/;
+        if (value.toString().length > 0)
+        {
+            if (!reg.test(ev.target.value))
+            {
+                return false;
+            }
+        }
+        this.setState({
+            buyNum: value.toString()
+        }, () =>
+            {
+                this.handleComputeGetData();
+                this.handleCheckAllInput();
+            })
+        return true
+    }
+    // 计算可获得的代币
+    private handleComputeGetData = () =>
+    {
+        if (!this.props.order.rewardDetail)
+        {
+            return false
+        }
+        // 单价 X 数量
+        const price = toMyNumber(this.props.order.rewardDetail.price).mul(this.state.buyNum);
+        const priceStr = web3.toBigNumber(price).toString(10);
+        this.handleCheckBalance(priceStr);
+        const num = this.props.transation.computeSpendPriceBuyCount(priceStr);
+        this.setState({
+            spendPrice: priceStr,
+            canGetCount: parseInt(num, 10).toString()
+        }, () =>
+            {
+                this.handleComputePriceDiff(this.state.canGetCount)
+            })
+        return true
+    }
+    // 检测花费的余额够不够
+    private handleCheckBalance = (price: string) =>
+    {
+        const num1 = parseFloat(price);
+        const num2 = parseFloat(this.state.myBalance);
+        if (num2 - num1 < 0)
+        {
+            this.setState({
+                isCheckOk: false
+            })
+        } else
+        {
+            this.setState({
+                isCheckOk: true
+            })
+        }
+    }
+    // 联系人的输入
+    private handleChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        this.setState({
+            contactName: ev.target.value
+        }, () =>
+        {
+            this.handleCheckAllInput();
+        })
+    }
+    // 号码的输入
+    private handleChangeTel = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        this.setState({
+            contactTel: ev.target.value
+        }, () =>
+        {
+            this.handleCheckAllInput();
+        })
+    }
+    // 地址的输入
+    private handleChangeAddress = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        this.setState({
+            contactAddr: ev.target.value
+        }, () =>
+        {
+            this.handleCheckAllInput();
+        })
+    }
+    // 邮箱的输入
+    private handleChangeEmail = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        this.setState({
+            contactEmail: ev.target.value
+        }, () =>
+        {
+            this.handleCheckAllInput();
+        })
+    }
+    // 留言的输入
+    private handleChangeMessage = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
+        this.setState({
+            contactMsg: ev.target.value
+        }, () =>
+        {
+            this.handleCheckAllInput();
+        })
+    }
+    // 创建订单
     private handleToCreateOrder = () =>
     {
+        if (!this.state.isCanBuyBtn)
+        {
+            return false;
+        }
         this.props.order.orderMenu = 2;
+        return true;
     }
+    // 取消订单
     private handleToCancelOrder = () =>
     {
         this.props.order.orderMenu = 3;
+    }
+    // 计算价格差
+    private handleComputePriceDiff = (num: string) =>
+    {
+        if (parseFloat(num) === 0)
+        {
+            this.setState({
+                minBuyCount: '0'
+            })
+        }
+        const count = toMyNumber(num).mul(0.98);
+        const intNum = web3.toBigNumber(count).toString(10);
+        this.setState({
+            minBuyCount: parseInt(intNum, 10).toString()
+        })
+    }
+    private handleCheckAllInput = () =>
+    {
+        let isOk = true;
+        if (!this.state.buyNum)
+        {
+            isOk = false;
+        }
+        if (!this.state.contactName)
+        {
+            isOk = false;
+        }
+        if (!this.state.contactTel)
+        {
+            isOk = false;
+        }
+        // 实物发放
+        if (this.props.order.rewardDetail && this.props.order.rewardDetail.distributeWay === '1')
+        {
+            if (!this.state.contactAddr)
+            {
+                isOk = false;
+            }
+        }
+        if (isOk)
+        {
+            this.setState({
+                isCheckOk: true
+            })
+        } else
+        {
+            this.setState({
+                isCheckOk: false
+            })
+        }
     }
 }
 export default injectIntl(Order)

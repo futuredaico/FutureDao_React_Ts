@@ -83,7 +83,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                       <React.Fragment key={index}>
                         <div className="inline-title">
                           <strong>回报{index + 1}</strong>
-                          <span className="tips-text">&nbsp;&nbsp;已售22</span>
+                          <span className="tips-text">&nbsp;&nbsp;已售{item.hasSellCount}</span>
                         </div>
                         <div className="inline-enter">
                           <div className="gray-box normalgray-box">
@@ -416,6 +416,10 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     if (isOk) {
       this.setState({
         isCanSave: true
+      })
+    }else{
+      this.setState({
+        isCanSave: false
       })
     }
   }

@@ -135,3 +135,12 @@ export enum ProjType
   MOVIE = "movie", // 电影
   OTHER = "other", // 其他
 }
+export enum OrderCode {
+  WaitingPay = "10141", // 等待付款
+  WaitingConfirm = "10142",  // 等待确认
+  WaitingDeliverGoods = "10143",  // 等待发货
+  hasDeliverGoods = "10144", // 已发货
+  Canceled = "10145", // 取消订单
+  PayTimeout = "10146",  // 付款超时
+  TxFailed = "10147"  // 交易失败
+}

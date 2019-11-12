@@ -290,7 +290,7 @@ class ProjectInfo
       const num = transationStore.computeSpendPriceBuyCount(item.price);
       return {
         ...item,
-        rewardPrice:parseInt(num,10)
+        rewardPrice:parseInt(num,10).toString()
       }
     });
     this.rewardList = list

@@ -19,13 +19,13 @@ class Support extends React.Component<IProjectInfoProps, IState> {
     public state = {
         isShowVideo: false
     }
-    public componentDidMount()
+    public async componentDidMount()
     {
         const projectId = this.props.match.params.projectId;
         this.props.projectinfo.projId = projectId;
         if (projectId)
         {
-            this.props.projectinfo.getProjInfo(projectId);
+            await this.props.projectinfo.getProjInfo(projectId);
             this.props.projectinfo.getRewardData();
         }
     }
