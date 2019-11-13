@@ -80,6 +80,6 @@ export interface IRewardInfo {
 }
 export interface IRewardContent {
   connectorName: string,
-  connectTel: string,
+  connectorTel: string,
   info: IRewardInfo[]
 }

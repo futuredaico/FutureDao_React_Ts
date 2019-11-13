@@ -382,8 +382,10 @@ export const sell = (addr:string,hash: string, count: number,minAmount:string) =
     return web3Tool.contractSend('fundPool', hash, "sell", [count,minAmountNum], { from: addr ,gas: 5500000});
 }
 
-
-
+/**
+ * 获取项目的所有合约hash
+ * @param projId 项目ID
+ */
 export const getProjectContractHash = (projId: string) =>
 {
     const opts = {

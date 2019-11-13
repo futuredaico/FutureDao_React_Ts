@@ -82,7 +82,7 @@ class FinancingManager extends React.Component<IFinancingProps, any> {
         this.props.financing.timer = null;
         this.props.financing.rewardContent = {
             connectorName: '',
-            connectTel: '',
+            connectorTel: '',
             info: [
                 {
                     rewardId: '',

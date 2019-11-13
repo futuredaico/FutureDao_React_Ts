@@ -11,6 +11,10 @@ export default [
     path: '/proposal/:projectId'
   },
   {
+    component: asyncComponent(() => import('../containers/order/order')),
+    path: '/order/:projectId'
+  },
+  {
     component: asyncComponent(() => import('../containers/order')),
     path: '/giftorder/:projectId'
   },

@@ -36,7 +36,7 @@ class Financing {
   @observable public financingContent: IFinancingContent | null = null;
   @observable public rewardContent: IRewardContent = {
     connectorName: '',
-    connectTel: '',
+    connectorTel: '',
     info: [
       {
         rewardId: '',
@@ -210,7 +210,7 @@ class Financing {
     const infoStr = JSON.stringify(info);
     console.log(infoStr)
     try {
-      result = await Api.setReward(common.userId, common.token, project.projId, this.rewardContent.connectorName, this.rewardContent.connectTel, infoStr);
+      result = await Api.setReward(common.userId, common.token, project.projId, this.rewardContent.connectorName, this.rewardContent.connectorTel, infoStr);
       console.log(result)
     } catch (e) {
       return false;

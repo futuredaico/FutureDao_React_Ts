@@ -17,7 +17,6 @@ interface IState
     isCanBuyBtn: boolean, // 是否可购买(是否连接上钱包)
     isCheckOk: boolean, // 是否可购买(是否填写了相关信息)
     myBalance: string,   // 我的余额
-    address: string,  // 当前连接地址
     buyNum: string,  // 购买数量
     isMaxBuy: boolean, // 是否为最大购买数量
     spendPrice: string, // 花费的资金
@@ -37,7 +36,6 @@ class Order extends React.Component<IOrderProps, IState> {
         isCanBuyBtn: false,
         isCheckOk: false,
         myBalance: '0',
-        address: '',
         buyNum: '1',
         isMaxBuy: false,
         spendPrice: '0',
@@ -75,193 +73,113 @@ class Order extends React.Component<IOrderProps, IState> {
         }
         return (
             <>
-                {
-                    this.props.order.orderMenu === 1 && (
-                        <>
-                            <div className="order-wrapper">
-                                <h2 className="order-title">订单信息</h2>
-                                <div className="order-info-box">
-                                    <div className="order-line">
-                                        <div className="oline-left">项目</div>
-                                        <div className="oline-right">{this.props.projectinfo.projInfo.projName}</div>
-                                    </div>
-                                    <div className="order-line">
-                                        <div className="oline-left">回报名称</div>
-                                        <div className="oline-right">{this.props.order.rewardDetail.rewardName}</div>
-                                    </div>
-                                    <div className="order-line">
-                                        <div className="oline-left">价格</div>
-                                        <div className="oline-right">{this.props.order.rewardDetail.price} {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
-                                    </div>
-                                    <div className="order-line">
-                                        <div className="oline-left">购买数量</div>
-                                        <div className="oline-right">
-                                            {
-                                                (this.state.buyNum && parseInt(this.state.buyNum, 10) > 1) ? <img src={require('@/img/minus-yes.png')} alt="" onClick={this.handleToMinusCount} className="count-icon left-cicon" /> : <img src={require('@/img/minus-no.png')} alt="" className="count-icon left-cicon" />
-                                            }
-                                            <input type="text" className="input-count" value={this.state.buyNum} onChange={this.handleChangeBuyCount} />
-                                            {
-                                                this.state.isMaxBuy
-                                                    ? <img src={require('@/img/plus-no.png')} alt="" className="count-icon right-cicon" />
-                                                    : <img src={require('@/img/plus-yes.png')} alt="" onClick={this.handleToPlusCount} className="count-icon right-cicon" />
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className="order-line">
-                                        <div className="oline-left">获得代币</div>
-                                        <div className="oline-right">{this.state.canGetCount}（ 估计 ）</div>
-                                    </div>
-                                    <div className="order-big-line">
-                                        <div className="oline-left">总价</div>
-                                        <div className="oline-right">{this.state.spendPrice}  {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
-                                    </div>
-                                </div>
+                <div className="order-wrapper">
+                    <h2 className="order-title">订单信息</h2>
+                    <div className="order-info-box">
+                        <div className="order-line">
+                            <div className="oline-left">项目</div>
+                            <div className="oline-right">{this.props.projectinfo.projInfo.projName}</div>
+                        </div>
+                        <div className="order-line">
+                            <div className="oline-left">回报名称</div>
+                            <div className="oline-right">{this.props.order.rewardDetail.rewardName}</div>
+                        </div>
+                        <div className="order-line">
+                            <div className="oline-left">价格</div>
+                            <div className="oline-right">{this.props.order.rewardDetail.price} {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
+                        </div>
+                        <div className="order-line">
+                            <div className="oline-left">购买数量</div>
+                            <div className="oline-right">
                                 {
-                                    this.props.order.rewardDetail.note !== '' && (
-                                        <div className="attention-please">
-                                            <img src={require("@/img/attention.png")} alt="" />
-                                            <span>注意：{this.props.order.rewardDetail.note}</span>
-                                        </div>
-                                    )
+                                    (this.state.buyNum && parseInt(this.state.buyNum, 10) > 1) ? <img src={require('@/img/minus-yes.png')} alt="" onClick={this.handleToMinusCount} className="count-icon left-cicon" /> : <img src={require('@/img/minus-no.png')} alt="" className="count-icon left-cicon" />
                                 }
-
-                                <h2 className="order-title">收货信息</h2>
-                                <div className="order-info-box">
-                                    <div className="order-line order-line-input">
-                                        <div className="oline-left">联系人姓名 <span className="red-xin">*</span></div>
-                                        <div className="oline-right">
-                                            <input type="text" className="input-text" value={this.state.contactName} onChange={this.handleChangeName} maxLength={50} />
-                                        </div>
-                                    </div>
-                                    <div className="order-line order-line-input">
-                                        <div className="oline-left">手机号 <span className="red-xin">*</span></div>
-                                        <div className="oline-right">
-                                            <div className="input-str">
-                                                <input type="text" className="input-text" value={this.state.contactTel} onChange={this.handleChangeTel} maxLength={50} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {
-                                        this.props.order.rewardDetail.distributeWay === '1' && (
-                                            <div className="order-line order-line-input">
-                                                <div className="oline-left">收货地址 <span className="red-xin">*</span></div>
-                                                <div className="oline-right">
-                                                    <div className="input-str">
-                                                        <input type="text" className="input-text" value={this.state.contactAddr} onChange={this.handleChangeAddress} maxLength={50} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                    <div className="order-line order-line-input">
-                                        <div className="oline-left">联系邮箱</div>
-                                        <div className="oline-right">
-                                            <div className="input-str">
-                                                <input type="text" className="input-text" maxLength={50} value={this.state.contactEmail} onChange={this.handleChangeEmail} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="order-line order-line-input">
-                                        <div className="oline-left">留言</div>
-                                        <div className="oline-right">
-                                            <div className="input-str">
-                                                <input type="text" placeholder="您对商品有什么特殊要求" className="input-text" value={this.state.contactMsg} onChange={this.handleChangeMessage} maxLength={50} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h2 className="order-title">注意事项</h2>
-                                <div className="attention-tips">
-                                    <p className="attention-p">付付款后您将直接转账给项目合约，项目合约会自动为您生成代币。付款成功后您的账户下会生成一份该礼包的订单，订单将由项目团队负责发货以及更新状态。</p>
-                                    <p className="attention-p">您的付款中将有30%用作代币回购的储备金，70%进入治理池用于支持项目发展。如果您持有项目代币，就可以通过投票决定治理池资金的用途。</p>
-                                    <p className="attention-p">FutureDao不会为项目做任何担保，也不会调查项目团队是否能够完成自己的承诺。为自己的承诺负责是项目团队应尽的责任。如果您对订单的发货过程有任何问题，请在社区内与项目团队进行沟通。在社区内表达意见、积极参与社区的治理投票，是您保障自身权利的重要渠道。</p>
-                                </div>
-                            </div>
-                            <div className="order-footer">
-                                <Button
-                                    text={"立即付款  " + this.state.spendPrice + " " + this.props.order.rewardDetail.fundName.toLocaleUpperCase()}
-                                    btnSize="bg-btn"
-                                    btnColor={(this.state.isCanBuyBtn && this.state.isCheckOk) ? '' : 'gray-btn'}
-                                    onClick={this.handleToCreateOrder}
-                                />
-                            </div>
-                        </>
-                    )
-                }
-                {
-                    this.props.order.orderMenu === 2 && (
-                        <div className="order-create-wrapper">
-                            <div className="order-create-content">
-                                <h1 className="ocreate-title">订单已创建</h1>
-                                <div className="ocreate-content">
-                                    <div className="content-line">
-                                        <div className="cline-left">转账给</div>
-                                        <div className="cline-right">0xA73359ca0d82d0971b7c84662e3109C88E710BFF</div>
-                                    </div>
-                                    <div className="content-line">
-                                        <div className="cline-left">转账金额</div>
-                                        <div className="cline-right">0.1 ETH</div>
-                                    </div>
-                                    <div className="content-line">
-                                        <div className="cline-left">手续费</div>
-                                        <div className="cline-right">0.0021 ETH</div>
-                                    </div>
-                                </div>
-                                <p className="ocreate-p">请在钱包中确认交易</p>
-                                <p className="ocreate-p">请在 <span className="purple-span">9:59</span> 内确认付款，否则订单将自动取消</p>
-                                <div className="step-btn">
-                                    <Button
-                                        text="取消订单"
-                                        btnSize="md-bg-btn"
-                                        onClick={this.handleToCancelOrder}
-                                    />
-                                </div>
-
+                                <input type="text" className="input-count" value={this.state.buyNum} onChange={this.handleChangeBuyCount} />
+                                {
+                                    this.state.isMaxBuy
+                                        ? <img src={require('@/img/plus-no.png')} alt="" className="count-icon right-cicon" />
+                                        : <img src={require('@/img/plus-yes.png')} alt="" onClick={this.handleToPlusCount} className="count-icon right-cicon" />
+                                }
                             </div>
                         </div>
-                    )
-                }
-                {
-                    this.props.order.orderMenu === 3 && (
-                        <div className="order-cancel-wrapper">
-                            <div className="order-cancel-content">
-                                <h1 className="ocancel-title">订单已取消</h1>
-                                <div className="step-btn">
-                                    <Button
-                                        text="关闭本页"
-                                        btnSize="md-bg-btn"
-                                        onClick={this.handleToCancelOrder}
-                                    />
-                                </div>
+                        <div className="order-line">
+                            <div className="oline-left">获得代币</div>
+                            <div className="oline-right">{this.state.canGetCount}（ 估计 ）</div>
+                        </div>
+                        <div className="order-big-line">
+                            <div className="oline-left">总价</div>
+                            <div className="oline-right">{this.state.spendPrice}  {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
+                        </div>
+                    </div>
+                    {
+                        this.props.order.rewardDetail.note !== '' && (
+                            <div className="attention-please">
+                                <img src={require("@/img/attention.png")} alt="" />
+                                <span>注意：{this.props.order.rewardDetail.note}</span>
+                            </div>
+                        )
+                    }
 
+                    <h2 className="order-title">收货信息</h2>
+                    <div className="order-info-box">
+                        <div className="order-line order-line-input">
+                            <div className="oline-left">联系人姓名 <span className="red-xin">*</span></div>
+                            <div className="oline-right">
+                                <input type="text" className="input-text" value={this.state.contactName} onChange={this.handleChangeName} maxLength={50} />
                             </div>
                         </div>
-                    )
-                }
-                {
-                    this.props.order.orderMenu === 4 && (
-                        <div className="order-check-wrapper">
-                            <div className="order-check-content">
-                                <h1 className="ocheck-title">付款确认中</h1>
-                                <p className="ocheck-p">等待链上确认付款结果</p>
-                                <p className="ocheck-p">您可以在“我的订单”中查看进度</p>
-                                <div className="step-btn">
-                                    <Button
-                                        text="关闭本页"
-                                        btnSize="md-bg-btn"
-                                        btnColor="white-purple"
-                                        onClick={this.handleToCancelOrder}
-                                    />
-                                    <Button
-                                        text="我的订单"
-                                        btnSize="md-bg-btn"
-                                        onClick={this.handleToCancelOrder}
-                                    />
+                        <div className="order-line order-line-input">
+                            <div className="oline-left">手机号 <span className="red-xin">*</span></div>
+                            <div className="oline-right">
+                                <div className="input-str">
+                                    <input type="text" className="input-text" value={this.state.contactTel} onChange={this.handleChangeTel} maxLength={50} />
                                 </div>
                             </div>
                         </div>
-                    )
-                }
+                        {
+                            this.props.order.rewardDetail.distributeWay === '1' && (
+                                <div className="order-line order-line-input">
+                                    <div className="oline-left">收货地址 <span className="red-xin">*</span></div>
+                                    <div className="oline-right">
+                                        <div className="input-str">
+                                            <input type="text" className="input-text" value={this.state.contactAddr} onChange={this.handleChangeAddress} maxLength={50} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        <div className="order-line order-line-input">
+                            <div className="oline-left">联系邮箱</div>
+                            <div className="oline-right">
+                                <div className="input-str">
+                                    <input type="text" className="input-text" maxLength={50} value={this.state.contactEmail} onChange={this.handleChangeEmail} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="order-line order-line-input">
+                            <div className="oline-left">留言</div>
+                            <div className="oline-right">
+                                <div className="input-str">
+                                    <input type="text" placeholder="您对商品有什么特殊要求" className="input-text" value={this.state.contactMsg} onChange={this.handleChangeMessage} maxLength={50} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 className="order-title">注意事项</h2>
+                    <div className="attention-tips">
+                        <p className="attention-p">付付款后您将直接转账给项目合约，项目合约会自动为您生成代币。付款成功后您的账户下会生成一份该礼包的订单，订单将由项目团队负责发货以及更新状态。</p>
+                        <p className="attention-p">您的付款中将有30%用作代币回购的储备金，70%进入治理池用于支持项目发展。如果您持有项目代币，就可以通过投票决定治理池资金的用途。</p>
+                        <p className="attention-p">FutureDao不会为项目做任何担保，也不会调查项目团队是否能够完成自己的承诺。为自己的承诺负责是项目团队应尽的责任。如果您对订单的发货过程有任何问题，请在社区内与项目团队进行沟通。在社区内表达意见、积极参与社区的治理投票，是您保障自身权利的重要渠道。</p>
+                    </div>
+                </div>
+                <div className="order-footer">
+                    <Button
+                        text={"立即付款  " + this.state.spendPrice + " " + this.props.order.rewardDetail.fundName.toLocaleUpperCase()}
+                        btnSize="bg-btn"
+                        btnColor={(this.state.isCanBuyBtn && this.state.isCheckOk) ? '' : 'gray-btn'}
+                        onClick={this.handleToCreateOrder}
+                    />
+                </div>
             </>
         );
     }
@@ -301,8 +219,7 @@ class Order extends React.Component<IOrderProps, IState> {
                 const ethBalance = await this.props.metamaskwallet.getMetamaskBalance();
                 this.setState({
                     isCanBuyBtn: true,
-                    myBalance: saveDecimal(ethBalance, 18),
-                    address: this.props.metamaskwallet.metamaskAddress
+                    myBalance: saveDecimal(ethBalance, 18)
                 })
             }
             else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
@@ -314,8 +231,7 @@ class Order extends React.Component<IOrderProps, IState> {
         {
             // 假如没有登陆
             this.setState({
-                isCanBuyBtn: false,
-                address: ''
+                isCanBuyBtn: false
             })
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
@@ -433,10 +349,7 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             spendPrice: priceStr,
             canGetCount: parseInt(num, 10).toString()
-        }, () =>
-            {
-                this.handleComputePriceDiff(this.state.canGetCount)
-            })
+        })
         return true
     }
     // 检测花费的余额够不够
@@ -462,9 +375,9 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             contactName: ev.target.value
         }, () =>
-        {
-            this.handleCheckAllInput();
-        })
+            {
+                this.handleCheckAllInput();
+            })
     }
     // 号码的输入
     private handleChangeTel = (ev: React.ChangeEvent<HTMLInputElement>) =>
@@ -472,9 +385,9 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             contactTel: ev.target.value
         }, () =>
-        {
-            this.handleCheckAllInput();
-        })
+            {
+                this.handleCheckAllInput();
+            })
     }
     // 地址的输入
     private handleChangeAddress = (ev: React.ChangeEvent<HTMLInputElement>) =>
@@ -482,9 +395,9 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             contactAddr: ev.target.value
         }, () =>
-        {
-            this.handleCheckAllInput();
-        })
+            {
+                this.handleCheckAllInput();
+            })
     }
     // 邮箱的输入
     private handleChangeEmail = (ev: React.ChangeEvent<HTMLInputElement>) =>
@@ -492,9 +405,9 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             contactEmail: ev.target.value
         }, () =>
-        {
-            this.handleCheckAllInput();
-        })
+            {
+                this.handleCheckAllInput();
+            })
     }
     // 留言的输入
     private handleChangeMessage = (ev: React.ChangeEvent<HTMLInputElement>) =>
@@ -502,40 +415,36 @@ class Order extends React.Component<IOrderProps, IState> {
         this.setState({
             contactMsg: ev.target.value
         }, () =>
-        {
-            this.handleCheckAllInput();
-        })
+            {
+                this.handleCheckAllInput();
+            })
     }
     // 创建订单
-    private handleToCreateOrder = () =>
+    private handleToCreateOrder = async () =>
     {
-        if (!this.state.isCanBuyBtn)
+        if (!this.state.isCanBuyBtn || !this.state.isCheckOk)
         {
             return false;
         }
-        this.props.order.orderMenu = 2;
+        const beforeRes = await this.handleBeforeCreateOrder();
+        if (!beforeRes)
+        {
+            return false;
+        }
+        const res = await this.props.order.createOrder(this.state.buyNum, this.state.canGetCount, this.state.contactName, this.state.contactTel, this.state.contactAddr, this.state.contactEmail, this.state.contactMsg)
+        if (res)
+        {
+            // 获得订单Id之后
+            this.props.history.push('/order/'+this.props.order.projId+"?orderid="+this.props.order.orderId)
+        } else
+        {
+            // 订单创建失败
+            this.props.common.openNotificationWithIcon('error', "操作失败", "订单创建失败");
+        }
+
         return true;
     }
-    // 取消订单
-    private handleToCancelOrder = () =>
-    {
-        this.props.order.orderMenu = 3;
-    }
-    // 计算价格差
-    private handleComputePriceDiff = (num: string) =>
-    {
-        if (parseFloat(num) === 0)
-        {
-            this.setState({
-                minBuyCount: '0'
-            })
-        }
-        const count = toMyNumber(num).mul(0.98);
-        const intNum = web3.toBigNumber(count).toString(10);
-        this.setState({
-            minBuyCount: parseInt(intNum, 10).toString()
-        })
-    }
+    // 检查必填项
     private handleCheckAllInput = () =>
     {
         let isOk = true;
@@ -570,6 +479,31 @@ class Order extends React.Component<IOrderProps, IState> {
                 isCheckOk: false
             })
         }
+    }
+    // 付款前的确认
+    private handleBeforeCreateOrder = async () =>
+    {
+        // 检查购买的回报ID是否还在
+        await this.props.order.getRewardInfo(this.props.order.rewardId);
+        // 立即付款时检查购买礼包数量是否超过剩余礼包数量    
+        if (!this.props.order.rewardDetail||(this.props.order.rewardDetail && this.props.order.rewardDetail.activeState==='0'))
+        {
+            this.props.common.openNotificationWithIcon('error', "操作失败", "该礼包已下架，请重新选购");
+            return false
+        }
+        else if (this.props.order.rewardDetail && this.props.order.rewardDetail.limitFlag === '1')
+        {
+            const sellCount = parseFloat(this.props.order.rewardDetail.hasSellCount.toString());
+            const maxCount = parseFloat(this.props.order.rewardDetail.limitMax);
+            const buyCount = parseFloat(this.state.buyNum);
+            const endCount = maxCount - sellCount;
+            if (endCount - buyCount < 0)
+            {
+                this.props.common.openNotificationWithIcon('error', "操作失败", "礼包数量不足，当前剩余" + endCount + "个");
+                return false
+            }
+        }
+        return true;
     }
 }
 export default injectIntl(Order)

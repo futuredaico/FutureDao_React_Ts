@@ -9,7 +9,15 @@ export interface IOrderStore {
     projId:string,
     rewardId:string,
     rewardDetail:IRewardDetail|null,
+    orderId:string,
+    hash:string,
+    orderInfo:ICreateOrderInfo|null
     getRewardInfo:(rewardId:string)=>Promise<boolean>,
+    createOrder:(buyCount:string,getCount:string,name:string,tel:string,addr:string,email:string,msg:string)=>Promise<boolean>,
+    confirmBuyOrder:(txid:string)=>Promise<boolean>,
+    cancelBuyOrder:(rewardId:string)=>Promise<boolean>,
+    getBuyOrder:(projId:string,orderId:string)=>Promise<boolean>,
+    getTradeHash:(projId:string)=>Promise<boolean>
   }
   
   
@@ -29,7 +37,7 @@ export interface IOrderStore {
   rewardName: string,  // 回报名称
   rewardDesc: string, // 回报详情
   price: string,    // 价格
-  // activeState:string,  // 是否有效
+  activeState:string,  // 是否有效,'0'无效，‘1’有效
   distributeTimeFlag: string, // 预计发放时间 0为不定期，1为定期
   distributeTimeFixYes: string, // 定期
   distributeTimeFixNot: string, // 不定期
@@ -39,6 +47,14 @@ export interface IOrderStore {
   limitFlag: string,  // 是否限量 0为不限量，1为限量
   limitMax: string, // 限量数量
   note: string, // 特殊说明  
-  projId: string, // 项目ID
-  
+  projId: string, // 项目ID  
+}
+export interface ICreateOrderInfo {
+  orderId:string,
+  orderState:string,
+  price:string
+  priceUnit:string,
+  projId:string,
+  time:number,
+  totalCost:string
 }

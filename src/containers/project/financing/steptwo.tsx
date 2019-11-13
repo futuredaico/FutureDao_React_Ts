@@ -11,7 +11,7 @@ import { IFinancingProps, IRewardInfo } from '../interface/financing.interface';
 import moment from 'moment';
 interface IState {
   connectName: string,
-  connectTel: string,
+  connectorTel: string,
   isCanSave: boolean,
 }
 
@@ -20,7 +20,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
   public intrl = this.props.intl.messages;
   public state = {
     connectName: this.props.financing.rewardContent.connectorName,
-    connectTel: this.props.financing.rewardContent.connectTel,
+    connectorTel: this.props.financing.rewardContent.connectorTel,
     isCanSave: false
   }
   public componentDidMount() {
@@ -67,7 +67,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
                     </div>
                     <div className="inline-enter">
                       <Input
-                        value={this.props.financing.rewardContent.connectTel}
+                        value={this.props.financing.rewardContent.connectorTel}
                         onChange={this.handleChangeContractTel}
                         maxLength={40}
                       />
@@ -220,7 +220,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
   // 输入联系人方式
   private handleChangeContractTel = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value;
-    this.props.financing.rewardContent.connectTel = value;
+    this.props.financing.rewardContent.connectorTel = value;
     this.handleCheckSetRewardInput();
   }
   // 输入回报名称
@@ -355,7 +355,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
     this.props.financing.rewardContent.info.splice(index, 1);
     if (this.props.financing.rewardContent.info.length === 0) {
       this.props.financing.rewardContent.connectorName = "";
-      this.props.financing.rewardContent.connectTel = "";
+      this.props.financing.rewardContent.connectorTel = "";
     }
   }
   // 提交回报信息
@@ -385,7 +385,7 @@ class StepTwo extends React.Component<IFinancingProps, IState> {
       if (!this.props.financing.rewardContent.connectorName) {
         isOk = false;
       }
-      if (!this.props.financing.rewardContent.connectTel) {
+      if (!this.props.financing.rewardContent.connectorTel) {
         isOk = false;
       }
       this.props.financing.rewardContent.info.forEach((item: IRewardInfo) => {

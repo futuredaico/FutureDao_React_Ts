@@ -33,4 +33,44 @@ export const createOrder = (userId:string,token:string,projId:string,rewardId:st
     }
     return request(opts);
 }
-// export const check
+/**
+ * 确认支付接口
+ * @param userId 用户ID
+ * @param token 标记
+ * @param orderId 订单ID
+ * @param txid 交易ID
+ */
+export const confirmBuyOrder =(userId:string,token:string,orderId:string,txid:string)=>{
+    const opts = {
+        method:'confirmBuyOrder',
+        params:[userId,token,orderId,txid]
+    }
+    return request(opts);
+}
+/**
+ * 取消购买订单接口
+ * @param userId 用户ID
+ * @param token 标记
+ * @param orderId 订单ID
+ */
+export const cancelBuyOrder =(userId:string,token:string,orderId:string)=>{
+    const opts = {
+        method:'cancelBuyOrder',
+        params:[userId,token,orderId]
+    }
+    return request(opts);
+}
+/**
+ * 获取订单详情
+ * @param userId 用户ID
+ * @param token 标记
+ * @param projId 项目ID
+ * @param orderId 订单ID
+ */
+export const getOrderInfo =(userId:string,token:string,projId:string,orderId:string)=>{
+    const opts = {
+        method:'queryBuyOrder',
+        params:[userId,token,projId,orderId]
+    }
+    return request(opts);
+}
