@@ -8,20 +8,21 @@ import { injectIntl } from 'react-intl';
 import { Input } from 'antd';
 import Button from '@/components/Button';
 import Select from '@/components/select';
-// import { getQueryString } from '@/utils/function'
+import { IOrderProjectProps, IOrderProjectList } from '../interface/orderproject.interface';
+import * as formatTime from 'utils/formatTime';
+import { OrderCode } from '@/store/interface/common.interface';
+
 interface IState
 {
-    isShowInfo: boolean,
     orderMenu: number,
     orderType: string,
     isShowSendBox: boolean
 }
-@inject('common', 'updateproject', 'createproject', 'project')
+@inject('common', 'orderproject', 'project','order')
 @observer
-class OrderProject extends React.Component<any, IState> {
+class OrderProject extends React.Component<IOrderProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
-        isShowInfo: false,
         orderMenu: 1,
         orderType: '1',
         isShowSendBox: false
@@ -36,13 +37,26 @@ class OrderProject extends React.Component<any, IState> {
             name: "虚拟商品",
         }
     ]
+    public componentDidMount()
+    {        
+        const projectId = this.props.match.params.projectId;
+        this.props.project.projId = projectId;
+        this.props.orderproject.getOrderProjectList();
+    }
+    public componentWillUnmount(){
+        this.props.orderproject.orderProjCount = 0;
+        this.props.orderproject.orderProjDetail = null;
+        this.props.orderproject.orderProjPage = 1;
+        this.props.orderproject.orderProjList = [];
+        this.props.order.rewardDetail = null;
+    }
     public render()
     {
         return (
             <div className="pro-order-wrapper">
                 <h3 className="right-title">订单管理</h3>
                 {
-                    !this.state.isShowInfo && (
+                    !this.props.orderproject.isShowOprojInfo && (
                         <>
                             <div className="order-menu">
                                 <ul className="title-ul">
@@ -88,33 +102,64 @@ class OrderProject extends React.Component<any, IState> {
                                 </ul>
                             </div>
                             <div className="order-table-content">
-                                <div className="order-table-line">
-                                    <div className="order-line-top">
-                                        <span className="order-time">日期：2019/9/9  11:30</span>
-                                        <span>订单号： 1234567890</span>
-                                    </div>
-                                    <ul className="order-table-box">
-                                        <li>
-                                            <span className="order-name">SS历险记SS历险记SS历险记SS历险记SS历</span>
-                                            <span className="order-backtitle">回报标题回报标题回报标题回报标题回报标题</span>
-                                        </li>
-                                        <li><span>1000.0000 DAI</span></li>
-                                        <li><span>1</span></li>
-                                        <li><span>1000.0000 DAI</span></li>
-                                        <li><span>莉莉萨</span></li>
-                                        <li><span>待发货</span></li>
-                                        <li>
-                                            <Button text="发货" btnSize="csm-btn" onClick={this.handleOpenSendBox} />
-                                            <span className="order-purple" onClick={this.handleOpenOrderInfo}>订单详情</span>
-                                        </li>
-                                    </ul>
-                                </div>
+                                {
+                                    this.props.orderproject.orderProjCount > 0 && this.props.orderproject.orderProjList.map((item: IOrderProjectList, index: number) =>
+                                    {
+                                        return (
+                                            <div className="order-table-line" key={index}>
+                                                <div className="order-line-top">
+                                                    <span className="order-time">日期：{formatTime.format('yyyy-MM-dd hh:mm', item.time.toString(), this.props.intl.locale)}</span>
+                                                    <span>订单号： {item.orderId}</span>
+                                                </div>
+                                                <ul className="order-table-box">
+                                                    <li>
+                                                        <span className="order-name">{item.projName}</span>
+                                                        <span className="order-backtitle">{item.rewardName}</span>
+                                                    </li>
+                                                    <li><span>{item.price} {item.priceUnit.toLocaleUpperCase()}</span></li>
+                                                    <li><span>{item.amount}</span></li>
+                                                    <li><span>{item.totalCost} {item.totalCostUnit.toLocaleUpperCase()}</span></li>
+                                                    <li><span>{item.connectorName}</span></li>
+                                                    <li>
+                                                        {
+                                                            item.orderState === OrderCode.WaitingPay && <span>待付款</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.WaitingConfirm && <span>待确认</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.WaitingDeliverGoods && <span>待发货</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.hasDeliverGoods && <span>已发货</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.Canceled && <span>取消订单</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.PayTimeout && <span>付款超时</span>
+                                                        }
+                                                        {
+                                                            item.orderState === OrderCode.TxFailed && <span>交易失败</span>
+                                                        }
+                                                    </li>
+                                                    {/* <li><span>待发货</span></li> */}
+                                                    <li>
+                                                        <Button text="发货" btnSize="csm-btn" onClick={this.handleOpenSendBox} />
+                                                        <span className="order-purple" onClick={this.handleOpenOrderInfo.bind(this,item)}>订单详情</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )
+                                    })
+                                }
+
                             </div>
                         </>
                     )
                 }
                 {
-                    this.state.isShowInfo && (
+                    this.props.orderproject.isShowOprojInfo && this.props.orderproject.orderProjDetail && (
                         <div className="manager-orderinfo-wrapper">
                             <div className="orderinfo-top">
                                 <strong className="gray-text">订单列表</strong>
@@ -122,55 +167,82 @@ class OrderProject extends React.Component<any, IState> {
                                 <strong>订单详情</strong>
                             </div>
                             <strong className="orderinfo-title first-title">当前订单状态</strong>
-                            <div className="orderinfo-gray-box">
-                                <strong className="orderinfo-status">待发货/已发货</strong>
-                                <span className="orderinfo-span">买家已付款，请及时发货/等待买家收货</span>
-                            </div>
+                            {
+                                this.props.orderproject.orderProjDetail.orderState === OrderCode.WaitingDeliverGoods && (
+                                    <div className="orderinfo-gray-box">
+                                        <strong className="orderinfo-status">待发货</strong>
+                                        <span className="orderinfo-span">买家已付款，请及时发货</span>
+                                    </div>
+                                )
+                            }
+                            {
+                                this.props.orderproject.orderProjDetail.orderState === OrderCode.hasDeliverGoods && (
+                                    <div className="orderinfo-gray-box">
+                                        <strong className="orderinfo-status">已发货</strong>
+                                        <span className="orderinfo-span">等待买家收货</span>
+                                    </div>
+                                )
+                            }
                             <strong className="orderinfo-title">收货信息</strong>
                             <div className="orderinfo-gray-box recieve-addr">
-                                <span className="orderinfo-span">收货人：<strong>莉莉萨</strong></span>
-                                <span className="orderinfo-span">手机：<strong>12312341234</strong></span>
-                                <span className="orderinfo-span">收货地址：<strong>上海市XX区XX路123号501</strong></span>
-                                <span className="orderinfo-span">留言：<strong>留言留言留言留言留言留言留言留言留言</strong></span>
+                                <span className="orderinfo-span">收货人：<strong>{this.props.orderproject.orderProjDetail.connectorName}</strong></span>
+                                <span className="orderinfo-span">手机：<strong>{this.props.orderproject.orderProjDetail.connectorTel}</strong></span>
+                                <span className="orderinfo-span">收货地址：<strong>{this.props.orderproject.orderProjDetail.connectorAddress ? this.props.orderproject.orderProjDetail.connectorAddress : '-'}</strong></span>
+                                <span className="orderinfo-span">留言：<strong>{this.props.orderproject.orderProjDetail.connectorMessage ? this.props.orderproject.orderProjDetail.connectorMessage : '-'}</strong></span>
                             </div>
                             <strong className="orderinfo-title">发货信息</strong>
-                            <div className="orderinfo-gray-box">
-                                <span className="orderinfo-span">暂未发货/顺丰快递：6554321</span>
-                                <Button text="发货/修改发货信息" onClick={this.handleOpenSendBox} />
-                            </div>
+                            {
+                                this.props.orderproject.orderProjDetail.orderState === OrderCode.WaitingDeliverGoods && (
+                                    <div className="orderinfo-gray-box">
+                                        <span className="orderinfo-span">暂未发货</span>
+                                        <Button text="发货" onClick={this.handleOpenSendBox} />
+                                    </div>
+                                )
+                            }
+                            {
+                                this.props.orderproject.orderProjDetail.orderState === OrderCode.hasDeliverGoods && (
+                                    <div className="orderinfo-gray-box">
+                                        <span className="orderinfo-span">{this.props.orderproject.orderProjDetail.senderNote?this.props.orderproject.orderProjDetail.senderNote:'暂无'}</span>
+                                        <Button text="修改发货信息" onClick={this.handleOpenSendBox} />
+                                    </div>
+                                )   
+                            }
+                            
                             <strong className="orderinfo-title">订单信息</strong>
                             <div className="order-id-line">
-                                <span>订单号 1234567890</span>
-                                <span className="right-time">创建日期：2019/9/9</span>
+                                <span>订单号 {this.props.orderproject.orderProjDetail.orderId}</span>
+                                <span className="right-time">创建日期：{formatTime.format('yyyy-MM-dd ', this.props.orderproject.orderProjDetail.time.toString(), this.props.intl.locale)}</span>
                             </div>
                             <div className="orderinfo-table-wrapper">
                                 <ul>
                                     <li>
-                                        <strong className="orderinfo-name">SS历险记SS历险记SS历险记SS历险记SS历</strong>
+                                        <strong className="orderinfo-name">{this.props.orderproject.orderProjDetail.projName}</strong>
                                         <div className="orderinfo-backtitle">
-                                            回报标题回报标题回报标题回报标题回报标题
-                                            <div className="orderinfo-order-box">
-                                                <p>回报说明Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-                                                <p>回报1X1</p>
-                                                <p>回报2X1</p>
-                                                <p>预计交货  2019年9月</p>
-                                            </div>
+                                            {this.props.orderproject.orderProjDetail.rewardName}
+                                            {
+                                                this.props.order.rewardDetail && (
+                                                    <div className="orderinfo-order-box">
+                                                        <p>{this.props.order.rewardDetail.rewardDesc}</p>
+                                                        <p>预计交货  {this.props.order.rewardDetail.distributeTimeFlag === "1" ? this.props.order.rewardDetail.distributeTimeFixYes : this.props.order.rewardDetail.distributeTimeFixNot + "天内"}</p>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </li>
                                     <li>
                                         <span className="info-table-th">价格</span>
-                                        <span className="info-table-td">1 ETH</span>
+                                        <span className="info-table-td">{this.props.orderproject.orderProjDetail.price} {this.props.orderproject.orderProjDetail.priceUnit.toLocaleUpperCase()}</span>
                                     </li>
                                     <li>
                                         <span className="info-table-th">数量</span>
-                                        <span className="info-table-td">10</span>
+                                        <span className="info-table-td">{this.props.orderproject.orderProjDetail.amount}</span>
                                     </li>
                                     <li>
                                         <span className="info-table-th">总价</span>
-                                        <span className="info-table-td">10 ETH</span>
+                                        <span className="info-table-td">{this.props.orderproject.orderProjDetail.totalCost} {this.props.orderproject.orderProjDetail.totalCostUnit.toLocaleUpperCase()}</span>
                                     </li>
                                 </ul>
-                                <div className="right-sumprice">共支付：10 ETH</div>
+                                <div className="right-sumprice">共支付：{this.props.orderproject.orderProjDetail.totalCost} {this.props.orderproject.orderProjDetail.totalCostUnit.toLocaleUpperCase()}</div>
                             </div>
                         </div>
                     )
@@ -186,8 +258,8 @@ class OrderProject extends React.Component<any, IState> {
                                 <span className="send-order-span">填写发货信息</span>
                                 <textarea name="sendinfo" className="send-order-reason" />
                                 <div className="sendbtn-wrap">
-                                    <Button text="取消" btnColor="red-btn" btnSize="stop-btn" />
-                                    <Button text="确认发货" btnSize="stop-btn" onClick={this.handleCloseSendBox} />
+                                    <Button text="取消" btnColor="red-btn" btnSize="stop-btn" onClick={this.handleCloseSendBox} />
+                                    <Button text="确认发货" btnSize="stop-btn" onClick={this.handleSendGoods} />
                                 </div>
                             </div>
                         </div>
@@ -208,11 +280,13 @@ class OrderProject extends React.Component<any, IState> {
             orderType: item.id
         })
     }
-    private handleOpenOrderInfo = () =>
+    // 获取单个订单详情
+    private handleOpenOrderInfo = (item:IOrderProjectList) =>
     {
-        this.setState({
-            isShowInfo: true
-        })
+        this.props.orderproject.orderProjDetail = null;
+        this.props.orderproject.isShowOprojInfo = true;
+        this.props.orderproject.getOrderProjectDetail(item.projId, item.orderId);
+        this.props.order.getRewardInfo(item.rewardId);
     }
     private handleOpenSendBox = () =>
     {
@@ -225,6 +299,11 @@ class OrderProject extends React.Component<any, IState> {
         this.setState({
             isShowSendBox: false
         })
+    }
+    // 发货
+    private handleSendGoods = ()=>{
+        // this.props.
+        this.handleCloseSendBox();
     }
 }
 

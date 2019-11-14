@@ -43,21 +43,14 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
     {
         this.handleCheckLinkWallet();
     }
-    // public componentWillUnmount(){
-    //     this.setState({
-    //         buyPrice: '',
-    //         wholeBuyPrice: '',
-    //         buyCount: '',
-    //         buyOnePrice: '',
-    //         isCanBuyBtn: false,
-    //         isShowBalance: false,
-    //         isError: false,
-    //         balance: '0',
-    //         wholeBalance: '0',
-    //         minBuyCount: '',
-    //         address:''
-    //     })
-    // }
+    public componentDidCatch(error, info) {
+        console.log(error)
+        // const isNewError = (error.toString() !== this.state.prevError.toString());// should only run once
+        // if (isNewError) {//判断两次错误不一致才再次执行，不然一直循环
+        //   this.logErrorToMyService(error, info);
+        //   this.setState({ prevError: error });
+        // }
+      }
     public render()
     {
         if (!this.props.projectinfo.projInfo)
@@ -324,7 +317,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             this.setState({
                 idDoingBuy:true
             })
-            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice);
+            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice,0);
             console.log(txid);
             this.setState({
                 idDoingBuy:false

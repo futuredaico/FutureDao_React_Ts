@@ -36,7 +36,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
 
   public componentWillUnmount()
   {
-    window.removeEventListener('scroll', this.onScrollFn.bind(this))
+    window.removeEventListener('scroll', this.onScrollFn.bind(this));
   }
 
   public render()

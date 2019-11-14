@@ -11,11 +11,12 @@ export interface IOrderStore {
     rewardDetail:IRewardDetail|null,
     orderId:string,
     hash:string,
-    orderInfo:ICreateOrderInfo|null
+    orderInfo:ICreateOrderInfo|null,
+    timeTen:NodeJS.Timer | null,
     getRewardInfo:(rewardId:string)=>Promise<boolean>,
     createOrder:(buyCount:string,getCount:string,name:string,tel:string,addr:string,email:string,msg:string)=>Promise<boolean>,
     confirmBuyOrder:(txid:string)=>Promise<boolean>,
-    cancelBuyOrder:(rewardId:string)=>Promise<boolean>,
+    cancelBuyOrder:()=>Promise<boolean>,
     getBuyOrder:(projId:string,orderId:string)=>Promise<boolean>,
     getTradeHash:(projId:string)=>Promise<boolean>
   }
@@ -51,10 +52,10 @@ export interface IOrderStore {
 }
 export interface ICreateOrderInfo {
   orderId:string,
-  orderState:string,
-  price:string
-  priceUnit:string,
-  projId:string,
-  time:number,
-  totalCost:string
+  orderState:string,  // 订单状态
+  price:string  // 订单单价
+  priceUnit:string, // 价格单位
+  projId:string, //
+  time:number, // 创建时间
+  totalCost:string // 价格总数
 }

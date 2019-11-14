@@ -147,3 +147,37 @@ export const bindAddress = (userId: string,token:string,type:string,address:stri
     }
     return request(opts);
 }
+/**
+ * 查询我的订单列表
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param page 当前页面
+ * @param pageSize 每页显示行数
+ */
+export const getMyorderList = (userId: string,token:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'queryBuyOrderList',
+        params: [
+            userId,token,page,pageSize
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 查询订单详情
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param orderId 订单ID
+ */
+export const getMyorderDetail = (userId: string,token:string,projId:string,orderId:string) =>
+{
+    const opts = {
+        method: 'queryBuyOrder',
+        params: [
+            userId,token,projId,orderId
+        ]
+    }
+    return request(opts);
+}

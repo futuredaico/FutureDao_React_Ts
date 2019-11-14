@@ -6,6 +6,7 @@ import { CONTRACT_CONFIG } from "@/config";
 import { AbiItem } from "web3-utils";
 // import { voteAbi } from "./VoteAbi";
 import MetaMask from "@/store/metamaskwallet";
+import common from "@/store/common";
 class Web3Tool
 {
 
@@ -87,7 +88,12 @@ class Web3Tool
                         console.log(txid);
                         r(txid);
                     })
-                    .on('error', err => { console.log(err) }); // If a out of gas error, the second parameter is the receipt.
+                    .on('error', err => { 
+                        console.log(err) 
+                        if(err['code']===4001){
+                            common.openNotificationWithIcon('error', "操作失败", "您拒绝了本次操作");
+                        }
+                    }); // If a out of gas error, the second parameter is the receipt.
             }
             else
             {
@@ -97,7 +103,12 @@ class Web3Tool
                         console.log(txid);
                         r(txid);
                     })
-                    .on('error', err => j(err)); // If a out of gas error, the second parameter is the receipt.
+                    .on('error', err => {
+                        if(err['code']===4001){
+                            common.openNotificationWithIcon('error', "操作失败", "您拒绝了本次操作");
+                        }
+                        j(err)
+                    }); // If a out of gas error, the second parameter is the receipt.
             }
         })
     }

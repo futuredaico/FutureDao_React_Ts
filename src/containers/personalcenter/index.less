@@ -428,6 +428,10 @@
                     .order-backtitle{
                         display: block;
                         text-align: left;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2; // （行数）
+                        /* autoprefixer: off */
+                        -webkit-box-orient: vertical; 
                     }
                     .order-purple{
                         display:block;
@@ -456,6 +460,10 @@
                     }
                 }
             }
+        }
+        .myorder-page-warpper{
+            text-align: center;
+            margin-top: 50px;
         }
     }
 }
@@ -532,11 +540,13 @@
             color: #9B9B9B;
         }
         .trangle{
+            display: inline-block;
             width: 0;
             height: 0;
-            border: 5px solid transparent;
-            border-top: 5px solid #9B9B9B;
+            border: 6px solid transparent;
+            border-left: 6px solid #9B9B9B;
             border-radius: 2px;
+            margin: 3px 10px 0 15px;
         }
     }
     .orderinfo-title{
@@ -650,7 +660,7 @@
                     .orderinfo-order-box{
                         display: none;
                         width: 450px;
-                        height: 268px;
+                        // height: 268px;
                         padding: 20px;
                         text-align: justify;
                         line-height: 18px;

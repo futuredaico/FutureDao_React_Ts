@@ -14,6 +14,7 @@ class Order
   @observable public orderId:string = '';  // 订单ID
   @observable public hash:string = ''; // 交易的合约hash
   @observable public orderInfo:ICreateOrderInfo|null = null; // 订单详情的部分数据
+  @observable public timeTen:NodeJS.Timer | null = null; // 倒计时定时器
 
   /**
    * 获取项目基本详情

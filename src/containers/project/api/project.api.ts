@@ -341,3 +341,40 @@ export const saveReserveFundRatio = (userId:string,token:string,projId:string,ra
     }
     return request(opts);
 }
+/**
+ * 确认发货
+ * @param userId 用户Id
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param orderId 订单ID
+ * @param note 说明
+ */
+export const confirmSendGoods = (userId:string,token:string,projId:string,orderId:string,note:string)=>{
+    const opts = {
+        method: 'confirmDeliverBuyOrder',
+        params: [userId,token,projId,orderId,note]
+    }
+    return request(opts);
+}
+/**
+ * 查询项目订单列表
+ * @param userId 用户Id
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param page 当前页
+ * @param pageSize 行数
+ */
+export const getProjOrderList = (userId:string,token:string,projId:string,page:number,pageSize:number)=>{
+    const opts = {
+        method: 'queryProjBuyOrderList',
+        params: [userId,token,projId,page,pageSize]
+    }
+    return request(opts);
+}
+export const getProjOrderDetail = (userId:string,token:string,projId:string,orderId:string)=>{
+    const opts = {
+        method: 'queryProjBuyOrder',
+        params: [userId,token,projId,orderId]
+    }
+    return request(opts);
+}

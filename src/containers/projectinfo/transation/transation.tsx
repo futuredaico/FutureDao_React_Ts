@@ -192,7 +192,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                     </div>
                     {
                         this.props.transation.transCount > 10 && (
-                            <div className="home-page-warpper">
+                            <div className="transtation-page-warpper">
                                 <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.transation.transPageSize} total={this.props.transation.transCount} onChange={this.handleChangeTransPage} />
                             </div>
                         )

@@ -171,7 +171,7 @@ class ProjectTransation
   //  * @param minCount 最少能买多少
   //  * @param amount 购买金额
   //  */
-  @action public buy = async (addr:string,minCount: string,amount:string) =>
+  @action public buy = async (addr:string,minCount: string,amount:string,orderId:number) =>
   {
     let hashStr = '';
 
@@ -184,10 +184,9 @@ class ProjectTransation
     if(!hashStr){
       return ''
     }
-    const timeNum = 0;
     try
     {
-      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),timeNum,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),orderId,metamaskwallet.web3.utils.toWei(amount,"ether"));
       console.log(txid)
       return txid;
     } catch (error)
