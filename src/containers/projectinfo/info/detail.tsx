@@ -25,6 +25,8 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
     }
     public componentDidMount()
     {
+        const projectId = this.props.match.params.projectId;
+        this.props.projectinfo.projId = projectId;
         // 获取留言列表
         this.handleGetDataList('');
     }

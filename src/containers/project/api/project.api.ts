@@ -363,18 +363,42 @@ export const confirmSendGoods = (userId:string,token:string,projId:string,orderI
  * @param projId 项目ID
  * @param page 当前页
  * @param pageSize 行数
+ * @param sendFlag 发货与否，0为待发货，1为已发货
+ * @param buyName 买家姓名
+ * @param orderStr 订单编号
+ * @param sendType 发放方式，0为虚拟发放，1为实物发放
  */
-export const getProjOrderList = (userId:string,token:string,projId:string,page:number,pageSize:number)=>{
+export const getProjOrderList = (userId:string,token:string,projId:string,page:number,pageSize:number,sendFlag:number,buyName:string,orderStr:string,sendType:number)=>{
     const opts = {
         method: 'queryProjBuyOrderList',
-        params: [userId,token,projId,page,pageSize]
+        params: [userId,token,projId,page,pageSize,sendFlag,buyName,orderStr,sendType]
     }
     return request(opts);
 }
+/**
+ * 获取项目订单详情
+ * @param userId 用户Id
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param orderId 订单ID
+ */
 export const getProjOrderDetail = (userId:string,token:string,projId:string,orderId:string)=>{
     const opts = {
         method: 'queryProjBuyOrder',
         params: [userId,token,projId,orderId]
+    }
+    return request(opts);
+}
+/**
+ * 导出联系人信息
+ * @param userId 用户Id
+ * @param token 访问令牌
+ * @param projId 项目ID 
+ */
+export const exportOrderFile = (userId:string,token:string,projId:string)=>{
+    const opts = {
+        method: 'exportOrderInfo',
+        params: [userId,token,projId]
     }
     return request(opts);
 }

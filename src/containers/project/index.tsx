@@ -15,6 +15,7 @@ import { IProjectStore } from './interface/project.interface';
 import { ICreateProjectStore } from './interface/createproject.interface';
 import { getQueryString } from '@/utils/function'
 import { IFinancingStore } from './interface/financing.interface';
+import { IOrderProjectStore } from './interface/orderproject.interface';
 
 interface IProps extends RouteComponentProps<{ projectId: string }> {
     route: {
@@ -24,14 +25,15 @@ interface IProps extends RouteComponentProps<{ projectId: string }> {
     project: IProjectStore,
     createproject: ICreateProjectStore,
     common: ICommonStore,
-    financing: IFinancingStore
+    financing: IFinancingStore,
+    orderproject: IOrderProjectStore,
     intl: any
 }
 interface IState {
     showDeletProject: boolean
 }
 
-@inject('project', 'createproject', 'common', 'financing')
+@inject('project', 'createproject', 'common', 'financing','orderproject')
 @observer
 class Project extends React.Component<IProps, IState> {
     public intrl = this.props.intl.messages;
@@ -175,10 +177,13 @@ class Project extends React.Component<IProps, IState> {
                 this.handleShowDeleteProject();
             }
         }
-        // else if (str === '/project/order')
-        // {
-        //     return false;
-        // }
+        else if (str === '/project/order')
+        {
+            this.props.orderproject.isShowOprojInfo = false;
+            this.props.orderproject.orderProjPage = 1;
+            this.props.history.push(str + '/' + this.props.project.projId);
+            return false;
+        }
         else {
             this.props.history.push(str + '/' + this.props.project.projId);
         }

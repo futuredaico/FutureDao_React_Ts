@@ -330,6 +330,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             }            
         } catch (error)
         {
+            console.log("err",error)
             this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
         }
         return true;

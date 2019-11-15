@@ -91,7 +91,9 @@ class Web3Tool
                     .on('error', err => { 
                         console.log(err) 
                         if(err['code']===4001){
+                            
                             common.openNotificationWithIcon('error', "操作失败", "您拒绝了本次操作");
+                            j(err);
                         }
                     }); // If a out of gas error, the second parameter is the receipt.
             }

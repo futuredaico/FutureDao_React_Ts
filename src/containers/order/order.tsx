@@ -166,14 +166,24 @@ class Order extends React.Component<IOrderProps, IState> {
                         return false
                     }
                     // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
-                    // const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,this.props.order.orderInfo.orderId)     
-                    // if(!!txid){
-                    //     this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
-                    //     this.props.order.orderMenu=3;
-                    //     this.props.order.confirmBuyOrder(txid);
-                    // }else{
-                    //     this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");                        
-                    // } 
+                    // try
+                    // {
+                    //     const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,this.props.order.orderInfo.orderId)     
+                    //     console.log(txid);
+                    //     if(!!txid){
+                    //         this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
+                    //         this.props.order.orderMenu=3;
+                    //         this.props.order.confirmBuyOrder(txid);
+                    //     }else{
+                    //         this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
+                    //     }            
+                    // } catch (error)
+                    // {
+                    //     console.log("err",error)
+                    //     this.handleToCancelOrder();
+                    //     this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
+                    // }
+                    
                 }
                 
             }

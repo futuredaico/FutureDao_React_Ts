@@ -19,6 +19,8 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
     }
     public componentDidMount()
     {
+        const projectId = this.props.match.params.projectId;
+        this.props.projectinfo.projId = projectId;
         this.props.projectinfo.getTeamData();
         // 启动融资之后
         if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
@@ -105,7 +107,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                                             ((item.limitFlag === '1' && parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10) === 0))
                                                                 ? <Button text="已抢光" btnColor="gray-btn" />
                                                                 : <>
-                                                                    <Button text="购买" />
+                                                                    <Button text="购买" onClick={this.handleToCreateOrder.bind(this,item)} />
                                                                     <span className="s-gray">{item.hasSellCount}支持</span>
                                                                 </>
                                                         }
@@ -157,6 +159,16 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
         this.setState({
             priceType: num
         })
+    }
+    // 购买
+    private handleToCreateOrder = (item: IProjReward)=>{
+        //
+        if(item.limitFlag === '1' && parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10)===0){
+            return false;
+        }
+        const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+        window.open(url + '/giftorder/' + this.props.projectinfo.projId +"?rewardid="+item.rewardId);
+        return true;
     }
 }
 

@@ -11,9 +11,11 @@ export interface IOrderProjectStore
   orderProjList:IOrderProjectList[],
   orderProjPage:number,
   orderProjPageSize:number,  
-  orderProjDetail:IOrderProjectDetail|null
-  getOrderProjectList:()=>Promise<boolean>,
-  getOrderProjectDetail:(projId:string,orderId:string)=>Promise<boolean>
+  orderProjDetail:IOrderProjectDetail|null,
+  exportLink:string,
+  getOrderProjectList:(sendFlag:number,buyName:string,orderStr:string,sendType:number)=>Promise<boolean>,
+  getOrderProjectDetail:(projId:string,orderId:string)=>Promise<boolean>,
+  exportFile:(projId:string)=>Promise<boolean>
 }
 
 export interface IOrderProjectProps  extends RouteComponentProps<{ projectId: string }>
