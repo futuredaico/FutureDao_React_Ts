@@ -60,7 +60,19 @@ class PersonalCenter extends React.Component<IProps, any> {
     {
         this.props.myorder.isShowInfo = false;
         this.props.myorder.orderPage = 1;
-        this.props.history.push(str);
+        
+        if(str === '/personalcenter/myorder'){
+            const pathname = this.props.history.location.pathname;
+            if(pathname.includes('/personalcenter/myorder')){
+                console.log(2)
+                this.props.myorder.getMyOrderList();
+            }else{
+                this.props.history.push(str);
+            } 
+        }
+        else{
+            this.props.history.push(str);
+        }        
     }
     // 菜单选择样式
     private mapChildClick = (path) =>

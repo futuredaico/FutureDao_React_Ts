@@ -25,7 +25,6 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
         // 启动融资之后
         if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
         {
-            this.props.projectinfo.getTokenPriceData();
             this.props.projectinfo.getRewardData();
             this.props.projectinfo.getReserveTokenData();
             this.props.projectinfo.computeCurrentBuyPrice();
@@ -59,7 +58,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                     }
                 </div>
                 {
-                    this.props.projectinfo.projInfo.projState === ProjectState.Trading && this.props.projectinfo.priceInfo && (
+                    this.props.projectinfo.projInfo.projState === ProjectState.Trading  && (
                         <>
                             {/* 项目代币价格模块 */}
                             <div className="price-wrapper">

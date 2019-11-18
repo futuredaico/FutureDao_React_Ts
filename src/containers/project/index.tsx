@@ -181,7 +181,18 @@ class Project extends React.Component<IProps, IState> {
         {
             this.props.orderproject.isShowOprojInfo = false;
             this.props.orderproject.orderProjPage = 1;
-            this.props.history.push(str + '/' + this.props.project.projId);
+            console.log(this.props.history.location.pathname);
+            const pathname = this.props.history.location.pathname
+            if(pathname.includes('/project/order')){
+                this.props.orderproject.orderMenu = 0;
+                this.props.orderproject.orderType = '0';
+                this.props.orderproject.buyName = '';
+                this.props.orderproject.orderStr = '';
+                this.props.orderproject.sendType= 0;
+                this.props.orderproject.getOrderProjectList(0,'','',0);
+            }else{
+                this.props.history.push(str + '/' + this.props.project.projId);
+            }   
             return false;
         }
         else {

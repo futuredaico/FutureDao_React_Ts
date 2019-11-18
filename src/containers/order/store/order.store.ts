@@ -85,13 +85,13 @@ class Order
   /**
    * 取消订单
    */
-  @action public cancelBuyOrder = async () =>
+  @action public cancelBuyOrder = async (orderId:string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.cancelBuyOrder(common.userId,common.token,this.orderId);
+      result = await Api.cancelBuyOrder(common.userId,common.token,orderId);
     } catch (e)
     {
       return false;

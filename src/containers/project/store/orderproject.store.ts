@@ -6,6 +6,7 @@ import project from './project.store';
 import { IOrderProjectList, IOrderProjectDetail } from '../interface/orderproject.interface';
 class OrderProject
 {
+    @observable public orderMenu:number = 0;
     @observable public isShowOprojInfo: boolean = false; // 是否显示详情页
     @observable public orderProjCount: number = 0;  // 列表总数
     @observable public orderProjPage: number = 1;  
@@ -13,7 +14,10 @@ class OrderProject
     @observable public orderProjList:IOrderProjectList[] = [];   // 订单列表
     @observable public orderProjDetail:IOrderProjectDetail|null = null; // 订单详情
     @observable public exportLink:string = '';
-
+    @observable public buyName:string = '';   // 买家名称
+    @observable public orderStr:string= '';   // 订单编号
+    @observable public sendType:number= 0;    // 订单类型（传入接口的）
+    @observable public orderType:string = '0' // 订单类型，（示）
     /**
      * 获取订单列表
      */
@@ -58,6 +62,9 @@ class OrderProject
         this.orderProjDetail = result[0].data || null;
         return true;
     }
+    /**
+     * 导出收货人信息
+     */
     @action public exportFile = async (projId: string) =>
     {
         let result: any = [];
@@ -74,6 +81,26 @@ class OrderProject
             return false
         }
         this.exportLink = result[0].data.fileUrl || '';
+        return true;
+    }
+    /**
+     * 发货
+     */
+    @action public sendGoods = async (projId: string,orderId:string,note:string) =>
+    {
+        let result: any = [];
+        try
+        {
+            result = await Api.confirmSendGoods(common.userId, common.token, projId,orderId,note);
+        } catch (e)
+        {
+
+            return false;
+        }
+        if (result[0].resultCode !== CodeType.success)
+        {
+            return false
+        }        
         return true;
     }
 }

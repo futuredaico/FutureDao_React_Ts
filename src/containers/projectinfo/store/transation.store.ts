@@ -26,7 +26,7 @@ const defaultContract = {
 }
 class ProjectTransation
 {
-  @observable public tradeMenu:number=1;
+  @observable public tradeMenu: number = 1;
   @observable public projContractInfo: IProjectContractInfo | null = null;
   @observable public historyPrice: IHistoryPrice = {
     buyInfo: [],
@@ -171,22 +171,30 @@ class ProjectTransation
   //  * @param minCount 最少能买多少
   //  * @param amount 购买金额
   //  */
-  @action public buy = async (addr:string,minCount: string,amount:string,orderId:number) =>
+  @action public buy = async (addr: string, minCount: string, amount: string, orderId: number, hash?: string) =>
   {
     let hashStr = '';
-
-    for (const item of projectinfoStore.hashList) {
-      if(item.contractName === 'TradeFundPool'){
-        hashStr = item.contractHash
+    if (hash)
+    {
+      hashStr = hash;
+    } else
+    {
+      for (const item of projectinfoStore.hashList)
+      {
+        if (item.contractName === 'TradeFundPool')
+        {
+          hashStr = item.contractHash
+        }
       }
     }
-
-    if(!hashStr){
+    console.log(hashStr)
+    if (!hashStr)
+    {
       return ''
     }
     try
     {
-      const txid = await Api.buy(addr,hashStr, parseInt(minCount,10),orderId,metamaskwallet.web3.utils.toWei(amount,"ether"));
+      const txid = await Api.buy(addr, hashStr, parseInt(minCount, 10), orderId, metamaskwallet.web3.utils.toWei(amount, "ether"));
       console.log(txid)
       return txid;
     } catch (error)

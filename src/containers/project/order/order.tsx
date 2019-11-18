@@ -15,26 +15,20 @@ import { Pagination } from 'antd';
 
 interface IState
 {
-    orderMenu: number,        // 菜单切换
-    orderType: string,        // 订单类型，（示）
     isShowSendBox: boolean,   // 发货弹窗标记
     recipientsName:string,    // 收件人名称
-    buyName:string,   // 买家名称
-    orderStr:string,  // 订单编号
-    sendType:number   // 订单类型（传入接口的）
+    noteStr:string, // 发货备注    
+    orderItemOrderId:string, // 发货的订单ID
 }
 @inject('common', 'orderproject', 'project','order')
 @observer
 class OrderProject extends React.Component<IOrderProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public state:IState = {
-        orderMenu: 0,
-        orderType: "0",
         isShowSendBox: false,
         recipientsName:'',
-        buyName:'',
-        orderStr:'',
-        sendType:0
+        noteStr:'',
+        orderItemOrderId:''
     };
     private orderOptions = [
         {
@@ -69,10 +63,10 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                         <>
                             <div className="order-menu">
                                 <ul className="title-ul">
-                                    <li className={this.state.orderMenu === 0 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 0)}>
+                                    <li className={this.props.orderproject.orderMenu === 0 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 0)}>
                                         待发货
                                     </li>
-                                    <li className={this.state.orderMenu === 1 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 1)}>
+                                    <li className={this.props.orderproject.orderMenu === 1 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 1)}>
                                         已发货
                                     </li>
                                 </ul>
@@ -81,21 +75,21 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                                 </div>
                             </div>
                             <div className="order-search-wrapper">
-                                <div className="order-search-smallbox">
+                                {/* <div className="order-search-smallbox">
                                     <span className="search-type-text">收件人名称</span>
                                     <Input className="search-input-order" value={this.state.recipientsName} onChange={this.handleChangeRecipients} />
-                                </div>
+                                </div> */}
                                 <div className="order-search-smallbox">
                                     <span className="search-type-text">买家名称</span>
-                                    <Input className="search-input-order" value={this.state.buyName} onChange={this.handleChangeBuyName} />
+                                    <Input className="search-input-order" value={this.props.orderproject.buyName} onChange={this.handleChangeBuyName} />
                                 </div>
                                 <div className="order-search-smallbox">
                                     <span className="search-type-text">订单编号</span>
-                                    <Input className="search-input-order" value={this.state.orderStr} onChange={this.handleChangeOrderStr} />
+                                    <Input className="search-input-order" value={this.props.orderproject.orderStr} onChange={this.handleChangeOrderStr} />
                                 </div>
                                 <div className="order-search-smallbox">
                                     <span className="search-type-text">订单类型</span>
-                                    <Select options={this.orderOptions} text='' onCallback={this.handleChoiceOrderType} defaultValue={this.state.orderType} />
+                                    <Select options={this.orderOptions} text='' onCallback={this.handleChoiceOrderType} defaultValue={this.props.orderproject.orderType} />
                                 </div>
                                 <Button text="搜索" btnColor="white-btn" onClick={this.handleSearchList} />
                             </div>
@@ -154,7 +148,9 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                                                     </li>
                                                     {/* <li><span>待发货</span></li> */}
                                                     <li>
-                                                        <Button text="发货" btnSize="csm-btn" onClick={this.handleOpenSendBox} />
+                                                        {
+                                                            item.orderState === OrderCode.WaitingDeliverGoods && <Button text="发货" btnSize="csm-btn" onClick={this.handleOpenSendBox.bind(this,item.orderId)} />
+                                                        }                                                        
                                                         <span className="order-purple" onClick={this.handleOpenOrderInfo.bind(this,item)}>订单详情</span>
                                                     </li>
                                                 </ul>
@@ -217,7 +213,7 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                                 this.props.orderproject.orderProjDetail.orderState === OrderCode.WaitingDeliverGoods && (
                                     <div className="orderinfo-gray-box">
                                         <span className="orderinfo-span">暂未发货</span>
-                                        <Button text="发货" onClick={this.handleOpenSendBox} />
+                                        <Button text="发货" onClick={this.handleOpenSendBox.bind(this,this.props.orderproject.orderProjDetail.orderId)} />
                                     </div>
                                 )
                             }
@@ -225,7 +221,7 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                                 this.props.orderproject.orderProjDetail.orderState === OrderCode.hasDeliverGoods && (
                                     <div className="orderinfo-gray-box">
                                         <span className="orderinfo-span">{this.props.orderproject.orderProjDetail.senderNote?this.props.orderproject.orderProjDetail.senderNote:'暂无'}</span>
-                                        <Button text="修改发货信息" onClick={this.handleOpenSendBox} />
+                                        <Button text="修改发货信息" onClick={this.handleOpenSendBox.bind(this,this.props.orderproject.orderProjDetail.orderId,this.props.orderproject.orderProjDetail.senderNote)} />
                                     </div>
                                 )   
                             }
@@ -278,7 +274,7 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
                                 </div>
                                 <div className="send-order-title"><strong>确认发货</strong></div>
                                 <span className="send-order-span">填写发货信息</span>
-                                <textarea name="sendinfo" className="send-order-reason" />
+                                <textarea name="sendinfo" className="send-order-reason" value={this.state.noteStr} onChange={this.handleChangeNoteStr} maxLength={500} />
                                 <div className="sendbtn-wrap">
                                     <Button text="取消" btnColor="red-btn" btnSize="stop-btn" onClick={this.handleCloseSendBox} />
                                     <Button text="确认发货" btnSize="stop-btn" onClick={this.handleSendGoods} />
@@ -296,9 +292,11 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
         await this.props.orderproject.exportFile(this.props.project.projId);
         window.open(this.props.orderproject.exportLink)
     }
+    // 获取列表
     private handleGetListData = () => {
-        this.props.orderproject.getOrderProjectList(this.state.orderMenu,this.state.buyName,this.state.orderStr,this.state.sendType);
+        this.props.orderproject.getOrderProjectList(this.props.orderproject.orderMenu,this.props.orderproject.buyName,this.props.orderproject.orderStr,this.props.orderproject.sendType);
     }
+    // 搜索列表
     private handleSearchList = ()=>{
         this.props.orderproject.orderProjPage = 1;
         this.handleGetListData();
@@ -306,22 +304,18 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
     // 切换选项
     private mapUnderline = (num: number) =>
     {
-        this.setState({
-            orderMenu: num,
-            orderType: "0",
-            recipientsName:'',
-            buyName:'',
-            orderStr:'',
-            sendType:0
-        })
+        this.props.orderproject.orderMenu = num;
+        this.props.orderproject.orderType = '0';
+        this.props.orderproject.buyName = '';
+        this.props.orderproject.orderStr = '';
+        this.props.orderproject.sendType= 0;
+        this.handleGetListData();
     }
     // 选择
     private handleChoiceOrderType = (item) =>
     {
-        this.setState({
-            orderType: item.id,
-            sendType:item.id==='0'?0:1
-        })
+        this.props.orderproject.orderType = item.id;
+        this.props.orderproject.sendType= item.id==='0'?0:1;
     }
     // 获取单个订单详情
     private handleOpenOrderInfo = (item:IOrderProjectList) =>
@@ -331,11 +325,18 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
         this.props.orderproject.getOrderProjectDetail(item.projId, item.orderId);
         this.props.order.getRewardInfo(item.rewardId);
     }
+    private handleChangeNoteStr = (ev: React.ChangeEvent<HTMLTextAreaElement>)=>{
+        this.setState({
+            noteStr:ev.target.value
+        })
+    }
     // 打开发货弹窗
-    private handleOpenSendBox = () =>
+    private handleOpenSendBox = (orderId:string,note?:string) =>
     {
         this.setState({
-            isShowSendBox: true
+            isShowSendBox: true,
+            orderItemOrderId:orderId,
+            noteStr:note?note:''
         })
     }
     // 关闭发货弹窗
@@ -346,9 +347,22 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
         })
     }
     // 发货
-    private handleSendGoods = ()=>{
-        // this.props.
-        this.handleCloseSendBox();
+    private handleSendGoods = async ()=>{
+        const projectId = this.props.match.params.projectId;
+        if(!projectId||!this.state.orderItemOrderId||!this.state.noteStr){
+            return false
+        }
+        // console.log(this.state.orderItemOrderId)
+        await this.props.orderproject.sendGoods(projectId,this.state.orderItemOrderId,this.state.noteStr);     
+        this.handleCloseSendBox();     
+        if(this.props.orderproject.isShowOprojInfo){
+            console.log(this.state.orderItemOrderId)
+            this.props.orderproject.getOrderProjectDetail(projectId, this.state.orderItemOrderId);
+        }else{
+            this.handleGetListData();
+        }   
+           
+        return true
     }
     // 翻页
     private handleChangeOrderProjectPage=(index:number)=>{
@@ -357,20 +371,18 @@ class OrderProject extends React.Component<IOrderProjectProps, IState> {
         this.handleGetListData();
     }
     // 收件人名称输入
-    private handleChangeRecipients = (ev: React.ChangeEvent<HTMLInputElement>)=>{
-        this.setState({
-            recipientsName: ev.target.value
-        })
-    }
+    // private handleChangeRecipients = (ev: React.ChangeEvent<HTMLInputElement>)=>{
+    //     this.setState({
+    //         recipientsName: ev.target.value
+    //     })
+    // }
+    // 买家名称输入
     private handleChangeBuyName = (ev: React.ChangeEvent<HTMLInputElement>)=>{
-        this.setState({
-            buyName: ev.target.value
-        })
+        this.props.orderproject.buyName = ev.target.value;
     }
+    // 订单编号输入
     private handleChangeOrderStr = (ev: React.ChangeEvent<HTMLInputElement>)=>{
-        this.setState({
-            orderStr: ev.target.value
-        })
+        this.props.orderproject.orderStr = ev.target.value
     }
 }
 

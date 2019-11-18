@@ -16,7 +16,7 @@ export interface IOrderStore {
     getRewardInfo:(rewardId:string)=>Promise<boolean>,
     createOrder:(buyCount:string,getCount:string,name:string,tel:string,addr:string,email:string,msg:string)=>Promise<boolean>,
     confirmBuyOrder:(txid:string)=>Promise<boolean>,
-    cancelBuyOrder:()=>Promise<boolean>,
+    cancelBuyOrder:(orderId:string)=>Promise<boolean>,
     getBuyOrder:(projId:string,orderId:string)=>Promise<boolean>,
     getTradeHash:(projId:string)=>Promise<boolean>
   }

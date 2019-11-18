@@ -11,7 +11,10 @@ import { IMyOrderProps, IOrderList } from './interface/myorder.interface';
 import { OrderCode } from '@/store/interface/common.interface';
 import { Pagination } from 'antd';
 import * as formatTime from 'utils/formatTime';
+import * as Cookie from '@/utils/cookie';
 import EventHandler from 'utils/event';
+import { toMyNumber } from '../../utils/numberTool';
+
 interface IState
 {
     orderMenu: number,
@@ -19,17 +22,23 @@ interface IState
     isShowSendBox: boolean,
     timeCount: string,  // 计时
     searchTxidFlag: boolean,
+    minBuyCount: string, // 至少可获得
+    oItemProjId:string,// 详情的项目ID
+    oItemOrderId:string,// 详情的订单ID
 }
-@inject('common', 'myorder', 'order', 'transation')
+@inject('common', 'myorder', 'order', 'transation','metamaskwallet','teemowallet')
 @observer
 class MyOrder extends React.Component<IMyOrderProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
+    public state:IState = {
         orderMenu: 1,
         orderType: '1',
         isShowSendBox: false,
         timeCount: '',
-        searchTxidFlag: false
+        searchTxidFlag: false,
+        minBuyCount:'0',
+        oItemProjId:'',
+        oItemOrderId:''
     };
     public componentDidMount()
     {
@@ -45,6 +54,11 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
         this.props.myorder.timeSet = null;
         this.props.myorder.orderList = [];
         this.props.order.rewardDetail = null;
+        if (this.props.myorder.timeSet)
+        {
+            clearInterval(this.props.myorder.timeSet);
+            this.props.myorder.timeSet = null;
+        }
     }
     public render()
     {
@@ -137,7 +151,7 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
                                         <span className="orderinfo-span">请在{this.state.timeCount}内付款，否则订单将自动取消</span>
                                         <div className="check-wrapper-btn">
                                             <Button text="取消订单" btnColor="red-btn" onClick={this.handleToCancelOrder} />
-                                            <Button text="立即付款" />
+                                            <Button text="立即付款" onClick={this.handlePayMoney} />
                                         </div>
                                     </div>
                                 )
@@ -289,28 +303,53 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
     // 取消订单
     private handleToCancelOrder = () =>
     {
-        this.props.order.cancelBuyOrder();
+        const res = this.props.order.cancelBuyOrder(this.state.oItemOrderId);
+        if(res){
+            if (this.props.myorder.timeSet)
+            {
+                clearInterval(this.props.myorder.timeSet);
+                this.props.myorder.timeSet = null;
+            }
+            this.props.myorder.getMyOrderDetail(this.state.oItemProjId, this.state.oItemOrderId);  
+            this.props.myorder.getMyOrderList();
+        }        
+    }
+
+    // 重新检测
+    
+
+
+    // 获取单个订单详情
+    private handleOpenOrderInfo = (item: IOrderList) =>
+    {
+        this.handleInitInfoData();
+        this.props.myorder.getMyOrderDetail(item.projId, item.orderId);
+        this.setState({
+            oItemProjId:item.projId,
+            oItemOrderId:item.orderId
+        })
+        if (item.orderState === OrderCode.WaitingPay)
+        {
+            this.mathTime(item.time);
+            this.handleComputePriceDiff(item.totalCost);
+            this.props.order.getTradeHash(item.projId);
+        }
+        this.props.order.getRewardInfo(item.rewardId);
+    }
+    // 切换详情页时，初始化数据
+    private handleInitInfoData = ()=>{
+        this.props.myorder.orderDetail = null;
+        this.props.myorder.isShowInfo = true;
         if (this.props.myorder.timeSet)
         {
             clearInterval(this.props.myorder.timeSet);
             this.props.myorder.timeSet = null;
         }
-    }
-
-    // 重新检测
-    // 立即付款
-
-    // 获取单个订单详情
-    private handleOpenOrderInfo = (item: IOrderList) =>
-    {
-        this.props.myorder.orderDetail = null;
-        this.props.myorder.isShowInfo = true;
-        this.props.myorder.getMyOrderDetail(item.projId, item.orderId);
-        if (item.orderState === OrderCode.WaitingPay)
-        {
-            this.mathTime(item.time)
-        }
-        this.props.order.getRewardInfo(item.rewardId);
+        this.setState({
+            minBuyCount: '0',
+            oItemProjId:'',
+            oItemOrderId:''
+        })
     }
     // 交易列表的分页
     private handleChangeMyOrderPage = (index: number) =>
@@ -365,8 +404,88 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
 
         }, 1000)
     }
+    // 立即付款，检验是否连接了钱包，并付款
+    private handlePayMoney = async () =>
+    {
+        const user = Cookie.getCookie("user");
+        if (user)
+        {
+            if (this.props.common.isVerifyEmail)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.verifyerr);
+                return false;
+            }
+            // 检测是否连接钱包
+            if (this.props.myorder.orderDetail && (this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase() === 'eth'|| this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase()==='dai'))
+            {
+                // 获取MetaMask钱包上登陆的地址
+                await this.props.metamaskwallet.inintWeb3();
+                await this.props.metamaskwallet.checkIsCurrendBindAddress();
 
-
+                if (this.props.metamaskwallet.metamaskAddress)
+                {
+                    console.log(this.props.myorder.orderDetail)
+                    if(!this.props.myorder.orderDetail)
+                    {
+                        return false
+                    }
+                    // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
+                    try
+                    {
+                        const intOrderId = parseInt(this.props.myorder.orderDetail.orderId,10);
+                        const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.myorder.orderDetail.totalCost,intOrderId,this.props.order.hash)     
+                        console.log(txid);
+                        if(!!txid){
+                            this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
+                            this.props.order.confirmBuyOrder(txid);
+                            if(this.props.order.timeTen){
+                                clearInterval(this.props.order.timeTen);
+                                this.props.order.timeTen = null;
+                            }
+                            this.props.myorder.getMyOrderDetail(this.state.oItemProjId, this.state.oItemOrderId); 
+                            this.props.myorder.getMyOrderList();                          
+                        }else{
+                            this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
+                        }            
+                    } catch (error)
+                    {
+                        console.log("err",error)
+                        this.handleToCancelOrder();                        
+                        this.props.common.openNotificationWithIcon('error', "操作失败", "订单已取消");
+                    }                    
+                }
+                
+            }
+            else if (this.props.myorder.orderDetail && (this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase() === 'neo'|| this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase()==='gas'))
+            {
+                // 获取Teemo钱包上登陆的地址                
+            }
+        }
+        else
+        {
+            // 假如没有登陆
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false
+        }
+        return true;
+    }
+    // 计算价格差,计算至少可获得多少代币
+    private handleComputePriceDiff = (price: string) =>
+    {
+        const num = this.props.transation.computeSpendPriceBuyCount(price);
+        const numInt = parseInt(num, 10)
+        if (numInt=== 0)
+        {
+            this.setState({
+                minBuyCount: '0'
+            })
+        }
+        const count = toMyNumber(num).mul(0.98);
+        const intNum = web3.toBigNumber(count).toString(10);
+        this.setState({
+            minBuyCount: parseInt(intNum, 10).toString()
+        })
+    }
 }
 
 export default injectIntl(MyOrder);

@@ -38,6 +38,7 @@ class Order extends React.Component<IOrderProps, IState> {
         {
             this.props.order.projId = projectId;
             this.props.order.orderId = orderId;
+            await this.props.projectinfo.getProjInfo(projectId);
             this.props.order.getTradeHash(projectId);
             await this.props.order.getBuyOrder(projectId, orderId);
             if (this.props.order.orderInfo && this.props.order.orderInfo.orderState===OrderCode.WaitingConfirm)
@@ -104,11 +105,7 @@ class Order extends React.Component<IOrderProps, IState> {
                             <div className="order-cancel-content">
                                 <h1 className="ocancel-title">订单已取消</h1>
                                 <div className="step-btn">
-                                    <Button
-                                        text="关闭本页"
-                                        btnSize="md-bg-btn"
-                                        onClick={this.handleToCloseOrder}
-                                    />
+                                    <a href="javascript:window.opener=null;window.close();" className="close-link">关闭本页</a>                                    
                                 </div>
                             </div>
                         </div>
@@ -122,12 +119,7 @@ class Order extends React.Component<IOrderProps, IState> {
                                 <p className="ocheck-p">等待链上确认付款结果</p>
                                 <p className="ocheck-p">您可以在“我的订单”中查看进度</p>
                                 <div className="step-btn">
-                                    <Button
-                                        text="关闭本页"
-                                        btnSize="md-bg-btn"
-                                        btnColor="white-purple"
-                                        onClick={this.handleToCancelOrder}
-                                    />
+                                    <a href="javascript:window.opener=null;window.close();" className="close-link white-purple">关闭本页</a>                                     
                                     <Button
                                         text="我的订单"
                                         btnSize="md-bg-btn"
@@ -141,10 +133,10 @@ class Order extends React.Component<IOrderProps, IState> {
             </>
         );
     }
-    // 检验是否连接了钱包
+    // 检验是否连接了钱包，并付款
     private handleCheckLinkWallet = async () =>
     {
-        const user = Cookie.getCookie("user")
+        const user = Cookie.getCookie("user");
         if (user)
         {
             if (this.props.common.isVerifyEmail)
@@ -166,24 +158,28 @@ class Order extends React.Component<IOrderProps, IState> {
                         return false
                     }
                     // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
-                    // try
-                    // {
-                    //     const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,this.props.order.orderInfo.orderId)     
-                    //     console.log(txid);
-                    //     if(!!txid){
-                    //         this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
-                    //         this.props.order.orderMenu=3;
-                    //         this.props.order.confirmBuyOrder(txid);
-                    //     }else{
-                    //         this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
-                    //     }            
-                    // } catch (error)
-                    // {
-                    //     console.log("err",error)
-                    //     this.handleToCancelOrder();
-                    //     this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
-                    // }
-                    
+                    try
+                    {
+                        const intOrderId = parseInt(this.props.order.orderInfo.orderId,10);
+                        const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,intOrderId,this.props.order.hash)     
+                        console.log(txid);
+                        if(!!txid){
+                            this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
+                            this.props.order.orderMenu=3;
+                            this.props.order.confirmBuyOrder(txid);
+                            if(this.props.order.timeTen){
+                                clearInterval(this.props.order.timeTen);
+                                this.props.order.timeTen = null;
+                            }  
+                        }else{
+                            this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
+                        }            
+                    } catch (error)
+                    {
+                        console.log("err",error)
+                        this.handleToCancelOrder();
+                        this.props.common.openNotificationWithIcon('error', "操作失败", "订单已取消");
+                    }                    
                 }
                 
             }
@@ -254,18 +250,22 @@ class Order extends React.Component<IOrderProps, IState> {
     // 取消订单
     private handleToCancelOrder = () =>
     {
-        this.props.order.cancelBuyOrder();
-        if(this.props.order.timeTen){
-            clearInterval(this.props.order.timeTen);
-            this.props.order.timeTen = null;
+        const res = this.props.order.cancelBuyOrder(this.props.order.orderId);
+        if(res){
+            if(this.props.order.timeTen){
+                clearInterval(this.props.order.timeTen);
+                this.props.order.timeTen = null;
+            }
+            this.props.order.orderMenu = 2;
         }
-        this.props.order.orderMenu = 2;
+        
     }
     // 关闭订单页
-    private handleToCloseOrder = () => {
-        window.close();
-    }
-    // 计算价格差
+    // private handleToCloseOrder = () => {
+    //     console.log(1)
+    //     window.close();
+    // }
+    // 计算价格差,计算至少可获得多少代币
     private handleComputePriceDiff = (price: string) =>
     {
         const num = this.props.transation.computeSpendPriceBuyCount(price);

@@ -6,6 +6,7 @@ import { IProjectStore } from "./project.interface";
 import { IOrderStore } from "@/containers/order/interface/order.interface";
 export interface IOrderProjectStore
 {
+  orderMenu:number,
   isShowOprojInfo:boolean,
   orderProjCount: number,
   orderProjList:IOrderProjectList[],
@@ -13,9 +14,14 @@ export interface IOrderProjectStore
   orderProjPageSize:number,  
   orderProjDetail:IOrderProjectDetail|null,
   exportLink:string,
+  buyName:string,
+  orderStr:string,
+  sendType:number,
+  orderType:string,
   getOrderProjectList:(sendFlag:number,buyName:string,orderStr:string,sendType:number)=>Promise<boolean>,
   getOrderProjectDetail:(projId:string,orderId:string)=>Promise<boolean>,
-  exportFile:(projId:string)=>Promise<boolean>
+  exportFile:(projId:string)=>Promise<boolean>,
+  sendGoods:(projId: string,orderId:string,note:string)=>Promise<boolean>,
 }
 
 export interface IOrderProjectProps  extends RouteComponentProps<{ projectId: string }>

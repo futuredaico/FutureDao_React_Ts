@@ -4,6 +4,8 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IOrderStore } from "@/containers/order/interface/order.interface";
 import { IProjectTransationStore } from "@/containers/projectinfo/interface/transation.interface";
+import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
+import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 export interface IMyOrderStore
 {
   isShowInfo:boolean,
@@ -23,6 +25,8 @@ export interface IMyOrderProps  extends RouteComponentProps
   common:ICommonStore,
   order:IOrderStore,
   transation:IProjectTransationStore,
+  teemowallet:ITeemoWalletStore,
+  metamaskwallet:IMetaMastWalletStore,
   intl: any
 }
 export interface IOrderList {

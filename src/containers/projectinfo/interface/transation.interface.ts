@@ -18,7 +18,7 @@ export interface IProjectTransationStore
   getHistoryData:(type:string)=>Promise<boolean>, // 获取历史价格的数据
   getTxListData:(addr:string)=>Promise<boolean>,  // 获取交易记录
   getTokenBalance:(addr:string)=>Promise<boolean>, // 获取奖金池的数据  
-  buy:(addr:string,count: string,amount:string,orderId:number)=>Promise<boolean>,
+  buy:(addr:string,count: string,amount:string,orderId:number,hash?:string)=>Promise<string>,
   sell:(addr:string,count:string,minamount:string)=>Promise<boolean>,
   computeBuyCountSpendPrice:(count:string)=>string,
   computeSpendPriceBuyCount:(amount:string)=>string,
