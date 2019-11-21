@@ -123,7 +123,7 @@ class Order extends React.Component<IOrderProps, IState> {
                                     <Button
                                         text="我的订单"
                                         btnSize="md-bg-btn"
-                                        onClick={this.handleToCancelOrder}
+                                        onClick={this.handleToGoMyOrder}
                                     />
                                 </div>
                             </div>
@@ -282,6 +282,8 @@ class Order extends React.Component<IOrderProps, IState> {
             minBuyCount: parseInt(intNum, 10).toString()
         })
     }
-
+    private handleToGoMyOrder = ()=>{
+        this.props.history.push('/personalcenter/myorder');
+    }
 }
 export default injectIntl(Order)
