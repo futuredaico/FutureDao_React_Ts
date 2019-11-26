@@ -6,7 +6,8 @@
       "node_modules/**/*.ts",
       "coverage/lcov-report/*.js",
       "src/utils/o3.js",
-      "src/utils/neotools.ts"
+      "src/utils/neotools.ts",
+      "package.json"
     ]
   },
   "rules": {

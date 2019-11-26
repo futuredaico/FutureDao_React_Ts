@@ -27,6 +27,7 @@
     "html-webpack-plugin": "2.29.0",
     "intl": "^1.2.5",
     "jest": "22.4.2",
+    "json-loader": "^0.5.7",
     "mobx": "^5.1.1",
     "mobx-react": "^5.2.8",
     "mobx-react-router": "^4.0.5",
@@ -152,7 +153,6 @@
       "pathRewrite": {}
     }
   },
-  
   "maintheme": {
     "black": "#000",
     "t-fff": "#fff",
