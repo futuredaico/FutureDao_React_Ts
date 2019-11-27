@@ -35,7 +35,6 @@ class Common implements ICommonStore {
   }
   // 设置语言
   @action public setLanguage = (msg: string) => {
-    this.openNotificationWithIcon('success', 'Operation successful', 'Email sent, please check it.', 'text', () => { alert(1) });
     if (msg === 'zh') {
       this.message = zh_CN;
       this.language = 'zh'
