@@ -42,7 +42,7 @@ export default class Header extends React.Component<IProps, IState>{
               {
                 (!this.props.common.userInfo) && (
                   <li>
-                    <span className="point-login" onClick={this.handleToLogin}>{this.props.locale.login} | </span>  <span className="point-login" onClick={this.handleToSignin}>{this.props.locale.sign}</span>
+                    <span className="point-login" onClick={this.handleToLogin}>{this.props.locale.login} </span> 
                   </li>
                 )
               }
@@ -51,8 +51,6 @@ export default class Header extends React.Component<IProps, IState>{
                   <li>
                     <div className="people-login">
                       <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                      {/* {
-                        this.state.showManger && ( */}
                       <div className="people-manager">
                         <div className="people-trangle">
                           <div className="trangle" />
@@ -65,8 +63,6 @@ export default class Header extends React.Component<IProps, IState>{
                           </ul>
                         </div>
                       </div>
-                      {/* )
-                      } */}
                     </div>
                   </li>
                 )
@@ -84,11 +80,7 @@ export default class Header extends React.Component<IProps, IState>{
     {
       // 未登录
       this.handleToLogin();
-    } else if (this.props.common.isVerifyEmail)
-    {
-      // 邮箱未验证
-      this.props.common.openNotificationWithIcon('error', this.props.notify.error, this.props.notify.verifyerr);
-    }
+    } 
     else
     {
       // 正常访问
@@ -99,19 +91,9 @@ export default class Header extends React.Component<IProps, IState>{
   // 登录
   private handleToLogin = () =>
   {
-    this.props.history.push('/load/login');
-  }
-  // 注册
-  private handleToSignin = () =>
-  {
-    this.props.history.push('/load/signin');
-  }
-
-  // private handleToShow = () => {
-  //   this.setState({
-  //     showManger: !this.state.showManger
-  //   })
-  // }
+    // this.props.history.push('/load/login');
+    this.props.common.loginFutureDao();
+  }  
 
   // 进入个人中心
   private handleToPersonal = () =>

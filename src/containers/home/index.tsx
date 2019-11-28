@@ -5,11 +5,12 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import Card from '@/components/card';
+// import Card from '@/components/card';
 // import Slider from '@/components/slider';
 import { Pagination } from 'antd';
 import { IHomeProps, IProjList } from './interface/home.interface';
-import { ProjType } from '@/store/interface/common.interface';
+import { ProjectState } from '@/store/interface/common.interface';
+// import { ProjType } from '@/store/interface/common.interface';
 
 @inject('home')
 @observer
@@ -61,26 +62,39 @@ class Home extends React.Component<IHomeProps, any> {
                         </div>
                         <div className="home-des">
                           <div className="sbox-title">{item.projTitle}</div>
-                          <div className="sbox-card">
+                          <div className="sbox-des">
+                            组织简介A community DAO focused on funding Ethereum border-bottom: 1px solid @bg-e5;border-bottom: 1px solid @bg-e5;development, in the name of Moloch the God of Coordina...
+                          </div>                          
+                          {
+                            item.projState === ProjectState.IdeaPub && (
+                              <div className="sbox-line">
+                                <div className="sbox-line-left"><strong>{this.intrl.home.display}</strong></div>
+                                <div className="sbox-line-right">{item.supportCount} 人看好</div>
+                              </div>
+                            )
+                          }
+                          {
+                            item.projState === ProjectState.Trading && (
+                              <div className="sbox-line">
+                                <div className="sbox-line-left">321股</div>
+                                <div className="sbox-line-right">123成员</div>
+                              </div>
+                            )
+                          }
+                         
+                          {/* <div className="sbox-card">
                             <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
                           </div>
-                          <div className="sbox-showtype">
-                            <div className="showtype-text"><strong>{this.intrl.home.display}</strong></div>
-                            <div className="kanhao-count">{item.supportCount}{this.intrl.home.supporttips}</div>
-                          </div>
-                          {/* <div className="sbox-line">
-                              <div className="sbox-line-left">已售出 3427股</div>
-                              <div className="sbox-line-right">1120 人参与</div>                              
-                            </div> */}
+                          */}                         
                           {/* <div className="sbox-line">
                               <div className="sbox-line-left">5天后开启众筹</div>                             
                             </div> */}
-                          <div className="sbox-doing">
+                          {/* <div className="sbox-doing"> */}
                             {/* <div className="sbox-toptext">300 ETH</div> */}
                             {/* toThousands(parseFloat(parseFloat(item.storePrice).toFixed(4)).toString()) */}
                             {/* <Slider rate={300} /> */}
                             {/* <div className="sbox-topright">{item.supportCount} 支持者</div> */}
-                          </div>
+                          {/* </div> */}
                         </div>
                       </div>
                     </li>
@@ -109,40 +123,40 @@ class Home extends React.Component<IHomeProps, any> {
     // todo
   }
   // 区分项目类别
-  private handleDiffType = (type: string) =>
-  {
-    //
-    if (type === ProjType.GAME)
-    {
-      return this.intrl.card.game
-    } else if (type === ProjType.COMIC)
-    {
-      return this.intrl.card.animation
-    } else if (type === ProjType.MOVIE)
-    {
-      return this.intrl.card.movies
-    } else
-    {
-      return this.intrl.card.other
-    }
-  }
-  private handleDiffColor = (type: string) =>
-  {
-    //
-    if (type === ProjType.GAME)
-    {
-      return 'c-green'
-    } else if (type === ProjType.COMIC)
-    {
-      return 'c-red'
-    } else if (type === ProjType.MOVIE)
-    {
-      return 'c-gray'
-    } else
-    {
-      return 'c-purple'
-    }
-  }
+  // private handleDiffType = (type: string) =>
+  // {
+  //   //
+  //   if (type === ProjType.GAME)
+  //   {
+  //     return this.intrl.card.game
+  //   } else if (type === ProjType.COMIC)
+  //   {
+  //     return this.intrl.card.animation
+  //   } else if (type === ProjType.MOVIE)
+  //   {
+  //     return this.intrl.card.movies
+  //   } else
+  //   {
+  //     return this.intrl.card.other
+  //   }
+  // }
+  // private handleDiffColor = (type: string) =>
+  // {
+  //   //
+  //   if (type === ProjType.GAME)
+  //   {
+  //     return 'c-green'
+  //   } else if (type === ProjType.COMIC)
+  //   {
+  //     return 'c-red'
+  //   } else if (type === ProjType.MOVIE)
+  //   {
+  //     return 'c-gray'
+  //   } else
+  //   {
+  //     return 'c-purple'
+  //   }
+  // }
 }
 
 export default injectIntl(Home);

@@ -117,7 +117,7 @@ export default {
     checkpwd:"确认密码",
   },
   myproject:{
-    project:"我的项目",
+    project:"我的DAO",
     follow:"关注中",
     manager:"管理中",
     ethereum:"以太坊",

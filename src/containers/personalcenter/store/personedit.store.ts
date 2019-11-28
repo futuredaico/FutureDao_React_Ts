@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/person.api';
-import {checkEmail} from '../../login/api/login.api';
 import { CodeType } from '@/store/interface/common.interface';
 import common from '@/store/common';
 class PersonEdit
@@ -55,7 +54,7 @@ class PersonEdit
         {
             if (common.userInfo)
             {
-                common.userInfo.brief = str;
+                // common.userInfo.brief = str;
             }
             else
             {
@@ -115,21 +114,40 @@ class PersonEdit
     /**
      * 检测邮箱
      */
-    @action public checkEmail = async (email: string) =>
+    // @action public checkEmail = async (email: string) =>
+    // {
+    //     let result: any = [];
+    //     try
+    //     {
+    //         result = await checkEmail(email);
+    //     } catch (e)
+    //     {
+    //         this.newEmailCode = '';
+    //         return false;
+    //     }
+    //     if (result[0].resultCode !== CodeType.success)
+    //     {
+    //         this.newEmailCode = result[0].resultCode;
+    //         return false           
+    //     }
+    //     return true;
+    // }
+    @action public bindWalletAddress = async (type:string,address:string) =>
     {
         let result: any = [];
         try
         {
-            result = await checkEmail(email);
+            result = await Api.bindAddress(common.userId, common.token, type,address);
         } catch (e)
         {
-            this.newEmailCode = '';
             return false;
         }
-        if (result[0].resultCode !== CodeType.success)
+        if (result[0].resultCode === CodeType.success)
         {
-            this.newEmailCode = result[0].resultCode;
-            return false           
+            common.getUserInfo();
+        } else
+        {
+            return false
         }
         return true;
     }

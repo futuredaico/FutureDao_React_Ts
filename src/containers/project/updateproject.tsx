@@ -32,20 +32,23 @@ class UpdateProject extends React.Component<IUpdateProjectProps, IState> {
   };
 
   public async componentDidMount()
-  {
+  { 
     const projectId = this.props.match.params.projectId;
     this.props.project.projId = projectId;
-    if (this.state.updateId)
+    if (projectId)
     {
-      this.props.createproject.getProject(projectId);
-      await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
-      if (this.props.updateproject.updateInfo)
+      // this.props.createproject.getProject(projectId);
+      if (this.state.updateId)
       {
-        this.setState({
-          updateTitle: this.props.updateproject.updateInfo.updateTitle,
-          detailString: BraftEditor.createEditorState(this.props.updateproject.updateInfo.updateDetail),
-          detailStr: this.props.updateproject.updateInfo.updateDetail
-        })
+        await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
+        if (this.props.updateproject.updateInfo)
+        {  
+          this.setState({
+            updateTitle: this.props.updateproject.updateInfo.updateTitle,
+            detailString: BraftEditor.createEditorState(this.props.updateproject.updateInfo.updateDetail),
+            detailStr: this.props.updateproject.updateInfo.updateDetail
+          })
+        }
       }
     }
   }

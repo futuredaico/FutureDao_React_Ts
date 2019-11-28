@@ -22,11 +22,11 @@
     "skipLibCheck": true,
     "paths": {
       // 设着alias别名，相似webpack，相对上面设置的基础路径      
-      "@/*":["./src/*"],
-      "config":["./src/config"],
-      "utils/*":["./src/utils/*"],
-    } ,
-    "types": [ "node" ]
+      "@/*": ["./src/*"],
+      "config": ["./src/config"],
+      "utils/*": ["./src/utils/*"],
+    },
+    "types": ["node"]
   },
   "exclude": [
     "node_modules",
@@ -36,6 +36,7 @@
     "webpack",
     "jest",
     "public",
-    "src/setupTests.ts"
+    "src/setupTests.ts",
+    "package.json"
   ]
 }

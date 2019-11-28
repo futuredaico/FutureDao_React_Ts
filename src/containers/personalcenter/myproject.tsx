@@ -5,11 +5,11 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import Card from '@/components/card';
+// import Card from '@/components/card';
 import { Pagination } from 'antd';
 import { IMyProjectProps, IProjAttentionList, IProjManagerList } from './interface/myproject.interface';
-import { ProjType, ProjectState, ProjSubState } from '@/store/interface/common.interface';
-import * as formatTime from 'utils/formatTime';
+import { ProjectState } from '@/store/interface/common.interface';
+// import * as formatTime from 'utils/formatTime';
 interface IState
 {
     projectMenuNum: number
@@ -22,10 +22,14 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
     public myprojectMenu = [
         {
             id: 1,
-            name: this.intrl.myproject.follow
+            name: '支持中'
         },
         {
             id: 2,
+            name: this.intrl.myproject.follow
+        },
+        {
+            id: 3,
             name: this.intrl.myproject.manager
         }
     ]
@@ -67,18 +71,37 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                             <img src={item.projConverUrl} alt="" className="attention-img" />
                                             <div className="attention-content">
                                                 <strong className="attention-title">{item.projTitle}</strong>
-                                                <div className="project-card">
-                                                    {/* <Card text="以太坊" colortype="c-qpurple" /> */}
+                                                <div className="attention-des">
+                                                    组织简介A community DAO focused on funding Ethereum border-bottom: 1px solid @bg-e5;border-bottom: 1px solid @bg-e5;development, in the name of Moloch the God of Coordina...
+                                                </div>                          
+                                                {
+                                                    item.projState === ProjectState.IdeaPub && (
+                                                    <div className="under-line">
+                                                        <div className="under-line-left"><strong>{this.intrl.home.display}</strong></div>
+                                                        <div className="under-line-right">{item.supportCount} 人看好</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {
+                                                    item.projState === ProjectState.Trading && (
+                                                    <div className="under-line">
+                                                        <div className="under-line-left">321 股</div>
+                                                        <div className="under-line-right">123 成员</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {/* <div className="project-card">
+                                                    <Card text="以太坊" colortype="c-qpurple" />
                                                     <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
-                                                </div>
-                                                <div className="project-status">
+                                                </div> */}
+                                                {/* <div className="project-status">
                                                     {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
                                                     {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
-                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
-                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
                                                     <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     )
@@ -97,6 +120,64 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                 }
                 {
                     this.state.projectMenuNum === 2 && (
+                        <div className="attention-list">
+                            {
+                                this.props.myproject.attentionCount > 0 && this.props.myproject.attentionList.map((item: IProjAttentionList, index: number) =>
+                                {
+                                    return (
+                                        <div className="attention-line" key={index} onClick={this.handleToProjectInfo.bind(this, item.projId)}>
+                                            <img src={item.projConverUrl} alt="" className="attention-img" />
+                                            <div className="attention-content">
+                                                <strong className="attention-title">{item.projTitle}</strong>
+                                                <div className="attention-des">
+                                                    组织简介A community DAO focused on funding Ethereum border-bottom: 1px solid @bg-e5;border-bottom: 1px solid @bg-e5;development, in the name of Moloch the God of Coordina...
+                                                </div>                          
+                                                {
+                                                    item.projState === ProjectState.IdeaPub && (
+                                                    <div className="under-line">
+                                                        <div className="under-line-left"><strong>{this.intrl.home.display}</strong></div>
+                                                        <div className="under-line-right">{item.supportCount} 人看好</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {
+                                                    item.projState === ProjectState.Trading && (
+                                                    <div className="under-line">
+                                                        <div className="under-line-left">321 股</div>
+                                                        <div className="under-line-right">123 成员</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {/* <div className="project-card">
+                                                    <Card text="以太坊" colortype="c-qpurple" />
+                                                    <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
+                                                </div> */}
+                                                {/* <div className="project-status">
+                                                    {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
+                                                    {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.Trading && <strong>交易中</strong>}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
+                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
+                                                </div> */}
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                            {
+                                this.props.myproject.attentionCount > 6 && (
+                                    <div className="list-page-warpper">
+                                        <Pagination showQuickJumper={true} defaultPageSize={this.props.myproject.attentionPageSize} defaultCurrent={1} total={this.props.myproject.attentionCount} onChange={this.handleChangeAttentionPage} />
+                                    </div>
+                                )
+                            }
+
+                        </div>
+                    )
+                }
+                {
+                    this.state.projectMenuNum === 3 && (
                         <div className="manager-list">
                             {
                                 this.props.myproject.manageCount > 0 && this.props.myproject.manageList.map((item: IProjManagerList, index: number) =>
@@ -106,20 +187,40 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                             <img src={item.projConverUrl} alt="" className="manager-img" />
                                             <div className="manager-right">
                                                 <strong className="project-title">{item.projTitle}</strong>
-                                                <div className="project-card">
-                                                    {/* <Card text="以太坊" colortype="c-qpurple" /> */}
-                                                    <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
+                                                <div className="manager-des">
+                                                    组织简介A community DAO focused on funding Ethereum border-bottom: 1px solid @bg-e5;border-bottom: 1px solid @bg-e5;development, in the name of Moloch the God of Coordina...
+                                                    
                                                 </div>
-                                                <div className="project-status">
+                                                {
+                                                    item.projState === ProjectState.IdeaPub && (
+                                                    <div className="munder-line">
+                                                        <div className="munder-line-left"><strong>{this.intrl.home.display}</strong></div>
+                                                        <div className="munder-line-right">{item.supportCount} 人看好</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {
+                                                    item.projState === ProjectState.Trading && (
+                                                    <div className="munder-line">
+                                                        <div className="munder-line-left">321 股</div>
+                                                        <div className="munder-line-right">123 成员</div>
+                                                    </div>
+                                                    )
+                                                }
+                                                {/* <div className="project-card">
+                                                    <Card text="以太坊" colortype="c-qpurple" />
+                                                    <Card text={this.handleDiffType(item.projType)} colortype="c-green" />
+                                                </div> */}
+                                                {/* <div className="project-status">
                                                     {item.projState === ProjectState.Readying && <strong>{this.intrl.myproject.prepare}</strong>}
                                                     {item.projState === ProjectState.IdeaPub && <strong>{this.intrl.myproject.display}</strong>}
-                                                    {/* {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
+                                                    {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
-                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>} */}
+                                                    {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
                                                     {item.projSubState === ProjSubState.Auditing && <strong className="green-text">{this.intrl.myproject.review}</strong>}
-                                                    {/* {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>} */}
+                                                    {item.projSubState === ProjSubState.Preheating && <strong className="purple-text">众筹预热</strong>}
                                                     {item.projSubState === ProjSubState.AuditFailed && <strong className="red-text">{this.intrl.myproject.failed}</strong>}
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     )
@@ -147,22 +248,24 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
         })
         this.props.myproject.attentionPage = 1;
         this.props.myproject.managerPage = 1;
-        if (item.id === 1)
+        if (item.id === 2)
         {
             this.props.myproject.getAttentionData();
-        } else
+        } else if(item.id === 3)
         {
             this.props.myproject.getManagerData();
         }
     }
     private handleCountNumber = (id: number) =>
     {
-        if (id === 1)
+        if (id === 2)
         {
             return this.props.myproject.attentionCount
-        } else
+        } else if(id === 3)
         {
             return this.props.myproject.manageCount
+        }else{
+            return ''
         }
     }
     // 管理项目的分页
@@ -178,24 +281,24 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
         this.props.myproject.getAttentionData();
     }
     // 区分项目类别
-    private handleDiffType = (type: string) =>
-    {
-        //
-        if (type === ProjType.GAME)
-        {
-            return this.intrl.card.game
-        } else if (type === ProjType.COMIC)
-        {
-            return this.intrl.card.animation
-        } else if (type === ProjType.MOVIE)
-        {
-            return this.intrl.card.movies
-        } else
-        {
-            return this.intrl.card.other
-        }
-    }
-    // 跳转到项目详情页todo
+    // private handleDiffType = (type: string) =>
+    // {
+    //     //
+    //     if (type === ProjType.GAME)
+    //     {
+    //         return this.intrl.card.game
+    //     } else if (type === ProjType.COMIC)
+    //     {
+    //         return this.intrl.card.animation
+    //     } else if (type === ProjType.MOVIE)
+    //     {
+    //         return this.intrl.card.movies
+    //     } else
+    //     {
+    //         return this.intrl.card.other
+    //     }
+    // }
+    // 跳转到项目详情页
     private handleToProjectInfo = (projId: string) =>
     {
         this.props.history.push('/projectinfo/' + projId);

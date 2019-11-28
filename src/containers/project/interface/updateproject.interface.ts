@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
-import { IProjUpdateInfo } from "@/containers/projectinfo/interface/projectinfo.interface";
+import { IProjUpdateInfo } from "@/containers/projectinfo/futuredao/interface/update.interface";
 import { ICreateProjectStore } from "./createproject.interface";
 import { IProjectStore } from "./project.interface";
 

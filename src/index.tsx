@@ -11,11 +11,26 @@ import { LocaleProvider } from 'antd';
 import storeCommon from '@/store/common';
 import Intl from 'intl';
 import { observer } from 'mobx-react';
-// import common from '@/store/common';
+// import TeemoWallet from '@/store/teemowallet';
+// import MetamaskWallet from '@/store/metamaskwallet';
 
 global.Intl = Intl;
 window['Intl'] = Intl;
-
+// window.addEventListener('Teemo.NEO.READY',()=>{
+//   console.log("检测钱包2")
+//   TeemoWallet.isLoadTeemo = true;
+//   // common.initAccountBalance();
+// });
+// window.addEventListener('load',()=>{
+//   console.log("检测钱包")
+//   MetamaskWallet.isLoadMetaMask = true;
+//   // common.initAccountBalance();
+// });
+// ethereum.on("accountsChanged",accounts=>{
+//   console.log(accounts[0]);
+//   MetamaskWallet.metamaskAddress=accounts[0];
+//   MetamaskWallet.checkIsCurrendBindAddress();
+// })
 const ObserverRender = observer(() => {
   return (
     <App />
