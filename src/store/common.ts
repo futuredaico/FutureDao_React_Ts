@@ -69,19 +69,19 @@ class Common implements ICommonStore {
   @action public loginFutureDao = async () => {
     const res = await metamaskwallet.inintWeb3();
     console.log(res)
-    if(res){
+    if (res) {
       // 获取随机数，进行签名
       let result: any = [];
       try {
         result = await Api.getLoginNonce(metamaskwallet.metamaskAddress);
-      } catch (e) {        
+      } catch (e) {
         return false;
       }
       if (result[0].resultCode === CodeType.success) {
         const data = result[0].data.nonceStr;
         console.log(data);
         console.log(metamaskwallet.metamaskAddress)
-        metamaskwallet.web3.eth.sign(data,metamaskwallet.metamaskAddress).then((value: string)=>{
+        metamaskwallet.web3.eth.sign(data, metamaskwallet.metamaskAddress).then((value: string) => {
           //
           console.log(value)
           this.loginCheck(value)
@@ -92,25 +92,25 @@ class Common implements ICommonStore {
     return true;
   }
   // 验证登陆
-  @action public loginCheck = async (data:string) => {
+  @action public loginCheck = async (data: string) => {
     let result: any = [];
     try {
-      result = await Api.validateLogin(metamaskwallet.metamaskAddress,data);
-    } catch (e) {        
+      result = await Api.validateLogin(metamaskwallet.metamaskAddress, data);
+    } catch (e) {
       return false;
     }
     console.log(result)
     if (result[0].resultCode === CodeType.success) {
-        this.userId = result[0].data.userId;
-        this.token = result[0].data.accessToken;
-        // sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
-        Cookie.setCookie("user", this.userId);
-        Cookie.setCookie("token", this.token);
-        window.location.reload();
-      }
-      else {
-        return false
-      }
+      this.userId = result[0].data.userId;
+      this.token = result[0].data.accessToken;
+      // sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
+      Cookie.setCookie("user", this.userId);
+      Cookie.setCookie("token", this.token);
+      window.location.reload();
+    }
+    else {
+      return false
+    }
     return true
   }
   // 登出
@@ -118,8 +118,8 @@ class Common implements ICommonStore {
     Cookie.removeCookie("user");
     Cookie.removeCookie("token");
     this.clearUserInfo();
-    // window.location.href = "/";
-    window.location.reload();
+    window.location.href = "/";
+    // window.location.reload();
   }
   // 清空用户信息
   @action public clearUserInfo = () => {
@@ -131,7 +131,7 @@ class Common implements ICommonStore {
   @action public getUserInfo = async () => {
     let result: any = [];
     try {
-      result = await Api.getUserInfo(this.userId, this.token,'1');
+      result = await Api.getUserInfo(this.userId, this.token, '1');
     } catch (e) {
       return false;
     }
