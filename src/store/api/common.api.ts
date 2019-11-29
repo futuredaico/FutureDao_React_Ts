@@ -31,10 +31,10 @@ export const uploadVideo = (file: RcFile) => {
  * @param token 令牌
  * @param flag  v3版本标识，0表示非v3版本，1表示v3版本
  */
-export const getUserInfo = (userId: string, token: string,flag:string) => {
+export const getUserInfo = () => {
   const opts = {
-    method: 'getUserInfo',
-    params: [userId,token,flag]
+    method: 'getUserInfoV3',
+    params: []
   }
   return request(opts);
 }
@@ -75,7 +75,7 @@ export const reSendVerify = (userId: string, token: string) => {
  */
 export const getLoginNonce = (address: string) => {
   const opts = {
-    method: 'getLoginNonce',
+    method: 'getLoginNonceV3',
     params: [address]
   }
   return request(opts);
@@ -87,7 +87,7 @@ export const getLoginNonce = (address: string) => {
  */
 export const validateLogin = (address: string, data: string) => {
   const opts = {
-    method: 'validateLogin',
+    method: 'validateLoginV3',
     params: [address,data]
   }
   return request(opts);

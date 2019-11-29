@@ -5,7 +5,7 @@ import { ICommonStore, CodeType, IUserInfo } from './interface/common.interface'
 import { RcFile } from 'antd/lib/upload';
 import * as Api from './api/common.api';
 import { notification } from 'antd';
-import * as Cookie from '@/utils/cookie';
+// import * as Cookie from '@/utils/cookie';
 import notificationBtn from '../components/notificationbtn';
 import metamaskwallet from './metamaskwallet';
 
@@ -101,12 +101,14 @@ class Common implements ICommonStore {
     }
     console.log(result)
     if (result[0].resultCode === CodeType.success) {
-      this.userId = result[0].data.userId;
-      this.token = result[0].data.accessToken;
+      // this.userId = result[0].data.userId;
+      // this.token = result[0].data.accessToken;
+
       // sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
-      Cookie.setCookie("user", this.userId);
-      Cookie.setCookie("token", this.token);
-      window.location.reload();
+      // Cookie.setCookie("user", this.userId);
+      // Cookie.setCookie("token", this.token);
+      this.getLoginStatus();
+      // window.location.reload();
     }
     else {
       return false
@@ -115,8 +117,8 @@ class Common implements ICommonStore {
   }
   // 登出
   @action public logoutFutureDao = () => {
-    Cookie.removeCookie("user");
-    Cookie.removeCookie("token");
+    // Cookie.removeCookie("user");
+    // Cookie.removeCookie("token");
     this.clearUserInfo();
     window.location.href = "/";
     // window.location.reload();
@@ -131,12 +133,18 @@ class Common implements ICommonStore {
   @action public getUserInfo = async () => {
     let result: any = [];
     try {
-      result = await Api.getUserInfo(this.userId, this.token, '1');
+      result = await Api.getUserInfo();
     } catch (e) {
       return false;
     }
     if (result[0].resultCode === CodeType.success) {
-      this.userInfo = result[0].data;
+      if (Object.keys(result[0].data).length === 0) {
+        this.userInfo = null;
+        return false
+      }else{
+        this.userInfo = result[0].data;
+      }
+      
     } else {
       this.userInfo = null;
       return false
@@ -146,14 +154,14 @@ class Common implements ICommonStore {
   // 刷新后获取保持登录状态
   @action public getLoginStatus = () => {
     // const loginStr = sessionStorage.getItem('user');
-    const user = Cookie.getCookie("user");
-    const token = Cookie.getCookie("token");
-    if (user && token) {
-      // const json = JSON.parse(loginStr);
-      this.userId = user;
-      this.token = token;
-      this.getUserInfo();
-    }
+    // const user = Cookie.getCookie("userId");
+    // const token = Cookie.getCookie("accessToken");
+    // if (user && token) {
+    //   // const json = JSON.parse(loginStr);
+    //   this.userId = user;
+    //   this.token = token;      
+    // }
+    this.getUserInfo();
   }
 
   // 右上角提示弹框4.5秒消失
