@@ -8,8 +8,11 @@ import en from 'react-intl/locale-data/en';
 import Layout from './containers/layout/index';
 import routes from './routers';
 import store from "./store";
+
 addLocaleData([...en, ...zh]);
 // 初始化请求
+
+
 
 store['common'].initLanguage();
 store['common'].getLoginStatus();

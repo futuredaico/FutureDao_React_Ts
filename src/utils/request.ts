@@ -30,7 +30,6 @@ const makeRpcPostBody = (method: string, params: any): {} => {
 const defaultConfig = {
   headers: {
     'Content-Type': 'application/json',
-    'withCredentials': true
   }
 }
 export default function request(opts: IOpts): Promise<any> {
@@ -59,6 +58,7 @@ export default function request(opts: IOpts): Promise<any> {
       ...defaultConfig,
     }
   }
+  args.withCredentials = true;
   return new Promise((resolve, reject) => {
     Axios(args)
       .then((data: any) => {
