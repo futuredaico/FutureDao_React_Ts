@@ -40,12 +40,12 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
             <>
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
-                    <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />                    
+                    <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />
                 </div>
                 <div className="message-wrapper" id="message">
                     <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                     {
-                        (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport)||(this.props.common.userInfo && this.props.projectinfo.projInfo.projState!==ProjectState.IdeaPub)
+                        (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport) || (this.props.common.userInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
                             ? (
                                 <div className="textarea-wrapper">
                                     <textarea
@@ -75,12 +75,10 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                     value={this.intrl.projinfo.textarea}
                                 />
                                 {
-                                    this.props.common.userInfo && (
-                                        <div className="people-message">
-                                            <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                            <strong>{this.props.common.userInfo.username}</strong>
-                                        </div>
-                                    )
+                                    <div className="people-message">
+                                        <img src={require('@/img/default.png')} alt="" className="people-img" />
+                                        <strong>神秘人</strong>
+                                    </div>
                                 }
                             </div>
                     }
@@ -237,7 +235,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
-        }        
+        }
         // 验证是否支持了项目
         if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
         {

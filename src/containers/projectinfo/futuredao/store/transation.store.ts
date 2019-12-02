@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import * as Api from '../../api/project.api';
+import * as Api from '../api/project.api';
 import { CodeType } from '@/store/interface/common.interface';
 import projectinfoStore from './projectinfo.store';
 import * as formatTime from '@/utils/formatTime';

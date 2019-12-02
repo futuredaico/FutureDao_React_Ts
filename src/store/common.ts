@@ -116,12 +116,17 @@ class Common implements ICommonStore {
     return true
   }
   // 登出
-  @action public logoutFutureDao = () => {
-    // Cookie.removeCookie("user");
-    // Cookie.removeCookie("token");
+  @action public logoutFutureDao = async() => {
+    let result: any = [];
+    try {
+      result = await Api.loginOut();
+    } catch (e) {
+      return false;
+    }
+    console.log(result)
     this.clearUserInfo();
     window.location.href = "/";
-    // window.location.reload();
+    return true
   }
   // 清空用户信息
   @action public clearUserInfo = () => {

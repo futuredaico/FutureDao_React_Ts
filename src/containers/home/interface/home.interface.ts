@@ -2,10 +2,11 @@ import { RouteComponentProps } from 'react-router-dom';
 import { ICommonStore } from '@/store/interface/common.interface';
 export interface IHomeStore {
     projListCount: number,   
-    projList: IProjList[],
+    projList: IMolochProjList[],
     projListPage:number,
     projListPageSize:number,
-    getProjList:()=>Promise<boolean>
+    // getProjList:()=>Promise<boolean>
+    getMolochProjList:()=>Promise<boolean>
 }
 export interface IHomeProps extends RouteComponentProps {
     intl: any,
@@ -13,14 +14,23 @@ export interface IHomeProps extends RouteComponentProps {
     common:ICommonStore
 }
 
-export interface IProjList {
+// export interface IProjList {
+//     projId:string,
+//     projName:string,
+//     projTitle:string,
+//     projType:string,
+//     projConverUrl:string,
+//     supportCount:number,
+//     lastUpdateTime:number,
+//     projState:string,
+//     projSubState:string,    
+// }
+export interface IMolochProjList {
     projId:string,
     projName:string,
-    projTitle:string,
     projType:string,
-    projConverUrl:string,
-    supportCount:number,
-    lastUpdateTime:number,
-    projState:string,
-    projSubState:string,    
+    projBrief:string,
+    projCoverUrl:string,
+    shares:number,
+    members:number 
 }

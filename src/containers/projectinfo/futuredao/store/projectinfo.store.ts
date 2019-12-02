@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import * as Api from '../../api/project.api';
+import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { saveDecimal,toMyNumber,toNonExponential } from "@/utils/numberTool";

@@ -7,7 +7,11 @@ export default [
   //   path: '/address/:address',
   // },
   {
-    component: asyncComponent(() => import('../containers/proposal')),
+    component: asyncComponent(() => import('../containers/proposal/molochdao')),
+    path: '/molochproposal/:projectId'
+  },
+  {
+    component: asyncComponent(() => import('../containers/proposal/futuredao')),
     path: '/proposal/:projectId'
   },
   {
@@ -71,8 +75,8 @@ export default [
     ]
   },  
   {
-    component: asyncComponent(() => import('../containers/projectinfo/molochodao')),
-    path: '/molochoinfo/:projectId'
+    component: asyncComponent(() => import('../containers/projectinfo/molochdao')),
+    path: '/molochinfo/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/projectinfo/futuredao')),

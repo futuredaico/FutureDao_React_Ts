@@ -93,3 +93,10 @@ export const validateLogin = (address: string, data: string) => {
   return request(opts);
 }
 
+export const loginOut = () => {
+  const opts = {
+    method: 'logoutV3',
+    params: []
+  }
+  return request(opts);
+}

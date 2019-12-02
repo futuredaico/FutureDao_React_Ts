@@ -8,8 +8,7 @@ import { injectIntl } from 'react-intl';
 // import Card from '@/components/card';
 // import Slider from '@/components/slider';
 import { Pagination } from 'antd';
-import { IHomeProps, IProjList } from './interface/home.interface';
-import { ProjectState } from '@/store/interface/common.interface';
+import { IHomeProps, IMolochProjList } from './interface/home.interface';
 // import { ProjType } from '@/store/interface/common.interface';
 
 @inject('home')
@@ -18,7 +17,7 @@ class Home extends React.Component<IHomeProps, any> {
   public intrl = this.props.intl.messages;
   public componentDidMount()
   {
-    this.props.home.getProjList();
+    this.props.home.getMolochProjList();
   }
   public componentWillUnmount()
   {
@@ -52,20 +51,24 @@ class Home extends React.Component<IHomeProps, any> {
           <div className="home-list-wrapper">
             <ul className="home-list-ul">
               {
-                this.props.home.projListCount > 0 && this.props.home.projList.map((item: IProjList, index) =>
+                this.props.home.projListCount > 0 && this.props.home.projList.map((item: IMolochProjList, index) =>
                 {
                   return (
-                    <li className="home-list-li" key={index} onClick={this.handleToProjectInfo.bind(this, item.projId)}>
+                    <li className="home-list-li" key={index} onClick={this.handleToProjectInfo.bind(this, item)}>
                       <div className="home-smallbox">
                         <div className="home-img">
-                          <img src={item.projConverUrl} alt="" />
+                          {
+                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" />:<img src={require("@/img/projdefault.png")} alt="" />
+                          }
                         </div>
                         <div className="home-des">
-                          <div className="sbox-title">{item.projTitle}</div>
-                          <div className="sbox-des">
-                            组织简介A community DAO focused on funding Ethereum border-bottom: 1px solid @bg-e5;border-bottom: 1px solid @bg-e5;development, in the name of Moloch the God of Coordina...
-                          </div>                          
-                          {
+                          <div className="sbox-title">{item.projName}</div>
+                          <div className="sbox-des">{item.projBrief}</div>
+                          <div className="sbox-line">
+                              <div className="sbox-line-left">{item.shares} 股</div>
+                              <div className="sbox-line-right">{item.members} 成员</div>
+                            </div>                  
+                          {/* {
                             item.projState === ProjectState.IdeaPub && (
                               <div className="sbox-line">
                                 <div className="sbox-line-left"><strong>{this.intrl.home.display}</strong></div>
@@ -80,7 +83,7 @@ class Home extends React.Component<IHomeProps, any> {
                                 <div className="sbox-line-right">123成员</div>
                               </div>
                             )
-                          }
+                          } */}
                          
                           {/* <div className="sbox-card">
                             <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
@@ -102,25 +105,28 @@ class Home extends React.Component<IHomeProps, any> {
                 })
               }
             </ul>
-            <div className="home-page-warpper">
-              <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.home.projListPageSize} total={this.props.home.projListCount} onChange={this.handleChangePage} />
-            </div>
+            {
+              this.props.home.projListCount>12 &&(
+                <div className="home-page-warpper">
+                  <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.home.projListPageSize} total={this.props.home.projListCount} onChange={this.handleChangePage} />
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
     );
   }
   // 跳转到项目详情页todo
-  private handleToProjectInfo = (id) =>
+  private handleToProjectInfo = (item:IMolochProjList) =>
   {
-    this.props.history.push('/projectinfo/' + id);
+    this.props.history.push('/molochinfo/' + item.projId);
   }
   // 分页
   private handleChangePage = (index: number) =>
   {
     this.props.home.projListPage = index;
-    this.props.home.getProjList();
-    // todo
+    this.props.home.getMolochProjList();
   }
   // 区分项目类别
   // private handleDiffType = (type: string) =>

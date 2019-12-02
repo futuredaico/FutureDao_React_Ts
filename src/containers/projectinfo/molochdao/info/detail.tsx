@@ -6,9 +6,8 @@ import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IMolochoInfoProps, IDiscussList, IDiscussReplyList } from '../interface/MolochoInfo.interface';
+import { IMolochInfoProps, IDiscussList, IDiscussReplyList } from '../interface/molochinfo.interface';
 import * as formatTime from '@/utils/formatTime';
-import { ProjectState } from '@/store/interface/common.interface';
 interface IState
 {
     discussInput: string,
@@ -16,7 +15,7 @@ interface IState
     replyInputOther: string,
 }
 @observer
-class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
+class MolochDetail extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         discussInput: '',
@@ -26,13 +25,13 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
     public componentDidMount()
     {
         const projectId = this.props.match.params.projectId;
-        this.props.projectinfo.projId = projectId;
+        this.props.molochinfo.projId = projectId;
         // 获取留言列表
         this.handleGetDataList('');
     }
     public render()
     {
-        if (!this.props.projectinfo.projInfo)
+        if (!this.props.molochinfo.projInfo)
         {
             return null;
         }
@@ -40,12 +39,14 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
             <>
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
-                    <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.projectinfo.projInfo.projDetail }} />                    
+                    {
+                        this.props.molochinfo.projInfo.projDetail?<div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} />:<div className="detail-p">暂无详情</div> 
+                    }                   
                 </div>
                 <div className="message-wrapper" id="message">
                     <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                     {
-                        (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport)||(this.props.common.userInfo && this.props.projectinfo.projInfo.projState!==ProjectState.IdeaPub)
+                        this.props.common.userInfo 
                             ? (
                                 <div className="textarea-wrapper">
                                     <textarea
@@ -59,7 +60,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
                                     />
                                     <div className="people-message">
                                         <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                        <strong>{this.props.common.userInfo.username}</strong>
+                                        <strong>{this.props.common.userInfo.username?this.props.common.userInfo.username:"神秘人"}</strong>
                                         <Button text={this.intrl.btn.comment} btnColor={this.state.discussInput ? '' : 'gray-btn'} onClick={this.handleSendDiscuss} />
                                     </div>
                                 </div>
@@ -77,18 +78,18 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
                                 {
                                     this.props.common.userInfo && (
                                         <div className="people-message">
-                                            <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                            <strong>{this.props.common.userInfo.username}</strong>
+                                            <img src={ require('@/img/default.png')} alt="" className="people-img" />
+                                            <strong>神秘人</strong>
                                         </div>
                                     )
                                 }
                             </div>
                     }
                     {
-                        this.props.projectinfo.projInfo.discussCount !== 0 && (
+                        this.props.molochinfo.projInfo.discussCount !== 0 && (
                             <div className="message-comment">
                                 {
-                                    this.props.projectinfo.projDiscussList.map((item: IDiscussList, index: number) =>
+                                    this.props.molochinfo.projDiscussList.map((item: IDiscussList, index: number) =>
                                     {
                                         return (
                                             <div className="comment-list" key={index}>
@@ -108,7 +109,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
                                                     <span>{item.zanCount ? item.zanCount : ''}</span>
                                                 </div>
                                                 {
-                                                    (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                    (item.isShowReply && this.props.molochinfo.projInfo ) && (
                                                         <div className="comment-input">
                                                             <textarea
                                                                 maxLength={500}
@@ -144,7 +145,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
                                                                                 <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
                                                                             </div>
                                                                             {
-                                                                                (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                                                (replyItem.isShowReply && this.props.molochinfo.projInfo) && (
                                                                                     <div className="reply-input">
                                                                                         <textarea
                                                                                             maxLength={500}
@@ -179,10 +180,10 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
     // 获取留言列表
     private handleGetDataList = async (discussId: string) =>
     {
-        await this.props.projectinfo.getProjDiscussList(discussId);
-        if (this.props.projectinfo.projDiscussList.length > 0)
+        await this.props.molochinfo.getProjDiscussList(discussId);
+        if (this.props.molochinfo.projDiscussList.length > 0)
         {
-            this.props.projectinfo.projDiscussList.map((item: IDiscussList) =>
+            this.props.molochinfo.projDiscussList.map((item: IDiscussList) =>
             {
                 if (item.subSize > 0)
                 {
@@ -194,7 +195,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
     // 获取回复列表
     private handleGetReplayList = async (item: IDiscussList) =>
     {
-        const replyList = await this.props.projectinfo.getProjDiscussReplyList(item.childrenId);
+        const replyList = await this.props.molochinfo.getProjDiscussReplyList(item.childrenId);
         item.childredList = [...replyList]
     }
     // 留言输入
@@ -216,7 +217,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendProjDiscuss('', this.state.discussInput);
+        const res = await this.props.molochinfo.sendProjDiscuss('', this.state.discussInput);
         if (res)
         {
             this.setState({
@@ -237,13 +238,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
-        }        
-        // 验证是否支持了项目
-        if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
-            return false
-        }
+        }   
         return true
     }
     // 点赞
@@ -254,7 +249,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.projectinfo.sendProZan(item.discussId);
+        const res = await this.props.molochinfo.sendProZan(item.discussId);
         if (res)
         {
             item.isZan = true;
@@ -270,7 +265,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.projDiscussList.forEach((list: IDiscussList) =>
+        this.props.molochinfo.projDiscussList.forEach((list: IDiscussList) =>
         {
             if (list.discussId === item.discussId)
             {
@@ -295,7 +290,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.projDiscussList.forEach((list: IDiscussList) =>
+        this.props.molochinfo.projDiscussList.forEach((list: IDiscussList) =>
         {
             list.isShowReply = false;
             list.childredList.forEach((replyList: IDiscussReplyList) =>
@@ -338,7 +333,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.sendProjDiscuss(item.discussId, this.state.replyInput);
+        this.props.molochinfo.sendProjDiscuss(item.discussId, this.state.replyInput);
         item.isShowReply = false;
         setTimeout(() =>
         {
@@ -353,7 +348,7 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
         {
             return false;
         }
-        this.props.projectinfo.sendProjDiscuss(replyItem.discussId, this.state.replyInputOther);
+        this.props.molochinfo.sendProjDiscuss(replyItem.discussId, this.state.replyInputOther);
         replyItem.isShowReply = false;
         setTimeout(() =>
         {
@@ -363,4 +358,4 @@ class MolochoDetail extends React.Component<IMolochoInfoProps, IState> {
     }
 }
 
-export default injectIntl(MolochoDetail);
+export default injectIntl(MolochDetail);

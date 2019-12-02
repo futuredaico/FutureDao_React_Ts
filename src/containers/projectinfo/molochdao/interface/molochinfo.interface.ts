@@ -1,17 +1,18 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
-import { IProjectUpdateStore } from "./update.interface";
-import { IProjectTransationStore } from "./transation.interface";
 import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
-export interface IMolochoInfoStore
+import { IMolochManagerStore } from "./molochmanager.interface";
+export interface IMolochInfoStore
 {
   menuNum: number,
   isShowUpdateInfo: boolean,
-  projInfo: IMolochoInfo | null,
+  projInfo: IMolochInfo | null,
   projId: string,
   projUpdateCount: number,
-  projTeamList: IProjectTeam[],
+  projMemberList: IProjectMember[],
+  memberPage:number,
+  memberPageSize:number,
   projDiscussList: IDiscussList[],
   isShowManagerInfo: boolean,
   priceInfo:IProjAssetPrice|null,  // 代币的价格
@@ -20,66 +21,49 @@ export interface IMolochoInfoStore
   buyPrice:string,
   sellPrice:string,
   hashList:IContractHash[],
-  getProjInfo: (projId: string) => Promise<boolean>,
-  startAttention: () => Promise<boolean>,
-  cancelAttention: () => Promise<boolean>,
-  startSupport: () => Promise<boolean>,
-  getTeamData: () => Promise<boolean>,
+  getMolochProjInfo: (projId: string) => Promise<boolean>,
+  getMemberData: () => Promise<boolean>,
   getProjDiscussList: (discussId: string) => Promise<boolean>,
   sendProjDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
   sendProZan: (discussId: string) => Promise<boolean>,
-  getProjDiscussReplyList: (childId: string) => Promise<[]>,
-  getTokenPriceData:()=>Promise<boolean>,
-  getRewardData:()=>Promise<boolean>,
-  getReserveTokenData:()=>Promise<boolean>,
-  computeCurrentBuyPrice:()=>void,
-  computeCurrentSellPrice:()=>void,
-  getContractHash:()=>Promise<boolean>
+  getProjDiscussReplyList: (childId: string) => Promise<[]>
 }
 
 
-export interface IMolochoInfoProps extends RouteComponentProps<{ projectId: string }>
+export interface IMolochInfoProps extends RouteComponentProps<{ projectId: string }>
 {
-  projectinfo: IMolochoInfoStore,
-  update: IProjectUpdateStore,
-  transation: IProjectTransationStore,
+  molochinfo: IMolochInfoStore,
   common: ICommonStore,
+  molochmanager: IMolochManagerStore,
   teemowallet:ITeemoWalletStore,
   metamaskwallet:IMetaMastWalletStore,
   intl: any
 }
 
-export interface IMolochoInfo
+export interface IMolochInfo
 {
+  projId:string, // 项目Id
   projName: string, // 项目名称
-  projTitle: string, // 项目标题
+  // projTitle: string, // 项目标题
   projType: string, // 项目类型
-  projConverUrl: string, // 项目封面
-  projBrief: string, // 项目简介
+  projBrief:string, // 项目简介
   projDetail: string, // 项目详情
-  supportCount: number, // 看好人数
-  isSupport: boolean, // 是否看好
-  isStar: boolean, // 是否关注
-  projVideoUrl: string, // 视频
-  discussCount: number, // 留言人数
-  updateCount: number, // 更新条数
-  time: number // 创建时间
-  hasIssueAmt: string, // 已发行
-  hasSellAmt: string // 已出售
-  projState: string, // 一级状态
-  projSubState: string, // 二级状态
-  hasSupport: string, // 支持人数
-  type:string, // 众筹类型
-  platform:string, // 上链类型
-  fundName:string, // 单位
-  fundReservePoolTotal:string // 储备池资金
+  projCoverUrl: string, // 项目封面
+  projFundTotal:string, // 资产
+  projFundSymbol:string, // 单位
+  shares:number,
+  valuePerShare:number, // 每股
+  projOfficialWeb:string, // 官网
+  discussCount:number,
+  members:number
 }
 
-export interface IProjectTeam
+export interface IProjectMember
 {
   username: string,
   headIconUrl: string,
-  brief: string
+  address:string,
+  shares:string
 }
 
 export interface IDiscussInfo

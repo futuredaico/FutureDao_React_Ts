@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/order.api';
-import {getProjectContractHash} from '../../projectinfo/api/project.api';
+import {getProjectContractHash} from '../../projectinfo/futuredao/api/project.api';
 // import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { IRewardDetail, ICreateOrderInfo } from '../interface/order.interface';
