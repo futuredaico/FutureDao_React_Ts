@@ -33,6 +33,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     public componentWillUnmount()
     {
         this.props.update.updateInfo = null;
+        this.props.update.updateId = '';
     }
     public render()
     {

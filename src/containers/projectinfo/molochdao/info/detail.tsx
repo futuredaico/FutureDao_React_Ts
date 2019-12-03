@@ -27,7 +27,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         const projectId = this.props.match.params.projectId;
         this.props.molochinfo.projId = projectId;
         // 获取留言列表
-        this.handleGetDataList('');
+        this.handleGetDataList();
     }
     public render()
     {
@@ -85,8 +85,9 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                 }
                             </div>
                     }
+                    {/* this.props.molochinfo.projInfo.discussCount  */}
                     {
-                        this.props.molochinfo.projInfo.discussCount !== 0 && (
+                        this.props.molochinfo.projDiscussList.length!== 0 && (
                             <div className="message-comment">
                                 {
                                     this.props.molochinfo.projDiscussList.map((item: IDiscussList, index: number) =>
@@ -122,7 +123,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                                     )
                                                 }
                                                 {
-                                                    (item.childredList.length > 0) && (
+                                                    (item.subSize > 0) && (
                                                         <div className="reply-comment">
                                                             {
                                                                 item.childredList.map((replyItem: IDiscussReplyList, num: number) =>
@@ -178,9 +179,9 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         )
     }
     // 获取留言列表
-    private handleGetDataList = async (discussId: string) =>
+    private handleGetDataList = async () =>
     {
-        await this.props.molochinfo.getProjDiscussList(discussId);
+        await this.props.molochinfo.getMolochDiscussList();
         if (this.props.molochinfo.projDiscussList.length > 0)
         {
             this.props.molochinfo.projDiscussList.map((item: IDiscussList) =>
@@ -195,7 +196,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
     // 获取回复列表
     private handleGetReplayList = async (item: IDiscussList) =>
     {
-        const replyList = await this.props.molochinfo.getProjDiscussReplyList(item.childrenId);
+        const replyList = await this.props.molochinfo.getMolochDiscussReplyList(item.rootId);
         item.childredList = [...replyList]
     }
     // 留言输入
@@ -217,7 +218,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.molochinfo.sendProjDiscuss('', this.state.discussInput);
+        const res = await this.props.molochinfo.sendMolochDiscuss('', this.state.discussInput);
         if (res)
         {
             this.setState({
@@ -225,7 +226,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
             })
             setTimeout(() =>
             {
-                this.handleGetDataList('');
+                this.handleGetDataList();
             }, 2000)
         }
         return true;
@@ -249,7 +250,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        const res = await this.props.molochinfo.sendProZan(item.discussId);
+        const res = await this.props.molochinfo.sendMolochZan(item.discussId);
         if (res)
         {
             item.isZan = true;
@@ -333,7 +334,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        this.props.molochinfo.sendProjDiscuss(item.discussId, this.state.replyInput);
+        this.props.molochinfo.sendMolochDiscuss(item.discussId, this.state.replyInput);
         item.isShowReply = false;
         setTimeout(() =>
         {
@@ -348,7 +349,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        this.props.molochinfo.sendProjDiscuss(replyItem.discussId, this.state.replyInputOther);
+        this.props.molochinfo.sendMolochDiscuss(replyItem.discussId, this.state.replyInputOther);
         replyItem.isShowReply = false;
         setTimeout(() =>
         {

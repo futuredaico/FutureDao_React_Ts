@@ -201,3 +201,31 @@ export const computeDay = function (time: string, locale: string)
   }
   return ''
 }
+export const onCountRemainTime = (remainTime:number) =>
+{
+  let d = 0;
+  let h = 0;
+  let m = 0;
+  if (remainTime >= 0)
+  {
+    d = Math.floor(remainTime / 60 / 60 / 24);
+    h = Math.floor(remainTime / 60 / 60 % 24);
+    m = Math.floor(remainTime / 60 % 60);
+  } else
+  {
+    return '' ;
+  }
+  // let hour = h.toString();
+  // if (hour.length === 1)
+  // {
+  //   hour = '0' + hour;
+  // }
+  // let minute = m.toString();
+  // if (minute.length === 1)
+  // {
+  //   minute = '0' + minute;
+  // }
+  const str = d+'d '+h+'h '+m+'min';
+  console.log(str)
+  return str;
+}

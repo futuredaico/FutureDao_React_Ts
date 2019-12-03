@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import * as Api from '../api/project.api';
+import * as Api from '../api/moloch.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/molochinfo.interface';
@@ -69,12 +69,12 @@ class MolochInfo
   /**
    * 获取项目评论列表
    */
-  @action public getProjDiscussList = async (discussId: string) =>
+  @action public getMolochDiscussList = async () =>
   {
     let result: any = [];
     try
     {
-      result = await Api.getProjDiscussList(this.projId, discussId, common.userId, this.projDiscussPage, this.projDiscussPageSize);
+      result = await Api.getMolochDiscussList(this.projId, this.projDiscussPage, this.projDiscussPageSize);
     } catch (e)
     {
       return false;
@@ -98,12 +98,12 @@ class MolochInfo
   /**
    * 获取项目评论回复列表
    */
-  @action public getProjDiscussReplyList = async (childId: string) =>
+  @action public getMolochDiscussReplyList = async (childId: string) =>
   {
     let result: any = [];
     try
     {
-      result = await Api.getProjDiscussChildList(childId, common.userId, this.projDiscussPage, this.projDiscussPageSize);
+      result = await Api.getMolochDiscussChildList(childId, this.projDiscussPage, this.projDiscussPageSize);
     } catch (e)
     {
       return [];
@@ -124,12 +124,12 @@ class MolochInfo
   /**
    * 发表项目评论
    */
-  @action public sendProjDiscuss = async (prevousId: string, discussStr: string) =>
+  @action public sendMolochDiscuss = async (prevousId: string, discussStr: string) =>
   {
     let result: any = [];
     try
     {
-      result = await Api.sendDiscussToProj(common.userId, common.token, this.projId, prevousId, discussStr);
+      result = await Api.sendMolochDiscussToProj( this.projId, prevousId, discussStr);
     } catch (e)
     {
       return false;
@@ -143,12 +143,12 @@ class MolochInfo
   /**
    * 项目评论点赞
    */
-  @action public sendProZan = async (discussId: string) =>
+  @action public sendMolochZan = async (discussId: string) =>
   {
     let result: any = [];
     try
     {
-      result = await Api.sendZanProj(common.userId, common.token, this.projId, discussId);
+      result = await Api.sendMolochZanProj( this.projId, discussId);
     } catch (e)
     {
       return false;

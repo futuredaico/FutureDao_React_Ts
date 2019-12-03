@@ -57,48 +57,43 @@ export const getProposalDetail = (projId: string, proposalId:string) =>
 
 /**
  * 发送项目的评论
- * @param userId 用户id
- * @param token 
  * @param projId 项目ID
  * @param prevousId 上一条评论ID（可为空，表示一级评论）
  * @param discussStr 评论内容
  */
-export const sendDiscussToProj = (userId: string, token: string, projId: string, prevousId: string, discussStr: string) =>
+export const sendMolochDiscussToProj = (projId: string, prevousId: string, discussStr: string) =>
 {
     const opts = {
-        method: 'addProjDiscuss',
-        params: [userId, token, projId, prevousId, discussStr]
+        method: 'addMoloDiscuss',
+        params: [projId, prevousId, discussStr]
     }
     return request(opts);
 }
 /**
- * 查询项目评论列表
+ * 查询项目评论列表(获取一级评论列表接口)
  * @param projId 项目ID
- * @param discussId 评论ID（为空表示查询一级评论）
- * @param userId 用户id
  * @param page 当前页码
  * @param pageSize 每页条数
  */
-export const getProjDiscussList = (projId: string, discussId: string, userId: string, page: number, pageSize: number) =>
+export const getMolochDiscussList = (projId: string, page: number, pageSize: number) =>
 {
     const opts = {
-        method: 'getProjSubDiscussList',
-        params: [projId, discussId, userId, page, pageSize]
+        method: 'getMoloDiscussList',
+        params: [projId, page, pageSize]
     }
     return request(opts);
 }
 /**
  * 查询项目二级评论接口
  * @param childId 一级评论ID
- * @param userId 用户ID
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getProjDiscussChildList = (childId: string, userId: string, page: number, pageSize: number) =>
+export const getMolochDiscussChildList = (childId: string, page: number, pageSize: number) =>
 {
     const opts = {
-        method: 'getProjSubChildDiscussList',
-        params: [childId, userId, page, pageSize]
+        method: 'getMoloSubDiscussList',
+        params: [childId, page, pageSize]
     }
     return request(opts);
 }
@@ -152,16 +147,14 @@ export const getUpdateDiscussChildList = (childId: string, userId: string, page:
 }
 /**
  * 点赞项目评论
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  * @param discussId 评论ID
  */
-export const sendZanProj = (userId: string, token: string, projId: string, discussId: string) =>
+export const sendMolochZanProj = (projId: string, discussId: string) =>
 {
     const opts = {
-        method: 'zanProjDiscuss',
-        params: [userId, token, projId, discussId]
+        method: 'zanMoloDiscuss',
+        params: [projId, discussId]
     }
     return request(opts);
 }

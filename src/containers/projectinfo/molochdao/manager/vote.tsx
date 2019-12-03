@@ -26,7 +26,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                         投票
                     </h3>
                     <div className="vote-box">
-                        <div className="vote-title">增发股份 1000 给 0X4323…2397</div>
+                        <div className="vote-title">MGP 28.1: Moloch v2 Unit Testing (Additional shares)</div>
                         <div className="manager-votebox">
                             <div className="green-sai" style={{ "width": 60 + "%" }} />
                             <div className="red-sai" style={{ "width": 40 + "%" }} />
@@ -38,14 +38,14 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 <strong>我的投票</strong>
                             </div>
                             <div className="myvote-btn">
-                                <Button text="赞同 +20" btnColor="bright-green" />
-                                <Button text="反对 +20" btnColor="bright-red" />                                
+                                <Button text="赞同" btnColor="bright-green" />
+                                <Button text="反对" btnColor="bright-red" />                                
                             </div>
                         </div>
                     </div>
                     <div className="going-box">
                         <strong className="left-str">投票中</strong><br />
-                        <span className="small-right-str">剩余时间：45:50:30</span>
+                        <span className="small-right-str">剩余时间：8d12h12m</span>
                     </div>
                 </>
         );

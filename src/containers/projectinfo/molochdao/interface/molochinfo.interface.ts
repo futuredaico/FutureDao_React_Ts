@@ -23,10 +23,10 @@ export interface IMolochInfoStore
   hashList:IContractHash[],
   getMolochProjInfo: (projId: string) => Promise<boolean>,
   getMemberData: () => Promise<boolean>,
-  getProjDiscussList: (discussId: string) => Promise<boolean>,
-  sendProjDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
-  sendProZan: (discussId: string) => Promise<boolean>,
-  getProjDiscussReplyList: (childId: string) => Promise<[]>
+  getMolochDiscussList: () => Promise<boolean>,
+  sendMolochDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
+  sendMolochZan: (discussId: string) => Promise<boolean>,
+  getMolochDiscussReplyList: (childId: string) => Promise<[]>
 }
 
 
@@ -55,7 +55,9 @@ export interface IMolochInfo
   valuePerShare:number, // 每股
   projOfficialWeb:string, // 官网
   discussCount:number,
-  members:number
+  members:number, // 成员总数
+  votePeriod:number, // 投票时长，单位秒
+  gracePeriod:number, // 公示时长，单位秒
 }
 
 export interface IProjectMember
@@ -76,14 +78,14 @@ export interface IDiscussInfo
   username: string, // 评论者
   headIconUrl: string, // 评论者头像
   subSize: number // 回复数
-  isZan: boolean, // 是否点赞
+  isZan: boolean, // 是否点赞  
   isShowReply: boolean // 是否展开回复
 }
 
 export interface IDiscussList extends IDiscussInfo
 {
   preDiscussId: string,  // 上一个评论的ID
-  childrenId: string, // 回复评论ID
+  rootId: string, // 回复评论ID
   childredList: IDiscussReplyList[]
 }
 

@@ -2,7 +2,15 @@
 // import { ICommonStore } from "@/store/interface/common.interface";
 export interface IMolochManagerStore
 {
-  menuNum: number,
+  proposalMenuNum: number,
+  proposalPage:number,
+  proposalPageSize:number,
+  proposalList:IMolochProposalList[],
+  proposalCount:number,
+  proposalInfo:IMolochProposalDetail|null,
+  proposalIndex:string,
+  getMolochProposalList:(projId: string)=>Promise<boolean>
+  getMolochProposalDetail:(projId: string)=>Promise<boolean>
 }
 
 
@@ -20,7 +28,7 @@ export interface IMolochProposalList {
   sharesRequested:string, // 要求股份
   tokenTribute:string, // 贡献股份数量
   tokenTributeSymbol:string, // 贡献股份单位
-  timestamp:number, // 创建时间
+  timestamp:number, // 创建提案时间
   yesShares:string, // 赞成票数
   noShares:string, // 反对票数
   hasVote:boolean, // 是否投票
@@ -38,8 +46,11 @@ export interface IMolochProposalDetail {
   tokenTribute:string, // 贡献股份数量
   tokenTributeSymbol:string, // 贡献股份单位
   tokenReceiver:string // 股份接收者
+  applicant:string,  // 受益人地址
+  applicantUsername:string,  // 受益人名称
+  applicantHeadIconUrl:string // 受益人头像
 }
-export enum IProposalType {
+export enum ProposalType {
   voting = '10151', // 投票中
   showing = '10152', // 公示中
   pass = '10153', // 已通过
