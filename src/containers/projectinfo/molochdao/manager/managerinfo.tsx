@@ -19,19 +19,15 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         isOpenStopBox: false,
         showDeletBox: false
     }
-    public componentDidMount()
-    {
+    public componentDidMount() {
         this.props.molochmanager.getMolochProposalDetail(this.props.molochinfo.projId);
     }
-    public componentWillUnmount()
-    {
+    public componentWillUnmount() {
         this.props.molochmanager.proposalInfo = null;
         this.props.molochmanager.proposalIndex = '';
     }
-    public render()
-    {
-        if (!this.props.molochmanager.proposalInfo)
-        {
+    public render() {
+        if (!this.props.molochmanager.proposalInfo) {
             return <div />;
         }
         return (
@@ -77,7 +73,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 <strong>提案说明</strong>
                             </div>
                             {/* <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> */}
-                            <p className="info-des" >{this.props.molochmanager.proposalInfo.proposalDetail}</p>
+
+                            <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} />
+
                             <div className="info-line">
                                 <div className="iline-left">
                                     <strong>要求股份</strong>
@@ -250,14 +248,12 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         );
     }
     // 取消提案
-    private handleToOpenStop = () =>
-    {
+    private handleToOpenStop = () => {
         this.setState({
             showDeletBox: true
         })
     }
-    private handleToCloseStop = () =>
-    {
+    private handleToCloseStop = () => {
         this.setState({
             isOpenStopBox: false,
             showDeletBox: false
@@ -268,19 +264,16 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     //         showDeletBox:true
     //     })
     // }
-    private handleStopProposal = () =>
-    {
+    private handleStopProposal = () => {
         // todo
         this.handleToCloseStop();
     }
     // 返回列表页
-    private handleBackManagerList = () =>
-    {
+    private handleBackManagerList = () => {
         this.props.molochinfo.isShowManagerInfo = false;
     }
     // 留言输入
-    private handleChangeManagerDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
-    {
+    private handleChangeManagerDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({
             managerDiscuss: ev.target.value
         })
