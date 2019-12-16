@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import { RouteComponentProps } from "react-router";
-import { Input } from 'antd';
+import { Input,Spin,Icon } from 'antd';
 import Button from '@/components/Button';
 // import classnames from 'classnames';
 import { History } from 'history';
@@ -27,6 +27,7 @@ interface IProps extends RouteComponentProps<{ projectId: string }>
 class ProjectProposal extends React.Component<IProps, any> {
     public state = {
         assetType: "1", // 贡献资金的单位
+        isDoingSave:false // 是否正在发布
     }
     private assetOption = [
         {
@@ -45,6 +46,7 @@ class ProjectProposal extends React.Component<IProps, any> {
     }
     public render()
     {
+        const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
         return (
             <div className="proposal-page">
                 <div className="proposal-wrapper">
@@ -98,11 +100,31 @@ class ProjectProposal extends React.Component<IProps, any> {
                                 text="发起预发布提案"
                                 btnSize="bg-btn"
                                 btnColor="gray-btn"
+                                onClick={this.handleSendProposal}
                             />
                         </div>
                     </div>
-
                 </div>
+                {
+          this.state.isDoingSave && (
+            <div className="going-on-wrapper">
+              <div className="going-on-content going-on-edit">
+                <strong className="going-bigtext">正在发布molochoDAO合约</strong>
+                      <div className="loading-going">
+                        <Spin indicator={antIcon} size="small" />
+                        <span>请等待...</span>
+                      </div>
+                      <p className="going-p">处理这些事物可能需要较长时间，取决于网络状态处理期间请勿关闭本页</p>
+                    
+                      {/* <div className="done-going">
+                        <img src={require("@/img/done.png")} alt="" />
+                        <span>成功！</span>
+                      </div> */}
+                   
+              </div>
+            </div>
+          )
+        }
             </div>
         );
     }
@@ -112,6 +134,11 @@ class ProjectProposal extends React.Component<IProps, any> {
         // todo
         this.setState({
             assetType: item.id
+        })
+    }
+    private handleSendProposal = ()=>{
+        this.setState({
+            isDoingSave:true
         })
     }
 }
