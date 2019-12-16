@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
-// import Button from '@/components/Button';
+import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { Pagination } from 'antd';
 import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
@@ -105,9 +105,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     }
                 </div>
                 {/* 页面右边部分 */}
-                {/* <div className="manager-right">
-                    <Button text="发起预发布提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
-                    <h3 className="title-h3">退出</h3>
+                <div className="manager-right">
+                    <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                    {/* <h3 className="title-h3">退出</h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
                             <div className="exit-left">我的股数</div>
@@ -125,8 +125,8 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                         <div className="doing-btn">
                             <Button text="立即退出" btnSize="buy-btn" />
                         </div>
-                    </div>
-                </div> */}
+                    </div> */}
+                </div>
             </div>
         );
     }
@@ -142,10 +142,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 发起提案
-    // private handleToProposal = () =>
-    // {
-    //     this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
-    // }
+    private handleToProposal = () =>
+    {
+        this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+    }
     // 查看提案详情
     private handleToInfo = (item: IMolochProposalList) =>
     {

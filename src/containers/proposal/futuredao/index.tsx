@@ -23,7 +23,7 @@ interface IProps extends RouteComponentProps<{ projectId: string }>
     intl: any
 }
 
-@inject('project', 'createproject', 'common')
+@inject('project')
 @observer
 class ProjectProposal extends React.Component<IProps, any> {
     public state = {
