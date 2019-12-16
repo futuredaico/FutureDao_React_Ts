@@ -8,20 +8,22 @@ import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import { Pagination } from 'antd';
+import { Pagination,Input } from 'antd';
 import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
-import {onCountRemainTime} from '@/utils/formatTime'
+import { onCountRemainTime } from '@/utils/formatTime'
 
 interface IState
 {
-    showListType: number
+    showListType: number,
+    showEntrust:boolean
 }
 
 @observer
 class MolochManager extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state: IState = {
-        showListType: 1
+        showListType: 1,
+        showEntrust:false
     }
     public componentDidMount()
     {
@@ -107,6 +109,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 {/* 页面右边部分 */}
                 <div className="manager-right">
                     <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                    <div className="entrust-btn">
+                        <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
+                    </div>
                     {/* <h3 className="title-h3">退出</h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
@@ -127,6 +132,26 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                         </div>
                     </div> */}
                 </div>
+                {
+                    this.state.showEntrust &&(
+                        <div className="entrust-wrapper">
+                    <div className="entrust-content">
+                        <div className="entrust-close">
+                            <img src={require('@/img/close2.png')} alt="close2.png" onClick={this.handleToCloseEntrust} className="close-icon" />
+                        </div>
+                        <div className="entrust-title"><strong>权限委托</strong></div>
+                        <div className="entrust-write">
+                            <span className="entrust-span">委托地址</span>
+                            <Input />
+                            <p className="entrust-tips"><span className="red-type">*</span><span className="gray-text">注意：权限委托后将无法发起提案或进行投票，权限委托可随时取消。</span></p>
+                            <div className="entrustbtn-wrap">
+                                <Button text="确认" btnSize="stop-btn" onClick={this.handleComfirmEntrust} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    )
+                }
             </div>
         );
     }
@@ -192,14 +217,15 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const agoTime = nowTimeInt - item.timestamp;
         if (this.props.molochinfo.projInfo)
         {
-          const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
-          const endTime = voteTime - agoTime;
-          return onCountRemainTime(endTime)
-        }else{
+            const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+            const endTime = voteTime - agoTime;
+            return onCountRemainTime(endTime)
+        } else
+        {
             return ''
         }
-        
-      // 投票时间-（当前时间点-创建提案时间）=剩余时间      
+
+        // 投票时间-（当前时间点-创建提案时间）=剩余时间      
     }
     // 计算公示倒计时
     private computeShowTime = (item: IMolochProposalList) =>
@@ -210,13 +236,33 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const agoTime = nowTimeInt - item.timestamp;
         if (this.props.molochinfo.projInfo)
         {
-          const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
-          const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
-          const endTime = graceTime+voteTime - agoTime;
-          return onCountRemainTime(endTime)
-        }else{
+            const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
+            const endTime = graceTime + voteTime - agoTime;
+            return onCountRemainTime(endTime)
+        } else
+        {
             return ''
         }
+    }
+    // 打开权限委托窗口
+    private handleToShowEntrust = ()=>{
+        this.setState({
+            showEntrust:true
+        })
+    }
+    // 确认权限委托
+    private handleComfirmEntrust = () =>
+    {
+        //
+        this.handleToCloseEntrust();
+    }
+    // 关闭权限委托窗口
+    private handleToCloseEntrust = ()=> {
+        //
+        this.setState({
+            showEntrust:false
+        })
     }
 }
 
