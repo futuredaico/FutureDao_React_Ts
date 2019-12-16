@@ -29,8 +29,8 @@ export interface IMolochProposalList {
   tokenTribute:string, // 贡献股份数量
   tokenTributeSymbol:string, // 贡献股份单位
   timestamp:number, // 创建提案时间
-  yesShares:string, // 赞成票数
-  noShares:string, // 反对票数
+  voteYesCount:number, // 赞成票数
+  voteNotCount:number, // 反对票数
   hasVote:boolean, // 是否投票
   proposalState:string // 提案状态
 }

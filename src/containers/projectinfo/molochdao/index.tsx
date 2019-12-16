@@ -66,28 +66,28 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                             <div className="going-wrapper">
                                 <div className="going-line">
                                     <div className="going-purple">
-                                        <strong className="purple-big">{saveDecimal(this.props.molochinfo.projInfo.projFundTotal, 6)}</strong><strong className="purple-sm"> {this.props.molochinfo.projInfo.projFundSymbol.toLocaleUpperCase()}</strong>
+                                        <strong className="purple-big">{saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6)}</strong><strong className="purple-sm"> {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
                                     </div>
-                                    <div className="going-gray">资产</div>
+                                    <div className="going-gray">{this.intrl.projinfo.asset}</div>
                                 </div>
                                 <div className="going-line">
                                     <div className="going-normal">
                                         <strong>{this.props.molochinfo.projInfo.shares}</strong>
                                     </div>
-                                    <div className="going-gray">总股份数</div>
+                                    <div className="going-gray">{this.intrl.projinfo.total}</div>
                                 </div>
                                 <div className="going-line">
                                     <div className="going-normal">
                                         <strong>{this.props.molochinfo.projInfo.valuePerShare}</strong>
                                     </div>
-                                    <div className="going-gray">每股价值</div>
+                                    <div className="going-gray">{this.intrl.projinfo.every}</div>
                                 </div>
                             </div>
                             {
-                                this.props.molochinfo.projInfo.projOfficialWeb && (
+                                this.props.molochinfo.projInfo.officailWeb && (
                                     <div className="ptop-weblink">
-                                        <a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.projOfficialWeb}>{this.props.molochinfo.projInfo.projOfficialWeb}</a>
-                                        <p className="gray-str">官方网站</p>
+                                        <a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.officailWeb}>{this.props.molochinfo.projInfo.officailWeb}</a>
+                                        <p className="gray-str">{this.intrl.projinfo.website}</p>
                                     </div>
                                 )
                             }

@@ -42,9 +42,9 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                     })
                 }
                 {
-                    this.props.molochinfo.projInfo.members>15 && (
+                    this.props.molochinfo.projInfo.member>15 && (
                         <div className="member-page-warpper">
-                            <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochinfo.memberPageSize} total={this.props.molochinfo.projInfo.members} onChange={this.handleChangePage} />
+                            <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochinfo.memberPageSize} total={this.props.molochinfo.projInfo.member} onChange={this.handleChangePage} />
                         </div>
                     )
                 }

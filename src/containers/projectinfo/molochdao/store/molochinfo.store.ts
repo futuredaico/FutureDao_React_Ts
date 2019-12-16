@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
-import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/molochinfo.interface';
 
@@ -33,7 +32,7 @@ class MolochInfo
 
     try
     {
-      result = await Api.getMolochProjInfo(projId, common.userId);
+      result = await Api.getMolochProjInfo(projId);
     } catch (e)
     {
       return false;

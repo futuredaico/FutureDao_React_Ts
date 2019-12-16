@@ -7,7 +7,7 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import VoteBox from './vote';
+// import VoteBox from './vote';
 
 @observer
 class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
@@ -19,15 +19,19 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         isOpenStopBox: false,
         showDeletBox: false
     }
-    public componentDidMount() {
+    public componentDidMount()
+    {
         this.props.molochmanager.getMolochProposalDetail(this.props.molochinfo.projId);
     }
-    public componentWillUnmount() {
+    public componentWillUnmount()
+    {
         this.props.molochmanager.proposalInfo = null;
         this.props.molochmanager.proposalIndex = '';
     }
-    public render() {
-        if (!this.props.molochmanager.proposalInfo) {
+    public render()
+    {
+        if (!this.props.molochmanager.proposalInfo)
+        {
             return <div />;
         }
         return (
@@ -35,12 +39,12 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                 <div className="manager-left">
                     <h3 className="title-h3">
                         {this.props.molochmanager.proposalInfo.proposalTitle}
-                        <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>
+                        {/* <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span> */}
                     </h3>
                     <div className="manager-info">
                         <div className="info-line">
                             <div className="iline-left">
-                                <strong>提案人</strong>
+                                <strong>{this.intrl.manager.proposer}</strong>
                             </div>
                             <div className="iline-right">
                                 {
@@ -56,7 +60,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                         <div className="proposal-info">
                             <div className="info-line">
                                 <div className="iline-left">
-                                    <strong>受益人</strong>
+                                    <strong>{this.intrl.manager.applicant}</strong>
                                 </div>
                                 <div className="iline-right">
                                     {
@@ -70,15 +74,14 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 </div>
                             </div>
                             <div>
-                                <strong>提案说明</strong>
+                                <strong>{this.intrl.manager.detail}</strong>
                             </div>
-                            {/* <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> */}
-
-                            <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} />
-
+                            {
+                                this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">暂无说明</p>
+                            }
                             <div className="info-line">
                                 <div className="iline-left">
-                                    <strong>要求股份</strong>
+                                    <strong>{this.intrl.manager.apply}</strong>
                                 </div>
                                 <div className="iline-right">
                                     <span>{this.props.molochmanager.proposalInfo.sharesRequested}</span>
@@ -86,7 +89,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                             </div>
                             <div className="info-line">
                                 <div className="iline-left">
-                                    <strong>贡献</strong>
+                                    <strong>{this.intrl.manager.gong2}</strong>
                                 </div>
                                 <div className="iline-right">
                                     <span>{this.props.molochmanager.proposalInfo.tokenTribute} {this.props.molochmanager.proposalInfo.tokenTributeSymbol.toLocaleUpperCase()}</span>
@@ -96,7 +99,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                     </div>
                     {/* 留言模块 */}
                     <div className="message-wrapper">
-                        <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
+                        {/* <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                         {
                             (this.props.common.userInfo && this.props.molochinfo.projInfo)
                                 ? (
@@ -136,7 +139,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                         )
                                     }
                                 </div>
-                        }
+                        } */}
                         <div className="message-comment">
                             {/* {
                                 this.props.update.updateDiscussList.length > 0 && this.props.update.updateDiscussList.map((item: IDiscussList, index: number) =>
@@ -219,17 +222,18 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                         </div>
                     </div>
                 </div>
+                {/* 页面右边部分 */}
                 <div className="manager-right">
                     <div className="back-btn">
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackManagerList} className="back-img" />
                     </div>
-                    <Button text="批准为正式提案" btnSize="bg-bg-btn" />
+                    {/* <Button text="批准为正式提案" btnSize="bg-bg-btn" />
                     <div className="notallow-wrapper">
                         <span>批准为正式提案</span>
                         <span className="sm-time">（ 4小时48分钟后可用 ）</span>
-                    </div>
+                    </div> */}
                     {/* （ 4小时48分钟后可用 ） */}
-                    <VoteBox {...this.props} />
+                    {/* <VoteBox {...this.props} /> */}
                 </div>
                 {
                     this.state.showDeletBox && (
@@ -248,12 +252,13 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         );
     }
     // 取消提案
-    private handleToOpenStop = () => {
-        this.setState({
-            showDeletBox: true
-        })
-    }
-    private handleToCloseStop = () => {
+    // private handleToOpenStop = () => {
+    //     this.setState({
+    //         showDeletBox: true
+    //     })
+    // }
+    private handleToCloseStop = () =>
+    {
         this.setState({
             isOpenStopBox: false,
             showDeletBox: false
@@ -264,7 +269,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     //         showDeletBox:true
     //     })
     // }
-    private handleStopProposal = () => {
+    private handleStopProposal = () =>
+    {
         // todo
         this.handleToCloseStop();
     }
@@ -273,11 +279,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         this.props.molochinfo.isShowManagerInfo = false;
     }
     // 留言输入
-    private handleChangeManagerDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-        this.setState({
-            managerDiscuss: ev.target.value
-        })
-    }
+    // private handleChangeManagerDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //     this.setState({
+    //         managerDiscuss: ev.target.value
+    //     })
+    // }
     // // 获取留言列表
     // private handleGetManagerDiscussList = async (discussId: string) =>
     // {

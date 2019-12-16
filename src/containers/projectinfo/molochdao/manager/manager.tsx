@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
-import Button from '@/components/Button';
+// import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { Pagination } from 'antd';
 import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
@@ -19,6 +19,7 @@ interface IState
 
 @observer
 class MolochManager extends React.Component<IMolochInfoProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         showListType: 1
     }
@@ -34,11 +35,11 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     <div className="manager-list-type">
                         <ul className="title-ul">
                             <li className={this.props.molochmanager.proposalMenuNum === 1 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 1)}>
-                                正式提案
+                                {this.intrl.manager.tian}
                             </li>
-                            <li className={this.props.molochmanager.proposalMenuNum === 2 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 2)}>
+                            {/* <li className={this.props.molochmanager.proposalMenuNum === 2 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 2)}>
                                 预发布提案<span className="sm-graytime">（4小时30分钟后可用）</span>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                     {
@@ -49,45 +50,45 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                     <div className="mcontent-top">
                                         <div className="mcontent-title">
                                             {
-                                                this.props.common.userInfo && (item.hasVote ? <Card text="已投票" colortype="block-gray" cardsize="sm-card" /> : <Card text="未投票" colortype="c-purple" cardsize="sm-card" />)
+                                                this.props.common.userInfo && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
                                             }
                                             <strong className="mtitle">{item.proposalTitle}</strong>
                                         </div>
                                         {
                                             item.proposalState === ProposalType.voting && (
                                                 <div className="transparent-toupiao">
-                                                    <span className="big-text">投票中</span>&nbsp;&nbsp;
-                                                    <span className="sm-text">剩余 {this.computeVoteTime(item)}</span>
+                                                    <span className="big-text">{this.intrl.manager.voting}</span>&nbsp;&nbsp;
+                                                    <span className="sm-text">{this.intrl.manager.other} {this.computeVoteTime(item)}</span>
                                                 </div>
                                             )
                                         }
                                         {
                                             item.proposalState === ProposalType.showing && (
                                                 <div className="transparent-toupiao purple-gongshi">
-                                                    <span className="big-text">公示中</span>&nbsp;&nbsp;
-                                                    <span className="sm-text">剩余 {this.computeShowTime(item)}</span>
+                                                    <span className="big-text">{this.intrl.manager.showing}</span>&nbsp;&nbsp;
+                                                    <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
                                                 </div>
                                             )
                                         }
                                         {
-                                            item.proposalState === ProposalType.pass && <Card text="已通过" colortype="transparent-green" cardsize="md-sm-card" />
+                                            item.proposalState === ProposalType.pass && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
                                         }
                                         {
-                                            item.proposalState === ProposalType.fail && <Card text="未通过" colortype="transparent-red" cardsize="md-sm-card" />
+                                            item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
                                         }
                                     </div>
                                     <div className="mcontent-down">
                                         <div className="mcontent-count">
-                                            <span>要求 </span>
-                                            <strong className="count-right">{item.sharesRequested} 股</strong>
-                                            <span>贡献 </span>
+                                            <span>{this.intrl.manager.request} </span>
+                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
+                                            <span>{this.intrl.manager.gong} </span>
                                             <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
                                         </div>
                                         <div className="manager-votebox">
                                             <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
                                             <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
-                                            <span className="left-top">赞同：{item.yesShares}</span>
-                                            <span className="right-top">反对：{item.noShares}</span>
+                                            <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
+                                            <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -97,13 +98,14 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
 
                     {
                         this.props.molochmanager.proposalCount > 10 && (
-                            <div className="member-page-warpper">
+                            <div className="proposal-page-warpper">
                                 <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochmanager.proposalPageSize} total={this.props.molochmanager.proposalCount} onChange={this.handleChangeManagerPage} />
                             </div>
                         )
                     }
                 </div>
-                <div className="manager-right">
+                {/* 页面右边部分 */}
+                {/* <div className="manager-right">
                     <Button text="发起预发布提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <h3 className="title-h3">退出</h3>
                     <div className="exit-wrapper">
@@ -111,14 +113,12 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                             <div className="exit-left">我的股数</div>
                             <div className="exit-right">
                                 <input type="text" className="normal-exit-input readonly-input" readOnly={true} />
-                                {/* <span className="asset-text">kk</span> */}
                             </div>
                         </div>
                         <div className="exit-line">
                             <div className="exit-left">退出股数</div>
                             <div className="exit-right">
                                 <input type="text" className="normal-exit-input" />
-                                {/* <span className="asset-text">ddd</span> */}
                                 <span className="amount-text">价值：10 ETH</span>
                             </div>
                         </div>
@@ -126,7 +126,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                             <Button text="立即退出" btnSize="buy-btn" />
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }
@@ -142,10 +142,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 发起提案
-    private handleToProposal = () =>
-    {
-        this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
-    }
+    // private handleToProposal = () =>
+    // {
+    //     this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+    // }
     // 查看提案详情
     private handleToInfo = (item: IMolochProposalList) =>
     {
@@ -164,7 +164,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     // 计算投票所占百分比
     private computePercentage = (item: IMolochProposalList, type: boolean) =>
     {
-        const total = parseInt(item.yesShares, 10) + parseInt(item.noShares, 10);
+        const total = item.voteYesCount + item.voteNotCount;
         if (total === 0)
         {
             return 50;
@@ -174,12 +174,12 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             // 支持
             if (type)
             {
-                const percent = parseInt((parseInt(item.yesShares, 10) / total * 100).toString(), 10)
+                const percent = item.voteYesCount / total * 100
                 return percent
             }// 反对
             else
             {
-                const percent = parseInt((parseInt(item.noShares, 10) / total * 100).toString(), 10)
+                const percent = item.voteNotCount / total * 100
                 return percent
             }
         }
@@ -192,7 +192,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const agoTime = nowTimeInt - item.timestamp;
         if (this.props.molochinfo.projInfo)
         {
-          const voteTime = this.props.molochinfo.projInfo.votePeriod;
+          const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
           const endTime = voteTime - agoTime;
           return onCountRemainTime(endTime)
         }else{
@@ -210,8 +210,8 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const agoTime = nowTimeInt - item.timestamp;
         if (this.props.molochinfo.projInfo)
         {
-          const voteTime = this.props.molochinfo.projInfo.votePeriod;
-          const graceTime = this.props.molochinfo.projInfo.gracePeriod;
+          const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+          const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
           const endTime = graceTime+voteTime - agoTime;
           return onCountRemainTime(endTime)
         }else{

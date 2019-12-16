@@ -50,10 +50,10 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                   <a href="#message">{this.intrl.projinfo.comment + ' ' + this.handleNumCount(2)} </a>
                 </li>
                 <li className={this.props.molochinfo.menuNum === 3 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 3)}>
-                  治理 
+                  {this.intrl.projinfo.manager} 
                 </li>
                 <li className={this.props.molochinfo.menuNum === 4 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 4)}>
-                  成员 {this.handleNumCount(4)}
+                  {this.intrl.projinfo.member} {this.handleNumCount(4)}
                 </li>
               </ul>
             </div>
@@ -105,8 +105,8 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
     }
     else if (id === 4)
     {
-      return this.props.molochinfo.projInfo ? this.props.molochinfo.projInfo.members : '';
-    }
+      return this.props.molochinfo.projInfo ? this.props.molochinfo.projInfo.member : '';
+    }else
     {
       return ''
     }

@@ -2,13 +2,12 @@ import request from "@/utils/request";
 /**
  * 获取项目详情基本信息
  * @param projId 项目ID
- * @param userId 用户ID
  */
-export const getMolochProjInfo = (projId: string, userId: string) =>
+export const getMolochProjInfo = (projId: string) =>
 {
     const opts = {
         method: 'getProjdetailV3',
-        params: [projId, userId]
+        params: [projId]
     }
     return request(opts);
 }

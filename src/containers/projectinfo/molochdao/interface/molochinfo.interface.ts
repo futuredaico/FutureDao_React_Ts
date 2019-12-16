@@ -49,15 +49,16 @@ export interface IMolochInfo
   projBrief:string, // 项目简介
   projDetail: string, // 项目详情
   projCoverUrl: string, // 项目封面
-  projFundTotal:string, // 资产
-  projFundSymbol:string, // 单位
+  fundTotal:string, // 资产
+  fundSymbol:string, // 单位
   shares:number,
   valuePerShare:number, // 每股
-  projOfficialWeb:string, // 官网
+  officailWeb:string, // 官网
   discussCount:number,
-  members:number, // 成员总数
-  votePeriod:number, // 投票时长，单位秒
-  gracePeriod:number, // 公示时长，单位秒
+  member:number, // 成员总数
+  votePeriod:string, // 投票时长，单位秒
+  notePreriod:string, // 公示时长，单位秒
+  cancelPreriod:string // 取消期时长，单位秒
 }
 
 export interface IProjectMember
@@ -65,7 +66,7 @@ export interface IProjectMember
   username: string,
   headIconUrl: string,
   address:string,
-  shares:string
+  shares:number
 }
 
 export interface IDiscussInfo

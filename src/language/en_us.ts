@@ -70,7 +70,9 @@ export default {
   home:{
     discover:"Discover projects",
     supporttips:" supporters",
-    display:"Creative display",    
+    display:"Creative display",
+    gu:"Shares",
+    member:"Members"  
   },
   login:{
     email:"Email",
@@ -148,7 +150,13 @@ export default {
     textarea:"Only supporters can  comment on the project.",
     noprofile:"No intro",
     noupdate:"No update data",
-    deletetips:"Confirm to delete this update?"
+    deletetips:"Confirm to delete this update?",
+    asset:"Bank",
+    total:"Total shares",
+    every:"Share value",
+    website:"Website",
+    manager:"Proposal",
+    member:"Members"
   },
   update:{
     update:"Publish updates",
@@ -231,5 +239,26 @@ export default {
     videoerr2:"Video upload failed",
     updatetips:"Changed",
     updateerr:"Change failed"
+  },
+  manager:{
+    tian:"Published proposals",
+    novote:"Unvoted",
+    yesvote:"Voted",
+    request:"Shares requested",
+    gong:"Tribute",
+    voting:"Voting period",
+    other:" left",
+    agree:"Yes",
+    disagree:"No",
+    showing:"Grace period",
+    pass:"Passed",
+    notallow:"Rejected",
+    doing:"Pending",
+    proposer:"Proposer",
+    applicant:"Applicant",
+    detail:"Proposal description",
+    apply:"Shares requested",
+    gong2:"Tribute",
+    gu:"Shares"
   }
 }

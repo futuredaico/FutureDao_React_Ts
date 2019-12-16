@@ -70,7 +70,9 @@ export default {
   home:{
     discover:"发现项目",
     supporttips:"人看好",
-    display:"创意展示",    
+    display:"创意展示",
+    gu:"股",
+    member:"成员"
   },
   login:{
     email:"邮箱",
@@ -148,7 +150,13 @@ export default {
     textarea:"只有项目的支持者可以留言",
     noprofile:"暂无简介",
     noupdate:"无更新数据",
-    deletetips:"确认删除本次更新？"
+    deletetips:"确认删除本次更新？",
+    asset:"资产",
+    total:"总股份数",
+    every:"每股价值",
+    website:"官方网站",
+    manager:"治理",
+    member:"成员"
   },
   update:{
     update:"发布更新",
@@ -231,5 +239,26 @@ export default {
     videoerr2:"视频上传失败",
     updatetips:"修改成功",
     updateerr:"修改失败"
+  },
+  manager:{
+    tian:"正式提案",
+    novote:"未投票",
+    yesvote:"已投票",
+    request:"要求",
+    gong:"贡献",
+    voting:"投票中",
+    other:"剩余",
+    agree:"赞同",
+    disagree:"反对",
+    showing:"公示中",
+    pass:"已通过",
+    notallow:"未通过",
+    doing:"待处理",
+    proposer:"提案人",
+    applicant:"股份申请人",
+    detail:"提案说明",
+    apply:"申请股份",
+    gong2:"贡献",
+    gu:"股"
   }
 }

@@ -65,8 +65,8 @@ class Home extends React.Component<IHomeProps, any> {
                           <div className="sbox-title">{item.projName}</div>
                           <div className="sbox-des">{item.projBrief}</div>
                           <div className="sbox-line">
-                              <div className="sbox-line-left">{item.shares} 股</div>
-                              <div className="sbox-line-right">{item.members} 成员</div>
+                              <div className="sbox-line-left">{item.shares} {this.intrl.home.gu}</div>
+                              <div className="sbox-line-right">{item.members} {this.intrl.home.member}</div>
                             </div>                  
                           {/* {
                             item.projState === ProjectState.IdeaPub && (
