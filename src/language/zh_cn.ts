@@ -72,7 +72,8 @@ export default {
     supporttips:"人看好",
     display:"创意展示",
     gu:"股",
-    member:"成员"
+    member:"成员",
+    des:"暂无简介"
   },
   login:{
     email:"邮箱",
@@ -156,7 +157,8 @@ export default {
     every:"每股价值",
     website:"官方网站",
     manager:"治理",
-    member:"成员"
+    member:"成员",
+    textarea2:"请先登陆"
   },
   update:{
     update:"发布更新",

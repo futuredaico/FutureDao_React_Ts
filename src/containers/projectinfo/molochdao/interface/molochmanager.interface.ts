@@ -33,6 +33,7 @@ export interface IMolochProposalList {
   voteNotCount:number, // 反对票数
   hasVote:boolean, // 是否投票
   proposalState:string // 提案状态
+  handleState:string, // 处理状态，0为未处理，1为已处理
 }
 export interface IMolochProposalDetail {
   projId:string,
@@ -55,4 +56,5 @@ export enum ProposalType {
   showing = '10152', // 公示中
   pass = '10153', // 已通过
   fail = '10154', // 未通过
+  aborted = '10155' // 已终止
 }

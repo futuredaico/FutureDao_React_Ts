@@ -72,7 +72,8 @@ export default {
     supporttips:" supporters",
     display:"Creative display",
     gu:"Shares",
-    member:"Members"  
+    member:"Members",
+    des:"No introduction"
   },
   login:{
     email:"Email",
@@ -156,7 +157,8 @@ export default {
     every:"Share value",
     website:"Website",
     manager:"Proposal",
-    member:"Members"
+    member:"Members",
+    textarea2:"Please log in."
   },
   update:{
     update:"Publish updates",

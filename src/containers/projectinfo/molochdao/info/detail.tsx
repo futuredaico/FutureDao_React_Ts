@@ -73,7 +73,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                     style={{ resize: 'none' }}
                                     className="message-textarea hei-textarea"
                                     readOnly={true}
-                                    value={this.intrl.projinfo.textarea}
+                                    value={this.intrl.projinfo.textarea2}
                                 />
                                 {
                                     this.props.common.userInfo && (

@@ -78,6 +78,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                         {
                                             item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
                                         }
+                                        {
+                                            (item.proposalState === ProposalType.pass||item.proposalState ===ProposalType.fail)  && item.handleState === '0' && <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
+                                        }
                                     </div>
                                     <div className="mcontent-down">
                                         <div className="mcontent-count">
@@ -86,12 +89,16 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                             <span>{this.intrl.manager.gong} </span>
                                             <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
                                         </div>
-                                        <div className="manager-votebox">
-                                            <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
-                                            <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
-                                            <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
-                                            <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
-                                        </div>
+                                        {
+                                            item.proposalState === ProposalType.voting && (
+                                                <div className="manager-votebox">
+                                                    <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
+                                                    <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
+                                                    <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
+                                                    <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
+                                                </div>
+                                            )
+                                        }                                        
                                     </div>
                                 </div>
                             )
@@ -108,10 +115,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 </div>
                 {/* 页面右边部分 */}
                 <div className="manager-right">
-                    <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                    {/* <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="entrust-btn">
                         <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
-                    </div>
+                    </div> */}
                     {/* <h3 className="title-h3">退出</h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
@@ -167,10 +174,16 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 发起提案
-    private handleToProposal = () =>
-    {
-        this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
-    }
+    // private handleToProposal = () =>
+    // {
+    //     // 验证是否登陆
+    //     if (!this.props.common.userInfo)
+    //     {
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+    //     }else{
+    //         this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+    //     }         
+    // }
     // 查看提案详情
     private handleToInfo = (item: IMolochProposalList) =>
     {
@@ -246,11 +259,11 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         }
     }
     // 打开权限委托窗口
-    private handleToShowEntrust = ()=>{
-        this.setState({
-            showEntrust:true
-        })
-    }
+    // private handleToShowEntrust = ()=>{
+    //     this.setState({
+    //         showEntrust:true
+    //     })
+    // }
     // 确认权限委托
     private handleComfirmEntrust = () =>
     {
@@ -264,6 +277,8 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             showEntrust:false
         })
     }
+    // 计算时间区间，4.8小时为一周期
+    // （当前时间-项目创建时间）/4.8*60*60----------向下取整
 }
 
 export default injectIntl(MolochManager);

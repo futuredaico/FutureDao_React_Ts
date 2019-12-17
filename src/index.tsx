@@ -35,12 +35,12 @@ if (window["ethereum"]) {
     // MetamaskWallet.metamaskAddress = accounts[0];
     // MetamaskWallet.checkIsCurrendBindAddress();
   })
-  // ethereum.on("networkChanged", accounts => {
-  //   console.log(accounts);
-  // common.loginFutureDao()
+  ethereum.on("networkChanged", accounts => {
+    console.log(accounts);
+  // common.network = accounts
   // MetamaskWallet.metamaskAddress = accounts[0];
   // MetamaskWallet.checkIsCurrendBindAddress();
-  // })
+  })
 }
 
 const ObserverRender = observer(() => {

@@ -63,7 +63,7 @@ class Home extends React.Component<IHomeProps, any> {
                         </div>
                         <div className="home-des">
                           <div className="sbox-title">{item.projName}</div>
-                          <div className="sbox-des">{item.projBrief}</div>
+                          <div className="sbox-des">{item.projBrief?item.projBrief:'暂无简介'}</div>
                           <div className="sbox-line">
                               <div className="sbox-line-left">{item.shares} {this.intrl.home.gu}</div>
                               <div className="sbox-line-right">{item.members} {this.intrl.home.member}</div>
