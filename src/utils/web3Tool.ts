@@ -2,42 +2,44 @@
 import { TransactionConfig } from "web3-core";
 // import { AbiItem } from "web3-utils";
 // import { fundAbi } from "./FundPoolAbi";
-import { CONTRACT_CONFIG } from "@/config";
 import { AbiItem } from "web3-utils";
+import { Contract, SendOptions } from 'web3-eth-contract';
+import { PromiEvent } from 'web3-core';
 // import { voteAbi } from "./VoteAbi";
 import MetaMask from "@/store/metamaskwallet";
-import common from "@/store/common";
-class Web3Tool {
+import { PromiseEvent } from "./promiseTool";
+export class Web3Tool {
+    public hash: string;
+    public abiItems: AbiItem[];
+    public contract: Contract;
+
+    constructor(abis: AbiItem[], hash: string = "") {
+        this.hash = hash;
+        this.abiItems = abis;
+        this.contract = new MetaMask.web3.eth.Contract(abis, hash);
+    }
 
     /**
      * 根据地址hash查询余额
      * @param addr 地址
      */
-    public async getBalanceByAddr(addr: string) {
-        try {
-            return MetaMask.web3.eth.getBalance(addr)
-        } catch (error) {
-            throw error;
-        }
+    public getEtherBalanceByAddr(addr: string) {
+        return MetaMask.web3.eth.getBalance(addr)
     }
 
     /**
-     * 调用合约查询数据
-     * @param abi 
-     * @param addr 
-     * @param methods 
-     * @param args 
+     * 调用合约查询
+     * @param methods 合约方法
+     * @param args 方法参数
      */
-    public async contractCall(name: 'fundPool' | 'vote', hash: string, methods: string, args?: any[]) {
-        const abi = name === 'fundPool' ? CONTRACT_CONFIG.fund_abi : CONTRACT_CONFIG.vote_abi;
-        const contract = new MetaMask.web3.eth.Contract(abi as AbiItem[], hash);
+    public async contractCall(methods: string, args?: any[]) {
         try {
             if (Array.isArray(args)) {
-                const result = await contract.methods[ methods ](...args).call();
+                const result = await this.contract.methods[ methods ](...args).call();
                 return result;
             }
             else {
-                return contract.methods[ methods ]().call()
+                return this.contract.methods[ methods ]().call();
             }
         } catch (error) {
             throw error;
@@ -45,209 +47,54 @@ class Web3Tool {
     }
 
     /**
-     * 调用合约执行操作
-     * @param abi 
-     * @param addr 
+     * 
      * @param methods 
      * @param args 
      * @param sendArgs 
      */
-    public async contractSend(name: 'fundPool' | 'vote' | 'jump', hash: string, methods: string, args?: any[], sendArgs?: TransactionConfig) {
-        let abi;
-        if (name === 'fundPool') {
-            abi = CONTRACT_CONFIG.fund_abi;
-        }
-        else if (name === 'vote') {
-            abi = CONTRACT_CONFIG.vote_abi;
+    public contractSend(methods: string, args?: any[], sendArgs?: SendOptions) {
+        if (Array.isArray(args)) {
+            const result = this.contract.methods[ methods ](...args).send(sendArgs)
+            return new PromiseEvent(result as PromiEvent<Contract>);
         }
         else {
-            abi = CONTRACT_CONFIG.jump_abi;
+            const result = this.contract.methods[ methods ]().send(sendArgs)
+            return new PromiseEvent(result as PromiEvent<Contract>);
         }
-        const contract = new MetaMask.web3.eth.Contract(abi as AbiItem[], hash);
-        return new Promise<string>((r, j) => {
-
-            if (Array.isArray(args)) {
-                contract.methods[ methods ](...args).send(sendArgs)
-                    .on('transactionHash', (txid) => {
-                        console.log(txid);
-                        r(txid);
-                    })
-                    .on('error', err => {
-                        console.log(err)
-                        if (err[ 'code' ] === 4001) {
-
-                            common.openNotificationWithIcon('error', "操作失败", "您拒绝了本次操作");
-                            j(err);
-                        }
-                    }); // If a out of gas error, the second parameter is the receipt.
-            }
-            else {
-                contract.methods[ methods ]().send(sendArgs)
-                    .on('transactionHash', (txid) => {
-                        console.log(txid);
-                        r(txid);
-                    })
-                    .on('error', err => {
-                        if (err[ 'code' ] === 4001) {
-                            common.openNotificationWithIcon('error', "操作失败", "您拒绝了本次操作");
-                        }
-                        j(err)
-                    }); // If a out of gas error, the second parameter is the receipt.
-            }
-        })
     }
 
-    public deployContract = async (abi: any, contractBytecode: string, args?: any[]) => {
+    /**
+     * 合约部署方法
+     * @param abi abi文件
+     * @param contractBytecode bytecode
+     * @param args 合约构造方法的参数
+     */
+    public async deployContract(abi: AbiItem[], contractBytecode: string, from: string, args?: any[]) {
         const contract = new MetaMask.web3.eth.Contract(abi);
         const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
         const deploy = contract.deploy(data)
-        deploy.estimateGas()
-            .then(value => {
-                console.log(value);
-                MetaMask.web3.eth.getGasPrice()
-                    .then(price => {
-                        console.log(price);
-
-                        deploy.send({ from: '0xb47076E7bD29bb62c6818Dbf83950F331845B5C6', gas: value * 10, gasPrice: price })
-                            // .on('error',err=>{
-                            //     console.error(err);
-                            // })
-                            // .on('transactionHash',(transactionHash:string)=>{
-                            //     console.log("hash:",transactionHash)
-                            // })
-                            // .on('receipt',receipt=>{
-                            //     console.log(receipt.contractAddress);                    
-                            // })
-                            // .on('confirmation',(confirmationNumber,receipt)=>{
-                            //     console.log("receipt,",receipt)
-                            // })
-                            .then(newContractInstance => {
-                                console.log('contract address', newContractInstance.options.address) // instance with the new contract address
-                            })
-                    })
-            })
-    }
-
-    /**
-     * 投票给提案
-     * @param proposalIndex 
-     * @param result 
-     */
-    public async vote(proposalIndex: number, result: number) {
-        // const contract = new MetaMask.web3.eth.Contract(voteAbi,'0x4CfB3A1F751be2e4D9396C7860C09c7751a95ef4');
-        // contract.methods.vote(proposalIndex,result).send({from:'0xb47076E7bD29bb62c6818Dbf83950F331845B5C6'})
-        // .on('transactionHash', (hash)=>{
-        //     console.log(hash);
-        // })
-        // .on('confirmation', (confirmationNumber, receipt)=>{
-        //     console.log('receipt',receipt);            
-        // })
-        // .on('receipt', (receipt)=>{
-        //     // receipt example
-        //     console.log(receipt); // 查询这里可以得到结果
-        // })
-        // .on('error', err=>console.error(err)); // If a out of gas error, the second parameter is the receipt.
-    }
-
-    /**
-     * 查询项目是否处于众筹阶段
-     */
-    public async crowdFunding() {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "crowdFunding")
-            .then(result => {
-                console.log(result);
-
-            })
-            .catch(err => {
-                console.error(err);
-            })
-    }
-
-    /**
-     * 获取储备池里还有多少eth
-     */
-    public async sellReserve() {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "sellReserve")
-            .then(result => {
-                console.log(result);
-
-            })
-            .catch(err => {
-                console.error(err);
-            })
-    }
-
-    /**
-     * 众筹阶段投入的eth数量，一旦正式开始，这个字段就毫无意义了
-     * @param addr 某个地址
-     */
-    public async crowdFundingEth(addr: string) {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "crowdFundingEth", [ addr ])
-            .then(result => {
-                console.log(result);
-
-            })
-            .catch(err => {
-                console.error(err);
-            })
-    }
-
-    /**
-     * 众筹的目标金额
-     */
-    public async crowdFundMoney() {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "crowdFundMoney")
-            .then(result => {
-                console.log(result);
-
-            })
-            .catch(err => {
-                console.error(err);
-            })
-    }
-
-    /**
-     * 众筹的时间
-     */
-    public async crowdFundDays() {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "crowdFundDays")
-            .then(result => {
-                console.log(result);
-
-            })
-            .catch(err => {
-                console.error(err);
-            })
-    }
-
-
-    /**
-     * 众筹的时间
-     */
-    public async crowdFundStartTime() {
-        this.contractCall('fundPool', CONTRACT_CONFIG.fund_hash, "crowdFundStartTime")
-            .then(result => {
-                console.log(result);
-            })
-            .catch(err => {
-                console.error(err);
-            })
+        try {
+            const count = await deploy.estimateGas();
+            const gas = count * 10  // 预估的gas*10倍，以防gas不够合约部署失败
+            const gasPrice = await MetaMask.web3.eth.getGasPrice();
+            const newContractInstance = await deploy.send({ from, gas, gasPrice });
+            console.log(newContractInstance.options.address);
+            return newContractInstance.options.address;
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
      * 转账
      */
-    public transfer = (data: TransactionConfig) => {
-        return new Promise<string>((resolve, reject) => {
-            MetaMask.web3.eth.sendTransaction(data, (error, txid: string) => {
-                if (error) {
-                    reject(error);
-                }
-                else {
-                    resolve(txid);
-                }
-            })
-        })
+    public async transfer(data: TransactionConfig) {
+        try {
+            const result = await MetaMask.web3.eth.sendTransaction(data);
+            console.log(result);
+            return result.transactionHash;
+        } catch (error) {
+            throw error;
+        }
     }
 }
-export default new Web3Tool();
