@@ -8,6 +8,7 @@ export interface IMolochManagerStore
   proposalList:IMolochProposalList[],
   proposalCount:number,
   proposalInfo:IMolochProposalDetail|null,
+  proposalListItem:IMolochProposalList|null,
   proposalIndex:string,
   proposalBalance:number,
   proposalAddress:string,
