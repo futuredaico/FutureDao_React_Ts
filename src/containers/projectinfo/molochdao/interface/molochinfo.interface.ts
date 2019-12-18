@@ -59,6 +59,7 @@ export interface IMolochInfo
   votePeriod:string, // 投票时长，单位秒
   notePreriod:string, // 公示时长，单位秒
   cancelPreriod:string // 取消期时长，单位秒
+  startTime:number // 项目创建时间
 }
 
 export interface IProjectMember

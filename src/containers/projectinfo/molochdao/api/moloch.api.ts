@@ -188,3 +188,16 @@ export const sendZanUpdateInfo = (userId: string, token: string, projId: string,
     }
     return request(opts);
 }
+/**
+ * 获取当前项目，当前用户的股份，以及当前项目的委托人
+ * @param addr 用户地址
+ * @param projId 项目ID
+ */
+export const getTokenBalance = ( projId: string,addr: string) =>
+{
+    const opts = {
+        method: 'getTokenBalance',
+        params: [projId,addr]
+    }
+    return request(opts);
+}

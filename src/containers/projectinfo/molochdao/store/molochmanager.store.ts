@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import common from '@/store/common';
+import MetamasktTool from '@/utils/metamasktool';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochProposalList, IMolochProposalDetail } from '../interface/molochmanager.interface';
 
@@ -12,6 +13,8 @@ class IMolochManager {
   @observable public proposalCount: number = 0; // 提案总数
   @observable public proposalInfo: IMolochProposalDetail | null = null; // 提案详情
   @observable public proposalIndex: string = ""; // 提案索引
+  @observable public proposalBalance:number = 0; // 项目占股数量
+  @observable public proposalAddress:string = ''; // 委托人
 
   /**
    * 获取提案列表
@@ -52,6 +55,38 @@ class IMolochManager {
     }
 
     return true;
+  }
+  /**
+   * 获取委托人，股份数量
+   */
+  @action public getTokenBalance = async (projId:string,addr:string)=>{
+    let result: any = [];
+    try {
+      result = await Api.getTokenBalance(projId,addr);
+    } catch (e) {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success) {
+      return false
+    }
+    this.proposalBalance = result[0].data.balance||0;
+    this.proposalAddress = result[0].data.newDelegateKey||''
+
+    return true;
+  }
+  /**
+   * 权限委托
+   */
+  @action public changeDelegateKey = async (addr:string,myaddr:string)=>{
+    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
+    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
+    const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
+    try {
+      await MetamasktTool.contractSend( contractHash, 'updateDelegateKey', [addr],{from:myaddr})
+    } catch (e) {
+      return false;
+    }
+    return true
   }
 }
 

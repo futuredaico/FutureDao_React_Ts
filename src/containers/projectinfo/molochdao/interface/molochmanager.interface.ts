@@ -9,8 +9,12 @@ export interface IMolochManagerStore
   proposalCount:number,
   proposalInfo:IMolochProposalDetail|null,
   proposalIndex:string,
-  getMolochProposalList:(projId: string)=>Promise<boolean>
-  getMolochProposalDetail:(projId: string)=>Promise<boolean>
+  proposalBalance:number,
+  proposalAddress:string,
+  getMolochProposalList:(projId: string)=>Promise<boolean>,
+  getMolochProposalDetail:(projId: string)=>Promise<boolean>,
+  getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
+  changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>
 }
 
 
