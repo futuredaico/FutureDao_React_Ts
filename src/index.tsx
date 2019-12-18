@@ -12,7 +12,7 @@ import storeCommon from '@/store/common';
 import Intl from 'intl';
 import { observer } from 'mobx-react';
 // import TeemoWallet from '@/store/teemowallet';
-// import MetamaskWallet from '@/store/metamaskwallet';
+import MetamaskWallet from '@/store/metamaskwallet';
 import common from '@/store/common';
 
 global.Intl = Intl;
@@ -37,6 +37,7 @@ if (window["ethereum"]) {
   })
   ethereum.on("networkChanged", accounts => {
     console.log(accounts);
+    MetamaskWallet.changeNetwork();
   // common.network = accounts
   // MetamaskWallet.metamaskAddress = accounts[0];
   // MetamaskWallet.checkIsCurrendBindAddress();

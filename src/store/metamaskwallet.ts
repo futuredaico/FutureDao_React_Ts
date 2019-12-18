@@ -1,6 +1,6 @@
 // 存储全局变量
 import { observable, action } from 'mobx';
-import { IMetaMastWalletStore } from './interface/metamaskwallet.interface';
+import { IMetaMastWalletStore, MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
 import Web3 from 'web3';
 import common from './common'
 import PersonEdit from '../containers/personalcenter/store/personedit.store';
@@ -61,8 +61,23 @@ class MetaMastWallet implements IMetaMastWalletStore
     this.metamaskAddress = '';
     // this.isLoginMetaMaskFlag = 1;
   }
+  // 获取网络
   @action public getMetamaskNetwork = ()=>{
-    this.metamaskNetwork = ethereum.networkVersion;
+    this.metamaskNetwork = ethereum.networkVersion;    
+  }
+  // 切换网络时，切换请求
+  @action public changeNetwork = () => {
+    this.getMetamaskNetwork()
+    // 1为主网，3为Ropsten测试链,4为Rinkeby测试链，42为Kovan测试链，5为Goerli测试链
+    let base = '';
+    if(this.metamaskNetwork!==MetaMaskNetworkCode.Mainnet){
+      //
+      base='/test'
+    }
+    const locations = window.location;
+    alert(location.origin);
+
+    window.location.href = `${location.origin}${base || ''}${locations.pathname}${locations.search}${locations.hash}`;
   }
   // 获取MetaMask钱包上登陆的地址
   @action public initAccount = () =>

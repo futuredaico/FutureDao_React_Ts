@@ -8,7 +8,8 @@ export interface IMetaMastWalletStore
     initAccount: () => Promise<string>,
     getMetamaskBalance: () => Promise<string>,
     checkIsCurrendBindAddress: () => Promise<boolean>,
-    getMetamaskNetwork:()=>void
+    getMetamaskNetwork:()=>void,
+    changeNetwork:()=>void
 }
 export interface IMetaMastWalletProps
 {
