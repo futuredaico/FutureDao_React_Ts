@@ -8,14 +8,16 @@ import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import { Pagination,Input } from 'antd';
+import { Pagination, Input } from 'antd';
 import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
 import { onCountRemainTime } from '@/utils/formatTime'
 
 interface IState
 {
     showListType: number,
-    showEntrust:boolean
+    showEntrust: boolean,  // 显示委托窗口
+    addrInput: string, // 权限委托的地址
+    addrBtn: boolean // 权限委托的确认按钮
 }
 
 @observer
@@ -23,11 +25,17 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state: IState = {
         showListType: 1,
-        showEntrust:false
+        showEntrust: false,
+        addrInput: '',
+        addrBtn: false
     }
     public componentDidMount()
     {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
+        if (this.props.common.userInfo)
+        {
+            this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
+        }
     }
     public render()
     {
@@ -79,7 +87,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                             item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
                                         }
                                         {
-                                            (item.proposalState === ProposalType.pass||item.proposalState ===ProposalType.fail)  && item.handleState === '0' && <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
+                                            (item.proposalState === ProposalType.pass || item.proposalState === ProposalType.fail) && item.handleState === '0' && <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
                                         }
                                     </div>
                                     <div className="mcontent-down">
@@ -98,7 +106,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                                     <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
                                                 </div>
                                             )
-                                        }                                        
+                                        }
                                     </div>
                                 </div>
                             )
@@ -115,16 +123,21 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 </div>
                 {/* 页面右边部分 */}
                 <div className="manager-right">
-                    {/* <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                    <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="entrust-btn">
-                        <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
-                    </div> */}
-                    {/* <h3 className="title-h3">退出</h3>
+                        {
+                            (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress)
+                                ? <Button text="取消权限委托" btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
+                                : <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
+                        }
+                        {/* <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} /> */}
+                    </div>
+                    <h3 className="title-h3">退出</h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
                             <div className="exit-left">我的股数</div>
                             <div className="exit-right">
-                                <input type="text" className="normal-exit-input readonly-input" readOnly={true} />
+                                <input type="text" className="normal-exit-input readonly-input" readOnly={true} value={this.props.molochmanager.proposalBalance} />
                             </div>
                         </div>
                         <div className="exit-line">
@@ -137,26 +150,30 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                         <div className="doing-btn">
                             <Button text="立即退出" btnSize="buy-btn" />
                         </div>
-                    </div> */}
-                </div>
-                {
-                    this.state.showEntrust &&(
-                        <div className="entrust-wrapper">
-                    <div className="entrust-content">
-                        <div className="entrust-close">
-                            <img src={require('@/img/close2.png')} alt="close2.png" onClick={this.handleToCloseEntrust} className="close-icon" />
-                        </div>
-                        <div className="entrust-title"><strong>权限委托</strong></div>
-                        <div className="entrust-write">
-                            <span className="entrust-span">委托地址</span>
-                            <Input />
-                            <p className="entrust-tips"><span className="red-type">*</span><span className="gray-text">注意：权限委托后将无法发起提案或进行投票，权限委托可随时取消。</span></p>
-                            <div className="entrustbtn-wrap">
-                                <Button text="确认" btnSize="stop-btn" onClick={this.handleComfirmEntrust} />
-                            </div>
-                        </div>
                     </div>
                 </div>
+                {
+                    this.state.showEntrust && (
+                        <div className="entrust-wrapper">
+                            <div className="entrust-content">
+                                <div className="entrust-close">
+                                    <img src={require('@/img/close2.png')} alt="close2.png" onClick={this.handleToCloseEntrust} className="close-icon" />
+                                </div>
+                                <div className="entrust-title"><strong>权限委托</strong></div>
+                                <div className="entrust-write">
+                                    <span className="entrust-span">委托地址</span>
+                                    <Input
+                                        value={this.state.addrInput}
+                                        onChange={this.handleChangeAddrInput}
+                                        onBlur={this.handleCheckAddrByMetamask}
+                                    />
+                                    <p className="entrust-tips"><span className="red-type">*</span><span className="gray-text">注意：权限委托后将无法发起提案或进行投票，权限委托可随时取消。</span></p>
+                                    <div className="entrustbtn-wrap">
+                                        <Button text="确认" btnSize="stop-btn" onClick={this.handleComfirmEntrust} btnColor={this.state.addrBtn ? '' : 'gray-btn'} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )
                 }
             </div>
@@ -174,16 +191,17 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 发起提案
-    // private handleToProposal = () =>
-    // {
-    //     // 验证是否登陆
-    //     if (!this.props.common.userInfo)
-    //     {
-    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-    //     }else{
-    //         this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
-    //     }         
-    // }
+    private handleToProposal = () =>
+    {
+        // 验证是否登陆
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+        } else
+        {
+            this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+        }
+    }
     // 查看提案详情
     private handleToInfo = (item: IMolochProposalList) =>
     {
@@ -258,23 +276,76 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             return ''
         }
     }
-    // 打开权限委托窗口
-    // private handleToShowEntrust = ()=>{
-    //     this.setState({
-    //         showEntrust:true
-    //     })
-    // }
-    // 确认权限委托
-    private handleComfirmEntrust = () =>
+    // 委托地址的输入
+    private handleChangeAddrInput = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        //
+        this.setState({
+            addrInput: ev.target.value.trim()
+        }, () =>
+        {
+            this.handleCheckAddrByMetamask();
+        })
+    }
+    // 校验输入地址格式是否正确（meta mask的地址）
+    private handleCheckAddrByMetamask = () =>
+    {
+        const res = web3.isAddress(this.state.addrInput);
+        this.setState({
+            addrBtn: res
+        })
+    }
+    // 取消权限委托
+    private handleToCancelEntrust = async () =>
+    {
+        // todo
+        if (!this.state.addrBtn || !this.props.common.userInfo)
+        {
+            return false;
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        const res = this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
+        if (res)
+        {
+            this.props.common.openNotificationWithIcon('success', '权限的变更', '权限已变更');
+        } else
+        {
+            this.props.common.openNotificationWithIcon('error', '权限的变更', '权限变更失败');
+        }
+        return true;
+    }
+    // 打开权限委托窗口
+    private handleToShowEntrust = () =>
+    {
+        this.setState({
+            showEntrust: true
+        })
+    }
+    // 确认权限委托
+    private handleComfirmEntrust = async () =>
+    {
+        if (!this.state.addrBtn || !this.props.common.userInfo)
+        {
+            return false;
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
+        const res = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);
+        if (res)
+        {
+            this.props.common.openNotificationWithIcon('success', '权限的变更', '权限已变更');
+        } else
+        {
+            this.props.common.openNotificationWithIcon('error', '权限的变更', '权限变更失败');
+        }
         this.handleToCloseEntrust();
+        return true;
     }
     // 关闭权限委托窗口
-    private handleToCloseEntrust = ()=> {
+    private handleToCloseEntrust = () =>
+    {
         //
         this.setState({
-            showEntrust:false
+            showEntrust: false
         })
     }
     // 计算时间区间，4.8小时为一周期

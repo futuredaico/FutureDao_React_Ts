@@ -75,9 +75,9 @@ class MetaMastWallet implements IMetaMastWalletStore
       base='/test'
     }
     const locations = window.location;
-    alert(location.origin);
-    alert(`${locations.pathname}${locations.search}${locations.hash}`)
-    alert(`${location.origin}${base || ''}${locations.pathname.replace('/test','')}${locations.search}${locations.hash}`)
+    // alert(location.origin);
+    // alert(`${locations.pathname}${locations.search}${locations.hash}`)
+    // alert(`${location.origin}${base || ''}${locations.pathname.replace('/test','')}${locations.search}${locations.hash}`)
 
     window.location.href = `${location.origin}${base || ''}${locations.pathname.replace('/test','')}${locations.search}${locations.hash}`;
   }
