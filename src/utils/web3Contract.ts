@@ -8,7 +8,30 @@ import { PromiEvent } from 'web3-core';
 // import { voteAbi } from "./VoteAbi";
 import MetaMask from "@/store/metamaskwallet";
 import { PromiseEvent } from "./promiseTool";
-export class Web3Tool {
+export class Web3Contract {
+
+    /**
+     * 合约部署方法
+     * @param abi abi文件
+     * @param contractBytecode bytecode
+     * @param args 合约构造方法的参数
+     */
+    public static async deployContract(abi: AbiItem[], contractBytecode: string, from: string, args?: any[]) {
+        const contract = new MetaMask.web3.eth.Contract(abi);
+        const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
+        const deploy = contract.deploy(data)
+        try {
+            const count = await deploy.estimateGas();
+            const gas = count * 10  // 预估的gas*10倍，以防gas不够合约部署失败
+            const gasPrice = await MetaMask.web3.eth.getGasPrice();
+            const newContractInstance = await deploy.send({ from, gas, gasPrice });
+            console.log(newContractInstance.options.address);
+            return newContractInstance.options.address;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     public hash: string;
     public abiItems: AbiItem[];
     public contract: Contract;
@@ -60,28 +83,6 @@ export class Web3Tool {
         else {
             const result = this.contract.methods[ methods ]().send(sendArgs)
             return new PromiseEvent(result as PromiEvent<Contract>);
-        }
-    }
-
-    /**
-     * 合约部署方法
-     * @param abi abi文件
-     * @param contractBytecode bytecode
-     * @param args 合约构造方法的参数
-     */
-    public async deployContract(abi: AbiItem[], contractBytecode: string, from: string, args?: any[]) {
-        const contract = new MetaMask.web3.eth.Contract(abi);
-        const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
-        const deploy = contract.deploy(data)
-        try {
-            const count = await deploy.estimateGas();
-            const gas = count * 10  // 预估的gas*10倍，以防gas不够合约部署失败
-            const gasPrice = await MetaMask.web3.eth.getGasPrice();
-            const newContractInstance = await deploy.send({ from, gas, gasPrice });
-            console.log(newContractInstance.options.address);
-            return newContractInstance.options.address;
-        } catch (error) {
-            throw error;
         }
     }
 
