@@ -51,7 +51,6 @@ class IMolochManager {
     this.proposalInfo = result[0].data || null;
     if (this.proposalInfo) {
       this.proposalInfo.proposalDetail = this.proposalInfo.proposalDetail.replace(/\\n/gi, "<br/>");
-      // console.log(toJS(this.proposalInfo).proposalDetail.replace(/\\n/gi, "---"), this.proposalInfo.proposalDetail.replace(/\\n/gi, "---"))
     }
 
     return true;

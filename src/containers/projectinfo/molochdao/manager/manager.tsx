@@ -62,7 +62,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                             {
                                                 this.props.common.userInfo && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
                                             }
-                                            <strong className="mtitle">{item.proposalTitle}</strong>
+                                            <strong className="mtitle">{item.proposalTitle?item.proposalTitle:'null'}</strong>
                                         </div>
                                         {
                                             item.proposalState === ProposalType.voting && (
@@ -207,6 +207,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     {
         this.props.molochinfo.isShowManagerInfo = true;
         this.props.molochmanager.proposalIndex = item.proposalIndex;
+        this.props.molochmanager.proposalListItem = item;
     }
     /**
      * 要修改数据

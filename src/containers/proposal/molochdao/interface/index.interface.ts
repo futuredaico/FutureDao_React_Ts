@@ -1,0 +1,19 @@
+import { RouteComponentProps } from "react-router";
+import { ICommonStore } from "@/store/interface/common.interface";
+import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
+export interface IMolochProposalStore
+{
+  fundHash:string,
+  fundSymbol:string,
+  getFundData:(projectId:string)=>Promise<boolean>,
+  applyProposal:(addr:string,giveNum:number,requireNum:number,des:string,myaddr:string)=>Promise<boolean>,
+}
+
+
+export interface IMolochProposalProps extends RouteComponentProps<{ projectId: string }>
+{
+  common: ICommonStore,
+  index: IMolochProposalStore,
+  metamaskwallet:IMetaMastWalletStore,
+  intl: any
+}

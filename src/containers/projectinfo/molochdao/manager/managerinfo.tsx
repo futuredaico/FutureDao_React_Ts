@@ -7,7 +7,7 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-// import VoteBox from './vote';
+import VoteBox from './vote';
 
 @observer
 class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
@@ -27,6 +27,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     {
         this.props.molochmanager.proposalInfo = null;
         this.props.molochmanager.proposalIndex = '';
+        this.props.molochmanager.proposalListItem = null;
     }
     public render()
     {
@@ -38,7 +39,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
             <div className="manager-wrapper manager-info-wrapper">
                 <div className="manager-left">
                     <h3 className="title-h3">
-                        {this.props.molochmanager.proposalInfo.proposalTitle}
+                        {this.props.molochmanager.proposalInfo.proposalTitle?this.props.molochmanager.proposalInfo.proposalTitle:'null'}
                         {/* <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span> */}
                     </h3>
                     <div className="manager-info">
@@ -233,7 +234,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                         <span className="sm-time">（ 4小时48分钟后可用 ）</span>
                     </div> */}
                     {/* （ 4小时48分钟后可用 ） */}
-                    {/* <VoteBox {...this.props} /> */}
+                    <VoteBox {...this.props} />
                 </div>
                 {
                     this.state.showDeletBox && (
