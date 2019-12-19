@@ -235,11 +235,12 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             title:this.state.tianName,
             description:this.state.tianDes
         }
-        console.log(JSON.stringify(tianStr))
-        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address);
         this.setState({
             isDoingSave: true
         })
+        console.log(JSON.stringify(tianStr))
+        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address);
+        
         this.initData();
         return true;
     }

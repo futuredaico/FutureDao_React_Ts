@@ -87,25 +87,25 @@ export default [
     path: '/project',
     children: [
       {
-        path: '/project/order/:projectId',
-        component: asyncComponent(() => import('../containers/project/order/order')),
+        path: '/moloch/order/:projectId',
+        component: asyncComponent(() => import('../containers/project/molochdao/order/order')),
       },
       {
-        path: '/project/financing/:projectId',
-        component: asyncComponent(() => import('../containers/project/financing/financing')),
+        path: '/moloch/financing/:projectId',
+        component: asyncComponent(() => import('../containers/project/molochdao/financing/financing')),
       },
       {
-        path: '/project/update/:projectId',
-        component: asyncComponent(() => import('../containers/project/updateproject')),
+        path: '/moloch/update/:projectId',
+        component: asyncComponent(() => import('../containers/project/molochdao/updateproject')),
       },
       {
-        path: '/project/:projectId',
-        component: asyncComponent(() => import('../containers/project/edit/createproject')),
+        path: '/moloch/:projectId',
+        component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
       },
-      {
-        path: '/project',
-        component: asyncComponent(() => import('../containers/project/edit/createproject')),
-      }
+      // {
+      //   path: '/project',
+      //   component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
+      // }
     ]
   },
   // {
