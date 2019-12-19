@@ -5,6 +5,8 @@ import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { Web3Contract } from '@/utils/web3Contract';
 import { AbiItem } from "web3-utils";
+import metamaskwallet from '@/store/metamaskwallet';
+import Moloch from '@/utils/Moloch';
 class CreateProject {
   @observable public step = 1; // 编辑项目的菜单选择
   @observable public stepOneStatus = 1;// 基础信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
@@ -32,29 +34,51 @@ class CreateProject {
    * 创建项目
    */
   @action public createProject = async () => {
-    let result: any = [];
-    const params: string[] = [
-      common.userId,
-      common.token,
-      this.createContent.projName,
-      this.createContent.projTitle,
-      this.createContent.projType,
-      this.createContent.projConverUrl,
-      this.createContent.projBrief,
-    ]
+    // let result: any = [];
+    // const params: string[] = [
+    //   common.userId,
+    //   common.token,
+    //   this.createContent.projName,
+    //   this.createContent.projTitle,
+    //   this.createContent.projType,
+    //   this.createContent.projConverUrl,
+    //   this.createContent.projBrief,
+    // ]
     try {
-      const files = require("../utils/contractFiles/Moloch.json")
-      const abi = files[ "abi" ] as AbiItem[];
-      const bytecode = files[ "bytecode" ] as string;
-      Web3Contract.deployContract(abi, bytecode, web3)
-      result = await Api.createProj(params);
+      const abi = Moloch.abi as AbiItem[];
+      const bytecode = Moloch.bytecode;
+      const summoner = metamaskwallet.metamaskAddress;
+      const approvedToken = common.token;
+      const periodDuration = 120;
+      const votingPeriodLength = 5;
+      const gracePeriodLength = 5;
+      const abortWindow = 2;
+      const proposalDeposit = 1000000000;
+      const dilutionBound = 3;
+      const processingReward = 10000;
+      const newContractInstance = await Web3Contract.deployContract(
+        abi, bytecode, metamaskwallet.metamaskAddress,
+        summoner,
+        approvedToken,
+        periodDuration,
+        votingPeriodLength,
+        gracePeriodLength,
+        abortWindow,
+        proposalDeposit,
+        dilutionBound,
+        dilutionBound,
+        processingReward
+      );
+      console.log(newContractInstance.options.address);
+
+      // result = await Api.createProj(params);
     } catch (e) {
       return false;
     }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.createContent.projId = result[ 0 ].data.projId
+    // if (result[ 0 ].resultCode !== CodeType.success) {
+    //   return false
+    // }
+    // this.createContent.projId = result[ 0 ].data.projId
     return true;
   }
   /**

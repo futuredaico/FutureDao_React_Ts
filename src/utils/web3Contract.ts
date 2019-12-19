@@ -16,7 +16,7 @@ export class Web3Contract {
      * @param contractBytecode bytecode
      * @param args 合约构造方法的参数
      */
-    public static async deployContract(abi: AbiItem[], contractBytecode: string, from: string, args?: any[]) {
+    public static async deployContract(abi: AbiItem[], contractBytecode: string, from: string, ...args: any[]) {
         const contract = new MetaMask.web3.eth.Contract(abi);
         const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
         const deploy = contract.deploy(data)
@@ -26,7 +26,19 @@ export class Web3Contract {
             const gasPrice = await MetaMask.web3.eth.getGasPrice();
             const newContractInstance = await deploy.send({ from, gas, gasPrice });
             console.log(newContractInstance.options.address);
-            return newContractInstance.options.address;
+            return newContractInstance;
+            // deploy.send({ from, gas, gasPrice })
+            //     .on("transactionHash", receipt => {
+            //         console.log(receipt);
+            //     })
+            //     .on("confirmation", (confNum, receipt) => {
+            //         console.log(confNum);
+            //         console.log(receipt);
+            //     })
+            //     .then(value => {
+            //         console.log(value.options.address);
+            //     })
+            // return
         } catch (error) {
             throw error;
         }
