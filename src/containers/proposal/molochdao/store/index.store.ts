@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/index.api';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochProposalStore } from '../interface/index.interface';
-import {TransactionReceipt} from 'web3-core'
+// import {TransactionReceipt} from 'web3-core'
 // import MetamasktTool from '@/utils/metamasktool';
 // import metamaskwallet from '@/store/metamaskwallet';
 import { AbiItem } from 'web3-utils';
@@ -40,7 +40,7 @@ class MolochProposal implements IMolochProposalStore
   /**
    * 发起提案
    */
-  @action public applyProposal = async (addr: string, giveNum: number, requireNum: number, des: string, myaddr: string) =>
+  @action public applyProposal = async (addr: string, giveNum: number, requireNum: number, des: string, myaddr: string,confrimCall:any) =>
   {
     // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
     // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
@@ -56,14 +56,16 @@ class MolochProposal implements IMolochProposalStore
       console.log(txid);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("submitProposal", [addr,giveNum, requireNum, des], { from: myaddr })
-      const subtxid:TransactionReceipt = await submitRes.onConfrim();
-      console.log("confirm",JSON.stringify(subtxid));
-      return subtxid
+      submitRes.onConfrim()
+      .then(res=>{confrimCall()})
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid);
+      return true
       // await MetamasktTool.contractSend(contractHash, 'approve', [addr,giveNum, requireNum, des], { from: myaddr })
       // await MetamasktTool.contractSend(contractHash, 'submitProposal', [addr,giveNum, requireNum, des], { from: myaddr })
     } catch (e)
     {
-      return null;
+      return false;
     }
   }
 }

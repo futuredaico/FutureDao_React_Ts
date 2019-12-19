@@ -239,7 +239,9 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             isDoingSave: true
         })
         console.log(JSON.stringify(tianStr))
-        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address);
+        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address,()=>{
+            this.props.common.openNotificationWithIcon('success','操作','确认')
+        });
         
         this.initData();
         return true;

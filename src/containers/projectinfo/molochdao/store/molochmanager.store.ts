@@ -149,6 +149,25 @@ class IMolochManager {
     }
     return true
   }
+  /**
+   * 处理提案
+   */
+  @action public processProposal = async (proposalIndex:string,myaddr:string)=>{
+    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
+    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
+    const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
+    try {
+      const index = parseInt(proposalIndex,10);
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend("processProposal", [index], { from: myaddr })
+      const subtxid = await submitRes.onConfrim();
+      console.log("confirm",JSON.stringify(subtxid));
+      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,2],{from:myaddr})
+    } catch (e) {
+      return false;
+    }
+    return true
+  }
 }
 
 export default new IMolochManager();

@@ -93,7 +93,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                 }
                 {
                     (this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass || this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail) && (
-                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text="处理提案" btnSize="bg-bg-btn" /> : <Button text="已处理" btnSize="bg-bg-btn" btnColor="gray-btn" />
+                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text="处理提案" btnSize="bg-bg-btn" onClick={this.handleProcessProposal} /> : <Button text="已处理" btnSize="bg-bg-btn" btnColor="gray-btn" />
                     )
                 }
             </>
@@ -115,6 +115,15 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         }
         await this.props.metamaskwallet.inintWeb3();
         await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        return true
+    }
+    // 处理提案
+    private handleProcessProposal = async()=>{
+        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+            return false
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
         return true
     }
 

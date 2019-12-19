@@ -20,6 +20,7 @@ export interface IMolochManagerStore
   getVoteData:(projId:string,proposalIndex:string,addr:string)=>Promise<boolean>,
   applyYesVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   applyNoVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  processProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
 }
 
 

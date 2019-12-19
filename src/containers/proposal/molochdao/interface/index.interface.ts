@@ -1,13 +1,13 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
-import { TransactionReceipt } from "web3-core";
+// import { TransactionReceipt } from "web3-core";
 export interface IMolochProposalStore
 {
   fundHash:string,
   fundSymbol:string,
   getFundData:(projectId:string)=>Promise<boolean>,
-  applyProposal:(addr:string,giveNum:number,requireNum:number,des:string,myaddr:string)=>Promise<TransactionReceipt|null>,
+  applyProposal:(addr:string,giveNum:number,requireNum:number,des:string,myaddr:string,confrimCall:any)=>Promise<boolean>,
 }
 
 
