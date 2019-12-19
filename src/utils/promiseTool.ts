@@ -1,4 +1,4 @@
-import { PromiEvent } from 'web3-core';
+import { PromiEvent,TransactionReceipt } from 'web3-core';
 export class PromiseEvent<T>{
     public promise: PromiEvent<T>
     constructor(param: PromiEvent<T>) {
@@ -7,7 +7,7 @@ export class PromiseEvent<T>{
 
     // 返回确认
     public onConfrim() {
-        return new Promise((r, j) => {
+        return new Promise<TransactionReceipt>((r, j) => {
             this.promise.on("confirmation", (confNumber, receipt) => {
                 r(receipt);
             })

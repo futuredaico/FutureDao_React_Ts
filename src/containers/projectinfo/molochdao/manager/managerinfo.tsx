@@ -22,6 +22,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     public componentDidMount()
     {
         this.props.molochmanager.getMolochProposalDetail(this.props.molochinfo.projId);
+        if(this.props.common.userInfo){
+            this.props.molochmanager.getVoteData(this.props.molochinfo.projId,this.props.molochmanager.proposalIndex,this.props.common.userInfo.address)
+        }        
     }
     public componentWillUnmount()
     {
