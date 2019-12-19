@@ -12,6 +12,7 @@ export interface IMolochManagerStore
   proposalIndex:string,
   proposalBalance:number,
   proposalAddress:string,
+  voteInfo:IVoteInfo,
   getMolochProposalList:(projId: string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
   getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
@@ -62,4 +63,9 @@ export enum ProposalType {
   pass = '10153', // 已通过
   fail = '10154', // 未通过
   aborted = '10155' // 已终止
+}
+export interface IVoteInfo {
+  voteCount:string,
+  voteType:string,
+  balance:string
 }

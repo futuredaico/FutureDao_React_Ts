@@ -5,7 +5,7 @@ import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IProjAsse
 
 class MolochInfo
 {
-  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为更新日志，4为交易，5为治理
+  @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为治理，4为成员
   @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IMolochInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID

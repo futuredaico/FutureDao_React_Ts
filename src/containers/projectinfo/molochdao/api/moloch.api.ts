@@ -201,3 +201,17 @@ export const getTokenBalance = ( projId: string,addr: string) =>
     }
     return request(opts);
 }
+/**
+ * 获取某个提案的投票详情
+ * @param projId 项目id
+ * @param proposalIndex 提案索引 
+ * @param addr 当前地址
+ */
+export const getVoteInfo = ( projId: string,proposalIndex:string,addr: string) =>
+{
+    const opts = {
+        method: 'getVoteInfo',
+        params: [projId,proposalIndex,addr]
+    }
+    return request(opts);
+}

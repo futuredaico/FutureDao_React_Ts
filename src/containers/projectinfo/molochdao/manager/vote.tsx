@@ -7,8 +7,9 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import { IMolochProposalList } from '../interface/molochmanager.interface';
-import { onCountRemainTime } from '@/utils/formatTime'
+import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
+import { onCountRemainTime } from '@/utils/formatTime';
+import classnames from 'classnames';
 
 @observer
 class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
@@ -26,36 +27,56 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         {
             return <div />;
         }
+        const voteClassName = classnames('vote-box', {
+            'agree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass ? true : false,
+            'disagree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail ? true : false,
+        })
         return (
-                <>
-                    <h3 className="title-h3">
-                        投票
+            <>
+                <h3 className="title-h3">
+                    投票
                     </h3>
-                    <div className="vote-box">
-                        <div className="vote-title">{this.props.molochmanager.proposalInfo.proposalTitle?this.props.molochmanager.proposalInfo.proposalTitle:'null'}</div>
-                        <div className="manager-votebox">
-                            <div className="green-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, true) + "%" }} />
-                            <div className="red-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, false) + "%" }} />
-                            <span className="left-top">赞同：{this.props.molochmanager.proposalListItem.voteYesCount}</span>
-                            <span className="right-top">反对：{this.props.molochmanager.proposalListItem.voteNotCount}</span>
+                <div className={voteClassName}>
+                    <div className="vote-title">{this.props.molochmanager.proposalInfo.proposalTitle ? this.props.molochmanager.proposalInfo.proposalTitle : 'null'}</div>
+                    <div className="manager-votebox">
+                        <div className="green-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, true) + "%" }} />
+                        <div className="red-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, false) + "%" }} />
+                        <span className="left-top">赞同：{this.props.molochmanager.proposalListItem.voteYesCount}</span>
+                        <span className="right-top">反对：{this.props.molochmanager.proposalListItem.voteNotCount}</span>
+                    </div>
+                    <div className="myvote">
+                        <div className="myvote-title">
+                            <strong>我的投票</strong>
                         </div>
-                        <div className="myvote">
-                            <div className="myvote-title">
-                                <strong>我的投票</strong>
-                            </div>
-                            <div className="myvote-btn">
-                                <Button text="赞同" btnColor="bright-green" />
-                                <Button text="反对" btnColor="bright-red" />                                
-                            </div>
+                        <div className="myvote-btn">
+                            <Button text="赞同" btnColor="bright-green" />
+                            <Button text="反对" btnColor="bright-red" />
+                            {/* <Button text="反对" btnColor="gray-btn" btnSize="vote-btn" /> */}
                         </div>
                     </div>
-                    <div className="going-box">
-                        <strong className="left-str">投票中</strong><br />
-                        <span className="small-right-str">剩余时间：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
-                    </div>
-                    <Button text="处理提案" btnSize="bg-bg-btn"  />
-                    <Button text="已处理" btnSize="bg-bg-btn" btnColor="gray-btn" />
-                </>
+                </div>
+                {
+                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.voting && (
+                        <div className="going-box">
+                            <strong className="left-str">投票中</strong><br />
+                            <span className="small-right-str">剩余时间：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
+                        </div>
+                    )
+                }
+                {
+                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.showing && (
+                        <div className="going-box">
+                            <strong className="left-str">公示中</strong><br />
+                            <span className="small-right-str">剩余时间：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
+                        </div>
+                    )
+                }
+                {
+                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass || this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail) && (
+                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text="处理提案" btnSize="bg-bg-btn" /> : <Button text="已处理" btnSize="bg-bg-btn" btnColor="gray-btn" />
+                    )
+                }
+            </>
         );
     }
     // 投赞同票 1是true

@@ -87,6 +87,20 @@ class IMolochManager {
     }
     return true
   }
+  @action public getVoteData = async (projId:string,proposalIndex:string,addr:string)=>{
+    let result: any = [];
+    try {
+      result = await Api.getVoteInfo(projId,proposalIndex,addr);
+    } catch (e) {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success) {
+      return false
+    }
+    
+
+    return true;
+  }
 }
 
 export default new IMolochManager();
