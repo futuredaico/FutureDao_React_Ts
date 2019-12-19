@@ -1,4 +1,4 @@
-import { PromiEvent,TransactionReceipt } from 'web3-core';
+import { PromiEvent, TransactionReceipt } from 'web3-core';
 export class PromiseEvent<T>{
     public promise: PromiEvent<T>
     constructor(param: PromiEvent<T>) {
@@ -19,7 +19,7 @@ export class PromiseEvent<T>{
 
     // 返回交易Hash
     public onTransactionHash() {
-        return new Promise((r, j) => {
+        return new Promise<string>((r, j) => {
             this.promise.on("transactionHash", (receipt) => {
                 r(receipt);
             })
