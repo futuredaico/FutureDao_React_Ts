@@ -16,7 +16,10 @@ export interface IMolochManagerStore
   getMolochProposalList:(projId: string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
   getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
-  changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>
+  changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>,
+  getVoteData:(projId:string,proposalIndex:string,addr:string)=>Promise<boolean>,
+  applyYesVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  applyNoVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
 }
 
 
@@ -66,6 +69,6 @@ export enum ProposalType {
 }
 export interface IVoteInfo {
   voteCount:string,
-  voteType:string,
+  voteType:string, // 1表示赞成，2表示反对，空表示未投票
   balance:string
 }

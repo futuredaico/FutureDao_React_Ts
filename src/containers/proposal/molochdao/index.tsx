@@ -222,20 +222,21 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         return true
     }
     // 发起提案
-    private handleSendProposal = () =>
+    private handleSendProposal = async () =>
     {
         if(!this.state.canSendFlag||!this.props.common.userInfo){
             return false;
-        }        
+        }
+        await this.props.metamaskwallet.inintWeb3();
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
-        // const fiveNum = parseFloat(this.state.tianContribution);
-        // const requireNum = parseInt(this.state.tianRequire,10);
+        const fiveNum = parseFloat(this.state.tianContribution);
+        const requireNum = parseInt(this.state.tianRequire,10);
         const tianStr = {
             title:this.state.tianName,
             description:this.state.tianDes
         }
         console.log(JSON.stringify(tianStr))
-        // this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,this.state.tianDes,this.props.common.userInfo.address);
+        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address);
         this.setState({
             isDoingSave: true
         })

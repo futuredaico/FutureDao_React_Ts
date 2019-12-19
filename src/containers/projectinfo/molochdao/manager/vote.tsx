@@ -49,9 +49,29 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                             <strong>我的投票</strong>
                         </div>
                         <div className="myvote-btn">
-                            <Button text="赞同" btnColor="bright-green" />
-                            <Button text="反对" btnColor="bright-red" />
-                            {/* <Button text="反对" btnColor="gray-btn" btnSize="vote-btn" /> */}
+                            {
+                                this.props.molochmanager.voteInfo.voteType === '' && (
+                                    <>
+                                        {
+                                            parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
+                                                <Button text="没有足够的票" btnColor="gray-btn" btnSize="vote-btn" />
+                                            )
+                                                : (
+                                                    <>
+                                                        <Button text="赞同" btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                        <Button text="反对" btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                    </>
+                                                )
+                                        }
+                                    </>
+                                )
+                            }
+                            {
+                                this.props.molochmanager.voteInfo.voteType === '1' && <Button text="赞同" btnColor="gray-btn" btnSize="vote-btn" />
+                            }
+                            {
+                                this.props.molochmanager.voteInfo.voteType === '2' && <Button text="反对" btnColor="gray-btn" btnSize="vote-btn" />
+                            }
                         </div>
                     </div>
                 </div>
@@ -67,7 +87,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                     this.props.molochmanager.proposalListItem.proposalState === ProposalType.showing && (
                         <div className="going-box">
                             <strong className="left-str">公示中</strong><br />
-                            <span className="small-right-str">剩余时间：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
+                            <span className="small-right-str">剩余时间：{this.computeShowTime(this.props.molochmanager.proposalListItem)}</span>
                         </div>
                     )
                 }
@@ -80,7 +100,23 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         );
     }
     // 投赞同票 1是true
+    private handeToVoteYes =async ()=>{
+        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+            return false
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        return true
+    }
     // 投反对票 2是false
+    private handeToVoteNo = async()=>{
+        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+            return false
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        return true
+    }
 
     // 计算投票所占百分比
     private computePercentage = (item: IMolochProposalList, type: boolean) =>
@@ -124,23 +160,23 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         // 投票时间-（当前时间点-创建提案时间）=剩余时间      
     }
     // 计算公示倒计时
-    // private computeShowTime = (item: IMolochProposalList) =>
-    // {
-    //     // 公示剩余时间=公示时间+投票时间-（当前时间点-发布合约的时间点）
-    //     const nowTime = new Date().getTime() / 1000;
-    //     const nowTimeInt = parseInt(nowTime.toString(), 10);
-    //     const agoTime = nowTimeInt - item.timestamp;
-    //     if (this.props.molochinfo.projInfo)
-    //     {
-    //         const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
-    //         const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
-    //         const endTime = graceTime + voteTime - agoTime;
-    //         return onCountRemainTime(endTime)
-    //     } else
-    //     {
-    //         return ''
-    //     }
-    // }
+    private computeShowTime = (item: IMolochProposalList) =>
+    {
+        // 公示剩余时间=公示时间+投票时间-（当前时间点-发布合约的时间点）
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        const agoTime = nowTimeInt - item.timestamp;
+        if (this.props.molochinfo.projInfo)
+        {
+            const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
+            const endTime = graceTime + voteTime - agoTime;
+            return onCountRemainTime(endTime)
+        } else
+        {
+            return ''
+        }
+    }
 }
 
 export default injectIntl(MolochManagerInfo);

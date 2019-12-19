@@ -3,7 +3,10 @@ import * as Api from '../api/moloch.api';
 import common from '@/store/common';
 import MetamasktTool from '@/utils/metamasktool';
 import { CodeType } from '@/store/interface/common.interface';
-import { IMolochProposalList, IMolochProposalDetail } from '../interface/molochmanager.interface';
+import { IMolochProposalList, IMolochProposalDetail, IVoteInfo } from '../interface/molochmanager.interface';
+import { Web3Contract } from '@/utils/web3Contract';
+import { AbiItem } from 'web3-utils';
+import Moloch from '@/utils/Moloch';
 
 class IMolochManager {
   @observable public proposalMenuNum: number = 1; // 菜单切换 1为正式提案，2为预发布提案
@@ -15,6 +18,11 @@ class IMolochManager {
   @observable public proposalIndex: string = ""; // 提案索引
   @observable public proposalBalance:number = 0; // 项目占股数量
   @observable public proposalAddress:string = ''; // 委托人
+  @observable public voteInfo:IVoteInfo = {
+    voteCount:'0',
+    voteType:'',
+    balance:'0'
+  }
 
   /**
    * 获取提案列表
@@ -87,6 +95,9 @@ class IMolochManager {
     }
     return true
   }
+  /**
+   * 获取该提案的投票详情
+   */
   @action public getVoteData = async (projId:string,proposalIndex:string,addr:string)=>{
     let result: any = [];
     try {
@@ -97,9 +108,46 @@ class IMolochManager {
     if (result[0].resultCode !== CodeType.success) {
       return false
     }
-    
-
+    this.voteInfo = result[0].data
     return true;
+  }
+  /**
+   * 投赞同票
+   */
+  @action public applyYesVote = async (proposalIndex:string,myaddr:string)=>{
+    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
+    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
+    const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
+    try {
+      const index = parseInt(proposalIndex,10);
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend("submitVote", [index,1], { from: myaddr })
+      const subtxid = await submitRes.onConfrim();
+      console.log("confirm",JSON.stringify(subtxid));
+      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,1],{from:myaddr})
+    } catch (e) {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 投反对票
+   */
+  @action public applyNoVote = async (proposalIndex:string,myaddr:string)=>{
+    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
+    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
+    const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
+    try {
+      const index = parseInt(proposalIndex,10);
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend("submitVote", [index,2], { from: myaddr })
+      const subtxid = await submitRes.onConfrim();
+      console.log("confirm",JSON.stringify(subtxid));
+      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,2],{from:myaddr})
+    } catch (e) {
+      return false;
+    }
+    return true
   }
 }
 
