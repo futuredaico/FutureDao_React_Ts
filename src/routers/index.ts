@@ -82,44 +82,40 @@ export default [
     component: asyncComponent(() => import('../containers/projectinfo/futuredao')),
     path: '/projectinfo/:projectId'
   },
-  {
-    component: asyncComponent(() => import('../containers/project')),
-    path: '/project',
-    children: [
-      {
-        path: '/moloch/order/:projectId',
-        component: asyncComponent(() => import('../containers/project/molochdao/order/order')),
-      },
-      {
-        path: '/moloch/financing/:projectId',
-        component: asyncComponent(() => import('../containers/project/molochdao/financing/financing')),
-      },
-      {
-        path: '/moloch/update/:projectId',
-        component: asyncComponent(() => import('../containers/project/molochdao/updateproject')),
-      },
-      {
-        path: '/moloch/:projectId',
-        component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
-      },
-      // {
-      //   path: '/project',
-      //   component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
-      // }
-    ]
-  },
+  // {
+  //   component: asyncComponent(() => import('../containers/project')),
+  //   path: '/project',
+  //   children: [
+  //     {
+  //       path: '/moloch/order/:projectId',
+  //       component: asyncComponent(() => import('../containers/project/molochdao/order/order')),
+  //     },
+  //     {
+  //       path: '/moloch/financing/:projectId',
+  //       component: asyncComponent(() => import('../containers/project/molochdao/financing/financing')),
+  //     },
+  //     {
+  //       path: '/moloch/update/:projectId',
+  //       component: asyncComponent(() => import('../containers/project/molochdao/updateproject')),
+  //     },
+  //     {
+  //       path: '/moloch/:projectId',
+  //       component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
+  //     },
+  //     {
+  //       path: '/project',
+  //       component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
+  //     }
+  //   ]
+  // },
   {
     component: asyncComponent(() => import('../containers/projectcreate')),
     path: '/create',
     children: [
       {
-        path: '/create/:projectId',
+        path: '/create/moloch',
         component: asyncComponent(() => import('../containers/projectcreate/info/molochdao')),
-      },
-      // {
-      //   path: '/project',
-      //   component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
-      // }
+      }
     ]
   },
   // {
