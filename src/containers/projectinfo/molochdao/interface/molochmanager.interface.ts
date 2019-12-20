@@ -13,6 +13,7 @@ export interface IMolochManagerStore
   proposalBalance:number,
   proposalAddress:string,
   voteInfo:IVoteInfo,
+  contractInfo:IContractInfo|null,
   getMolochProposalList:(projId: string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
   getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
@@ -21,6 +22,7 @@ export interface IMolochManagerStore
   applyYesVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   applyNoVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  getContractInfo:(projId:string)=>Promise<boolean>
 }
 
 
@@ -78,5 +80,9 @@ export interface IContractInfo{
   votingPeriodLength:string,
   notingPeriodLength:string,
   cancelPeriodLength:string,
-  contractHashs:[]
+  contractHashs:IContractHash[]
+}
+export interface IContractHash{
+  name:string,
+  hash:string
 }

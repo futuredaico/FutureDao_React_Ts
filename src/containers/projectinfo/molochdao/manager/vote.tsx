@@ -11,15 +11,14 @@ import { IMolochProposalList, ProposalType } from '../interface/molochmanager.in
 import { onCountRemainTime } from '@/utils/formatTime';
 import classnames from 'classnames';
 
+interface IState {
+    isVoteEnd:boolean, // 投票时间已经结束
+}
 @observer
-class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
+class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
-        managerDiscuss: '',
-        managerReply: '',
-        managerReplyOther: '',
-        isOpenStopBox: false,
-        showDeletBox: false
+    public state:IState = {
+        isVoteEnd: false
     }
     public render()
     {
@@ -49,20 +48,36 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                             <strong>我的投票</strong>
                         </div>
                         <div className="myvote-btn">
+
                             {
                                 this.props.molochmanager.voteInfo.voteType === '' && (
                                     <>
                                         {
-                                            parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
-                                                <Button text="没有足够的票" btnColor="gray-btn" btnSize="vote-btn" />
+                                            this.props.molochmanager.proposalListItem.proposalState === ProposalType.voting ? (
+                                                <>
+                                                    {
+                                                        this.computeVoteTime(this.props.molochmanager.proposalListItem)==='End'? (
+                                                            <Button text="投票已结束" btnColor="gray-btn" btnSize="vote-btn" />
+                                                        ) : (
+                                                                <>
+                                                                    {
+                                                                        parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
+                                                                            <Button text="没有足够的票" btnColor="gray-btn" btnSize="vote-btn" />
+                                                                        )
+                                                                            : (
+                                                                                <>
+                                                                                    <Button text="赞同" btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                                                    <Button text="反对" btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                </>
+                                                                            )
+                                                                    }</>
+                                                            )
+                                                    }
+                                                </>
                                             )
-                                                : (
-                                                    <>
-                                                        <Button text="赞同" btnColor="bright-green" onClick={this.handeToVoteYes} />
-                                                        <Button text="反对" btnColor="bright-red" onClick={this.handeToVoteNo} />
-                                                    </>
-                                                )
+                                                : <Button text="未投票" btnColor="gray-btn" btnSize="vote-btn" />
                                         }
+
                                     </>
                                 )
                             }
@@ -100,30 +115,36 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         );
     }
     // 投赞同票 1是true
-    private handeToVoteYes =async ()=>{
-        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+    private handeToVoteYes = async () =>
+    {
+        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        {
             return false
         }
         await this.props.metamaskwallet.inintWeb3();
-        await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         return true
     }
     // 投反对票 2是false
-    private handeToVoteNo = async()=>{
-        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+    private handeToVoteNo = async () =>
+    {
+        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        {
             return false
         }
         await this.props.metamaskwallet.inintWeb3();
-        await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         return true
     }
     // 处理提案
-    private handleProcessProposal = async()=>{
-        if(!this.props.common.userInfo||!this.props.molochmanager.proposalIndex){
+    private handleProcessProposal = async () =>
+    {
+        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        {
             return false
         }
         await this.props.metamaskwallet.inintWeb3();
-        await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex,this.props.common.userInfo.address);
+        await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         return true
     }
 
@@ -160,10 +181,16 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const endTime = voteTime - agoTime;
-            return onCountRemainTime(endTime)
+            if (endTime < 0)
+            {
+                return 'End'
+            } else
+            {
+                return onCountRemainTime(endTime)
+            }
         } else
         {
-            return ''
+            return 'End'
         }
 
         // 投票时间-（当前时间点-创建提案时间）=剩余时间      
@@ -180,10 +207,16 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
             const endTime = graceTime + voteTime - agoTime;
-            return onCountRemainTime(endTime)
+            if (endTime < 0)
+            {
+                return 'End'
+            } else
+            {
+                return onCountRemainTime(endTime)
+            }
         } else
         {
-            return ''
+            return 'End'
         }
     }
 }

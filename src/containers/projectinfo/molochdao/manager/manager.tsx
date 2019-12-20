@@ -10,7 +10,8 @@ import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { Pagination, Input } from 'antd';
 import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
-import { onCountRemainTime } from '@/utils/formatTime'
+import { onCountRemainTime } from '@/utils/formatTime';
+import QuitProject from './quit';
 
 interface IState
 {
@@ -32,6 +33,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     public componentDidMount()
     {
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
+        this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
         {
             this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
@@ -62,7 +64,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                             {
                                                 this.props.common.userInfo && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
                                             }
-                                            <strong className="mtitle">{item.proposalTitle?item.proposalTitle:'null'}</strong>
+                                            <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                         </div>
                                         {
                                             item.proposalState === ProposalType.voting && (
@@ -97,16 +99,12 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                             <span>{this.intrl.manager.gong} </span>
                                             <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
                                         </div>
-                                        {
-                                            item.proposalState === ProposalType.voting && (
-                                                <div className="manager-votebox">
-                                                    <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
-                                                    <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
-                                                    <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
-                                                    <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
-                                                </div>
-                                            )
-                                        }
+                                        <div className="manager-votebox">
+                                            <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
+                                            <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
+                                            <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
+                                            <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )
@@ -132,25 +130,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                         }
                         {/* <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} /> */}
                     </div>
-                    <h3 className="title-h3">退出</h3>
-                    <div className="exit-wrapper">
-                        <div className="exit-line">
-                            <div className="exit-left">我的股数</div>
-                            <div className="exit-right">
-                                <input type="text" className="normal-exit-input readonly-input" readOnly={true} value={this.props.molochmanager.proposalBalance} />
-                            </div>
-                        </div>
-                        <div className="exit-line">
-                            <div className="exit-left">退出股数</div>
-                            <div className="exit-right">
-                                <input type="text" className="normal-exit-input" />
-                                <span className="amount-text">价值：10 ETH</span>
-                            </div>
-                        </div>
-                        <div className="doing-btn">
-                            <Button text="立即退出" btnSize="buy-btn" />
-                        </div>
-                    </div>
+                    <QuitProject {...this.props}/>
                 </div>
                 {
                     this.state.showEntrust && (
@@ -221,10 +201,6 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     // 计算投票所占百分比
     private computePercentage = (item: IMolochProposalList, type: boolean) =>
     {
-        if(this.props.common.userInfo){
-            console.log(this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress)
-        }
-        
         const total = item.voteYesCount + item.voteNotCount;
         if (total === 0)
         {
@@ -255,10 +231,14 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const endTime = voteTime - agoTime;
-            return onCountRemainTime(endTime)
+            if(endTime<0){
+                return 'End'
+            }else{
+                return onCountRemainTime(endTime)
+            }            
         } else
         {
-            return ''
+            return 'End'
         }
 
         // 投票时间-（当前时间点-创建提案时间）=剩余时间      
@@ -275,10 +255,14 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
             const endTime = graceTime + voteTime - agoTime;
-            return onCountRemainTime(endTime)
+            if(endTime<0){
+                return 'End'
+            }else{
+                return onCountRemainTime(endTime)
+            }  
         } else
         {
-            return ''
+            return 'End'
         }
     }
     // 委托地址的输入

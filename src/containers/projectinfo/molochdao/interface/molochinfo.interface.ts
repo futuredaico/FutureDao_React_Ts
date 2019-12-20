@@ -15,12 +15,6 @@ export interface IMolochInfoStore
   memberPageSize:number,
   projDiscussList: IDiscussList[],
   isShowManagerInfo: boolean,
-  priceInfo:IProjAssetPrice|null,  // 代币的价格
-  rewardList:IProjReward[],  // 礼包列表
-  reserveData: IProjReserveToken | null,    // 预留代币数据
-  buyPrice:string,
-  sellPrice:string,
-  hashList:IContractHash[],
   getMolochProjInfo: (projId: string) => Promise<boolean>,
   getMemberData: () => Promise<boolean>,
   getMolochDiscussList: () => Promise<boolean>,
@@ -95,56 +89,4 @@ export interface IDiscussReplyList extends IDiscussInfo
 {
   preUserId: string, // 被回复人ID
   preUsername: string // 被回复人名称
-}
-
-export interface IHistoryPrice
-{
-  buyInfo: string[],
-  sellInfo: string[],
-  timeInfo: string[],
-}
-
-export interface IProjAssetPrice
-{
-  ob_fundAmt: string, // 购买代币花费eth数量
-  ob_tokenAmt: string, // 购买代币数量
-  os_fundAmt: string, // 出售代币花费eth数量
-  os_tokenAmt: string, // 出售代币数量
-}
-export interface IProjReward
-{
-  rewardId: string,  // 回报信息Id
-  rewardName: string,  // 回报名称
-  rewardDesc: string, // 回报详情
-  price: string,    // 价格
-  limitFlag: string,  // 是否限量 0为不限量，1为限量
-  limitMax: string, // 限量数量
-  distributeTimeFlag: string, // 预计发放时间 0为不定期，1为定期
-  distributeTimeFixYes: string, // 定期
-  distributeTimeFixNot: string, // 不定期
-  distributeWay: string, // 发放方式，0为虚拟发放，1为实物发放
-  note: string, // 特殊说明
-  projId: string, // 项目ID
-  fundName: string, // 单位
-  hasSellCount: number // 已出售数量
-  rewardPrice:string  // 计算出可获得的礼包
-}
-
-export interface IProjReserveToken
-{
-  lockTotal: string,  // 锁定总额
-  count: number,
-  list: IProjReserveList[]
-}
-export interface IProjReserveList
-{
-  tokenAmt: string,  // 代币数量
-  timestamp: string,  // 到期时间
-  order: number,  // 第几批次
-  unlockFlag: string,  // 解锁标识，true为已解锁，false为未解锁
-}
-export interface IContractHash {
-  contractHash:string,   // 合约hash
-  contractName:string,   // 合约作用名
-  projId:string
 }

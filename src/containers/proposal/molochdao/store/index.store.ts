@@ -37,32 +37,27 @@ class MolochProposal implements IMolochProposalStore
     this.fundSymbol = result[0].data.fundSymbol || '';
     return true;
   }
+  
   /**
    * 发起提案
    */
-  @action public applyProposal = async (addr: string, giveNum: number, requireNum: number, des: string, myaddr: string,confrimCall:any) =>
+  @action public applyProposal = async (contractHash:string,addr: string, giveNum: number, requireNum: number, des: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
   {
     // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
     // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
-    const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
+    // const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
     console.log([addr, giveNum, requireNum, des]);
     console.log({ from: myaddr, to: contractHash, value: giveNum })
     try
     {
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
       const erc20Contract = new Web3Contract(abi,"0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7");
-      const result = erc20Contract.contractSend("approve",[myaddr,20],{from:myaddr})
-      const txid = await result.onTransactionHash();
-      console.log(txid);
+      erc20Contract.contractSend("approve",[myaddr,20],{from:myaddr});
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("submitProposal", [addr,giveNum, requireNum, des], { from: myaddr })
-      submitRes.onConfrim()
-      .then(res=>{confrimCall()})
-      const subtxid = await submitRes.onTransactionHash();
-      console.log(subtxid);
+      const submitRes = molochContract.contractSend("submitProposal", [addr,giveNum, requireNum, des], { from: myaddr });
+      submitRes.onTransactionHash().then(()=>{sendCall()})
+      submitRes.onConfrim().then(res=>{confrimCall()})      
       return true
-      // await MetamasktTool.contractSend(contractHash, 'approve', [addr,giveNum, requireNum, des], { from: myaddr })
-      // await MetamasktTool.contractSend(contractHash, 'submitProposal', [addr,giveNum, requireNum, des], { from: myaddr })
     } catch (e)
     {
       return false;
