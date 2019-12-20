@@ -73,3 +73,10 @@ export interface IVoteInfo {
   voteType:string, // 1表示赞成，2表示反对，空表示未投票
   balance:string
 }
+export interface IContractInfo{
+  periodDuration:string,
+  votingPeriodLength:string,
+  notingPeriodLength:string,
+  cancelPeriodLength:string,
+  contractHashs:[]
+}

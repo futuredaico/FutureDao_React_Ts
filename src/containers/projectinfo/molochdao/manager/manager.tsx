@@ -126,7 +126,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="entrust-btn">
                         {
-                            (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress)
+                            (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
                                 ? <Button text="取消权限委托" btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
                                 : <Button text="权限委托" btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
                         }
@@ -221,6 +221,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     // 计算投票所占百分比
     private computePercentage = (item: IMolochProposalList, type: boolean) =>
     {
+        if(this.props.common.userInfo){
+            console.log(this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress)
+        }
+        
         const total = item.voteYesCount + item.voteNotCount;
         if (total === 0)
         {

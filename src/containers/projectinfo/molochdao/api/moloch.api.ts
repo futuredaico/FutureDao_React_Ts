@@ -215,3 +215,15 @@ export const getVoteInfo = ( projId: string,proposalIndex:string,addr: string) =
     }
     return request(opts);
 }
+/**
+ * 获取合约hash，以及相关时间参数
+ * @param projId 项目ID
+ */
+export const getContractInfo = ( projId: string) =>
+{
+    const opts = {
+        method: 'queryContractInfo',
+        params: [projId]
+    }
+    return request(opts);
+}
