@@ -73,7 +73,7 @@ export default [
         component: asyncComponent(() => import('../containers/personalcenter/personedit')),
       }
     ]
-  },  
+  },
   {
     component: asyncComponent(() => import('../containers/projectinfo/molochdao')),
     path: '/molochinfo/:projectId'
@@ -101,6 +101,20 @@ export default [
       {
         path: '/moloch/:projectId',
         component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
+      },
+      // {
+      //   path: '/project',
+      //   component: asyncComponent(() => import('../containers/project/molochdao/edit/createproject')),
+      // }
+    ]
+  },
+  {
+    component: asyncComponent(() => import('../containers/projectcreate')),
+    path: '/create',
+    children: [
+      {
+        path: '/create/:projectId',
+        component: asyncComponent(() => import('../containers/projectcreate/info/molochdao')),
       },
       // {
       //   path: '/project',
