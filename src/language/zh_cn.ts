@@ -28,6 +28,10 @@ export default {
     delete:"删除",
     updatevideo:"更换视频",
     review:"审核中",
+    proposal:"发起提案",
+    weituo:"权限委托",
+    cweituo:"取消权限委托",
+    quit:"立即退出"
   },
   card:{
     game:"游戏",
@@ -118,6 +122,10 @@ export default {
     newemail:"新邮箱",
     password:"密码",
     checkpwd:"确认密码",
+    name:"名称",
+    address:"钱包地址",
+    nodata:"无",
+    shen:"神秘人"
   },
   myproject:{
     project:"我的DAO",
@@ -158,7 +166,7 @@ export default {
     website:"官方网站",
     manager:"治理",
     member:"成员",
-    textarea2:"请先登陆"
+    textarea2:"请先登陆",    
   },
   update:{
     update:"发布更新",
@@ -261,6 +269,16 @@ export default {
     detail:"提案说明",
     apply:"申请股份",
     gong2:"贡献",
-    gu:"股"
+    gu:"股",
+    quit:"退出",
+    mygu:"我的股数",
+    quitgu:"退出股数",
+    value:"价值",
+    address:"委托地址",
+    tips:"注意：权限委托后将无法发起提案或进行投票，权限委托可随时取消。",
+    vote:"投票",
+    myvote:"我的投票",
+    over:"投票已结束",
+    noenough:"没有足够的票",
   }
 }

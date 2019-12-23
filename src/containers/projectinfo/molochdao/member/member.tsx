@@ -10,6 +10,7 @@ import { Pagination } from 'antd';
 
 @observer
 class MolochMember extends React.Component<IMolochInfoProps> {
+    public intrl = this.props.intl.messages;
     public componentDidMount (){
         this.props.molochinfo.getMemberData()
     }
@@ -31,11 +32,11 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                                     }
                                 </div>
                                 <div className="member-name-addr">
-                                    <strong className="member-name">{item.username?item.username:'神秘人'}</strong>
+                                    <strong className="member-name">{item.username?item.username:this.intrl.user.shen}</strong>
                                     <span>{item.address.replace(/^(.{7})(.*)(.{4})$/, '$1...$3')}</span>
                                 </div>
                                 <div className="member-count">
-                                    <strong>{item.shares} 股</strong>
+                                    <strong>{item.shares} {this.intrl.home.gu}</strong>
                                 </div>
                             </div>
                         )

@@ -30,30 +30,31 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
         }
         return (
                 <>
-                    <h3 className="title-h3">退出</h3>
+                    <h3 className="title-h3">{this.intrl.manager.quit}</h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
-                            <div className="exit-left">我的股数</div>
+                            <div className="exit-left">{this.intrl.manager.mygu}</div>
                             <div className="exit-right">
                                 <input type="text" className="normal-exit-input readonly-input" readOnly={true} value={this.props.molochmanager.proposalBalance} />
                             </div>
                         </div>
                         <div className="exit-line">
-                            <div className="exit-left">退出股数</div>
+                            <div className="exit-left">{this.intrl.manager.quitgu}</div>
                             <div className="exit-right">
                                 <input type="text" className="normal-exit-input" value={this.state.exitShareInput} onChange={this.handleChangeExitNumber} />
                                 {
-                                    this.state.exitShareInput && <span className="amount-text">价值：{this.state.valueShow} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</span>
+                                    this.state.exitShareInput && <span className="amount-text">{this.intrl.manager.value}：{this.state.valueShow} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</span>
                                 }                                
                             </div>
                         </div>
                         <div className="doing-btn">
-                            <Button text="立即退出" btnSize="buy-btn" />
+                            <Button text={this.intrl.btn.quit} btnSize="buy-btn" onClick={this.handleSendQuitShares} />
                         </div>
                     </div>
                 </>
         );
     }
+    // 退出股数的输入
     private handleChangeExitNumber = (ev: React.ChangeEvent<HTMLInputElement>)=>{
         
         const value = ev.target.value as unknown as number;
@@ -82,6 +83,34 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
             })
         })
         return true
+    }
+    // 发送退出股数请求
+    private handleSendQuitShares =async ()=>{
+        // 未登录
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        // 未输入，输入为零
+        if(!this.state.exitShareInput||parseFloat(this.state.exitShareInput)<=0){
+            return false;
+        }
+        await this.props.metamaskwallet.inintWeb3();
+        // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
+        const value = parseInt(this.state.exitShareInput,10)
+        const res = await this.props.molochmanager.quitShares(value, this.props.common.userInfo.address);
+        if (res)
+        {
+            this.props.common.openNotificationWithIcon('success', '退出股数', '交易已发出，请在钱包确认。');
+        } else
+        {
+            this.props.common.openNotificationWithIcon('error', '退出股数', '交易发送失败');
+        }
+        this.setState({
+            exitShareInput:''
+        })
+        return true;
     }
 }
 

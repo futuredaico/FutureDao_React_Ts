@@ -10,7 +10,12 @@ const formatConfig = function (dateObj: Date)
     "S": dateObj.getMilliseconds()             // 毫秒 
   }
 };
-
+/**
+ * 规范时间显示格式
+ * @param fmt 规范的日期格式
+ * @param dateNumber 时间戳
+ * @param locale 显示语言
+ */
 export const format = function (fmt: string, dateNumber: string, locale: string)
 {
 
@@ -59,71 +64,42 @@ export const format = function (fmt: string, dateNumber: string, locale: string)
   }
   return fmt;
 }
-
+/**
+ * 初始化时间戳
+ * @param dateNumber 时间戳
+ */
 export const formatUnixTime = (dateNumber: string | number) =>
 {
   return dateNumber.toString().length === 10 ? parseInt(dateNumber.toString(), 10) * 1000 : parseInt(dateNumber.toString(), 10);
 }
-// 倒计时
-export const onCountDown = () =>
-{
-  const date = new Date();
-  const now = date.getTime();
-  // 当天
-  const today = new Date(date.setHours(0, 0, 0, 0));
-  // 明天
-  const tomorrow = today.setDate(today.getDate() + 1);
-  const leftTime = tomorrow - now;
-
-  let h = 0;
-  let m = 0;
-  let s = 0;
-  if (leftTime >= 0)
-  {
-    // d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
-    h = Math.floor(leftTime / 1000 / 60 / 60 % 24);
-    m = Math.floor(leftTime / 1000 / 60 % 60);
-    s = Math.floor(leftTime / 1000 % 60);
-  } else
-  {
-    return false ;
-  }
-  let hour = h.toString();
-  if (hour.length === 1)
-  {
-    hour = '0' + hour;
-  }
-  let minute = m.toString();
-  if (minute.length === 1)
-  {
-    minute = '0' + minute;
-  }
-  let second = s.toString();
-  if (second.length === 1)
-  {
-    second = '0' + second;
-  }  
-  setTimeout(onCountDown, 1000);
-  const str = hour+':'+minute+':'+second;
-  return str;
-}
-// 计算时间差值
-export const computeTime = function (time: number, locale: string)
+/**
+ * 计算时间差值
+ * @param time 结束的时间戳
+ * @param locale 显示语言
+ */
+export const computeTime = function (time: string, locale: string)
 {
   // const date1 = '2015/05/01 00:00:00';  // 开始时间
   const nowTime = new Date().getTime();    // 当前时间
-  const dateTimer = formatUnixTime(time.toString());
+  const dateTimer = formatUnixTime(time);
   const endTime = new Date(dateTimer).getTime(); // 结束时间
-  const differ = nowTime - endTime;   // 时间差的毫秒数    
+  let differ = 0;
+  if(endTime>nowTime){
+    // 计算还剩余多少时间（结束时间-当前时间）
+    differ = endTime - nowTime;   // 时间差的毫秒数
+  }else{
+    // 过去了多少时间（当前时间-结束时间）
+    differ = nowTime - endTime;   // 时间差的毫秒数  
+  }
 
   // 计算出相差天数
   const days = Math.floor(differ / (24 * 3600 * 1000))
   if (days > 0)
   {
     if (locale === 'en'){
-      return days + ' days ago'
+      return days + ' days'
     }
-    return days + '天前更新'
+    return days + '天'
   }
   // 计算出小时数
   const leave1 = differ % (24 * 3600 * 1000)    // 计算天数后剩余的毫秒数
@@ -131,9 +107,9 @@ export const computeTime = function (time: number, locale: string)
   if (hours > 0)
   {
     if (locale === 'en'){
-      return hours + ' hours ago'
+      return hours + ' hours'
     }
-    return hours + '小时前更新'
+    return hours + '小时'
   }
   // 计算相差分钟数
   const leave2 = leave1 % (3600 * 1000)        // 计算小时数后剩余的毫秒数
@@ -141,9 +117,9 @@ export const computeTime = function (time: number, locale: string)
   if (minutes > 5)
   {
     if (locale === 'en'){
-      return minutes + ' minutes ago'
+      return minutes + ' minutes'
     }
-    return minutes + '分钟前更新'
+    return minutes + '分钟'
   }
   // 计算相差秒数
   // const leave3 = leave2 % (60 * 1000)      // 计算分钟数后剩余的毫秒数
@@ -153,54 +129,18 @@ export const computeTime = function (time: number, locale: string)
   //   if (locale === 'en'){
   //     return seconds + ' seconds ago'
   //   }
-  //   return seconds + '秒前'
+  //   return seconds + '秒'
   // }
   
   if (locale === 'en'){
-    return 'Just now'
-  }
-  return '刚刚'
-}
-
-export const computeDay = function (time: string, locale: string)
-{
-  // const date1 = '2015/05/01 00:00:00';  // 开始时间
-  const nowTime = new Date().getTime();    // 当前时间
-  const dateTimer = formatUnixTime(time);
-  const endTime = new Date(dateTimer).getTime(); // 结束时间
-  const differ =  endTime - nowTime;   // 时间差的毫秒数    
-
-  // 计算出相差天数
-  const days = Math.floor(differ / (24 * 3600 * 1000))
-  if (days > 0)
-  {
-    if (locale === 'en'){
-      return days + ' days ago'
-    }
-    return days + '天后'
-  }
-  // 计算出小时数
-  const leave1 = differ % (24 * 3600 * 1000)    // 计算天数后剩余的毫秒数
-  const hours = Math.floor(leave1 / (3600 * 1000));
-  if (hours > 0)
-  {
-    if (locale === 'en'){
-      return hours + ' hours ago'
-    }
-    return hours + '小时后'
-  }
-  // 计算相差分钟数
-  const leave2 = leave1 % (3600 * 1000)        // 计算小时数后剩余的毫秒数
-  const minutes = Math.floor(leave2 / (60 * 1000));
-  if (minutes > 5)
-  {
-    if (locale === 'en'){
-      return minutes + ' minutes ago'
-    }
-    return minutes + '分钟后'
+    return ''
   }
   return ''
 }
+/**
+ * 剩余的时间显示
+ * @param remainTime 剩余的时间戳
+ */
 export const onCountRemainTime = (remainTime:number) =>
 {
   let d = 0;

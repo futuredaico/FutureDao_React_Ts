@@ -1,5 +1,5 @@
 /**
- * 个人中心
+ * 我的项目
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
@@ -100,7 +100,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                                     {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
                                                     {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
-                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
+                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                 </div> */}
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                                                     {item.projState === ProjectState.CrowdFunding && <strong>众筹中</strong>}
                                                     {item.projState === ProjectState.Trading && <strong>交易中</strong>}
                                                     {item.projState === ProjectState.ClearUp && <strong>清退</strong>}
-                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)}</span>
+                                                    <span className="time-text">{formatTime.computeTime(item.lastUpdateTime, this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                 </div> */}
                                             </div>
                                         </div>

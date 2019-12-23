@@ -22,7 +22,8 @@ export interface IMolochManagerStore
   applyYesVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   applyNoVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
-  getContractInfo:(projId:string)=>Promise<boolean>
+  getContractInfo:(projId:string)=>Promise<boolean>,
+  quitShares:(value:number,myaddr:string)=>Promise<boolean>,
 }
 
 
@@ -76,10 +77,10 @@ export interface IVoteInfo {
   balance:string
 }
 export interface IContractInfo{
-  periodDuration:string,
-  votingPeriodLength:string,
-  notingPeriodLength:string,
-  cancelPeriodLength:string,
+  periodDuration:string, // 周期区间，单位，秒
+  votingPeriodLength:string, // 投票周期
+  notingPeriodLength:string, // 公示周期
+  cancelPeriodLength:string, // 终止周期
   contractHashs:IContractHash[]
 }
 export interface IContractHash{

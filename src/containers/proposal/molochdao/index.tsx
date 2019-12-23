@@ -117,7 +117,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                         </div>
                         <div className="inline-btn">
                             <Button
-                                text="发起预发布提案"
+                                text="发起提案"
                                 btnSize="bg-btn"
                                 btnColor={this.state.canSendFlag ? "" : "gray-btn"}
                                 onClick={this.handleSendProposal}

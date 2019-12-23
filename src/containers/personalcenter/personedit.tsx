@@ -66,7 +66,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                     {/* 编辑名称 */}
                     <div className={nameClassName}>
                         <div className="edit-title">
-                            <strong>名称</strong>
+                            <strong>{this.intrl.user.name}</strong>
                             {
                                 !this.state.isEditName && <div className="edit-img" onClick={this.handleEditPerson.bind(this, 1)} />
                             }
@@ -91,7 +91,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                                 )
                                 : <span>
                                     {
-                                        this.props.common.userInfo.username !== '' ? this.props.common.userInfo.username : '神秘人'
+                                        this.props.common.userInfo.username !== '' ? this.props.common.userInfo.username : this.intrl.user.shen
                                     }
                                 </span>
                         }
@@ -99,12 +99,12 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                     {/* 编辑钱包 */}
                     <div className={nameClassName}>
                         <div className="edit-title">
-                            <strong>钱包地址</strong>                            
+                            <strong>{this.intrl.user.address}</strong>                            
                         </div>
                         {
                             this.props.common.userInfo.address!==""
                                 ? <span>{this.props.common.userInfo.address}</span>                                
-                                : <span className="nobind-text">无</span>
+                                : <span className="nobind-text">{this.intrl.user.nodata}</span>
                         }
                     </div>  
                     

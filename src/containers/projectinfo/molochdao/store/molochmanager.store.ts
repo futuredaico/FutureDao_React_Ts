@@ -143,9 +143,6 @@ class IMolochManager {
    * 投赞同票
    */
   @action public applyYesVote = async (proposalIndex:string,myaddr:string)=>{
-    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
-    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
-    
     if(!this.contractInfo){
       return false
     }
@@ -161,10 +158,8 @@ class IMolochManager {
     try {
       const index = parseInt(proposalIndex,10);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("submitVote", [index,1], { from: myaddr })
-      const subtxid = await submitRes.onConfrim();
-      console.log("confirm",JSON.stringify(subtxid));
-      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,1],{from:myaddr})
+      const submitRes = molochContract.contractSend("submitVote", [index,1], { from: myaddr });
+      console.log(submitRes)
     } catch (e) {
       return false;
     }
@@ -174,8 +169,6 @@ class IMolochManager {
    * 投反对票
    */
   @action public applyNoVote = async (proposalIndex:string,myaddr:string)=>{
-    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
-    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
     if(!this.contractInfo){
       return false
     }
@@ -192,9 +185,7 @@ class IMolochManager {
       const index = parseInt(proposalIndex,10);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("submitVote", [index,2], { from: myaddr })
-      const subtxid = await submitRes.onConfrim();
-      console.log("confirm",JSON.stringify(subtxid));
-      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,2],{from:myaddr})
+      console.log(submitRes)
     } catch (e) {
       return false;
     }
@@ -204,8 +195,6 @@ class IMolochManager {
    * 处理提案
    */
   @action public processProposal = async (proposalIndex:string,myaddr:string)=>{
-    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
-    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
     if(!this.contractInfo){
       return false
     }
@@ -222,15 +211,37 @@ class IMolochManager {
       const index = parseInt(proposalIndex,10);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("processProposal", [index], { from: myaddr })
-      const subtxid = await submitRes.onConfrim();
-      console.log("confirm",JSON.stringify(subtxid));
-      // await MetamasktTool.contractSend( contractHash, 'submitVote', [index,2],{from:myaddr})
+      console.log(submitRes)
     } catch (e) {
       return false;
     }
     return true
   }
-  
+  /**
+   * 退出股数
+   */
+  @action public quitShares = async (value:number,myaddr:string)=>{
+    if(!this.contractInfo){
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item:IContractHash)=>{
+      if(item.name==='moloch'){
+        contractHash = item.hash
+      }
+    })
+    if(!contractHash){
+      return false
+    }
+    try {
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend('ragequit', [value],{from:myaddr})
+      console.log(submitRes);
+    } catch (e) {
+      return false;
+    }
+    return true
+  }
 }
 
 export default new IMolochManager();

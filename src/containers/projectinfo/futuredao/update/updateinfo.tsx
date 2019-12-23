@@ -128,7 +128,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                                             <strong>{item.username}</strong>
                                         </div>
                                         <p>{item.discussContent}</p>
-                                        <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
+                                        <span className="time-tips">{formatTime.computeTime(item.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                         <div className="right-other">
                                             <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenUpdatReply.bind(this, item)} />
                                             {
@@ -164,7 +164,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                                                                         <strong>{replyItem.username}</strong>
                                                                     </div>
                                                                     <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
-                                                                    <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
+                                                                    <span className="time-tips">{formatTime.computeTime(replyItem.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                                     <div className="right-other">
                                                                         <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenUpdatReplyOther.bind(this, replyItem)} />
                                                                         {
