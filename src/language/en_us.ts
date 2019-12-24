@@ -252,7 +252,8 @@ export default {
     updateerr:"Change failed",
     sendok:"Transaction generated. Please confirm in the wallet.",
     sendfail:"Transaction sending failed.",
-    senddone:"Your proposal has been sent."
+    senddone:"Your proposal has been sent.",
+    membererr:"You are not a member and cannot initiate a proposal"
   },
   manager:{
     tian:"Published proposals",

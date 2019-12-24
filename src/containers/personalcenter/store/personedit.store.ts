@@ -16,7 +16,7 @@ class PersonEdit
         let result: any = [];
         try
         {
-            result = await Api.modifyUserIcon(common.userId, common.token, imgStr);
+            result = await Api.modifyUserIcon(imgStr);
         } catch (e)
         {
             return false;
@@ -38,32 +38,23 @@ class PersonEdit
         return true;
     }
     /**
-     * 修改用户简介
+     * 修改用户名称
      */
-    @action public updateUserBrief = async (str: string) =>
+    @action public updateName = async (username: string) =>
     {
         let result: any = [];
         try
         {
-            result = await Api.modifyUserBrief(common.userId, common.token, str);
+            result = await Api.updateUsername(username);
         } catch (e)
         {
             return false;
         }
-        if (result[0].resultCode === CodeType.success)
-        {
-            if (common.userInfo)
-            {
-                // common.userInfo.brief = str;
-            }
-            else
-            {
-                return false
-            }
-        } else
+        if (result[0].resultCode !== CodeType.success)
         {
             return false
-        }
+        } 
+        common.getUserInfo();
         return true;
     }
     /**

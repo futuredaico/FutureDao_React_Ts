@@ -85,7 +85,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                                         />
                                         <div className="personedit-btn">
                                             <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveDrief} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveUsername} />
                                         </div>
                                     </>
                                 )
@@ -138,7 +138,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             }
         }
     }
-    // 输入个人简介
+    // 输入用户名称
     private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         //
@@ -146,10 +146,10 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             nameInput: ev.target.value.trim()
         })
     }
-    // 确认修改个人简历(待修改)
-    private handleToSaveDrief = async () =>
+    // 确认修改用户名称
+    private handleToSaveUsername = async () =>
     {
-        const res = await this.props.personedit.updateUserBrief(this.state.nameInput);
+        const res = await this.props.personedit.updateName(this.state.nameInput);
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.drieftips);

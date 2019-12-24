@@ -65,7 +65,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                     <div className="mcontent-top">
                                         <div className="mcontent-title">
                                             {
-                                                this.props.common.userInfo && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
+                                                (this.props.common.userInfo && this.props.molochmanager.proposalBalance>0) && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
                                             }
                                             <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                         </div>
@@ -136,9 +136,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
 
                     <div className="entrust-btn">
                         {
-                            (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
-                                ? <Button text={this.intrl.btn.cweituo} btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
-                                : <Button text={this.intrl.btn.weituo} btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
+                            (this.props.molochmanager.proposalAddress === '' || (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress))
+                            ?<Button text={this.intrl.btn.weituo} btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
+                            :<Button text={this.intrl.btn.cweituo} btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
                         }
                     </div>
                     <QuitProject {...this.props} />
@@ -188,7 +188,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-        } else
+        }else if(this.props.molochmanager.proposalBalance<=0){
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+        }
+         else
         {
             this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
         }

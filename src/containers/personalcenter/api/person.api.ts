@@ -5,13 +5,11 @@ import request from 'utils/request';
  * @param token 
  * @param imgStr 头像url
  */
-export const modifyUserIcon = (userId: string,token:string,imgStr:string) =>
+export const modifyUserIcon = (imgStr:string) =>
 {
     const opts = {
-        method: 'modifyUserIcon',
+        method: 'modifyUserIconV3',
         params: [
-            userId,
-            token,
             imgStr
         ]
     }
@@ -177,6 +175,20 @@ export const getMyorderDetail = (userId: string,token:string,projId:string,order
         method: 'queryBuyOrder',
         params: [
             userId,token,projId,orderId
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 修改用户名
+ * @param username 用户名
+ */
+export const updateUsername = (username:string) =>
+{
+    const opts = {
+        method: 'modifyUserNameV3',
+        params: [
+            username
         ]
     }
     return request(opts);

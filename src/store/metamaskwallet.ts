@@ -69,7 +69,7 @@ class MetaMastWallet implements IMetaMastWalletStore
   @action public changeNetwork = () => {
     this.getMetamaskNetwork()
     // vip注释 这里判断要不要进行切换
-    const currentMetaMask = sessionStorage.get('currentMetaMask') || '';
+    const currentMetaMask = sessionStorage.getItem('currentMetaMask') || '';
     if (currentMetaMask && currentMetaMask === this.metamaskNetwork) {
       return false;
     }
