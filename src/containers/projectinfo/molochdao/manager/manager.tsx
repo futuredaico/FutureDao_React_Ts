@@ -43,7 +43,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.handleComputeTimeIndex();
     }
     public render()
-    {        
+    {
         return (
             <div className="manager-wrapper">
                 <div className="manager-left">
@@ -65,7 +65,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                     <div className="mcontent-top">
                                         <div className="mcontent-title">
                                             {
-                                                (this.props.common.userInfo && this.props.molochmanager.proposalBalance>0) && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
+                                                (this.props.common.userInfo && this.props.molochmanager.proposalBalance > 0) && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
                                             }
                                             <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                         </div>
@@ -133,14 +133,17 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                                 </div>
                             )
                     }
-
-                    <div className="entrust-btn">
-                        {
-                            (this.props.molochmanager.proposalAddress === '' || (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress))
-                            ?<Button text={this.intrl.btn.weituo} btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
-                            :<Button text={this.intrl.btn.cweituo} btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
-                        }
-                    </div>
+                    {
+                        this.props.molochmanager.proposalBalance > 0 && (
+                            <div className="entrust-btn">
+                                {
+                                    (this.props.molochmanager.proposalAddress === '' || (this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() === this.props.molochmanager.proposalAddress))
+                                        ? <Button text={this.intrl.btn.weituo} btnSize="bg-bg-btn" onClick={this.handleToShowEntrust} />
+                                        : <Button text={this.intrl.btn.cweituo} btnSize="bg-bg-btn" onClick={this.handleToCancelEntrust} />
+                                }
+                            </div>
+                        )
+                    }
                     <QuitProject {...this.props} />
                 </div>
                 {
@@ -188,10 +191,11 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-        }else if(this.props.molochmanager.proposalBalance<=0){
+        } else if (this.props.molochmanager.proposalBalance <= 0)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
         }
-         else
+        else
         {
             this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
         }
@@ -240,9 +244,11 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     {
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 当前时间-提案创建时间=提案过去了的时间
         const agoTime = nowTimeInt - item.timestamp;
         if (this.props.molochinfo.projInfo)
         {
+            // 项目投票时间长度
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const endTime = voteTime - agoTime;
             if (endTime < 0)
@@ -383,18 +389,18 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         // 项目创建时间
         const startTime = this.props.molochinfo.projInfo.startTime;
         const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
-        console.log("betweenTime:"+betweenTime)
+        console.log("betweenTime:" + betweenTime)
         const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);
-        console.log("nowIndex:"+nowIndex);
+        console.log("nowIndex:" + nowIndex);
         if (this.props.molochmanager.proposalList.length > 0)
         {
             // 获取最新的一个提案
             const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
             console.log("最新提案时间")
             console.log(new Date())
-            console.log(new Date(item.timestamp*1000))
+            console.log(new Date(item.timestamp * 1000))
             const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
-            console.log("tianIndex:"+tianIndex)
+            console.log("tianIndex:" + tianIndex)
             if (nowIndex === tianIndex)
             {
                 // 计算剩余的时间
@@ -408,9 +414,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 let str = '';
                 if (remainTime >= 0)
                 {
-                    h = Math.floor(remainTime / 60 / 60 % 24);
-                    m = Math.floor(remainTime / 60 % 60);
-                    s = Math.floor(remainTime%60);
+                    h = Math.floor(remainTime / (60 * 60) % 24);
+                    m = Math.floor(remainTime/ 60 % 60);
+                    s = Math.floor(remainTime % 60);
                     if (h > 0)
                     {
                         str = h + this.intrl.manager.hours;
@@ -420,8 +426,9 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                         str = str + m + this.intrl.manager.min;
                     }
                     console.log(s)
-                    if(s>0){
-                        str = str + s +this.intrl.manager.second;
+                    if (s > 0)
+                    {
+                        str = str + s + this.intrl.manager.second;
                     }
                 }
                 console.log('打印发提案剩余时间')

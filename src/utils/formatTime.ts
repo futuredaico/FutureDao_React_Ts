@@ -148,9 +148,9 @@ export const onCountRemainTime = (remainTime:number) =>
   let m = 0;
   if (remainTime >= 0)
   {
-    d = Math.floor(remainTime / 60 / 60 / 24);
-    h = Math.floor(remainTime / 60 / 60 % 24);
-    m = Math.floor(remainTime / 60 % 60);
+    d = Math.floor(remainTime / (60 * 60 * 24));
+    h = Math.floor(remainTime / (60 * 60) % 24);
+    m = Math.floor(remainTime/ 60 % 60);
   } else
   {
     return '' ;
