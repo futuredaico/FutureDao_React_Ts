@@ -32,18 +32,18 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         addrBtn: false,
         sendTime: ''
     }
-    public componentDidMount()
+    public async componentDidMount()
     {
-        this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
+        await this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
         {
             this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
+        this.handleComputeTimeIndex();
     }
     public render()
-    {
-        this.handleComputeTimeIndex();
+    {        
         return (
             <div className="manager-wrapper">
                 <div className="manager-left">
@@ -129,7 +129,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                             : (
                                 <div className="notallow-wrapper">
                                     <span>{this.intrl.btn.proposal}</span>
-                                    <span className="sm-time">{this.state.sendTime}（ 4小时48分钟后可用 ）</span>
+                                    <span className="sm-time">{this.state.sendTime}</span>
                                 </div>
                             )
                     }
@@ -266,7 +266,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         if (this.props.molochinfo.projInfo)
         {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
-            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
+            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             const endTime = graceTime + voteTime - agoTime;
             if (endTime < 0)
             {
@@ -310,10 +310,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '权限的变更', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '权限的变更', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
         return true;
     }
@@ -342,10 +342,10 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '权限的变更', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '权限的变更', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
         this.handleToCloseEntrust();
         return true;
@@ -380,39 +380,49 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         // 项目创建时间
         const startTime = this.props.molochinfo.projInfo.startTime;
         const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
+        console.log("betweenTime:"+betweenTime)
         const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);
-        console.log(nowIndex);
+        console.log("nowIndex:"+nowIndex);
         if (this.props.molochmanager.proposalList.length > 0)
         {
             // 获取最新的一个提案
             const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
-            console.log(this.props.molochmanager.proposalList)
-            console.log(item)
+            console.log("最新提案时间")
+            console.log(new Date())
+            console.log(new Date(item.timestamp*1000))
             const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
-            console.log(tianIndex)
+            console.log("tianIndex:"+tianIndex)
             if (nowIndex === tianIndex)
             {
-                // 4小时48分钟后可用 
                 // 计算剩余的时间
                 const latestIndexTime = (nowIndex + 1) * betweenTime;
                 const endTime = latestIndexTime + startTime;
                 const remainTime = endTime - nowTime;
+                console.log(remainTime)
                 let h = 0;
                 let m = 0;
-                let str = ''
+                let s = 0;
+                let str = '';
                 if (remainTime >= 0)
                 {
                     h = Math.floor(remainTime / 60 / 60 % 24);
                     m = Math.floor(remainTime / 60 % 60);
+                    s = Math.floor(remainTime%60);
                     if (h > 0)
                     {
-                        str = h + '小时';
+                        str = h + this.intrl.manager.hours;
                     }
                     if (m > 0)
                     {
-                        str = str + 'm' + '分钟后可用';
+                        str = str + m + this.intrl.manager.min;
+                    }
+                    console.log(s)
+                    if(s>0){
+                        str = str + s +this.intrl.manager.second;
                     }
                 }
+                console.log('打印发提案剩余时间')
+                console.log(str)
                 this.setState({
                     sendTime: str
                 })

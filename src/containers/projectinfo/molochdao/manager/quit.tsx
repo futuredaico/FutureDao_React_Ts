@@ -102,10 +102,10 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.quitShares(value, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '退出股数', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '退出股数', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
         this.setState({
             exitShareInput:''

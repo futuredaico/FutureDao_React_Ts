@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import common from '@/store/common';
-import MetamasktTool from '@/utils/metamasktool';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochProposalList, IMolochProposalDetail, IVoteInfo, IContractInfo, IContractHash } from '../interface/molochmanager.interface';
 import { Web3Contract } from '@/utils/web3Contract';
@@ -133,7 +132,10 @@ class IMolochManager {
       return false
     }
     try {
-      await MetamasktTool.contractSend( contractHash, 'updateDelegateKey', [addr],{from:myaddr})
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend("updateDelegateKey", [addr],{from:myaddr});
+      console.log(submitRes)
+      await submitRes.onTransactionHash();
     } catch (e) {
       return false;
     }
@@ -160,6 +162,7 @@ class IMolochManager {
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("submitVote", [index,1], { from: myaddr });
       console.log(submitRes)
+      await submitRes.onTransactionHash();
     } catch (e) {
       return false;
     }
@@ -186,6 +189,7 @@ class IMolochManager {
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("submitVote", [index,2], { from: myaddr })
       console.log(submitRes)
+      await submitRes.onTransactionHash();
     } catch (e) {
       return false;
     }
@@ -207,10 +211,14 @@ class IMolochManager {
     if(!contractHash){
       return false
     }
+    console.log(contractHash)
     try {
       const index = parseInt(proposalIndex,10);
+      console.log(index)
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("processProposal", [index], { from: myaddr })
+      const submitRes = molochContract.contractSend("processProposal", [index], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
       console.log(submitRes)
     } catch (e) {
       return false;

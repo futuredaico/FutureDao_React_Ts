@@ -28,10 +28,12 @@ export default {
     delete:"Delete",
     updatevideo:"Change",
     review:"Under review",
-    proposal:"发起提案",
-    weituo:"权限委托",
-    cweituo:"取消权限委托",
-    quit:"立即退出"
+    proposal:"New proposal",
+    weituo:"Delegation",
+    cweituo:"Cancel delegation",
+    quit:"Quit",
+    do:"Processing proposal",
+    done:"Processed"
   },
   card:{
     game:"Games",
@@ -124,8 +126,7 @@ export default {
     checkpwd:"Confirm password",
     name:"Name",
     address:"Wallet address",
-    nodata:"无",
-    shen:"神秘人"
+    shen:"Unknown"
   },
   myproject:{
     project:"My project",
@@ -248,7 +249,10 @@ export default {
     videoerr:"The video size exceeds the limit",
     videoerr2:"Video upload failed",
     updatetips:"Changed",
-    updateerr:"Change failed"
+    updateerr:"Change failed",
+    sendok:"Transaction generated. Please confirm in the wallet.",
+    sendfail:"Transaction sending failed.",
+    senddone:"Your proposal has been sent."
   },
   manager:{
     tian:"Published proposals",
@@ -270,12 +274,31 @@ export default {
     apply:"Shares requested",
     gong2:"Tribute",
     gu:"Shares",    
-    quit:"退出",
-    mygu:"我的股数",
-    quitgu:"退出股数",
-    value:"价值",
-    address:"委托地址",
-    tips:"注意：权限委托后将无法发起提案或进行投票，权限委托可随时取消。",
-    
+    quit:"Rage quit",
+    mygu:"Balance",
+    quitgu:"Quit",
+    value:"Value",
+    address:"Delegation address",
+    tips:"Note: You will not be able to initiate proposals or vote after the delegation. The delegation can be cancelled at any time.",
+    vote:"Vote",
+    myvote:"My vote",
+    over:"Voting ended",
+    notenough:"Insufficient votes",
+    time:"Time left",
+    done:"Processed",
+    hours:"h",
+    min:"m",
+    second:"s later is available"
+  },
+  proposal:{
+    title:"New MolochoDao proposal",
+    name:"Proposal title",
+    des:"Details" ,
+    destips:"（ Proposal details will be uploaded to the chain. You can use a cloud document and paste the link here. ）",
+    people:"Applicant/Beneficiary" ,
+    peopletips:"（ The applied shares will be sent to this address. ）",
+    require:"Shares requested",
+    gong:"Tribute",
+    gongtips:"（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
   }
 }

@@ -166,6 +166,5 @@ export const onCountRemainTime = (remainTime:number) =>
   //   minute = '0' + minute;
   // }
   const str = d+'d '+h+'h '+m+'min';
-  console.log(str)
   return str;
 }

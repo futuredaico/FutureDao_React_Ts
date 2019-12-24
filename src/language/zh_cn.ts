@@ -31,7 +31,9 @@ export default {
     proposal:"发起提案",
     weituo:"权限委托",
     cweituo:"取消权限委托",
-    quit:"立即退出"
+    quit:"立即退出",
+    do:"处理提案",
+    done:"已处理"
   },
   card:{
     game:"游戏",
@@ -124,7 +126,6 @@ export default {
     checkpwd:"确认密码",
     name:"名称",
     address:"钱包地址",
-    nodata:"无",
     shen:"神秘人"
   },
   myproject:{
@@ -248,7 +249,10 @@ export default {
     videoerr:"视频大小超出限制",
     videoerr2:"视频上传失败",
     updatetips:"修改成功",
-    updateerr:"修改失败"
+    updateerr:"修改失败",
+    sendok:"交易已发出，请在钱包确认。",
+    sendfail:"交易发送失败",
+    senddone:"您的提案已发出"
   },
   manager:{
     tian:"正式提案",
@@ -279,6 +283,22 @@ export default {
     vote:"投票",
     myvote:"我的投票",
     over:"投票已结束",
-    noenough:"没有足够的票",
+    notenough:"没有足够的票",
+    time:"剩余时间",
+    done:"已处理",
+    hours:"小时",
+    min:"分钟",
+    second:"秒后可用"
+  },
+  proposal:{
+    title:"发起MolochoDao提案",
+    name:"提案名称",
+    des:"提案详情" ,
+    destips:"（ 提案详情将上链。内容过多时建议您使用云文档，并将文档链接粘贴此处。 ）",
+    people:"股份申请人" ,
+    peopletips:"（ 申请到的股份将发到此地址。 ）",
+    require:"申请股份",
+    gong:"贡献资金",
+    gongtips:"（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
   }
 }

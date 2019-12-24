@@ -104,7 +104,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                         {
                             this.props.common.userInfo.address!==""
                                 ? <span>{this.props.common.userInfo.address}</span>                                
-                                : <span className="nobind-text">{this.intrl.user.nodata}</span>
+                                : <span className="nobind-text">-</span>
                         }
                     </div>  
                     

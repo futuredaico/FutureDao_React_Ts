@@ -63,7 +63,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                                                 <>
                                                                     {
                                                                         parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
-                                                                            <Button text={this.intrl.manager.noenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
                                                                         )
                                                                             : (
                                                                                 <>
@@ -95,7 +95,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                     this.props.molochmanager.proposalListItem.proposalState === ProposalType.voting && (
                         <div className="going-box">
                             <strong className="left-str">{this.intrl.manager.voting}</strong><br />
-                            <span className="small-right-str">剩余时间：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
+                            <span className="small-right-str">{this.intrl.manager.time}：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
                         </div>
                     )
                 }
@@ -103,13 +103,13 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                     this.props.molochmanager.proposalListItem.proposalState === ProposalType.showing && (
                         <div className="going-box">
                             <strong className="left-str">{this.intrl.manager.showing}</strong><br />
-                            <span className="small-right-str">剩余时间：{this.computeShowTime(this.props.molochmanager.proposalListItem)}</span>
+                            <span className="small-right-str">{this.intrl.manager.time}：{this.computeShowTime(this.props.molochmanager.proposalListItem)}</span>
                         </div>
                     )
                 }
                 {
                     (this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass || this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail) && (
-                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text="处理提案" btnSize="bg-bg-btn" onClick={this.handleProcessProposal} /> : <Button text="已处理" btnSize="bg-bg-btn" btnColor="gray-btn" />
+                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} /> : <Button text={this.intrl.btn.done} btnSize="bg-bg-btn" btnColor="gray-btn" />
                     )
                 }
             </>
@@ -126,10 +126,10 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '投票', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '投票', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
 
         return true
@@ -145,10 +145,10 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '投票', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '投票', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
         return true
     }
@@ -163,10 +163,10 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', '处理提案', '交易已发出，请在钱包确认。');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         } else
         {
-            this.props.common.openNotificationWithIcon('error', '处理提案', '交易发送失败');
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
         return true
     }
@@ -228,7 +228,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         if (this.props.molochinfo.projInfo)
         {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
-            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePreriod);
+            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             const endTime = graceTime + voteTime - agoTime;
             if (endTime < 0)
             {

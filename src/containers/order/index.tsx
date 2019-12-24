@@ -434,7 +434,7 @@ class Order extends React.Component<IOrderProps, IState> {
         } else
         {
             // 订单创建失败
-            this.props.common.openNotificationWithIcon('error', "操作失败", "订单创建失败");
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "订单创建失败");
         }
 
         return true;
@@ -483,7 +483,7 @@ class Order extends React.Component<IOrderProps, IState> {
         // 立即付款时检查购买礼包数量是否超过剩余礼包数量    
         if (!this.props.order.rewardDetail||(this.props.order.rewardDetail && this.props.order.rewardDetail.activeState==='0'))
         {
-            this.props.common.openNotificationWithIcon('error', "操作失败", "该礼包已下架，请重新选购");
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "该礼包已下架，请重新选购");
             return false
         }
         else if (this.props.order.rewardDetail && this.props.order.rewardDetail.limitFlag === '1')
@@ -494,7 +494,7 @@ class Order extends React.Component<IOrderProps, IState> {
             const endCount = maxCount - sellCount;
             if (endCount - buyCount < 0)
             {
-                this.props.common.openNotificationWithIcon('error', "操作失败", "礼包数量不足，当前剩余" + endCount + "个");
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "礼包数量不足，当前剩余" + endCount + "个");
                 return false
             }
         }

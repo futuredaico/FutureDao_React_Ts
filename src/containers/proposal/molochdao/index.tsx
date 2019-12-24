@@ -31,6 +31,7 @@ interface IState
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class MolochProposal extends React.Component<IMolochProposalProps, IState> {
+    public intrl = this.props.intl.messages;
     public state = {
         isDoingSave: false,
         tianName: '',
@@ -61,7 +62,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         when(
             () => !!this.props.common.userInfo,
             () => this.setState({
-                tianAddress:this.props.common.userInfo?this.props.common.userInfo.address:''
+                tianAddress: this.props.common.userInfo ? this.props.common.userInfo.address : ''
             })
         )
     }
@@ -71,43 +72,43 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             <div className="proposal-page">
                 <div className="proposal-wrapper">
                     <div className="proposal-top">
-                        <h2>发起MolochoDao提案</h2>
+                        <h2>{this.intrl.proposal.title}</h2>
                     </div>
                     <div className="proposal-content">
                         <div className="inline-title">
-                            <strong>提案名称</strong>&nbsp;
+                            <strong>{this.intrl.proposal.name}</strong>&nbsp;
                         <span className="red-type">*</span>
                         </div>
                         <div className="inline-enter">
                             <Input maxLength={40} value={this.state.tianName} onChange={this.handleChangeTianName} />
                         </div>
                         <div className="inline-title">
-                            <strong>提案详情</strong>&nbsp;
+                            <strong>{this.intrl.proposal.des}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 提案详情将上链。内容过多时建议您使用云文档，并将文档链接粘贴此处。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.destips}</span>
                         </div>
                         <div className="inline-enter">
                             <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                         </div>
                         <div className="inline-title">
-                            <strong>股份申请人</strong>&nbsp;
+                            <strong>{this.intrl.proposal.people}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 申请到的股份将发到此地址。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.peopletips}</span>
                         </div>
                         <div className="inline-enter">
-                            <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress}  />
+                            <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
                         </div>
                         <div className="inline-title">
-                            <strong>申请股份</strong>&nbsp;
+                            <strong>{this.intrl.proposal.require}</strong>&nbsp;
                             <span className="red-type">*</span>
                         </div>
                         <div className="inline-enter">
                             <Input className="sort-inputtext" value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
                         </div>
                         <div className="inline-title">
-                            <strong>贡献资金</strong>&nbsp;
+                            <strong>{this.intrl.proposal.gong}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.gongtips}</span>
                         </div>
                         <div className="inline-enter">
                             <Input className="sort-inputtext" suffix={this.props.index.fundSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
@@ -117,7 +118,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                         </div>
                         <div className="inline-btn">
                             <Button
-                                text="发起提案"
+                                text={this.intrl.btn.proposal}
                                 btnSize="bg-btn"
                                 btnColor={this.state.canSendFlag ? "" : "gray-btn"}
                                 onClick={this.handleSendProposal}
@@ -246,11 +247,11 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         }
         await this.props.index.applyProposal(contractHash, this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {
-            this.props.common.openNotificationWithIcon('success', '发起提案', '交易已发出，等待链上确认');
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
-        },() =>
+        }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', '发起提案', '您的提案已发出');            
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
         });
         return true;
     }
