@@ -67,26 +67,16 @@ class MetaMastWallet implements IMetaMastWalletStore
   }
   // 切换网络时，切换请求
   @action public changeNetwork = () => {
-    this.getMetamaskNetwork()
-    // vip注释 这里判断要不要进行切换
-    const currentMetaMask = sessionStorage.getItem('currentMetaMask') || '';
-    if (currentMetaMask && currentMetaMask === this.metamaskNetwork) {
-      return false;
-    }
-    // 1为主网，3为Ropsten测试链,4为Rinkeby测试链，42为Kovan测试链，5为Goerli测试链
-    let base = '';
+    this.getMetamaskNetwork();
+    // 不是主网时
     if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
-      //
-      base = '/test'
-    }
-    const locations = window.location;
-    // alert(location.origin);
-    // alert(`${locations.pathname}${locations.search}${locations.hash}`)
-    // alert(`${location.origin}${base || ''}${locations.pathname.replace('/test','')}${locations.search}${locations.hash}`)
-    // vip注释 每次切换的时候存一下当前切的哪个环境
-    sessionStorage.setItem('currentMetaMask', this.metamaskNetwork);
-    window.location.href = `${location.origin}${base || ''}${locations.pathname.replace('/test', '')}${locations.search}${locations.hash}`;
-    return true;
+      // 
+      if (common.language === 'en') {
+        common.openNotificationWithIcon('info', 'Please attention', 'You have switch networks.');
+      } else {
+        common.openNotificationWithIcon('info', '请注意', '您已切换网络。');
+      }
+    } 
   }
   // 获取MetaMask钱包上登陆的地址
   @action public initAccount = () =>

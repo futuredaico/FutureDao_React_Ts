@@ -253,7 +253,9 @@ export default {
     sendok:"Transaction generated. Please confirm in the wallet.",
     sendfail:"Transaction sending failed.",
     senddone:"Your proposal has been sent.",
-    membererr:"You are not a member and cannot initiate a proposal"
+    membererr:"You are not a member and cannot initiate a proposal",    
+    logintitle:"Login failed",
+    logincheck:"Please set Metamask to mainnet and try again.",
   },
   manager:{
     tian:"Published proposals",

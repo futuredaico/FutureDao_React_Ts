@@ -8,6 +8,7 @@ import { notification } from 'antd';
 // import * as Cookie from '@/utils/cookie';
 import notificationBtn from '../components/notificationbtn';
 import metamaskwallet from './metamaskwallet';
+import { MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
@@ -68,6 +69,18 @@ class Common implements ICommonStore {
   // 登录
   @action public loginFutureDao = async () => {
     const res = await metamaskwallet.inintWeb3();
+    // 是主网版本时
+    if(process.env.REACT_APP_SERVER_ENV !== 'DEV'){
+      // 不是主网网络
+      if (metamaskwallet.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
+        if (this.language === 'en') {
+          this.openNotificationWithIcon('error', 'Login failed', 'Please set Metamask to mainnet and try again.');
+        } else {
+          this.openNotificationWithIcon('error', '登陆失败', '请将Metamask切换至主网后重试');
+        }
+        return false
+      }
+    }
     console.log(res)
     if (res) {
       // 获取随机数，进行签名

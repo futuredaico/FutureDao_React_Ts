@@ -253,7 +253,9 @@ export default {
     sendok:"交易已发出，请在钱包确认。",
     sendfail:"交易发送失败",
     senddone:"您的提案已发出",
-    membererr:"您还不是成员，不能发起提案"
+    membererr:"您还不是成员，不能发起提案",
+    logintitle:"登陆失败",
+    logincheck:"请将Metamask切换至主网后重试",
   },
   manager:{
     tian:"正式提案",
