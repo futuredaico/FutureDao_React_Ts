@@ -21,6 +21,7 @@ class Common implements ICommonStore {
   @observable public userInfo: IUserInfo | null = null; // 当前个人用户信息
   @observable public userId: string = ''; // 用户id
   @observable public token: string = ''; // 登录token
+  @observable public isLoginoutFlag:boolean = false; // 是否登出
 
   // 初始化语言
   @action public initLanguage = () => {
@@ -120,8 +121,8 @@ class Common implements ICommonStore {
       // sessionStorage.setItem("user", `{"userId":"${this.userId}","token":"${this.token}"}`);
       // Cookie.setCookie("user", this.userId);
       // Cookie.setCookie("token", this.token);
-      this.getLoginStatus();
-      // window.location.reload();
+      // this.getLoginStatus();
+      window.location.reload();
     }
     else {
       return false

@@ -7,8 +7,10 @@ export interface IMolochProposalStore
 {
   fundHash:string,
   fundSymbol:string,
+  proposalFee:string,
+  fundDecimals:number,
   getFundData:(projectId:string)=>Promise<boolean>,
-  applyProposal:(contractHash:string,addr:string,giveNum:number,requireNum:number,des:string,myaddr:string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
+  applyProposal:(contractHash:string,assetHash:string,addr:string,giveNum:number,requireNum:number,des:string,myaddr:string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
 }
 
 

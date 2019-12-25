@@ -38,9 +38,17 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
         {
-            this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
+            await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
+            await this.props.molochmanager.getUpStreamData(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
         this.handleComputeTimeIndex();
+        // 发起提案资格显示(委托人不是自己)
+        if (this.props.molochmanager.proposalAddress && this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
+        {
+            this.setState({
+                sendTime: this.intrl.manager.no
+            })
+        }
     }
     public render()
     {
@@ -125,7 +133,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 {/* 页面右边部分 */}
                 <div className="manager-right">
                     {
-                        !!!this.state.sendTime ? <Button text={this.intrl.btn.proposal} btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                        (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text={this.intrl.btn.proposal} btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                             : (
                                 <div className="notallow-wrapper">
                                     <span>{this.intrl.btn.proposal}</span>
@@ -191,14 +199,32 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-        } else if (this.props.molochmanager.proposalBalance <= 0)
+        } else
         {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+            // 是否被别人委托了
+            if (this.props.molochmanager.upAddress)
+            {
+                // 委托人资金为0了
+                if (this.props.molochmanager.upBalance <= 0)
+                {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                } else
+                {
+                    this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+                }
+            } else
+            {
+                if (this.props.molochmanager.proposalBalance <= 0)
+                {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                }
+                else
+                {
+                    this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+                }
+            }
         }
-        else
-        {
-            this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
-        }
+
     }
     // 查看提案详情
     private handleToInfo = (item: IMolochProposalList) =>
@@ -415,7 +441,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 if (remainTime >= 0)
                 {
                     h = Math.floor(remainTime / (60 * 60) % 24);
-                    m = Math.floor(remainTime/ 60 % 60);
+                    m = Math.floor(remainTime / 60 % 60);
                     s = Math.floor(remainTime % 60);
                     if (h > 0)
                     {

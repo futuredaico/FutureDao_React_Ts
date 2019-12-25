@@ -12,6 +12,8 @@ export interface IMolochManagerStore
   proposalIndex:string,
   proposalBalance:number,
   proposalAddress:string,
+  upBalance:number,
+  upAddress:string,
   voteInfo:IVoteInfo,
   contractInfo:IContractInfo|null,
   getMolochProposalList:(projId: string)=>Promise<boolean>,
@@ -24,6 +26,7 @@ export interface IMolochManagerStore
   processProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   getContractInfo:(projId:string)=>Promise<boolean>,
   quitShares:(value:number,myaddr:string)=>Promise<boolean>,
+  getUpStreamData:(projId:string,addr:string)=>Promise<boolean>
 }
 
 

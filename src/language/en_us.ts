@@ -256,6 +256,8 @@ export default {
     membererr:"You are not a member and cannot initiate a proposal",    
     logintitle:"Login failed",
     logincheck:"Please set Metamask to mainnet and try again.",
+    logouttips:"Wallet has changed. Account is logged out.",
+    comfirm:"Comfirm"
   },
   manager:{
     tian:"Published proposals",
@@ -291,7 +293,8 @@ export default {
     done:"Processed",
     hours:"h",
     min:"m",
-    second:"s later is available"
+    second:"s later is available",
+    no:"(No permission)"
   },
   proposal:{
     title:"New MolochoDao proposal",

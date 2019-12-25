@@ -256,6 +256,8 @@ export default {
     membererr:"您还不是成员，不能发起提案",
     logintitle:"登陆失败",
     logincheck:"请将Metamask切换至主网后重试",
+    logouttips:"钱包状态已更改，您已退出登陆。",
+    comfirm:"确认"
   },
   manager:{
     tian:"正式提案",
@@ -291,7 +293,8 @@ export default {
     done:"已处理",
     hours:"小时",
     min:"分钟",
-    second:"秒后可用"
+    second:"秒后可用",
+    no:"（无权限）"
   },
   proposal:{
     title:"发起MolochoDao提案",

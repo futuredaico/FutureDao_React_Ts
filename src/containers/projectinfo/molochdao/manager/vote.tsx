@@ -35,7 +35,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             <>
                 <h3 className="title-h3">
                     {this.intrl.manager.vote}
-                    </h3>
+                </h3>
                 <div className={voteClassName}>
                     <div className="vote-title">{this.props.molochmanager.proposalInfo.proposalTitle ? this.props.molochmanager.proposalInfo.proposalTitle : 'null'}</div>
                     <div className="manager-votebox">
@@ -62,16 +62,39 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                                         ) : (
                                                                 <>
                                                                     {
-                                                                        parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
-                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
-                                                                        )
-                                                                            : (
+                                                                        this.props.molochmanager.upAddress
+                                                                            ? (
                                                                                 <>
-                                                                                    <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
-                                                                                    <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                    {
+                                                                                        this.props.molochmanager.upBalance <= 0 ? (
+                                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                                        )
+                                                                                            : (
+                                                                                                <>
+                                                                                                    <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                                                                    <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                                </>
+                                                                                            )
+                                                                                    }
                                                                                 </>
                                                                             )
-                                                                    }</>
+                                                                            : (
+                                                                                <>
+                                                                                    {
+                                                                                        parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
+                                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                                        )
+                                                                                            : (
+                                                                                                <>
+                                                                                                    <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                                                                    <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                                </>
+                                                                                            )
+                                                                                    }
+                                                                                </>
+                                                                            )
+                                                                    }
+                                                                </>
                                                             )
                                                     }
                                                 </>
@@ -122,6 +145,21 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         {
             return false
         }
+        // 是否被别人委托了
+        if (this.props.molochmanager.upAddress)
+        {
+            // 委托人资金为0了
+            if (this.props.molochmanager.upBalance <= 0)
+            {
+                return false
+            } 
+        } else
+        {
+            if (this.props.molochmanager.proposalBalance <= 0)
+            {
+                return false
+            }
+        }
         await this.props.metamaskwallet.inintWeb3();
         const res = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
@@ -140,6 +178,21 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
         {
             return false
+        }
+        // 是否被别人委托了
+        if (this.props.molochmanager.upAddress)
+        {
+            // 委托人资金为0了
+            if (this.props.molochmanager.upBalance <= 0)
+            {
+                return false
+            } 
+        } else
+        {
+            if (this.props.molochmanager.proposalBalance <= 0)
+            {
+                return false
+            }
         }
         await this.props.metamaskwallet.inintWeb3();
         const res = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
