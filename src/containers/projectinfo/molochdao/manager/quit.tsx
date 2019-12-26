@@ -7,7 +7,7 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import { toMyNumber } from '@/utils/numberTool';
+import { toMyNumber, saveDecimal } from '@/utils/numberTool';
 
 interface IState
 {
@@ -79,7 +79,7 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
             const everyNum = this.props.molochinfo.projInfo?this.props.molochinfo.projInfo.valuePerShare:0
             const exitValue = toMyNumber(this.state.exitShareInput).mul(everyNum).toString()
             this.setState({
-                valueShow:exitValue
+                valueShow:parseFloat(saveDecimal(exitValue, 6)).toString()
             })
         })
         return true

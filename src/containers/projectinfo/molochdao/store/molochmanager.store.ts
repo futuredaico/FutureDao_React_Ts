@@ -224,6 +224,7 @@ class IMolochManager
       const index = parseInt(proposalIndex, 10);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
       const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log("赞同票")
       console.log(JSON.stringify(res));
       const res2 = await molochContract.contractCall("proposalQueue",[index]);
       console.log(res2)
@@ -261,6 +262,11 @@ class IMolochManager
     {
       const index = parseInt(proposalIndex, 10);
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      console.log("反对票")
+      const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log(JSON.stringify(res));
+      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [index, 2], { from: myaddr })
       console.log(submitRes)
       await submitRes.onTransactionHash();
