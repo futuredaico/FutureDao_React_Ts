@@ -31,7 +31,9 @@ window['Intl'] = Intl;
 if (window["ethereum"]) {
   ethereum.on("accountsChanged", accounts => {
     console.log(accounts[0]);
-    common.isLoginoutFlag=true;
+    if(common.userInfo&&common.userInfo.address){
+      common.isLoginoutFlag=true;
+    }
     // MetamaskWallet.metamaskAddress = accounts[0];
     // MetamaskWallet.checkIsCurrendBindAddress();
   })
