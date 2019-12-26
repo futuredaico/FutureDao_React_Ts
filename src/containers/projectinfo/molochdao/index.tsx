@@ -66,7 +66,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                             <div className="going-wrapper">
                                 <div className="going-line">
                                     <div className="going-purple">
-                                        <strong className="purple-big">{saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6)}</strong><strong className="purple-sm"> {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
+                                        <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))}</strong><strong className="purple-sm"> {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
                                     </div>
                                     <div className="going-gray">{this.intrl.projinfo.asset}</div>
                                 </div>
@@ -78,7 +78,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                                 </div>
                                 <div className="going-line">
                                     <div className="going-normal">
-                                        <strong>{this.props.molochinfo.projInfo.valuePerShare}</strong>
+                                        <strong>{parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 6))}</strong>
                                     </div>
                                     <div className="going-gray">{this.intrl.projinfo.every}</div>
                                 </div>

@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList } from '../interface/molochinfo.interface';
+import { toMyNumber, toNonExponential } from '@/utils/numberTool';
 
 class MolochInfo
 {
@@ -35,7 +36,11 @@ class MolochInfo
     {
       return false
     }
-    this.projInfo = result[0].data;
+    this.projInfo = result[0].data||null;
+    if(this.projInfo){
+      this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
+    }
+    
     return true;
   }
   /**

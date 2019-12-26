@@ -54,12 +54,14 @@ class MolochProposal implements IMolochProposalStore
       const decimals = Math.pow(10,this.fundDecimals);
       console.log(decimals)
       const giveMoney = toMyNumber(giveNum).mul(decimals);
-      console.log(giveMoney)
-      const money = parseFloat(this.proposalFee.toString())+parseFloat(giveMoney.toString());
-      console.log(money)
+      const giveMoneyNum = parseFloat(giveMoney.toString());
+      console.log('giveMoney:'+giveMoneyNum)
+      const money = parseFloat(this.proposalFee.toString())+giveMoneyNum;
+      console.log('money:'+money);
+      console.log(addr+"-----"+giveMoneyNum+"-----"+requireNum+"-----"+des)
       erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("submitProposal", [addr,giveNum, requireNum, des], { from: myaddr });
+      const submitRes = molochContract.contractSend("submitProposal", [addr,giveMoneyNum, requireNum, des], { from: myaddr });
       submitRes.onTransactionHash().then(()=>{sendCall()})
       submitRes.onConfrim().then(res=>{confrimCall()})      
       return true

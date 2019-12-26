@@ -46,7 +46,7 @@ export interface IMolochInfo
   fundTotal:string, // 资产
   fundSymbol:string, // 单位
   shares:number,
-  valuePerShare:number, // 每股
+  valuePerShare:string, // 每股
   officailWeb:string, // 官网
   discussCount:number,
   member:number, // 成员总数
