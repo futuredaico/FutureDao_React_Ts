@@ -30,9 +30,9 @@ export default class Header extends React.Component<IProps, IState>{
             <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
               <li><Link to="/">{this.props.locale.discover}</Link></li>
-              <li>
+              {/* <li>
                 <a href="javascript:;" onClick={this.handleToCreateProject}>{this.props.locale.creat}</a>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="header-right">
@@ -56,7 +56,7 @@ export default class Header extends React.Component<IProps, IState>{
                         <div className="people-list">
                           <ul className="people-ul">
                             <li className="people-li" onClick={this.handleToPersonal}>{this.props.locale.center}</li>
-                            <li className="people-li" onClick={this.handleToMyProject}>{this.props.locale.myproject}</li>
+                            {/* <li className="people-li" onClick={this.handleToMyProject}>{this.props.locale.myproject}</li> */}
                             <li className="people-li" onClick={this.handleToLogout} >{this.props.locale.exit}</li>
                           </ul>
                         </div>
@@ -72,17 +72,17 @@ export default class Header extends React.Component<IProps, IState>{
     );
   }
   // 创建项目
-  private handleToCreateProject = () => {
-    if (!this.props.common.userInfo) {
-      // 未登录
-      this.handleToLogin();
-    }
-    else {
-      // 正常访问
-      const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
-      window.location.href = href + '/create'
-    }
-  }
+  // private handleToCreateProject = () => {
+  //   if (!this.props.common.userInfo) {
+  //     // 未登录
+  //     this.handleToLogin();
+  //   }
+  //   else {
+  //     // 正常访问
+  //     const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+  //     window.location.href = href + '/create'
+  //   }
+  // }
   // 登录
   private handleToLogin = () => {
     // this.props.history.push('/load/login');
@@ -95,10 +95,10 @@ export default class Header extends React.Component<IProps, IState>{
     this.props.history.push('/personalcenter/userinfo')
   }
   // 进入我的项目
-  private handleToMyProject = () => {
-    // this.handleToShow();
-    this.props.history.push('/personalcenter/myproject')
-  }
+  // private handleToMyProject = () => {
+  //   // this.handleToShow();
+  //   this.props.history.push('/personalcenter/myproject')
+  // }
   // 退出登录
   private handleToLogout = () => {
     // todo

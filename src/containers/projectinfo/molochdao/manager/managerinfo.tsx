@@ -56,7 +56,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                         : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
                                 }
                                 <div className="people-swrap">
-                                    <strong className="member-name">{this.props.molochmanager.proposalInfo.username ? this.props.molochmanager.proposalInfo.username : "神秘人"}</strong>
+                                    <strong className="member-name">{this.props.molochmanager.proposalInfo.username ? this.props.molochmanager.proposalInfo.username : this.intrl.user.shen}</strong>
                                     <span>{this.props.molochmanager.proposalInfo.proposer.replace(/^(.{7})(.*)(.{4})$/, '$1...$3')}</span>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                             : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
                                     }
                                     <div className="people-swrap">
-                                        <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : "神秘人"}</strong>
+                                        <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
                                         <span>{this.props.molochmanager.proposalInfo.applicant.replace(/^(.{7})(.*)(.{4})$/, '$1...$3')}</span>
                                     </div>
                                 </div>

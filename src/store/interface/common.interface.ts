@@ -9,6 +9,7 @@ export interface ICommonStore
   token: string,
   userId: string,
   footer: boolean,
+  isLoginoutFlag:boolean,
   uploadFile: (file: RcFile) => Promise<string>,
   uploadVideo: (file: RcFile) => Promise<string>,
   loginFutureDao: () => Promise<boolean>,
@@ -17,6 +18,7 @@ export interface ICommonStore
   getUserInfo: () => void,
   openNotificationWithIcon: (type: string, message: string, des: string) => void,
   reSendEmail: () => void,
+  // changeAccount:()=>Promise<boolean>
 }
 export interface ICommonProps
 {

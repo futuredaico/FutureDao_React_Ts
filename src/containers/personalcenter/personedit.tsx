@@ -66,7 +66,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                     {/* 编辑名称 */}
                     <div className={nameClassName}>
                         <div className="edit-title">
-                            <strong>名称</strong>
+                            <strong>{this.intrl.user.name}</strong>
                             {
                                 !this.state.isEditName && <div className="edit-img" onClick={this.handleEditPerson.bind(this, 1)} />
                             }
@@ -85,13 +85,13 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                                         />
                                         <div className="personedit-btn">
                                             <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelEdit} />
-                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveDrief} />
+                                            <Button text={this.intrl.btn.checkupdate} onClick={this.handleToSaveUsername} />
                                         </div>
                                     </>
                                 )
                                 : <span>
                                     {
-                                        this.props.common.userInfo.username !== '' ? this.props.common.userInfo.username : '神秘人'
+                                        this.props.common.userInfo.username !== '' ? this.props.common.userInfo.username : this.intrl.user.shen
                                     }
                                 </span>
                         }
@@ -99,12 +99,12 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
                     {/* 编辑钱包 */}
                     <div className={nameClassName}>
                         <div className="edit-title">
-                            <strong>钱包地址</strong>                            
+                            <strong>{this.intrl.user.address}</strong>                            
                         </div>
                         {
                             this.props.common.userInfo.address!==""
                                 ? <span>{this.props.common.userInfo.address}</span>                                
-                                : <span className="nobind-text">无</span>
+                                : <span className="nobind-text">-</span>
                         }
                     </div>  
                     
@@ -138,7 +138,7 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             }
         }
     }
-    // 输入个人简介
+    // 输入用户名称
     private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         //
@@ -146,10 +146,10 @@ class PersonalEidt extends React.Component<IPersonProps, IState> {
             nameInput: ev.target.value.trim()
         })
     }
-    // 确认修改个人简历(待修改)
-    private handleToSaveDrief = async () =>
+    // 确认修改用户名称
+    private handleToSaveUsername = async () =>
     {
-        const res = await this.props.personedit.updateUserBrief(this.state.nameInput);
+        const res = await this.props.personedit.updateName(this.state.nameInput);
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.drieftips);

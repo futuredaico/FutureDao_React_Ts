@@ -77,7 +77,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                 {
                                     <div className="people-message">
                                         <img src={require('@/img/default.png')} alt="" className="people-img" />
-                                        <strong>神秘人</strong>
+                                        <strong>{this.intrl.user.shen}</strong>
                                     </div>
                                 }
                             </div>
@@ -95,7 +95,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                                     <strong>{item.username}</strong>
                                                 </div>
                                                 <p>{item.discussContent}</p>
-                                                <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
+                                                <span className="time-tips">{formatTime.computeTime(item.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                 <div className="right-other">
                                                     <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReply.bind(this, item)} />
                                                     {
@@ -131,7 +131,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                                                                 <strong>{replyItem.username}</strong>
                                                                             </div>
                                                                             <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
-                                                                            <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
+                                                                            <span className="time-tips">{formatTime.computeTime(replyItem.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                                             <div className="right-other">
                                                                                 <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReplyOther.bind(this, replyItem)} />
                                                                                 {

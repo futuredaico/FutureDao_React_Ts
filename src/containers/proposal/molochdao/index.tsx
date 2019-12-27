@@ -5,7 +5,7 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import { Input, Spin, Icon } from 'antd';
+import { Input } from 'antd';
 import Button from '@/components/Button';
 // import classnames from 'classnames';
 // import { getQueryString } from '@/utils/function';
@@ -13,6 +13,8 @@ import Button from '@/components/Button';
 import TextArea from 'antd/lib/input/TextArea';
 import { IMolochProposalProps } from './interface/index.interface';
 import { saveDecimal } from '@/utils/numberTool';
+import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
+import { when } from 'mobx';
 
 interface IState
 {
@@ -26,9 +28,10 @@ interface IState
     canSendFlag: boolean, // 是否可发起提案
 }
 
-@inject('index','common','metamaskwallet')
+@inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class MolochProposal extends React.Component<IMolochProposalProps, IState> {
+    public intrl = this.props.intl.messages;
     public state = {
         isDoingSave: false,
         tianName: '',
@@ -37,7 +40,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         tianAddrBtn: true,
         tianRequire: '',
         tianContribution: '',
-        canSendFlag: false
+        canSendFlag: false,
+        sendState: false
     }
     // private assetOption = [
     //     {
@@ -52,53 +56,59 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
 
     public componentDidMount()
     {
-        const projectId =this.props.match.params['projectId'];
+        const projectId = this.props.match.params['projectId'];
         this.props.index.getFundData(projectId);
+        this.props.molochmanager.getContractInfo(projectId);
+        when(
+            () => !!this.props.common.userInfo,
+            () => this.setState({
+                tianAddress: this.props.common.userInfo ? this.props.common.userInfo.address : ''
+            })
+        )
     }
     public render()
     {
-        const antIcon = <Icon type="loading" style={{ fontSize: 24 }} />;
         return (
             <div className="proposal-page">
                 <div className="proposal-wrapper">
                     <div className="proposal-top">
-                        <h2>发起MolochoDao提案</h2>
+                        <h2>{this.intrl.proposal.title}</h2>
                     </div>
                     <div className="proposal-content">
                         <div className="inline-title">
-                            <strong>提案名称</strong>&nbsp;
+                            <strong>{this.intrl.proposal.name}</strong>&nbsp;
                         <span className="red-type">*</span>
                         </div>
                         <div className="inline-enter">
                             <Input maxLength={40} value={this.state.tianName} onChange={this.handleChangeTianName} />
                         </div>
                         <div className="inline-title">
-                            <strong>提案详情</strong>&nbsp;
+                            <strong>{this.intrl.proposal.des}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 提案详情将上链。内容过多时建议您使用云文档，并将文档链接粘贴此处。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.destips}</span>
                         </div>
                         <div className="inline-enter">
                             <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                         </div>
                         <div className="inline-title">
-                            <strong>股份申请人</strong>&nbsp;
+                            <strong>{this.intrl.proposal.people}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 申请到的股份将发到此地址。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.peopletips}</span>
                         </div>
                         <div className="inline-enter">
                             <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
                         </div>
                         <div className="inline-title">
-                            <strong>申请股份</strong>&nbsp;
+                            <strong>{this.intrl.proposal.require}</strong>&nbsp;
                             <span className="red-type">*</span>
                         </div>
                         <div className="inline-enter">
                             <Input className="sort-inputtext" value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
                         </div>
                         <div className="inline-title">
-                            <strong>贡献资金</strong>&nbsp;
+                            <strong>{this.intrl.proposal.gong}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）</span>
+                            <span className="tips-text">{this.intrl.proposal.gongtips}</span>
                         </div>
                         <div className="inline-enter">
                             <Input className="sort-inputtext" suffix={this.props.index.fundSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
@@ -108,7 +118,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                         </div>
                         <div className="inline-btn">
                             <Button
-                                text="发起预发布提案"
+                                text={this.intrl.btn.proposal}
                                 btnSize="bg-btn"
                                 btnColor={this.state.canSendFlag ? "" : "gray-btn"}
                                 onClick={this.handleSendProposal}
@@ -116,26 +126,6 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                         </div>
                     </div>
                 </div>
-                {
-                    this.state.isDoingSave && (
-                        <div className="going-on-wrapper">
-                            <div className="going-on-content going-on-edit">
-                                <strong className="going-bigtext">正在发布molochoDAO合约</strong>
-                                <div className="loading-going">
-                                    <Spin indicator={antIcon} size="small" />
-                                    <span>请等待...</span>
-                                </div>
-                                <p className="going-p">处理这些事物可能需要较长时间，取决于网络状态处理期间请勿关闭本页</p>
-
-                                {/* <div className="done-going">
-                        <img src={require("@/img/done.png")} alt="" />
-                        <span>成功！</span>
-                      </div> */}
-
-                            </div>
-                        </div>
-                    )
-                }
             </div>
         );
     }
@@ -214,7 +204,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             return false;
         }
         this.setState({
-            tianContribution: saveDecimal(value.toString(),4)
+            tianContribution: saveDecimal(value.toString(), 4)
         }, () =>
         {
             this.checkAllInput()
@@ -224,26 +214,46 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
     // 发起提案
     private handleSendProposal = async () =>
     {
-        if(!this.state.canSendFlag||!this.props.common.userInfo){
+        if (!this.state.canSendFlag || !this.props.common.userInfo)
+        {
             return false;
         }
         await this.props.metamaskwallet.inintWeb3();
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
         const fiveNum = parseFloat(this.state.tianContribution);
-        const requireNum = parseInt(this.state.tianRequire,10);
+        const requireNum = parseInt(this.state.tianRequire, 10);
         const tianStr = {
-            title:this.state.tianName,
-            description:this.state.tianDes
+            title: this.state.tianName,
+            description: this.state.tianDes
         }
         this.setState({
             isDoingSave: true
         })
-        console.log(JSON.stringify(tianStr))
-        await this.props.index.applyProposal(this.state.tianAddress,fiveNum,requireNum,JSON.stringify(tianStr),this.props.common.userInfo.address,()=>{
-            this.props.common.openNotificationWithIcon('success','操作','确认')
+        if (!this.props.molochmanager.contractInfo)
+        {
+            return false
+        }
+        let contractHash = '';
+        this.props.molochmanager.contractInfo.contractHashs.map((item: IContractHash) =>
+        {
+            if (item.name === 'moloch')
+            {
+                contractHash = item.hash
+            }
+        })
+        if (!contractHash)
+        {
+            return false
+        }
+        const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
+        await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            this.initData();
+        }, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
         });
-        
-        this.initData();
         return true;
     }
     private checkAllInput = () =>
@@ -274,7 +284,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         })
     }
     // 初始化输入框
-    private initData = () => {
+    private initData = () =>
+    {
         this.setState({
             tianName: '',
             tianDes: '',
@@ -284,6 +295,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             tianContribution: '',
             canSendFlag: false
         })
+        const projectId = this.props.match.params['projectId'];
+        this.props.history.push('/molochinfo/' + projectId);
     }
 }
 

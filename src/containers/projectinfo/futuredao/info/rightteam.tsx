@@ -137,7 +137,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                                         <div className="right-t">
                                                             {item.tokenAmt}
                                                             {
-                                                                item.unlockFlag ? <span className="g-tips">（已解锁）</span> : <span className="c-tips">（{formatTime.computeDay(item.timestamp, this.props.intl.locale)}）</span>
+                                            item.unlockFlag ? <span className="g-tips">（已解锁）</span> : <span className="c-tips">（{formatTime.computeTime(item.timestamp, this.props.intl.locale)}{this.props.intl.locale === 'en'?' later':'后'}）</span>
                                                             }
                                                         </div>
                                                     </div>

@@ -1,7 +1,8 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/molochinfo.interface';
+import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList } from '../interface/molochinfo.interface';
+import { toMyNumber, toNonExponential } from '@/utils/numberTool';
 
 class MolochInfo
 {
@@ -17,12 +18,6 @@ class MolochInfo
   @observable public projUpdateCount: number = 0; // 项目更新日志总数
   @observable public projDiscussList: IDiscussList[] = []; // 项目评论列表
   @observable public isShowManagerInfo = false; // 是否显示治理详情
-  @observable public priceInfo: IProjAssetPrice | null = null;
-  @observable public rewardList: IProjReward[] = [];
-  @observable public reserveData: IProjReserveToken | null = null;
-  @observable public buyPrice: string = '0'; // 项目代币当前购买价格
-  @observable public sellPrice: string = '0'; // 项目代币当前出售价格
-  @observable public hashList:IContractHash[] = [];
   /**
    * 获取项目基本详情
    */
@@ -41,7 +36,11 @@ class MolochInfo
     {
       return false
     }
-    this.projInfo = result[0].data;
+    this.projInfo = result[0].data||null;
+    if(this.projInfo){
+      this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
+    }
+    
     return true;
   }
   /**

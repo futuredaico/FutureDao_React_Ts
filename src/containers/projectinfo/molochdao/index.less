@@ -682,7 +682,8 @@
         }
         .transparent-purple{
           position: absolute;
-          top: 34px;
+          top: 0;
+          right: 90px;
         }
         .transparent-toupiao{
           position: absolute;
@@ -776,6 +777,20 @@
     display: inline-block;
     margin-top: 30px;
     vertical-align: top;  
+    .notallow-wrapper{
+      width: 300px;
+      height: 44px;
+      background: @bg-ddd;
+      border-radius: 3px;
+      font-size: 14px;
+      color: #BBBBBB;
+      text-align: center;
+      padding-top: 5px;
+      .sm-time{
+        font-size: 12px;
+        display: block;
+      }
+    }
     .entrust-btn{
       margin-top:30px;
     }
@@ -800,12 +815,13 @@
       .exit-right{
           position: relative;
           .normal-exit-input{
-              border: 1px solid @bg-e5;
-              border-radius: 3px;
-              width: 200px;
-              height: 36px;
-              padding: 10px 40px 10px 10px;
-              box-sizing: border-box;
+            text-align: right;
+            border: 1px solid @bg-e5;
+            border-radius: 3px;
+            width: 200px;
+            height: 36px;
+            padding: 10px 10px 10px 10px;
+            box-sizing: border-box;
           }
           .error-input{
             border: 1px solid #F25151;

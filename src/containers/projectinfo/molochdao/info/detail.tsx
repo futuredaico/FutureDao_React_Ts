@@ -60,7 +60,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                     />
                                     <div className="people-message">
                                         <img src={this.props.common.userInfo.headIconUrl ? this.props.common.userInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                        <strong>{this.props.common.userInfo.username?this.props.common.userInfo.username:"神秘人"}</strong>
+                                        <strong>{this.props.common.userInfo.username?this.props.common.userInfo.username:this.intrl.user.shen}</strong>
                                         <Button text={this.intrl.btn.comment} btnColor={this.state.discussInput ? '' : 'gray-btn'} onClick={this.handleSendDiscuss} />
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                     this.props.common.userInfo && (
                                         <div className="people-message">
                                             <img src={ require('@/img/default.png')} alt="" className="people-img" />
-                                            <strong>神秘人</strong>
+                                            <strong>{this.intrl.user.shen}</strong>
                                         </div>
                                     )
                                 }
@@ -99,7 +99,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                                     <strong>{item.username}</strong>
                                                 </div>
                                                 <p>{item.discussContent}</p>
-                                                <span className="time-tips">{formatTime.computeTime(item.time, this.props.intl.locale)}</span>
+                                                <span className="time-tips">{formatTime.computeTime(item.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                 <div className="right-other">
                                                     <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReply.bind(this, item)} />
                                                     {
@@ -135,7 +135,7 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
                                                                                 <strong>{replyItem.username}</strong>
                                                                             </div>
                                                                             <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
-                                                                            <span className="time-tips">{formatTime.computeTime(replyItem.time, this.props.intl.locale)}</span>
+                                                                            <span className="time-tips">{formatTime.computeTime(replyItem.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en'?' ago':'前更新'}</span>
                                                                             <div className="right-other">
                                                                                 <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReplyOther.bind(this, replyItem)} />
                                                                                 {
