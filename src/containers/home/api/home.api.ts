@@ -12,3 +12,10 @@ export const getProjList = (page:number,pageSize:number)=>{
   }
   return request(opts)
 }
+export const getMolochProjList = (page:number,pageSize:number)=>{
+  const opts = {
+    method:'getProjListV3',
+    params:[page,pageSize]
+  }
+  return request(opts)
+}

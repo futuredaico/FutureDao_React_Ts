@@ -7,7 +7,7 @@ import CommonStore from '@/store/common';
 import ScrollToTop from '@/components/scrolltotop';
 import './index.less';
 import Footer from '../footer';
-import VerifyMail from './verifymail';
+import LogoutBox from './logoutbox';
 
 export default class LayoutIndex extends React.Component<any, any> {
   public static contextTypes = {
@@ -63,7 +63,7 @@ export default class LayoutIndex extends React.Component<any, any> {
             common={CommonStore}
           />
           <div className="layout-main">
-            <VerifyMail common={CommonStore} locale={this.state.lang === 'en' ? en_US.email : zh_CN.email} />
+            <LogoutBox common={CommonStore} locale={this.state.lang === 'en'?en_US.notify:zh_CN.notify} />
             {this.props.children}
           </div>
           <Footer
@@ -78,7 +78,7 @@ export default class LayoutIndex extends React.Component<any, any> {
 
   private onMapping()
   {
-    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname)))
+    if (/load/.test(location.pathname) || (/inviteteam/.test(location.pathname))|| (/support/.test(location.pathname))|| (/giftorder/.test(location.pathname)))
     {
       CommonStore.footer = false;
       return;

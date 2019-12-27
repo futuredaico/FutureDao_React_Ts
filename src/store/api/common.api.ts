@@ -12,6 +12,7 @@ export const uploadFile = (file: RcFile) => {
   }
   return request(opts)
 }
+// 上传视频
 export const uploadVideo = (file: RcFile) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -26,16 +27,14 @@ export const uploadVideo = (file: RcFile) => {
 
 /**
  * 获取用户信息
- * @param userId 用户Id
+ * @param userId 用户ID
  * @param token 令牌
+ * @param flag  v3版本标识，0表示非v3版本，1表示v3版本
  */
-export const getUserInfo = (userId: string, token: string) => {
+export const getUserInfo = () => {
   const opts = {
-    method: 'getUserInfo',
-    params: [
-      userId,
-      token
-    ]
+    method: 'getUserInfoV3',
+    params: []
   }
   return request(opts);
 }
@@ -67,6 +66,37 @@ export const reSendVerify = (userId: string, token: string) => {
       userId,
       token
     ]
+  }
+  return request(opts);
+}
+/**
+ * 获取签名的随机数
+ * @param address 钱包地址
+ */
+export const getLoginNonce = (address: string) => {
+  const opts = {
+    method: 'getLoginNonceV3',
+    params: [address]
+  }
+  return request(opts);
+}
+/**
+ * 验证登录
+ * @param address 钱包地址
+ * @param data 签名数据
+ */
+export const validateLogin = (address: string, data: string) => {
+  const opts = {
+    method: 'validateLoginV3',
+    params: [address,data]
+  }
+  return request(opts);
+}
+
+export const loginOut = () => {
+  const opts = {
+    method: 'logoutV3',
+    params: []
   }
   return request(opts);
 }

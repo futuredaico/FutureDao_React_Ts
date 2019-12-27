@@ -16,7 +16,7 @@ const baseCommonUrl: string = "https://api.nel.group/api/" + network;
 const baseUrl: string = "https://apidao.nel.group/api/" + network;
 // const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
 const fileUrl: string = "https://apioss.nel.group/api/file/" + network;
-const videoUrl: string = "https://apioss.nel.group/api/file/" + network+'bi';
+const videoUrl: string = "https://apioss.nel.group/api/file/" + network + 'bi';
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 
@@ -29,7 +29,7 @@ const makeRpcPostBody = (method: string, params: any): {} => {
 }
 const defaultConfig = {
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 }
 export default function request(opts: IOpts): Promise<any> {
@@ -40,7 +40,7 @@ export default function request(opts: IOpts): Promise<any> {
   if (opts.baseUrl === 'file') {
     url = fileUrl;
   }
-  if(opts.baseUrl === 'video'){
+  if (opts.baseUrl === 'video') {
     url = videoUrl;
   }
   const params = makeRpcPostBody(opts.method, opts.params);
@@ -58,6 +58,7 @@ export default function request(opts: IOpts): Promise<any> {
       ...defaultConfig,
     }
   }
+  args.withCredentials = true;
   return new Promise((resolve, reject) => {
     Axios(args)
       .then((data: any) => {
@@ -66,18 +67,18 @@ export default function request(opts: IOpts): Promise<any> {
             resolve(data.data);
             return;
           }
-          if(!!data.data.result.length){
-            if(data.data.result[0].resultCode === CodeType.invalidLoginInfo || data.data.result[0].resultCode === CodeType.notFindUserInfo ){
+          if (!!data.data.result.length) {
+            if (data.data.result[0].resultCode === CodeType.invalidLoginInfo || data.data.result[0].resultCode === CodeType.notFindUserInfo) {
               // 无效的登录信息(即用户名/邮箱/密码错误)/没有找到用户信息
-              if(common.language === 'en'){
+              if (common.language === 'en') {
                 common.openNotificationWithIcon('error', 'Operation failed', 'The login status is abnormal, please log in again.');
-              }else{
+              } else {
                 common.openNotificationWithIcon('error', '操作失败', '登陆状态异常，请重新登陆');
               }
-            }else if(data.data.result[0].resultCode === CodeType.invalidAccessToken||data.data.result[0].resultCode === CodeType.expireAccessToken){
-              if(common.language === 'en'){
+            } else if (data.data.result[0].resultCode === CodeType.invalidAccessToken || data.data.result[0].resultCode === CodeType.expireAccessToken) {
+              if (common.language === 'en') {
                 common.openNotificationWithIcon('error', 'Operation failed', 'Login timed out, please log in again');
-              }else{
+              } else {
                 common.openNotificationWithIcon('error', '操作失败', '登陆超时，请重新登陆');
               }
             }

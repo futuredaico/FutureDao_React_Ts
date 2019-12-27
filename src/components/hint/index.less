@@ -1,29 +1,69 @@
 .hint-box {
     display: inline-block;
-    margin-left: 5px;
-    //vertical-align: middle;
-    width: .14rem;
-    height: .14rem;
+    margin-left: 10px;
+    width: 14px;
+    height: 14px;
     position: relative;
-    top:1.5px;
+    top:3px;
     .hint-msg{
         position: relative; 
         .hint-img {
+            width: 14px;
+            height: 14px;
             img {
                 width: 14px;
                 height: 14px;
-                &.type3{
-                    width: 14px;
-                    height: 14px;
-                    vertical-align: top;
-                }
             }
         }
         .hint-content {
             display: none;
+            p {
+                font-size: 12px;
+                line-height: 16px;
+                margin-bottom: 0;
+                color: #333333;
+                letter-spacing: 0;
+                text-align: justify;
+                font-weight: 400;
+            }
+        }
+        .top-hint{
+            width: 207px; 
+            box-sizing: border-box;   
+            background: #fff;
+            box-shadow: 0 0 6px 0 rgba(162,162,162,0.50);
+            border-radius: 3px;
+            padding: 10px 15px;
+            position: absolute;
+            bottom: 32px;
+            left: -101px;
+            z-index: 1;
+            .hint-wrapper {
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                bottom: -16px;
+                left: 50%;
+                margin-left: -15px;
+                clip: rect(13px,33px,33px,0); 
+                .arrow {
+                    width:20px;
+                    height:20px;
+                    -moz-transform: rotate(-45deg);
+                    -webkit-transform: rotate(-45deg);
+                    -ms-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                    background: #fff;
+                    box-shadow: -2px 0 10px 0 rgba(185, 185, 185, 0.5);
+                    margin-left:10px;
+                    margin-top:4px;
+                }
+            }
+        }
+        .right-hint{
             width: 205px; 
             box-sizing: border-box;   
-            background: @text-fff;
+            background: #fff;
             box-shadow: 0 0 6px 0 rgba(162,162,162,0.50);
             border-radius: 3px;
             padding: 10px 15px;
@@ -35,18 +75,6 @@
             -webkit-transform: translateY(-50%);
             -ms-transform: translateY(-50%);
             transform: translateY(-50%);
-            p {     
-                // text-indent: 2em;
-                font-size: 12px;
-                line-height: 16px;
-                margin-bottom: 0;
-                font-family: PingFangSC-Regular;
-                color: #333333;
-                letter-spacing: 0;
-                text-align: justify;
-            }
-        }
-        .hint-content {
             .hint-wrapper {
                 width: 30px;
                 height: 30px;
@@ -55,6 +83,43 @@
                 left: -15px;
                 margin-top: -15px;
                 clip: rect(0,15px,30px,0); 
+                .arrow {
+                    width:20px;
+                    height:20px;
+                    -moz-transform: rotate(-45deg);
+                    -webkit-transform: rotate(-45deg);
+                    -ms-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                    background: #fff;
+                    box-shadow: -2px 0 10px 0 rgba(185, 185, 185, 0.5);
+                    margin-left:10px;
+                    margin-top:4px;
+                }
+            }
+        }
+        .bottom-hint{
+            width: 207px; 
+            box-sizing: border-box;   
+            background: #fff;
+            box-shadow: 0 0 5px 0 rgba(170,170,170,0.50);
+            border-radius: 2px;
+            padding: 10px 15px;
+            position: absolute;
+            bottom: -18px;
+            right: -179px;
+            z-index: 1;
+            -moz-transform: translateY(100%);
+            -webkit-transform: translateY(100%);
+            -ms-transform: translateY(100%);
+            transform: translateY(100%);            
+            .hint-wrapper {
+                width: 30px;
+                height: 30px;
+                position: absolute;
+                top: 1px;
+                left: 1px;
+                margin-top: -15px;
+                clip: rect(0,35px,14px,0); 
                 .arrow {
                     width:20px;
                     height:20px;

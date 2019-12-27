@@ -44,7 +44,7 @@ export function asNumber(str:string,decimal?:number)
     value = value.replace(/^\./g,"");
 
     // 保证.只出现一次，而不能出现两次以上
-
+ 
     value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
 
     if(decimal)
@@ -56,4 +56,142 @@ export function asNumber(str:string,decimal?:number)
     }
     
     return value;
+}
+/**
+ * 保留小数点后几位
+ * @param str 数字
+ * @param num 小数点后几位
+ */
+export function saveDecimal(str:string,decimal:number){
+    const value = str.split('.');
+    if(value.length>1){
+        return value[0]+'.'+value[1].substring(0,decimal)
+    }
+    else{
+        return str
+    }
+}
+class MyNumber
+{
+    public value:number;
+    
+    constructor(value:string|number)
+    {
+        if(typeof value==="string")
+        {
+            this.value = parseFloat(value);
+        }
+        else
+        {
+            this.value = value;
+        }
+    }
+
+    public toString(){
+        return this.value.toString();
+    }
+    /**
+     * 加
+     * @param arg 
+     */
+    public add(...arg) {
+        // tslint:disable-next-line:one-variable-per-declaration
+        let r1, r2, m, result = this.value;
+        arg.forEach(value => {
+            if(typeof value==="object")
+            {
+                value=value['value'];
+            }
+            try { r1 = result.toString().split(".")[1].length } catch (e) { r1 = 0 }
+            try { r2 = value.toString().split(".")[1].length } catch (e) { r2 = 0 }
+            m = Math.pow(10, Math.max(r1, r2));
+            result = Math.round(result * m + value * m) / m;
+        });
+        return new MyNumber(result);
+    }
+    /**
+     * 减
+     * @param arg 
+     */
+    public sub (...arg) {
+        // tslint:disable-next-line:one-variable-per-declaration
+        let r1, r2, m, result = this.value;
+        arg.forEach(value => {
+            if(typeof value==="object")
+            {
+                value=value['value'];
+            }
+            try { r1 = result.toString().split(".")[1].length } catch (e) { r1 = 0 }
+            try { r2 = value.toString().split(".")[1].length } catch (e) { r2 = 0 }
+            m = Math.pow(10, Math.max(r1, r2));
+            const n = (r1 >= r2) ? r1 : r2;
+            result = parseFloat((Math.round(result * m - value * m) / m).toFixed(n));
+        });
+        return new MyNumber(result);
+    };
+    /**
+     * 乘
+     * @param arg 
+     */
+    public mul(...arg) {
+        let result = this.value;
+        arg.forEach(value => {
+            if(typeof value==="object")
+            {
+                value=value['value'];
+            }
+            let m = 0;
+            const s1 = result.toString();
+            const s2 = value.toString();
+            try { m += s1.split(".")[1].length } catch (e) { m=0 }
+            try { m += s2.split(".")[1].length } catch (e) { m=m }
+            result = Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+        });
+        return new MyNumber(result);
+    };
+    /**
+     * 除
+     * @param arg 
+     */
+    public div(...arg) {
+        let result = this.value;
+        arg.forEach(value => {
+            let t1 = 0; let t2 = 0;let r1; let r2;
+            try { t1 = result.toString().split(".")[1].length } catch (e) { t1=0 }
+            try { t2 = value.toString().split(".")[1].length } catch (e) { t2=0 }
+            r1 = Number(result.toString().replace(".", ""));
+            r2 = Number(value.toString().replace(".", ""));
+            result = (r1 / r2) * Math.pow(10, t2 - t1);
+        });
+        return new MyNumber(result);
+    };
+
+    /**
+     * 平方
+     */
+    public sqr(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        return this.mul(this.value);
+    }
+
+    /**
+     * 开平方根
+     */
+    public sqrt(){
+        return new MyNumber(Math.sqrt(this.value));
+    }
+
+}
+
+export const toMyNumber=(value:string|number)=>{
+    return new MyNumber(value);
+}
+/**
+ * 解决科学技术法显示
+ * @param num 
+ */
+export const toNonExponential = (num) =>{
+    const m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+    if(m){
+        return num.toFixed(Math.max(0, (m[1] || '').length - m[2]));
+    }    
 }

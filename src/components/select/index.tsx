@@ -10,44 +10,36 @@ interface IOptions {
 	id: string | number,
 	name: string
 }
-interface IProps
-{
-	options:IOptions[],
-	text:string,
+interface IProps {
+	options: IOptions[],
+	text: string,
 	onCallback?: (event: any) => void,
 	style?: object,
-	placeholder?:string,
-	defaultValue?:string | number
+	placeholder?: string,
+	defaultValue?: string | number
 }
 
-interface IState{
-	options:IOptions,
-	expand:boolean
+interface IState {
+	options: IOptions,
+	expand: boolean
 }
 
 @observer
 export default class Select extends React.Component<IProps, IState> {
 	public state = {
 		// 选择的项
-		options:{id: '', name: ''},
+		options: { id: '', name: '' },
 		expand: false,
 	}
 	public componentDidMount() {
-		if(this.props.defaultValue) {
+		if (this.props.defaultValue) {
 			this.setState({
-				options:this.props.options.filter((item) => item.id === this.props.defaultValue)[0]
+				options: this.props.options.filter((item) => item.id === this.props.defaultValue)[0]
 			}, () => {
-				if(this.props.onCallback) {
+				if (this.props.onCallback) {
 					this.props.onCallback(this.state.options);
 				}
 			});
-		} else if(!this.props.placeholder) {
-			this.setState({
-				options:this.props.options[0]
-			});
-			if(this.props.onCallback) {
-				this.props.onCallback(this.props.options[0]);
-			}
 		}
 
 		// 注册全局点击事件，以便点击其他区域时，隐藏展开的内容
@@ -62,7 +54,7 @@ export default class Select extends React.Component<IProps, IState> {
 
 		this.setState({ options: item, expand: false });
 
-		if(this.props.onCallback) {
+		if (this.props.onCallback) {
 			this.props.onCallback(item);
 		}
 	}
@@ -70,31 +62,30 @@ export default class Select extends React.Component<IProps, IState> {
 	public onExpand = (e) => {
 		// 取反
 		const expand = !this.state.expand;
-	
+
 		this.setState({
-		  expand: expand
+			expand: expand
 		});
-	
+
 		e.stopPropagation();
-	  }
+	}
 	public componentWillUnmount() {
 		//  组件释放remove click处理
 		EventHandler.remove(this.globalClick);
-	  }
+	}
 
-	public render()
-	{
-		const selectBox = classnames('select-box', {'disNone': !this.state.expand})
+	public render() {
+		const selectBox = classnames('select-box', { 'disNone': !this.state.expand })
 		const { options = [] } = this.props;
-		let showName:string = this.props.placeholder || options[0][name];
-		if(this.state.options && this.state.options.name) {
-			showName =   this.state.options.name
+		let showName: string = this.props.placeholder || options[0][name];
+		if (this.state.options && this.state.options.name) {
+			showName = this.state.options.name
 		}
 		return (
 			<div className="select-wrapper"
 				onClick={this.onExpand}
 			>
-				{this.props.text!==''&&<div className="select-type">{this.props.text}</div>}
+				{this.props.text !== '' && <div className="select-type">{this.props.text}</div>}
 				<div className="selected-text" style={this.props.style}>
 					<span>{showName}</span>
 					<span className="triangle" />

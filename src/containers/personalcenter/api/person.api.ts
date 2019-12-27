@@ -5,13 +5,11 @@ import request from 'utils/request';
  * @param token 
  * @param imgStr 头像url
  */
-export const modifyUserIcon = (userId: string,token:string,imgStr:string) =>
+export const modifyUserIcon = (imgStr:string) =>
 {
     const opts = {
-        method: 'modifyUserIcon',
+        method: 'modifyUserIconV3',
         params: [
-            userId,
-            token,
             imgStr
         ]
     }
@@ -123,6 +121,74 @@ export const getAttentionList = (userId: string,token:string,page:number,pageSiz
             token,
             page,
             pageSize
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 用户绑定钱包地址
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param type 地址类型 eth,neo
+ * @param address 地址
+ */
+export const bindAddress = (userId: string,token:string,type:string,address:string) =>
+{
+    const opts = {
+        method: 'bindAddress',
+        params: [
+            userId,
+            token,
+            type,
+            address
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 查询我的订单列表
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param page 当前页面
+ * @param pageSize 每页显示行数
+ */
+export const getMyorderList = (userId: string,token:string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'queryBuyOrderList',
+        params: [
+            userId,token,page,pageSize
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 查询订单详情
+ * @param userId 用户id
+ * @param token 访问令牌
+ * @param projId 项目ID
+ * @param orderId 订单ID
+ */
+export const getMyorderDetail = (userId: string,token:string,projId:string,orderId:string) =>
+{
+    const opts = {
+        method: 'queryBuyOrder',
+        params: [
+            userId,token,projId,orderId
+        ]
+    }
+    return request(opts);
+}
+/**
+ * 修改用户名
+ * @param username 用户名
+ */
+export const updateUsername = (username:string) =>
+{
+    const opts = {
+        method: 'modifyUserNameV3',
+        params: [
+            username
         ]
     }
     return request(opts);

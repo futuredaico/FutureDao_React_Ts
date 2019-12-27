@@ -27,7 +27,7 @@
       .home-list-ul{
         .home-list-li{
           width: 255px;
-          height: 326px;
+          height: 337px;
           margin-right: 20px;
           margin-top: 30px;          
           box-sizing: border-box;
@@ -58,7 +58,20 @@
                 /* autoprefixer: off */
                 -webkit-box-orient: vertical; 
                 margin-bottom: 5px;
-              }     
+              }
+              .sbox-des{
+                height: 50px;
+                line-height: 16px;
+                font-size: 12px;
+                color:@t-b2;
+                margin-top: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis; 
+                display: -webkit-box;
+                -webkit-line-clamp: 3; // （行数）
+                /* autoprefixer: off */
+                -webkit-box-orient: vertical;
+              }  
               .sbox-showtype{
                 .showtype-text{
                   color: @t-purple;
@@ -71,21 +84,21 @@
                   color: @t-b2;
                 }
               }         
-              .sbox-asset{
-                margin-top: 28px;
+              .sbox-line{
+                margin-top: 18px;
                 font-size: 14px;
-                .sbox-line{
-                  margin-bottom: 15px;
-                  .sbox-line-left{
-                    display: inline-block;
-                    color: @t-purple;                 
-                  }
-                  .sbox-line-right{
-                    float: right;
-                    font-size: 12px;
-                  }                  
+                border-top: 1px solid @bg-e5;
+                padding-top: 12px;
+                .sbox-line-left{
+                  display: inline-block;
+                  color: @t-purple;                 
                 }
-              }
+                .sbox-line-right{
+                  float: right;
+                  font-size: 12px;
+                  color: @t-b2;
+                }                  
+              }            
               .sbox-doing{
                 margin-top: 20px;
                 font-size: 14px;

@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/person.api';
-import {checkEmail} from '../../login/api/login.api';
 import { CodeType } from '@/store/interface/common.interface';
 import common from '@/store/common';
 class PersonEdit
@@ -17,7 +16,7 @@ class PersonEdit
         let result: any = [];
         try
         {
-            result = await Api.modifyUserIcon(common.userId, common.token, imgStr);
+            result = await Api.modifyUserIcon(imgStr);
         } catch (e)
         {
             return false;
@@ -39,32 +38,23 @@ class PersonEdit
         return true;
     }
     /**
-     * 修改用户简介
+     * 修改用户名称
      */
-    @action public updateUserBrief = async (str: string) =>
+    @action public updateName = async (username: string) =>
     {
         let result: any = [];
         try
         {
-            result = await Api.modifyUserBrief(common.userId, common.token, str);
+            result = await Api.updateUsername(username);
         } catch (e)
         {
             return false;
         }
-        if (result[0].resultCode === CodeType.success)
-        {
-            if (common.userInfo)
-            {
-                common.userInfo.brief = str;
-            }
-            else
-            {
-                return false
-            }
-        } else
+        if (result[0].resultCode !== CodeType.success)
         {
             return false
-        }
+        } 
+        common.getUserInfo();
         return true;
     }
     /**
@@ -115,21 +105,40 @@ class PersonEdit
     /**
      * 检测邮箱
      */
-    @action public checkEmail = async (email: string) =>
+    // @action public checkEmail = async (email: string) =>
+    // {
+    //     let result: any = [];
+    //     try
+    //     {
+    //         result = await checkEmail(email);
+    //     } catch (e)
+    //     {
+    //         this.newEmailCode = '';
+    //         return false;
+    //     }
+    //     if (result[0].resultCode !== CodeType.success)
+    //     {
+    //         this.newEmailCode = result[0].resultCode;
+    //         return false           
+    //     }
+    //     return true;
+    // }
+    @action public bindWalletAddress = async (type:string,address:string) =>
     {
         let result: any = [];
         try
         {
-            result = await checkEmail(email);
+            result = await Api.bindAddress(common.userId, common.token, type,address);
         } catch (e)
         {
-            this.newEmailCode = '';
             return false;
         }
-        if (result[0].resultCode !== CodeType.success)
+        if (result[0].resultCode === CodeType.success)
         {
-            this.newEmailCode = result[0].resultCode;
-            return false           
+            common.getUserInfo();
+        } else
+        {
+            return false
         }
         return true;
     }
