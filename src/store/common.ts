@@ -93,11 +93,12 @@ class Common implements ICommonStore {
       }
       if (result[0].resultCode === CodeType.success) {
         const data = result[0].data.nonceStr;
-        console.log(data);
-        console.log(metamaskwallet.metamaskAddress)
-        metamaskwallet.web3.eth.sign(data, metamaskwallet.metamaskAddress).then((value: string) => {
+        console.log("待签名数据",data);
+        console.log("签名地址",metamaskwallet.metamaskAddress)
+
+        metamaskwallet.web3.eth.personal.sign(data, metamaskwallet.metamaskAddress,"password").then((value: string) => {
           //
-          console.log(value)
+          console.log("签名结果",value)
           this.loginCheck(value)
         })
       }else{
@@ -145,7 +146,11 @@ class Common implements ICommonStore {
     }
     console.log(result)
     this.clearUserInfo();
-    window.location.href = "/";
+    if(process.env.REACT_APP_SERVER_ENV === 'DEV'){
+      window.location.href = '/test'
+    }else{
+      window.location.href = "/";
+    }    
     return true
   }
   // 清空用户信息
