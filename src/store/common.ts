@@ -100,6 +100,12 @@ class Common implements ICommonStore {
           console.log(value)
           this.loginCheck(value)
         })
+      }else{
+        if (this.language === 'en') {
+          this.openNotificationWithIcon('error', 'Operation fail', 'Requests are too frequent, please try again in 30 seconds');
+        } else {
+          this.openNotificationWithIcon('error', '操作失败', '请求过于频繁，请30秒之后在试');
+        }
       }
       // sign(dataToSign: string, address: string | number, callback?: (error: Error, signature: string) => void): Promise<string>;
     }
