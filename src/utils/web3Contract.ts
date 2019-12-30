@@ -24,13 +24,13 @@ export class Web3Contract {
         const deploy = contract.deploy(data)
         try {
             const count = await deploy.estimateGas();
-            const gas = count * 10  // 预估的gas*10倍，以防gas不够合约部署失败
+            const gas = count;  // 预估的gas*10倍，以防gas不够合约部署失败
             const gasPrice = await MetaMask.web3.eth.getGasPrice();
             console.log('gas', gas);
             console.log('gasprice', gasPrice);
 
             // const newContractInstance = await deploy.send({ from, gas, gasPrice });       1000000000
-            const newContractInstance = await deploy.send({ from, gas: 57535910, gasPrice: "10000000000" });
+            const newContractInstance = await deploy.send({ from, gas, gasPrice });
             console.log(newContractInstance.options.address);
             return newContractInstance;
             // deploy.send({ from, gas, gasPrice })

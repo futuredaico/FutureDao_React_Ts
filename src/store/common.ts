@@ -93,13 +93,20 @@ class Common implements ICommonStore {
       }
       if (result[0].resultCode === CodeType.success) {
         const data = result[0].data.nonceStr;
-        console.log(data);
-        console.log(metamaskwallet.metamaskAddress)
-        metamaskwallet.web3.eth.sign(data, metamaskwallet.metamaskAddress).then((value: string) => {
+        console.log("待签名数据",data);
+        console.log("签名地址",metamaskwallet.metamaskAddress)
+
+        metamaskwallet.web3.eth.personal.sign(data, metamaskwallet.metamaskAddress,"password").then((value: string) => {
           //
-          console.log(value)
+          console.log("签名结果",value)
           this.loginCheck(value)
         })
+      }else{
+        if (this.language === 'en') {
+          this.openNotificationWithIcon('error', 'Operation fail', 'Requests are too frequent, please try again in 30 seconds');
+        } else {
+          this.openNotificationWithIcon('error', '操作失败', '请求过于频繁，请30秒之后在试');
+        }
       }
       // sign(dataToSign: string, address: string | number, callback?: (error: Error, signature: string) => void): Promise<string>;
     }
@@ -139,7 +146,11 @@ class Common implements ICommonStore {
     }
     console.log(result)
     this.clearUserInfo();
-    window.location.href = "/";
+    if(process.env.REACT_APP_SERVER_ENV === 'DEV'){
+      window.location.href = '/test'
+    }else{
+      window.location.href = "/";
+    }    
     return true
   }
   // 清空用户信息
