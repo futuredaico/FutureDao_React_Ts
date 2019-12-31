@@ -75,11 +75,11 @@ export default class Footer extends React.Component<IProps, any>
               {/* <li className="img-icon" id="qqfooter">
                                 <a href="#qqfooter" className="img-qq" />
                             </li> */}
-              <li className="img-icon" id="wechatfooter">
+              {/* <li className="img-icon" id="wechatfooter">
                 <a href="#wechatfooter" className="img-wechat" />
-              </li>
+              </li> */}
               <li className="img-icon">
-                <a href="https://github.com/NewEconoLab" target="_blank" className="img-git" />
+                <a href="https://github.com/futuredaico" target="_blank" className="img-git" />
               </li>
             </ul>
           </div>

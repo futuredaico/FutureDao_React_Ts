@@ -54,12 +54,12 @@ export default {
     notsame:"Passwords don’t match."
   },  
   header:{
-    discover:"Discover projects",
+    discover:"Explore",
     creat:"Establish project",
-    center:"Personal center",
+    center:"Dashboard",
     myproject:"My projects",
     exit:"Log out",
-    login:"Log in",
+    login:"Log in metamask",
     sign:"Sign up"
   },
   footer:{
@@ -74,7 +74,7 @@ export default {
     policy:"Privacy policy"
   },
   home:{
-    discover:"Discover projects",
+    discover:"Explore",
     supporttips:" supporters",
     display:"Creative display",
     gu:"Shares",
@@ -114,8 +114,8 @@ export default {
     againpwd:"Confirm password"
   },
   user:{
-    info:"Personal info",
-    center:"Personal center",
+    info:"Profile",
+    center:"Dashboard",
     profile:"Personal profile",
     email:"Email address ",
     oldpwd:"Old password",
