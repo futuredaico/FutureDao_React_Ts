@@ -59,7 +59,7 @@ export default {
     center:"个人中心",
     myproject:"我的项目",
     exit:"退出账号",
-    login:"登陆metamask",
+    login:"Metamask 登陆",
     sign:"注册"
   },
   footer:{

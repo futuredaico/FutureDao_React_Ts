@@ -59,7 +59,7 @@ export default {
     center:"Dashboard",
     myproject:"My projects",
     exit:"Log out",
-    login:"Log in metamask",
+    login:"Log in with Metamask",
     sign:"Sign up"
   },
   footer:{

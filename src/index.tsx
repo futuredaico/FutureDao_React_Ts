@@ -32,17 +32,14 @@ if (window["ethereum"]) {
   ethereum.on("accountsChanged", accounts => {
     console.log(accounts[0]);
     if(common.userInfo&&common.userInfo.address){
-      common.isLoginoutFlag=true;
+      if(common.userInfo.address.toLocaleLowerCase()!==accounts[0].toLocaleLowerCase()){
+        common.isLoginoutFlag=true;
+      }      
     }
-    // MetamaskWallet.metamaskAddress = accounts[0];
-    // MetamaskWallet.checkIsCurrendBindAddress();
   })
   ethereum.on("networkChanged", accounts => {
     console.log(accounts);
     MetamaskWallet.changeNetwork();
-  // common.network = accounts
-  // MetamaskWallet.metamaskAddress = accounts[0];
-  // MetamaskWallet.checkIsCurrendBindAddress();
   })
 }
 
