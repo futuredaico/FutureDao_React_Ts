@@ -111,6 +111,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 { name: 'SAI', id: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359' },
                 { name: 'DAI', id: '0x6b175474e89094c44da98b954eedeac495271d0f' },
                 { name: 'WETH', id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
+                { name: '其他', id: '' }
             ]
 
     public render() {
