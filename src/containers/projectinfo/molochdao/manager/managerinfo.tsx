@@ -43,9 +43,10 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                 <div className="manager-left">
                     <h3 className="title-h3">
                         {this.props.molochmanager.proposalInfo.proposalTitle?this.props.molochmanager.proposalInfo.proposalTitle:'null'}
-                        {/* <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span> */}
+                        <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>
                     </h3>
                     <div className="manager-info">
+                        {/* 提案人 */}
                         <div className="info-line">
                             <div className="iline-left">
                                 <strong>{this.intrl.manager.proposer}</strong>
@@ -57,11 +58,19 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 }
                                 <div className="people-swrap">
                                     <strong className="member-name">{this.props.molochmanager.proposalInfo.username ? this.props.molochmanager.proposalInfo.username : this.intrl.user.shen}</strong>
-                                    <span>{this.props.molochmanager.proposalInfo.proposer.replace(/^(.{7})(.*)(.{4})$/, '$1...$3')}</span>
+                                    <span>{this.props.molochmanager.proposalInfo.proposer}</span>
                                 </div>
                             </div>
                         </div>
+                        {/* 提案具体详情 */}
                         <div className="proposal-info">
+                            <div>
+                                <strong>{this.intrl.manager.detail}</strong>
+                            </div>
+                            {
+                                this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">暂无说明</p>
+                            }
+                            {/* 申请股份类型 */}
                             <div className="info-line">
                                 <div className="iline-left">
                                     <strong>{this.intrl.manager.applicant}</strong>
@@ -73,16 +82,10 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                     }
                                     <div className="people-swrap">
                                         <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
-                                        <span>{this.props.molochmanager.proposalInfo.applicant.replace(/^(.{7})(.*)(.{4})$/, '$1...$3')}</span>
+                                        <span>{this.props.molochmanager.proposalInfo.applicant}</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <strong>{this.intrl.manager.detail}</strong>
-                            </div>
-                            {
-                                this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">暂无说明</p>
-                            }
+                            </div>                            
                             <div className="info-line">
                                 <div className="iline-left">
                                     <strong>{this.intrl.manager.apply}</strong>
@@ -97,6 +100,31 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 </div>
                                 <div className="iline-right">
                                     <span>{this.props.molochmanager.proposalInfo.tokenTribute} {this.props.molochmanager.proposalInfo.tokenTributeSymbol.toLocaleUpperCase()}</span>
+                                </div>
+                            </div>
+                            {/* 提出成员类型 */}
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>提出成员</strong>
+                                </div>
+                                <div className="iline-right">
+                                    {
+                                        this.props.molochmanager.proposalInfo.applicantHeadIconUrl ? <img src={this.props.molochmanager.proposalInfo.applicantHeadIconUrl} alt="" className="people-headicon" />
+                                            : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
+                                    }
+                                    <div className="people-swrap">
+                                        <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
+                                        <span>{this.props.molochmanager.proposalInfo.applicant}</span>
+                                    </div>
+                                </div>
+                            </div>      
+                            {/* 添加支持代币类型 */}
+                            <div className="info-line">
+                                <div className="iline-left">
+                                    <strong>添加支持代币</strong>
+                                </div>
+                                <div className="iline-right">
+                                    <span>0x1234567890987654321</span>
                                 </div>
                             </div>
                         </div>
@@ -231,12 +259,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                     <div className="back-btn">
                         <img src={require('@/img/back.png')} alt="" onClick={this.handleBackManagerList} className="back-img" />
                     </div>
-                    {/* <Button text="批准为正式提案" btnSize="bg-bg-btn" />
+                    <Button text="批准为正式提案" btnSize="bg-bg-btn" />
                     <div className="notallow-wrapper">
                         <span>批准为正式提案</span>
                         <span className="sm-time">（ 4小时48分钟后可用 ）</span>
-                    </div> */}
-                    {/* （ 4小时48分钟后可用 ） */}
+                    </div>
                     <VoteBox {...this.props} />
                 </div>
                 {
@@ -256,11 +283,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         );
     }
     // 取消提案
-    // private handleToOpenStop = () => {
-    //     this.setState({
-    //         showDeletBox: true
-    //     })
-    // }
+    private handleToOpenStop = () => {
+        this.setState({
+            showDeletBox: true
+        })
+    }
     private handleToCloseStop = () =>
     {
         this.setState({

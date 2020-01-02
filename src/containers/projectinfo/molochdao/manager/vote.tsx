@@ -132,7 +132,26 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 }
                 {
                     (this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass || this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail) && (
-                        this.props.molochmanager.proposalListItem.handleState === '0' ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} /> : <Button text={this.intrl.btn.done} btnSize="bg-bg-btn" btnColor="gray-btn" />
+                        this.props.molochmanager.proposalListItem.handleState === '0'
+                            ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} />
+                            : (
+                                <>
+                                    {
+                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass && (
+                                            <div className="going-box pass-str">
+                                                <strong>提案已通过</strong>
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail && (
+                                            <div className="going-box fail-str">
+                                                <strong>提案未通过</strong>
+                                            </div>
+                                        )
+                                    }
+                                </>
+                            )
                     )
                 }
             </>
@@ -152,7 +171,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             if (this.props.molochmanager.upBalance <= 0)
             {
                 return false
-            } 
+            }
         } else
         {
             if (this.props.molochmanager.proposalBalance <= 0)
@@ -186,7 +205,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             if (this.props.molochmanager.upBalance <= 0)
             {
                 return false
-            } 
+            }
         } else
         {
             if (this.props.molochmanager.proposalBalance <= 0)

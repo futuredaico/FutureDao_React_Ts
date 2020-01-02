@@ -12,7 +12,25 @@ export default [
   },
   {
     component: asyncComponent(() => import('../containers/proposal/molochdao')),
-    path: '/molochproposal/:projectId'
+    path: '/sendproposal/:projectId',
+    children: [
+      {
+        path: '/sendproposal/token/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/addtoken')),
+      },
+      {
+        path: '/sendproposal/kick/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/kickmember')),
+      },
+      {
+        path: '/sendproposal/apply/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/applyshares')),
+      },
+      {
+        path: '/sendproposal/menu/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/menu')),
+      }
+    ]
   },
   {
     component: asyncComponent(() => import('../containers/proposal/futuredao')),
