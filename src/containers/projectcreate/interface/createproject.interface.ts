@@ -12,6 +12,7 @@ export interface IProjectStore {
 export interface ICreateProjectStore {
   createStatus: number,
   createContent: ICreateContent,
+  projectID: string,
   createProject: () => Promise<boolean>,
   getTokenInfo: (token: string) => Promise<{
     symbol: string;
@@ -32,14 +33,17 @@ export interface ICreateContent {
   projectName: string;            // 项目名称
   projectBrief: string;           // 项目简介
   projectDetail: string,          // 文本编辑内容 详情
-  projConverUrl: string;          // 项目封面URL
+  projectConverUrl: string;       // 项目封面URL
+  officialWebUrl: string;         // 官网URL
   approvedToken: string;          // 允许交易的token
+  approvedTokenSymbol?: string      // token的简称
+  approvedDecimals?: number         // token 精度
   periodDuration: number;         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
   votingPeriodLength: number;     // 投票有多少个区间段
   gracePeriodLength: number;      // 公示有多少个区间段
   abortWindow: number;            // 撤回投票的窗口期
   proposalDeposit: number;        // 提议的押金
-  dilutionBound: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
+  dilutionBound?: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
   processingReward: number;       // 处理提案的人所得到的奖励
 }
 
