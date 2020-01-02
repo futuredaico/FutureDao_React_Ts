@@ -1,5 +1,5 @@
 /**
- * 项目详情页
+ * 项目成员页
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
@@ -50,7 +50,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                         </div>
                     )
                 }
-                <h3 className="title-h3">普通股份持有人</h3>
+                <h3 className="title-h3 other-bigtitle">普通股份持有人</h3>
             </div>
         );
     }

@@ -137,7 +137,40 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     }
                     {
                         this.props.molochmanager.proposalMenuNum === 2 && (
-                            <></>
+                            <>
+                                {
+                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
+                                    {
+                                        return (
+                                            <div className="manager-list manager-ready-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
+                                                <div className="mcontent-top">
+                                                    <div className="mcontent-title">
+                                                        <span className="title-gray">#{item.proposalIndex}</span>
+                                                        <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
+                                                    </div>
+                                                    <Card text="我的" colortype="transparent-purple" cardsize="md-sm-card" />
+                                                </div>
+                                                <div className="mcontent-down">
+                                                    <div className="mcontent-count">
+                                                        <span>{this.intrl.manager.request} </span>
+                                                        <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
+                                                        <span>{this.intrl.manager.gong} </span>
+                                                        <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+
+                                {
+                                    this.props.molochmanager.proposalCount > 10 && (
+                                        <div className="proposal-page-warpper">
+                                            <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochmanager.proposalPageSize} total={this.props.molochmanager.proposalCount} onChange={this.handleChangeManagerPage} />
+                                        </div>
+                                    )
+                                }
+                            </>
                         )
                     }
 
@@ -222,7 +255,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
                 } else
                 {
-                    this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposal/menu/' + this.props.molochinfo.projId)
                 }
             } else
             {
@@ -232,7 +265,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 }
                 else
                 {
-                    this.props.history.push('/molochproposal/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposal/menu/' + this.props.molochinfo.projId)
                 }
             }
         }

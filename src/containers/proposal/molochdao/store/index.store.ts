@@ -9,6 +9,7 @@ import { toMyNumber } from '@/utils/numberTool';
 
 class MolochProposal implements IMolochProposalStore
 {
+  @observable public proposalMenu:number = 0; // 发起提案的菜单选择，0为首页，1为申请，2为踢出，3为添加代币
   @observable public fundHash: string = ''; // 贡献资金的hash
   @observable public fundSymbol: string = ''; // 贡献资金的简称
   @observable public proposalFee:string = ''; // 押金（手续费）

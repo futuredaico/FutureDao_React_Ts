@@ -2,7 +2,7 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { IMolochManagerStore } from "@/containers/projectinfo/molochdao/interface/molochmanager.interface";
-// import { TransactionReceipt } from "web3-core";
+import { History } from 'history';
 export interface IMolochProposalStore
 {
   fundHash:string,
@@ -16,6 +16,10 @@ export interface IMolochProposalStore
 
 export interface IMolochProposalProps extends RouteComponentProps<{ projectId: string }>
 {
+  route: {
+    [ key: string ]: any
+  };
+  history: History,
   common: ICommonStore,
   index: IMolochProposalStore,
   metamaskwallet:IMetaMastWalletStore,

@@ -8,6 +8,7 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { toMyNumber, saveDecimal } from '@/utils/numberTool';
+import Hint from '@/components/hint';
 
 interface IState
 {
@@ -30,7 +31,13 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
         }
         return (
                 <>
-                    <h3 className="title-h3">{this.intrl.manager.quit}</h3>
+                    <h3 className="title-h3">
+                        {this.intrl.manager.quit}
+                        <Hint
+                            text="同时持有管理者股份和普通股份时，优先退出普通股份"
+                            hintType="right-hint"
+                        />
+                    </h3>
                     <div className="exit-wrapper">
                         <div className="exit-line">
                             <div className="exit-left">{this.intrl.manager.mygu}</div>
