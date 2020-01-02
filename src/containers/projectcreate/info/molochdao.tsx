@@ -101,12 +101,17 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         { name: '5天', id: 5 }
     ]
     // 代币选择项
-    private tokenOptions: IOptions[] = [
-        { name: 'DAI', id: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359' },
-        { name: 'WETH', id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
-        { name: 'USDF', id: '0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7' },
-        { name: '其他', id: '' }
-    ]
+    private tokenOptions: IOptions[] =
+        (process.env.REACT_APP_SERVER_ENV === 'DEV') ?
+            [
+                { name: 'USDF', id: '0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7' },
+                { name: '其他', id: '' }
+            ] :
+            [
+                { name: 'SAI', id: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359' },
+                { name: 'DAI', id: '0x6b175474e89094c44da98b954eedeac495271d0f' },
+                { name: 'WETH', id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
+            ]
 
     public render() {
         return (
