@@ -34,17 +34,17 @@ class CreateProject implements ICreateProjectStore {
    */
   @action public createProject = async () => {
     try {
-      await metamaskwallet.inintWeb3();
+      await metamaskwallet.inintWeb3(); // 初始化 web3
       const abi = Moloch.abi as AbiItem[];
       const bytecode = Moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
-      const asset = await this.getTokenInfo(this.createContent.approvedToken);
-      const decimals = Math.pow(10, parseFloat(asset.decimals));
+      const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
+      const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
       const proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals);
       const processingReward = toMyNumber(this.createContent.processingReward).mul(decimals);
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
-
+      // 部署合约
       const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
@@ -57,14 +57,15 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.dilutionBound,
         processingReward.value
       );
+      // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
       this.createStatus = 1;
       console.log('txid', txid);
-      const newContactInstance = await deployResult.promise;
+      const newContactInstance = await deployResult.promise;  // 合约部署成功后获得新的合约对象
       const contractAddress = newContactInstance.options.address;
       const newContract = new Web3Contract(abi, contractAddress, newContactInstance);
-      const guildBankAddress = await newContract.contractCall("guildBank");
-      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress);
+      const guildBankAddress = await newContract.contractCall("guildBank"); // 获得 bank合约hash
+      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress); // 上传项目信息给服务端
       console.log(result);
       if (result && result[ 0 ] && result[ 0 ].resultCode === "00000") {
         this.projectID = result[ 0 ].data.projId;
@@ -75,8 +76,12 @@ class CreateProject implements ICreateProjectStore {
         return false;
       }
     } catch (e) {
-      console.log('create error', e);
-      this.createStatus = 3;
+      // 判断异常是不是用户拒绝了交易 Metamask 错误码 4001
+      if (e.code === 4001) {
+        this.createStatus = 0;
+      } else {
+        this.createStatus = 3;
+      }
       return false;
     }
     return true;
