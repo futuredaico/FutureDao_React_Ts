@@ -3,9 +3,9 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
-import { IMolochProposalProps } from './interface/index.interface';
+import { IMolochProposalProps } from '../interface/index.interface';
 import { renderRoutes } from 'react-router-config';
 
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')

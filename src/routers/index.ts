@@ -11,24 +11,28 @@ export default [
     path: '/index',
   },
   {
-    component: asyncComponent(() => import('../containers/proposal/molochdao')),
-    path: '/sendproposal/:projectId',
+    component: asyncComponent(() => import('../containers/proposal/molochdao/v1')),
+    path: '/sendproposalv1/:projectId',
+  },
+  {
+    component: asyncComponent(() => import('../containers/proposal/molochdao/v2')),
+    path: '/sendproposalv2/:projectId',
     children: [
       {
-        path: '/sendproposal/token/:projectId',
-        component: asyncComponent(() => import('../containers/proposal/molochdao/addtoken')),
+        path: '/sendproposalv2/token/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/v2/addtoken')),
       },
       {
-        path: '/sendproposal/kick/:projectId',
-        component: asyncComponent(() => import('../containers/proposal/molochdao/kickmember')),
+        path: '/sendproposalv2/kick/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/v2/kickmember')),
       },
       {
-        path: '/sendproposal/apply/:projectId',
-        component: asyncComponent(() => import('../containers/proposal/molochdao/applyshares')),
+        path: '/sendproposalv2/apply/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/v2/applyshares')),
       },
       {
-        path: '/sendproposal/menu/:projectId',
-        component: asyncComponent(() => import('../containers/proposal/molochdao/menu')),
+        path: '/sendproposalv2/menu/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/molochdao/v2/menu')),
       }
     ]
   },
@@ -43,8 +47,12 @@ export default [
     ]
   },
   {
-    component: asyncComponent(() => import('../containers/projectinfo/molochdao')),
-    path: '/molochinfo/:projectId'
+    component: asyncComponent(() => import('../containers/projectinfo/molochdao/v2')),
+    path: '/molochinfov2/:projectId'
+  },
+  {
+    component: asyncComponent(() => import('../containers/projectinfo/molochdao/v1')),
+    path: '/molochinfov1/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/projectcreate')),

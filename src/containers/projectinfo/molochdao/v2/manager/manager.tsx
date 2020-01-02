@@ -3,13 +3,13 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
-import { IMolochInfoProps } from '../interface/molochinfo.interface';
+import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import { Pagination, Input } from 'antd';
-import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
+import { IMolochProposalList, ProposalType } from '../../interface/molochmanager.interface';
 import { onCountRemainTime } from '@/utils/formatTime';
 import QuitProject from './quit';
 
@@ -255,7 +255,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
                 } else
                 {
-                    this.props.history.push('/sendproposal/menu/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposalv2/menu/' + this.props.molochinfo.projId)
                 }
             } else
             {
@@ -265,7 +265,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                 }
                 else
                 {
-                    this.props.history.push('/sendproposal/menu/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposalv2/menu/' + this.props.molochinfo.projId)
                 }
             }
         }

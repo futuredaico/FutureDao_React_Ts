@@ -3,13 +3,13 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import ProjectDetail from './info/detail'
 import Manager from './manager/manager';
 import ManagerInfo from './manager/managerinfo';
 import Member from './member/member';
-import { IMolochInfoProps } from './interface/molochinfo.interface';
+import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import classnames from 'classnames';
 
 @observer

@@ -3,10 +3,10 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IMolochInfoProps } from '../interface/molochinfo.interface';
+import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import { toMyNumber, saveDecimal } from '@/utils/numberTool';
 import Hint from '@/components/hint';
 

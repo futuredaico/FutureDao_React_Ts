@@ -3,11 +3,11 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IMolochInfoProps } from '../interface/molochinfo.interface';
-import { IMolochProposalList, ProposalType } from '../interface/molochmanager.interface';
+import { IMolochInfoProps } from '../../interface/molochinfo.interface';
+import { IMolochProposalList, ProposalType } from '../../interface/molochmanager.interface';
 import { onCountRemainTime } from '@/utils/formatTime';
 import classnames from 'classnames';
 

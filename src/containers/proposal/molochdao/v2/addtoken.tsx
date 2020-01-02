@@ -1,14 +1,14 @@
 /**
- * 提出成员
+ * 添加支持代币
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Input } from 'antd';
 import Button from '@/components/Button';
 import TextArea from 'antd/lib/input/TextArea';
-import { IMolochProposalProps } from './interface/index.interface';
+import { IMolochProposalProps } from '../interface/index.interface';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 
 interface IState
@@ -16,21 +16,21 @@ interface IState
     isDoingSave: boolean,// 是否正在发布
     tianName: string,  // 提案名称
     tianDes: string,  // 提案详情
-    tianKickAddr: string, // 踢出成员地址
-    tianKickAddrBtn: boolean, // 地址的格式确认
+    tianTokenHash: string, // 添加代币hash
+    tianHashBtn: boolean, // Hash的格式确认
     canSendFlag: boolean, // 是否可发起提案
 }
 
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
-class KickMember extends React.Component<IMolochProposalProps, IState> {
+class AddToken extends React.Component<IMolochProposalProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         isDoingSave: false,
         tianName: '',
         tianDes: '',
-        tianKickAddr: '',
-        tianKickAddrBtn: true,
+        tianTokenHash: '',
+        tianHashBtn: true,
         canSendFlag: false
     }
 
@@ -60,12 +60,11 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
                     <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                 </div>
                 <div className="inline-title">
-                    <strong>踢出成员地址</strong>&nbsp;
+                    <strong>添加代币Hash</strong>&nbsp;
                             <span className="red-type">*</span>
-                    <span className="tips-text">（ 该成员股份将被全部按比例兑换成资产 ）</span>
                 </div>
                 <div className="inline-enter">
-                    <Input value={this.state.tianKickAddr} onChange={this.handleChangeTianKickAddr} />
+                    <Input value={this.state.tianTokenHash} onChange={this.handleChangeTianTokenHash} />
                 </div>
                 <div className="inline-btn">
                     <Button
@@ -98,22 +97,22 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             this.checkAllInput()
         })
     }
-    // 股份申请人的输入
-    private handleChangeTianKickAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    // 代币hash的输入
+    private handleChangeTianTokenHash = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         this.setState({
-            tianKickAddr: ev.target.value
+            tianTokenHash: ev.target.value
         }, () =>
         {
-            this.handleChangeAddrByMetamask()
+            this.handleChangeHashByMetamask()
         })
     }
-    // 地址格式验证
-    private handleChangeAddrByMetamask = () =>
+    // 代币hash格式验证
+    private handleChangeHashByMetamask = () =>
     {
-        const res = web3.isAddress(this.state.tianKickAddr);
+        const res = web3.isAddress(this.state.tianTokenHash);
         this.setState({
-            tianKickAddrBtn: res
+            tianHashBtn: res
         }, () =>
         {
             this.checkAllInput()
@@ -127,7 +126,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             return false;
         }
         await this.props.metamaskwallet.inintWeb3();
-        // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5        
+        // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
         // const tianStr = {
         //     title: this.state.tianName,
         //     description: this.state.tianDes
@@ -152,7 +151,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             return false
         }
         // const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
-        // await this.props.index.applyProposal(contractHash, assetHash,this.state.tianKickAddr, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        // await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         // {
         //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
         this.initData();
@@ -173,7 +172,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         {
             isOk = false;
         }
-        if (!this.state.tianKickAddrBtn)
+        if (!this.state.tianHashBtn)
         {
             isOk = false;
         }
@@ -187,8 +186,8 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         this.setState({
             tianName: '',
             tianDes: '',
-            tianKickAddr: '',
-            tianKickAddrBtn: false,
+            tianTokenHash: '',
+            tianHashBtn: false,
             canSendFlag: false
         })
         const projectId = this.props.match.params['projectId'];
@@ -196,4 +195,4 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
     }
 }
 
-export default injectIntl(KickMember);
+export default injectIntl(AddToken);

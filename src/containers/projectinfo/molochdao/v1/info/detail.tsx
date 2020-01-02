@@ -3,10 +3,10 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { IMolochInfoProps, IDiscussList, IDiscussReplyList } from '../interface/molochinfo.interface';
+import { IMolochInfoProps, IDiscussList, IDiscussReplyList } from '../../interface/molochinfo.interface';
 import * as formatTime from '@/utils/formatTime';
 interface IState
 {
@@ -39,10 +39,6 @@ class MolochDetail extends React.Component<IMolochInfoProps, IState> {
             <>
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
-                    <div className="contract-projectinfo">
-                        <p>合约地址：0x1fd169a4f5c59acf79d0fd5d91d1201ef1bce9f1</p>
-                        <p>创建者：0x512e07a093aaa20ba288392eadf03838c7a4e522</p>
-                    </div>
                     {
                         this.props.molochinfo.projInfo.projDetail?<div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} />:<div className="detail-p">暂无详情</div> 
                     }                   
