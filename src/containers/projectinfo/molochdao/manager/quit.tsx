@@ -34,7 +34,7 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
                     <h3 className="title-h3">
                         {this.intrl.manager.quit}
                         <Hint
-                            text="同时持有管理者股份和普通股份时，优先退出普通股份"
+                            text="同时持有普通股份和无表决权股份时，优先退出无表决权股份。"
                             hintType="right-hint"
                         />
                     </h3>
