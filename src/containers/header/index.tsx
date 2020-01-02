@@ -29,9 +29,10 @@ export default class Header extends React.Component<IProps, IState>{
           <div className="header-menu">
             <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
+              <li><Link to="/index">首页</Link></li>
               <li><Link to="/">{this.props.locale.discover}</Link></li>
               <li>
-                <a href="javascript:;" onClick={this.handleToCreateProject}>{this.props.locale.creat}</a>
+                <span className="aclick-span" onClick={this.handleToCreateProject}>{this.props.locale.creat}</span>
               </li>
             </ul>
           </div>

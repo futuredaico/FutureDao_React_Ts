@@ -60,75 +60,87 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
                             <li className={this.props.molochmanager.proposalMenuNum === 1 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 1)}>
                                 {this.intrl.manager.tian}
                             </li>
-                            {/* <li className={this.props.molochmanager.proposalMenuNum === 2 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 2)}>
+                            <li className={this.props.molochmanager.proposalMenuNum === 2 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 2)}>
                                 预发布提案<span className="sm-graytime">（4小时30分钟后可用）</span>
-                            </li> */}
+                            </li>
                         </ul>
                     </div>
                     {
-                        this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
-                        {
-                            return (
-                                <div className="manager-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
-                                    <div className="mcontent-top">
-                                        <div className="mcontent-title">
-                                            {
-                                                (this.props.common.userInfo && this.props.molochmanager.proposalBalance > 0) && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
-                                            }
-                                            <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
-                                        </div>
-                                        {
-                                            item.proposalState === ProposalType.voting && (
-                                                <div className="transparent-toupiao">
-                                                    <span className="big-text">{this.intrl.manager.voting}</span>&nbsp;&nbsp;
+                        this.props.molochmanager.proposalMenuNum === 1 && (
+                            <>
+                                {
+                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
+                                    {
+                                        return (
+                                            <div className="manager-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
+                                                <div className="mcontent-top">
+                                                    <div className="mcontent-title">
+                                                        {
+                                                            (this.props.common.userInfo && this.props.molochmanager.proposalBalance > 0) && (item.hasVote ? <Card text={this.intrl.manager.yesvote} colortype="block-gray" cardsize="sm-card" /> : <Card text={this.intrl.manager.novote} colortype="c-purple" cardsize="sm-card" />)
+                                                        }
+                                                        <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
+                                                    </div>
+                                                    {
+                                                        item.proposalState === ProposalType.voting && (
+                                                            <div className="transparent-toupiao">
+                                                                <span className="big-text">{this.intrl.manager.voting}</span>&nbsp;&nbsp;
                                                     <span className="sm-text">{this.intrl.manager.other} {this.computeVoteTime(item)}</span>
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            item.proposalState === ProposalType.showing && (
-                                                <div className="transparent-toupiao purple-gongshi">
-                                                    <span className="big-text">{this.intrl.manager.showing}</span>&nbsp;&nbsp;
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {
+                                                        item.proposalState === ProposalType.showing && (
+                                                            <div className="transparent-toupiao purple-gongshi">
+                                                                <span className="big-text">{this.intrl.manager.showing}</span>&nbsp;&nbsp;
                                                     <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
+                                                            </div>
+                                                        )
+                                                    }
+                                                    {
+                                                        item.proposalState === ProposalType.pass && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
+                                                    }
+                                                    {
+                                                        item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
+                                                    }
+                                                    {
+                                                        (item.proposalState === ProposalType.pass || item.proposalState === ProposalType.fail) && item.handleState === '0' && <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
+                                                    }
                                                 </div>
-                                            )
-                                        }
-                                        {
-                                            item.proposalState === ProposalType.pass && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
-                                        }
-                                        {
-                                            item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
-                                        }
-                                        {
-                                            (item.proposalState === ProposalType.pass || item.proposalState === ProposalType.fail) && item.handleState === '0' && <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
-                                        }
-                                    </div>
-                                    <div className="mcontent-down">
-                                        <div className="mcontent-count">
-                                            <span>{this.intrl.manager.request} </span>
-                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
-                                            <span>{this.intrl.manager.gong} </span>
-                                            <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
-                                        </div>
-                                        <div className="manager-votebox">
-                                            <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
-                                            <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
-                                            <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
-                                            <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
+                                                <div className="mcontent-down">
+                                                    <div className="mcontent-count">
+                                                        <span>{this.intrl.manager.request} </span>
+                                                        <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
+                                                        <span>{this.intrl.manager.gong} </span>
+                                                        <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
+                                                    </div>
+                                                    <div className="manager-votebox">
+                                                        <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
+                                                        <div className="red-sai" style={{ "width": this.computePercentage(item, false) + "%" }} />
+                                                        <span className="left-top">{this.intrl.manager.agree}：{item.voteYesCount}</span>
+                                                        <span className="right-top">{this.intrl.manager.disagree}：{item.voteNotCount}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
 
-                    {
-                        this.props.molochmanager.proposalCount > 10 && (
-                            <div className="proposal-page-warpper">
-                                <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochmanager.proposalPageSize} total={this.props.molochmanager.proposalCount} onChange={this.handleChangeManagerPage} />
-                            </div>
+                                {
+                                    this.props.molochmanager.proposalCount > 10 && (
+                                        <div className="proposal-page-warpper">
+                                            <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.molochmanager.proposalPageSize} total={this.props.molochmanager.proposalCount} onChange={this.handleChangeManagerPage} />
+                                        </div>
+                                    )
+                                }
+                            </>
                         )
                     }
+                    {
+                        this.props.molochmanager.proposalMenuNum === 2 && (
+                            <></>
+                        )
+                    }
+
                 </div>
                 {/* 页面右边部分 */}
                 <div className="manager-right">
@@ -192,7 +204,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.proposalPage = index;
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
-    // 发起提案
+    // 发起提案(变成预发布提案)
     private handleToProposal = () =>
     {
         // 验证是否登陆

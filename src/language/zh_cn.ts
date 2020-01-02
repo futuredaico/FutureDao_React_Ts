@@ -28,7 +28,7 @@ export default {
     delete:"删除",
     updatevideo:"更换视频",
     review:"审核中",
-    proposal:"发起提案",
+    proposal:"发起预发布提案",
     weituo:"权限委托",
     cweituo:"取消权限委托",
     quit:"立即退出",
@@ -59,7 +59,7 @@ export default {
     center:"个人中心",
     myproject:"我的项目",
     exit:"退出账号",
-    login:"登陆",
+    login:"Metamask 登陆",
     sign:"注册"
   },
   footer:{
@@ -147,7 +147,7 @@ export default {
     people:"人",
     supporttips:"看好这个项目",
     tips:"这个项目只是发布了创意展示，还没有开始融资，如果你看好这个项目，点击下面的“看好”，给作者一点鼓励吧",
-    info:"项目详情",
+    info:"详情",
     comment:"留言",
     update:"更新",
     updatetime:"x天前更新",

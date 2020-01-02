@@ -111,7 +111,7 @@ class StepOne extends React.Component<IFinancingProps, IState> {
       name: "否",
     }
   ]
-  public async componentWillMount()
+  public async componentDidMount()
   {
     if (!this.props.financing.financingContent)
     {

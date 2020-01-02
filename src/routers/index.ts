@@ -7,6 +7,10 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/home/home')),
+    path: '/index',
+  },
+  {
     component: asyncComponent(() => import('../containers/proposal/molochdao')),
     path: '/molochproposal/:projectId'
   },

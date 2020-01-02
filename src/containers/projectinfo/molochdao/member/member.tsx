@@ -22,6 +22,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
         }
         return (
             <div className="member-wrapper">
+                <h3 className="title-h3">管理者股份持有人</h3>
                 {
                     this.props.molochinfo.projMemberList.map((item:IProjectMember,index:number)=>{
                         return (
@@ -49,7 +50,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                         </div>
                     )
                 }
-                
+                <h3 className="title-h3">普通股份持有人</h3>
             </div>
         );
     }
