@@ -48,7 +48,7 @@ class CreateProject implements ICreateProjectStore {
       const proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals);
       const processingReward = toMyNumber(this.createContent.processingReward).mul(decimals);
 
-      const newContractInstance = await Web3Contract.deployContract(
+      const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
         this.createContent.approvedToken,
@@ -60,10 +60,18 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.dilutionBound,
         processingReward.value
       );
-      console.log(newContractInstance.options.address);
+      console.log('create over');
+      const txid = await deployResult.onTransactionHash();
+      console.log('txid', txid);
+      const newContactInstance = await deployResult.promise;
+      console.log('contract address', newContactInstance.options.address);
+      const confirm = await deployResult.onConfrim();
+      console.log('confirm', confirm);
+
       this.createStatus = 2;
       // result = await Api.createProj(params);
     } catch (e) {
+      console.log('create error', e);
       this.createStatus = 3;
       return false;
     }

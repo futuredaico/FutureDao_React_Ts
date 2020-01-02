@@ -30,9 +30,8 @@ export class Web3Contract {
             console.log('gasprice', gasPrice);
 
             // const newContractInstance = await deploy.send({ from, gas, gasPrice });       1000000000
-            const newContractInstance = await deploy.send({ from, gas, gasPrice });
-            console.log(newContractInstance.options.address);
-            return newContractInstance;
+            const newContractInstance = deploy.send({ from, gas, gasPrice });
+            return new PromiseEvent(newContractInstance);
             // deploy.send({ from, gas, gasPrice })
             //     .on("transactionHash", receipt => {
             //         console.log(receipt);

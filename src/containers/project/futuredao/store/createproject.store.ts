@@ -69,7 +69,12 @@ class CreateProject {
         dilutionBound,
         processingReward
       );
-      console.log(newContractInstance.options.address);
+      const txid = await newContractInstance.onTransactionHash();
+      const confirm = await newContractInstance.onConfrim();
+      console.log('txid', txid);
+      console.log('confirm', confirm);
+
+      // console.log(newContractInstance.options.address);
 
       // result = await Api.createProj(params);
     } catch (e) {
