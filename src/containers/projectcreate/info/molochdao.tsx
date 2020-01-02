@@ -45,6 +45,7 @@ interface IState {
     abortWindowEnter: boolean,
     proposalDepositEnter: boolean,
     processingRewardEnter: boolean,
+    createButtonState: boolean,
 }
 
 interface IOptions {
@@ -87,9 +88,10 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         abortWindowEnter: false,
         proposalDepositEnter: false,
         processingRewardEnter: false,
+        createButtonState: true
     }
     // DAO版本选择
-    private versionOptions: IOptions[] = [ { 'id': 'molochdao2.0', 'name': 'MolochDAO V2.0' } ]
+    private versionOptions: IOptions[] = [ { 'id': 'molochdao1.0', 'name': 'MolochDAO V1.0' } ]
     // 期间选择项
     private dayOptions: IOptions[] = [
         { name: '1天', id: 1 },
@@ -105,6 +107,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         { name: 'USDF', id: '0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7' },
         { name: '其他', id: '' }
     ]
+
     public render() {
         return (
             <div className="molochdao-create">
@@ -269,13 +272,21 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 <div className="info-group" style={{ textAlign: "center" }}>
-                    <Button
-                        text={this.intrl.btn.editstep1}
-                        btnSize="bg-btn"
-                        onClick={this.handleToCreateProject}
-                        // disabled={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward)}
-                        btnColor={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward) ? 'gray-btn' : ''}
-                    />
+                    {
+                        this.state.createButtonState ?
+                            <Button
+                                text={this.intrl.btn.editstep1}
+                                btnSize="bg-btn"
+                                onClick={this.handleToCreateProject}
+                                // disabled={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward)}
+                                btnColor={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward) ? 'gray-btn' : ''}
+                            /> :
+                            <Button
+                                text={this.intrl.btn.editstep1}
+                                btnSize="bg-btn"
+                                disabled={true}
+                            />
+                    }
                 </div>
             </div>
         );
@@ -514,7 +525,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 projectName: this.state.projectName,                        // 项目名称
                 projectBrief: this.state.info,                              // 项目简介
                 projectDetail: this.state.projDetail,                       // 文本编辑内容 详情
-                projConverUrl: this.state.imageUrl,                         // 项目封面URL
+                projectConverUrl: this.state.imageUrl,                         // 项目封面URL
+                officialWebUrl: this.state.officialWebsite,
                 approvedToken: this.state.approvedToken,                    // 允许交易的token
                 periodDuration: this.state.periodDuration,                  // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
                 votingPeriodLength: this.state.votingPeriodLength,          // 投票有多少个区间段
@@ -524,8 +536,16 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
                 processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
             }
-            const result = await this.props.createproject.createProject();
-            console.log(result);
+            this.setState({ createButtonState: false })
+            try {
+                const result = await this.props.createproject.createProject();
+                if (result) {
+                    this.setState({ createButtonState: true })
+                }
+                this.setState({ createButtonState: true })
+            } catch (error) {
+                this.setState({ createButtonState: true })
+            }
         }
     }
 

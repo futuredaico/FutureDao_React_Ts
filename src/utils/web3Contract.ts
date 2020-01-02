@@ -53,10 +53,14 @@ export class Web3Contract {
     public abiItems: AbiItem[];
     public contract: Contract;
 
-    constructor(abis: AbiItem[], hash: string = "") {
+    constructor(abis: AbiItem[], hash: string = "", contract?: Contract) {
         this.hash = hash;
         this.abiItems = abis;
-        this.contract = new MetaMask.web3.eth.Contract(abis, hash);
+        if (contract) {
+            this.contract = contract;
+        } else {
+            this.contract = new MetaMask.web3.eth.Contract(abis, hash);
+        }
     }
 
     /**

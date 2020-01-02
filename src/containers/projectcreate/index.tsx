@@ -36,14 +36,11 @@ class Project extends React.Component<IProps, IState> {
         return (
             <div className="create-project-index">
                 <div className="index-title"><b>创建新DAO</b></div>
-                {
-                    this.props.createproject.createStatus === 0 &&
-                    <div className="router-wrapper">
-                        {
-                            renderRoutes(this.props.route.children)
-                        }
-                    </div>
-                }
+                <div className="router-wrapper" hidden={this.props.createproject.createStatus !== 0}>
+                    {
+                        renderRoutes(this.props.route.children)
+                    }
+                </div>
                 {
                     this.props.createproject.createStatus > 0 &&
 
@@ -65,11 +62,11 @@ class Project extends React.Component<IProps, IState> {
                                 (this.props.createproject.createStatus === 2) && (
                                     <>
                                         <div className="done-going">
-                                            <img src={require("@/img/done.png")} alt="" />
+                                            <img src={require("@/img/done.png")} width={14} alt="" />
                                             <span>成功！</span>
                                         </div>
                                         <div className="goon-btn">
-                                            <Button text="继续" btnSize="md-bg-btn" onClick={this.handleGoOn} />
+                                            <Button text="继续" btnSize="md-bg-btn" onClick={this.handleGoIndex} />
                                         </div>
                                     </>
                                 )
@@ -78,11 +75,11 @@ class Project extends React.Component<IProps, IState> {
                                 (this.props.createproject.createStatus === 3) && (
                                     <>
                                         <div className="done-going">
-                                            <img src={require("@/img/done.png")} alt="" />
+                                            <img src={require("@/img/close.png")} alt="" width={18} />
                                             <span>失败！</span>
                                         </div>
                                         <div className="goon-btn">
-                                            <Button text="继续" btnSize="md-bg-btn" onClick={this.handleGoOn} />
+                                            <Button text="重试" btnSize="md-bg-btn" onClick={this.handleGoRetry} />
                                         </div>
                                     </>
                                 )
@@ -95,8 +92,18 @@ class Project extends React.Component<IProps, IState> {
         );
     }
 
-    private handleGoOn = () => {
+    // 项目创建失败，显示创建页面，保留数据
+    private handleGoRetry = () => {
         this.props.createproject.createStatus = 0;
+    }
+
+    // 项目创建成功跳转到对应的项目详情页
+    private handleGoIndex = () => {
+        if (process.env.REACT_APP_SERVER_ENV === 'DEV') {
+            window.location.href = '/test/molochinfo/' + this.props.createproject.projectID;
+        } else {
+            window.location.href = '/molochinfo/' + this.props.createproject.projectID;
+        }
     }
 
 }
