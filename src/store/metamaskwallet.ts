@@ -68,15 +68,28 @@ class MetaMastWallet implements IMetaMastWalletStore
   // 切换网络时，切换请求
   @action public changeNetwork = () => {
     this.getMetamaskNetwork();
-    // 不是主网时
-    if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
-      // 
-      if (common.language === 'en') {
-        common.openNotificationWithIcon('info', 'Please attention', 'You have switch networks.');
-      } else {
-        common.openNotificationWithIcon('info', '请注意', '您已切换网络。');
-      }
-    } 
+    common.logoutFutureDao();
+    // 测试网
+    if(process.env.REACT_APP_SERVER_ENV === 'DEV'){
+      if (this.metamaskNetwork === MetaMaskNetworkCode.Mainnet) {
+        // 
+        if (common.language === 'en') {
+          common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
+        } else {
+          common.openNotificationWithIcon('info', '请注意', 'Please note your current network status.');
+        }
+      } 
+    }else{ // 主网
+      if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
+        // 
+        if (common.language === 'en') {
+          common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
+        } else {
+          common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
+        }
+      } 
+    }
+    
   }
   // 获取MetaMask钱包上登陆的地址
   @action public initAccount = () =>

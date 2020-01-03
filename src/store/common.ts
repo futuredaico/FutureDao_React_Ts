@@ -70,6 +70,7 @@ class Common implements ICommonStore {
   // 登录
   @action public loginFutureDao = async () => {
     const res = await metamaskwallet.inintWeb3();
+    console.log("网络状态:"+process.env.REACT_APP_SERVER_ENV)
     // 是主网版本时
     if(process.env.REACT_APP_SERVER_ENV !== 'DEV'){
       // 不是主网网络
