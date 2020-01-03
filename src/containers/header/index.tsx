@@ -30,9 +30,9 @@ export default class Header extends React.Component<IProps, IState>{
             <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
               <li><Link to="/">{this.props.locale.discover}</Link></li>
-              {/* <li>
-                <a href="javascript:;" onClick={this.handleToCreateProject}>{this.props.locale.creat}</a>
-              </li> */}
+              <li>
+                <span className="aclick-span" onClick={this.handleToCreateProject}>{this.props.locale.creat}</span>
+              </li>
             </ul>
           </div>
           <div className="header-right">
@@ -72,17 +72,17 @@ export default class Header extends React.Component<IProps, IState>{
     );
   }
   // 创建项目
-  // private handleToCreateProject = () => {
-  //   if (!this.props.common.userInfo) {
-  //     // 未登录
-  //     this.handleToLogin();
-  //   }
-  //   else {
-  //     // 正常访问
-  //     const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
-  //     window.location.href = href + '/create'
-  //   }
-  // }
+  private handleToCreateProject = () => {
+    if (!this.props.common.userInfo) {
+      // 未登录
+      this.handleToLogin();
+    }
+    else {
+      // 正常访问
+      const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+      window.location.href = href + '/create'
+    }
+  }
   // 登录
   private handleToLogin = () => {
     // this.props.history.push('/load/login');

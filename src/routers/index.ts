@@ -115,6 +115,10 @@ export default [
       {
         path: '/create/moloch',
         component: asyncComponent(() => import('../containers/projectcreate/info/molochdao')),
+      },
+      {
+        path: '/create',
+        component: asyncComponent(() => import('../containers/projectcreate/info/projects')),
       }
     ]
   },

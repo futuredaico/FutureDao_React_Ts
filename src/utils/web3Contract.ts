@@ -19,14 +19,19 @@ export class Web3Contract {
     public static async deployContract(abi: AbiItem[], contractBytecode: string, from: string, ...args: any[]) {
         const contract = new MetaMask.web3.eth.Contract(abi);
         const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
+        console.log('data', data);
+
         const deploy = contract.deploy(data)
         try {
             const count = await deploy.estimateGas();
-            const gas = count * 10  // 预估的gas*10倍，以防gas不够合约部署失败
+            const gas = count;  // 预估的gas*10倍，以防gas不够合约部署失败
             const gasPrice = await MetaMask.web3.eth.getGasPrice();
-            const newContractInstance = await deploy.send({ from, gas, gasPrice });
-            console.log(newContractInstance.options.address);
-            return newContractInstance;
+            console.log('gas', gas);
+            console.log('gasprice', gasPrice);
+
+            // const newContractInstance = await deploy.send({ from, gas, gasPrice });       1000000000
+            const newContractInstance = deploy.send({ from, gas, gasPrice });
+            return new PromiseEvent(newContractInstance);
             // deploy.send({ from, gas, gasPrice })
             //     .on("transactionHash", receipt => {
             //         console.log(receipt);
@@ -48,10 +53,14 @@ export class Web3Contract {
     public abiItems: AbiItem[];
     public contract: Contract;
 
-    constructor(abis: AbiItem[], hash: string = "") {
+    constructor(abis: AbiItem[], hash: string = "", contract?: Contract) {
         this.hash = hash;
         this.abiItems = abis;
-        this.contract = new MetaMask.web3.eth.Contract(abis, hash);
+        if (contract) {
+            this.contract = contract;
+        } else {
+            this.contract = new MetaMask.web3.eth.Contract(abis, hash);
+        }
     }
 
     /**
@@ -69,13 +78,14 @@ export class Web3Contract {
      */
     public async contractCall(methods: string, args?: any[]) {
         try {
-            if (Array.isArray(args)) {
-                const result = await this.contract.methods[ methods ](...args).call();
-                return result;
-            }
-            else {
-                return this.contract.methods[ methods ]().call();
-            }
+            const method = this.contract.methods[ methods ];
+            return Array.isArray(args) ? method(...args).call() : method().call();
+            // if (Array.isArray(args)) {
+            //     return this.contract.methods[ methods ](...args).call();
+            // }
+            // else {
+            //     return this.contract.methods[ methods ]().call();
+            // }
         } catch (error) {
             throw error;
         }
@@ -88,14 +98,22 @@ export class Web3Contract {
      * @param sendArgs 
      */
     public contractSend(methods: string, args?: any[], sendArgs?: SendOptions) {
-        if (Array.isArray(args)) {
-            const result = this.contract.methods[ methods ](...args).send(sendArgs)
+        try {
+            const method = this.contract.methods[ methods ];    // 先 取得method 用于下一步执行
+            const methodResult = Array.isArray(args) ? method(...args) : method();  // 根据参数判断如何执行方法，是否传参
+            const result = sendArgs ? methodResult.send(sendArgs) : methodResult(); // 根据转账参数判断是否传参
             return new PromiseEvent(result as PromiEvent<Contract>);
+        } catch (error) {
+            throw error;
         }
-        else {
-            const result = this.contract.methods[ methods ]().send(sendArgs)
-            return new PromiseEvent(result as PromiEvent<Contract>);
-        }
+        // if (Array.isArray(args)) {
+        //     const result = this.contract.methods[ methods ](...args).send(sendArgs)
+        //     return new PromiseEvent(result as PromiEvent<Contract>);
+        // }
+        // else {
+        //     const result = this.contract.methods[ methods ]().send(sendArgs)
+        //     return new PromiseEvent(result as PromiEvent<Contract>);
+        // }
     }
 
     /**
@@ -104,7 +122,6 @@ export class Web3Contract {
     public async transfer(data: TransactionConfig) {
         try {
             const result = await MetaMask.web3.eth.sendTransaction(data);
-            console.log(result);
             return result.transactionHash;
         } catch (error) {
             throw error;

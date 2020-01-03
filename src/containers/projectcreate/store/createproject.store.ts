@@ -1,265 +1,101 @@
 import { observable, action } from 'mobx'
-import { ICreateContent, IMemberList, ITeamList } from '../interface/createproject.interface';
-import * as Api from '../api/project.api'
-import common from '@/store/common';
-import { CodeType } from '@/store/interface/common.interface';
+import { ICreateContent, ICreateProjectStore } from '../interface/createproject.interface';
+// import * as Api from '../api/project.api'
+// import common from '@/store/common';
 import { Web3Contract } from '@/utils/web3Contract';
 import { AbiItem } from "web3-utils";
 import metamaskwallet from '@/store/metamaskwallet';
 import Moloch from '@/utils/Moloch';
-class CreateProject {
-  @observable public step = 1; // 编辑项目的菜单选择
-  @observable public stepOneStatus = 1;// 基础信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
-  @observable public stepTwoStatus = 0; // 详细信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
-  @observable public stepThreeStatus = 0; // 详细信息完成状态，0不可编辑，1正在编辑，2已编辑完成，3为常规可编辑
+import { toMyNumber } from '@/utils/numberTool';
+import { saveContractInfo } from '../api/project.api';
+class CreateProject implements ICreateProjectStore {
+  @observable public createStatus = 0; // 创建项目的状态 0 是编辑状态 1是发布中 2是发布成功 3是发布失败
+  @observable public projectID = "";     // 创建项目成功后得到的项目ID
   @observable public createContent: ICreateContent = {
-    projId: '',
-    projName: '',
-    projTitle: '',
-    projType: '',
-    projConverUrl: '',
-    projBrief: '',
-    projVideoUrl: '',
-    projDetail: '',
-    connectEmail: '',
-    officialWeb: '',
-    community: '',
-    projState: 'reading',
-    projSubState: 'init',
-    role: ''
+    version: '',                // 版本
+    projectName: '',            // 项目名称
+    projectBrief: '',           // 项目简介
+    projectDetail: '',          // 文本编辑内容 详情
+    projectConverUrl: '',          // 项目封面URL
+    officialWebUrl: '',
+    approvedToken: '',          // 允许交易的token
+    approvedTokenSymbol: '',
+    approvedDecimals: 0,
+    periodDuration: (process.env.REACT_APP_SERVER_ENV === 'DEV') ? 120 : 17280,         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
+    votingPeriodLength: 5,     // 投票有多少个区间段
+    gracePeriodLength: 5,      // 公示有多少个区间段
+    abortWindow: 2,            // 撤回投票的窗口期
+    proposalDeposit: 0,        // 提议的押金
+    dilutionBound: 3,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
+    processingReward: 0,       // 处理提案的人所得到的奖励
   }
-  @observable public searchList: IMemberList[] = []; // 查询成员列表
-  @observable public teamList: ITeamList[] = []; // 项目成员列表
   /**
    * 创建项目
    */
   @action public createProject = async () => {
-    // let result: any = [];
-    // const params: string[] = [
-    //   common.userId,
-    //   common.token,
-    //   this.createContent.projName,
-    //   this.createContent.projTitle,
-    //   this.createContent.projType,
-    //   this.createContent.projConverUrl,
-    //   this.createContent.projBrief,
-    // ]
-    console.log("testa");
-
     try {
+      await metamaskwallet.inintWeb3(); // 初始化 web3
       const abi = Moloch.abi as AbiItem[];
       const bytecode = Moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
-      const approvedToken = common.token;
-      const periodDuration = 120;
-      const votingPeriodLength = 5;
-      const gracePeriodLength = 5;
-      const abortWindow = 2;
-      const proposalDeposit = 1000000000;
-      const dilutionBound = 3;
-      const processingReward = 10000;
-      const newContractInstance = await Web3Contract.deployContract(
+      const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
+      const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
+      const proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals);
+      const processingReward = toMyNumber(this.createContent.processingReward).mul(decimals);
+      this.createContent.approvedDecimals = parseFloat(asset.decimals)
+      this.createContent.approvedTokenSymbol = asset.symbol;
+      // 部署合约
+      const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
-        approvedToken,
-        periodDuration,
-        votingPeriodLength,
-        gracePeriodLength,
-        abortWindow,
-        proposalDeposit,
-        dilutionBound,
-        dilutionBound,
-        processingReward
+        this.createContent.approvedToken,
+        this.createContent.periodDuration,
+        this.createContent.votingPeriodLength,
+        this.createContent.gracePeriodLength,
+        this.createContent.abortWindow,
+        proposalDeposit.value,
+        this.createContent.dilutionBound,
+        processingReward.value
       );
-      console.log(newContractInstance.options.address);
-
-      // result = await Api.createProj(params);
+      // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
+      const txid = await deployResult.onTransactionHash();
+      this.createStatus = 1;
+      console.log('txid', txid);
+      const newContactInstance = await deployResult.promise;  // 合约部署成功后获得新的合约对象
+      const contractAddress = newContactInstance.options.address;
+      const newContract = new Web3Contract(abi, contractAddress, newContactInstance);
+      const guildBankAddress = await newContract.contractCall("guildBank"); // 获得 bank合约hash
+      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress); // 上传项目信息给服务端
+      console.log(result);
+      if (result && result[ 0 ] && result[ 0 ].resultCode === "00000") {
+        this.projectID = result[ 0 ].data.projId;
+        this.createStatus = 2;
+      }
+      else {
+        this.createStatus = 3;
+        return false;
+      }
     } catch (e) {
+      // 判断异常是不是用户拒绝了交易 Metamask 错误码 4001
+      if (e.code === 4001) {
+        this.createStatus = 0;
+      } else {
+        this.createStatus = 3;
+      }
       return false;
-    }
-    // if (result[ 0 ].resultCode !== CodeType.success) {
-    //   return false
-    // }
-    // this.createContent.projId = result[ 0 ].data.projId
-    return true;
-  }
-  /**
-   * 修改基础信息
-   */
-  @action public modifyStepOne = async (params: string[]) => {
-    let result: any = [];
-
-    try {
-      result = await Api.modifyProjName(params);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.getProject(this.createContent.projId);
-    return true;
-  }
-  /**
-   * 修改详情模块
-   */
-  @action public modifyStepTwo = async (params: string[]) => {
-    let result: any = [];
-
-    try {
-      result = await Api.modifyProjVideo(params);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.getProject(this.createContent.projId);
-    return true;
-  }
-  /**
-   * 修改团队模块
-   */
-  @action public modifyStepThree = async (params: string[]) => {
-    let result: any = [];
-
-    try {
-      result = await Api.modifyProjEmail(params);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.getProject(this.createContent.projId);
-    return true;
-  }
-  /**
-   * 修改项目
-   */
-  // @action public modifyProject = async (params: string[]) =>
-  // {
-  //   let result: any = [];
-
-  //   try
-  //   {
-  //     result = await Api.modifyProj(params);
-  //   } catch (e)
-  //   {
-  //     return false;
-  //   }
-  //   if (result[0].resultCode !== CodeType.success)
-  //   {
-  //     return false
-  //   }
-  //   this.getProject(this.createContent.projId);
-  //   return true;
-  // }
-  /**
-   * 获取项目信息
-   */
-  @action public getProject = async (projId: string) => {
-    let result: any = [];
-
-    try {
-      result = await Api.getProj(common.userId, common.token, projId);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.createContent = result[ 0 ].data;
-    this.stepOneStatus = 2;
-    this.stepTwoStatus = 3;
-    this.stepThreeStatus = 3;
-    if (this.createContent.projDetail) {
-      this.stepTwoStatus = 2;
-    }
-    if (this.createContent.connectEmail) {
-      this.stepThreeStatus = 2;
-    }
-    return true;
-  }
-  /**
-   * 获取成员列表
-   */
-  @action public getTeamList = async () => {
-    let result: any = [];
-
-    try {
-      result = await Api.getMember(common.userId, common.token, this.createContent.projId, 1, 10);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.teamList = result[ 0 ].data.list;
-    return true;
-  }
-  /**
-   * 查询成员
-   */
-  @action public searchMemberList = async (memberEmail: string) => {
-    let result: any = [];
-
-    try {
-      result = await Api.searchMember(common.userId, common.token, memberEmail, 1, 10);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    this.searchList = result[ 0 ].data.list;
-    return true;
-  }
-  /**
-   * 邀请成员
-   */
-  @action public inviteMember = async (memberId: string) => {
-    let result: any = [];
-
-    try {
-      result = await Api.inviteMember(common.userId, common.token, memberId, this.createContent.projId);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    return true;
-  }
-  /**
-   * 删除成员
-   */
-  @action public deleteMember = async (memberId: string) => {
-    let result: any = [];
-    try {
-      result = await Api.deleteMember(common.userId, common.token, this.createContent.projId, memberId);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
     }
     return true;
   }
 
-  @action public commitProjectAudit = async () => {
-    let result: any = [];
-
-    try {
-      result = await Api.commitProject(common.userId, common.token, this.createContent.projId);
-    } catch (e) {
-      return false;
-    }
-    if (result[ 0 ].resultCode !== CodeType.success) {
-      return false
-    }
-    return true;
+  @action public getTokenInfo = async (token: string) => {
+    await metamaskwallet.inintWeb3();
+    const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+    const contract = new Web3Contract(abi, token);
+    const symbol = await contract.contractCall("symbol");
+    const decimals = await contract.contractCall("decimals");
+    return { symbol, decimals }
   }
+
 }
 
 export default new CreateProject();

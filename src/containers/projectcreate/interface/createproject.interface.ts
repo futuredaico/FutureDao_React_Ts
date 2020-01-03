@@ -10,23 +10,14 @@ export interface IProjectStore {
 }
 
 export interface ICreateProjectStore {
-  step: number,
-  stepOneStatus: number,
-  stepTwoStatus: number,
-  stepThreeStatus: number,
+  createStatus: number,
   createContent: ICreateContent,
-  searchList: IMemberList[],
-  teamList: ITeamList[],
+  projectID: string,
   createProject: () => Promise<boolean>,
-  modifyStepOne: (params: string[]) => Promise<boolean>,
-  modifyStepTwo: (params: string[]) => Promise<boolean>,
-  modifyStepThree: (params: string[]) => Promise<boolean>,
-  getProject: (projId: string) => Promise<boolean>,
-  getTeamList: () => Promise<boolean>,
-  searchMemberList: (memberEmail: string) => Promise<boolean>,
-  inviteMember: (memberId: string) => Promise<boolean>,
-  deleteMember: (memberId: string) => Promise<boolean>,
-  commitProjectAudit: () => Promise<boolean>,
+  getTokenInfo: (token: string) => Promise<{
+    symbol: string;
+    decimals: string;
+  }>
 }
 
 
@@ -38,20 +29,22 @@ export interface ICreateProjectProps extends RouteComponentProps<{ projectId: st
 }
 
 export interface ICreateContent {
-  projId: string,       // 项目ID
-  projName: string,     // 项目名称
-  projTitle: string,    // 项目标题
-  projType: string,     // 项目类型
-  projConverUrl: string, // 项目封面
-  projBrief: string,    // 项目简介
-  projVideoUrl: string,// 视频介绍
-  projDetail: string,   // 项目详情
-  connectEmail: string, // 邮箱
-  officialWeb: string,  // 官网
-  community: string,    // 社区
-  projState: string,    // 项目阶段状态
-  projSubState: string, // 项目提交审核状态
-  role: string          // 项目担任角色
+  version: string;                // 版本
+  projectName: string;            // 项目名称
+  projectBrief: string;           // 项目简介
+  projectDetail: string,          // 文本编辑内容 详情
+  projectConverUrl: string;       // 项目封面URL
+  officialWebUrl: string;         // 官网URL
+  approvedToken: string;          // 允许交易的token
+  approvedTokenSymbol?: string      // token的简称
+  approvedDecimals?: number         // token 精度
+  periodDuration: number;         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
+  votingPeriodLength: number;     // 投票有多少个区间段
+  gracePeriodLength: number;      // 公示有多少个区间段
+  abortWindow: number;            // 撤回投票的窗口期
+  proposalDeposit: number;        // 提议的押金
+  dilutionBound?: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
+  processingReward: number;       // 处理提案的人所得到的奖励
 }
 
 export interface IMemberList {

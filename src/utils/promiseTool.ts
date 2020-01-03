@@ -29,15 +29,15 @@ export class PromiseEvent<T>{
         })
     }
 
-    public then() {
-        return this.promise.then;
+    public onThen(): Promise<T> {
+        return this.promise;
     }
 
-    public catch() {
+    public onCatch() {
         return this.promise.catch;
     }
 
-    public finally() {
+    public onFinally() {
         return this.promise.finally;
     }
 
