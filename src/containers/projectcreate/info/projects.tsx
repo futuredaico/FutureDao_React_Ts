@@ -10,7 +10,7 @@ interface IState {
     isEdit: boolean
 }
 
-@inject('createproject', 'common', 'project')
+@inject('createproject', 'common')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
