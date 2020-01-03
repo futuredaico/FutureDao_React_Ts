@@ -28,7 +28,7 @@ export default {
     delete:"删除",
     updatevideo:"更换视频",
     review:"审核中",
-    proposal:"发起预发布提案",
+    proposal:"发起提案",
     weituo:"权限委托",
     cweituo:"取消权限委托",
     quit:"立即退出",

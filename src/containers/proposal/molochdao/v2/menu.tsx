@@ -3,9 +3,9 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
-import { IMolochProposalProps } from './interface/index.interface';
+import { IMolochProposalProps } from '../interface/index.interface';
 import { Link } from 'react-router-dom';
 
 interface IState{
@@ -28,13 +28,13 @@ class MolochProposalMenu extends React.Component<IMolochProposalProps,IState> {
     {
         return (
             <div className="proposal-content">
-                <Link to={"/sendproposal/apply/"+this.state.projId} className="type-box-wrapper">
+                <Link to={"/sendproposalv2/apply/"+this.state.projId} className="type-box-wrapper">
                     <div className="middle-box">申请股份</div>
                 </Link>
-                <Link to={"/sendproposal/kick/"+this.state.projId} className="type-box-wrapper" >
+                <Link to={"/sendproposalv2/kick/"+this.state.projId} className="type-box-wrapper" >
                     <div className="middle-box">踢出成员</div>
                 </Link>
-                <Link to={"/sendproposal/token/"+this.state.projId} className="type-box-wrapper">
+                <Link to={"/sendproposalv2/token/"+this.state.projId} className="type-box-wrapper">
                     <div className="middle-box">添加支持代币</div>
                 </Link>
             </div>

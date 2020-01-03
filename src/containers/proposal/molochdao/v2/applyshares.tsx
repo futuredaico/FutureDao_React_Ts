@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Input } from 'antd';
 import Button from '@/components/Button';
@@ -11,7 +11,7 @@ import Button from '@/components/Button';
 // import { getQueryString } from '@/utils/function';
 // import Select from '@/components/select';
 import TextArea from 'antd/lib/input/TextArea';
-import { IMolochProposalProps } from './interface/index.interface';
+import { IMolochProposalProps } from '../interface/index.interface';
 import { saveDecimal } from '@/utils/numberTool';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 import { when } from 'mobx';

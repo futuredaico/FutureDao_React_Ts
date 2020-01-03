@@ -3,9 +3,9 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
-import { IMolochInfoProps, IProjectMember } from '../interface/molochinfo.interface';
+import { IMolochInfoProps, IProjectMember } from '../../interface/molochinfo.interface';
 import { Pagination } from 'antd';
 
 @observer

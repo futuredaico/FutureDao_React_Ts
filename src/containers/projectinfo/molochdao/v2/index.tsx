@@ -3,11 +3,11 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
-import { IMolochInfoProps } from './interface/molochinfo.interface';
 import { saveDecimal } from '@/utils/numberTool';
+import { IMolochInfoProps } from '../interface/molochinfo.interface';
 
 interface IState
 {
