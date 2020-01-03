@@ -284,7 +284,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             canSendFlag: false
         })
         const projectId = this.props.match.params['projectId'];
-        this.props.history.push('/molochinfov1/' + projectId);
+        this.props.history.push('/molochinfo/' + projectId);
     }
 }
 

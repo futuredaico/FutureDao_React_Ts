@@ -1,5 +1,5 @@
 /**
- * 项目成员页
+ * 项目成员模块
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';

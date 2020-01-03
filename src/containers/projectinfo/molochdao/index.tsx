@@ -3,11 +3,13 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import '../index.less';
+import './index.less';
 import { injectIntl } from 'react-intl';
-import Pbottom from './pbottom';
-import { saveDecimal } from '@/utils/numberTool';
-import { IMolochInfoProps } from '../interface/molochinfo.interface';
+// import PbottomV1 from './v1/pbottom';
+import PbottomV2 from './v2/pbottom';
+import { IMolochInfoProps } from './interface/molochinfo.interface';
+// import TopRightV1 from './v1/topinfov1';
+import TopRightV2 from './v2/topinfov2';
 
 interface IState
 {
@@ -62,41 +64,12 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                                 } */}
                             </div>
                         </div>
-                        <div className="ptop-right">
-                            <div className="going-wrapper">
-                                <div className="going-line">
-                                    <div className="going-purple">
-                                        <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))}</strong><strong className="purple-sm"> {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
-                                    </div>
-                                    <div className="going-gray">{this.intrl.projinfo.asset}</div>
-                                </div>
-                                <div className="going-line">
-                                    <div className="going-normal">
-                                        <strong>{this.props.molochinfo.projInfo.shares}</strong>
-                                    </div>
-                                    <div className="going-gray">{this.intrl.projinfo.total}</div>
-                                </div>
-                                <div className="going-line">
-                                    <div className="going-normal">
-                                        <strong>{parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 6))}</strong>
-                                    </div>
-                                    <div className="going-gray">{this.intrl.projinfo.every}</div>
-                                </div>
-                            </div>
-                            {
-                                this.props.molochinfo.projInfo.officailWeb && (
-                                    <div className="ptop-weblink">
-                                        <a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.officailWeb}>{this.props.molochinfo.projInfo.officailWeb}</a>
-                                        <p className="gray-str">{this.intrl.projinfo.website}</p>
-                                    </div>
-                                )
-                            }
-
-                        </div>
+                        {/* <TopRightV1 {...this.props} /> */}
+                        <TopRightV2 {...this.props} />
                     </div>
-
                 </div>
-                <Pbottom {...this.props} />
+                {/* <PbottomV1 {...this.props} /> */}
+                <PbottomV2 {...this.props} />
             </div >
         );
     }

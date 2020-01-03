@@ -50,8 +50,18 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
                             <div className="exit-right">
                                 <input type="text" className="normal-exit-input" value={this.state.exitShareInput} onChange={this.handleChangeExitNumber} />
                                 {
-                                    this.state.exitShareInput && <span className="amount-text">{this.intrl.manager.value}：{this.state.valueShow} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</span>
-                                }                                
+                                    this.state.exitShareInput && (
+                                        <div className="value-wrapper">
+                                            <span className="amount-text">{this.intrl.manager.value}：{this.state.valueShow} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</span>
+                                            <div className="amount-box">
+                                                <p>11.111 Eth</p>
+                                                <p>11.111 Eth</p>
+                                                <p>11.111 Eth</p>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                                         
                             </div>
                         </div>
                         <div className="doing-btn">

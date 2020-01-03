@@ -47,12 +47,8 @@ export default [
     ]
   },
   {
-    component: asyncComponent(() => import('../containers/projectinfo/molochdao/v2')),
-    path: '/molochinfov2/:projectId'
-  },
-  {
-    component: asyncComponent(() => import('../containers/projectinfo/molochdao/v1')),
-    path: '/molochinfov1/:projectId'
+    component: asyncComponent(() => import('../containers/projectinfo/molochdao')),
+    path: '/molochinfo/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/projectcreate')),

@@ -131,41 +131,6 @@ class IndexHome extends React.Component<IHomeProps, any> {
     this.props.home.projListPage = index;
     this.props.home.getMolochProjList();
   }
-  // 区分项目类别
-  // private handleDiffType = (type: string) =>
-  // {
-  //   //
-  //   if (type === ProjType.GAME)
-  //   {
-  //     return this.intrl.card.game
-  //   } else if (type === ProjType.COMIC)
-  //   {
-  //     return this.intrl.card.animation
-  //   } else if (type === ProjType.MOVIE)
-  //   {
-  //     return this.intrl.card.movies
-  //   } else
-  //   {
-  //     return this.intrl.card.other
-  //   }
-  // }
-  // private handleDiffColor = (type: string) =>
-  // {
-  //   //
-  //   if (type === ProjType.GAME)
-  //   {
-  //     return 'c-green'
-  //   } else if (type === ProjType.COMIC)
-  //   {
-  //     return 'c-red'
-  //   } else if (type === ProjType.MOVIE)
-  //   {
-  //     return 'c-gray'
-  //   } else
-  //   {
-  //     return 'c-purple'
-  //   }
-  // }
 }
 
 export default injectIntl(IndexHome);
