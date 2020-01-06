@@ -7,30 +7,61 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { saveDecimal } from '@/utils/numberTool';
+import classnames from 'classnames';
+
+interface IState
+{
+    showAllAsset: boolean
+}
 
 @observer
-class TopInfoV2 extends React.Component<IMolochInfoProps> {
+class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
+    public state: IState = {
+        showAllAsset: false
+    }
     public render()
     {
         if (!this.props.molochinfo.projInfo)
         {
             return null;
         }
+        const listClassName = classnames('going-purple', { 'show-list-asset': this.state.showAllAsset })
         return (
             <div className="ptop-right ptopv2-right">
                 <div className="going-wrapper">
                     <div className="going-line">
                         <div className="going-gray">{this.intrl.projinfo.asset}</div>
-                        <div className="going-purple">
-                            <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
-                            <br />
-                            <strong className="purple-big">12345678.1234 ETH</strong><br />
-                            <strong className="purple-big">12345 ETH</strong>
-                            <div className="show-all">
-                                <span>全部</span>
-                                <span className="trage" />
+                        <div className={listClassName}>
+                            <div className="list-asset-num">
+                                <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
+                                <br />
+                                <strong className="purple-big">12345678.1234 ETH</strong><br />
+                                <strong className="purple-big">12345 ETH</strong>
+                                {
+                                    !this.state.showAllAsset && (
+                                        (
+                                            <div className="show-all" onClick={this.handleToShowList}>
+                                                <span>全部</span>
+                                                <span className="trage" />
+                                            </div>
+                                        )
+                                    )
+                                }
+                                <br />
+                                <strong className="purple-big">12345678.1234 ETH</strong><br />
+                                <strong className="purple-big">12345 ETH</strong><br />
+                                <strong className="purple-big">12345678.1234 ETH</strong><br />
+                                <strong className="purple-big">12345 ETH</strong><br />
                             </div>
+                            {
+                                this.state.showAllAsset && (
+                                    <div className="list-asset-wrapper" onClick={this.handleToShowList}>
+                                        <span className="take-up">收起<span className="trage-gray" /></span>
+                                    </div>
+                                    )
+                            }
+
                         </div>
                     </div>
                     <div className="going-line">
@@ -58,10 +89,16 @@ class TopInfoV2 extends React.Component<IMolochInfoProps> {
                             </div>
                         )
                     }
-                    
+
                 </div>
             </div>
         );
+    }
+    // 展开与收起
+    private handleToShowList = ()=>{        
+        this.setState({
+            showAllAsset:!this.state.showAllAsset
+        })
     }
 }
 export default injectIntl(TopInfoV2)
