@@ -96,6 +96,10 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
       // todo
       window.location.hash = 'message'
     }
+    if (this.props.molochinfo.projId)
+    {
+        this.props.molochinfo.getMolochProjInfo(this.props.molochinfo.projId);
+    }
   }
   private handleNumCount = (id: number) =>
   {

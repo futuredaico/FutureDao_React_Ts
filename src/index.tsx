@@ -16,7 +16,7 @@ import MetamaskWallet from '@/store/metamaskwallet';
 import common from '@/store/common';
 
 global.Intl = Intl;
-window['Intl'] = Intl;
+window[ 'Intl' ] = Intl;
 // window.addEventListener('Teemo.NEO.READY',()=>{
 //   console.log("检测钱包2")
 //   TeemoWallet.isLoadTeemo = true;
@@ -28,17 +28,18 @@ window['Intl'] = Intl;
 //   // common.initAccountBalance();
 // });
 
-if (window["ethereum"]) {
+if (window[ "ethereum" ]) {
   ethereum.on("accountsChanged", accounts => {
-    console.log(accounts[0]);
-    if(common.userInfo&&common.userInfo.address){
-      if(common.userInfo.address.toLocaleLowerCase()!==accounts[0].toLocaleLowerCase()){
-        common.isLoginoutFlag=true;
-      }      
+    console.log(accounts[ 0 ]);
+    if (common.userInfo && common.userInfo.address) {
+      if (common.userInfo.address.toLocaleLowerCase() !== accounts[ 0 ].toLocaleLowerCase()) {
+        common.isLoginoutFlag = true;
+      }
     }
   })
   ethereum.on("networkChanged", accounts => {
     console.log(accounts);
+    // common.logoutFutureDao();
     MetamaskWallet.changeNetwork();
   })
 }
