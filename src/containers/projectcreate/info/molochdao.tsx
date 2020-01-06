@@ -31,6 +31,8 @@ interface IState {
     abortWindow: number;            // 撤回投票的窗口期
     proposalDeposit: string;        // 提议的押金
     dilutionBound: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
+    emergencyExitWait: number;       // 如果在此之后仍未处理提案，则直接跳过
+    bailoutWait: number              // 返还资产等待区间段
     processingReward: string;       // 处理提案的人所得到的奖励
     loading: boolean;               // 图片上传加载中的状态
     otherToken: boolean;
@@ -49,6 +51,8 @@ interface IState {
     processingRewardEnter: boolean,
     processingRewardError: boolean,
     createButtonState: boolean,
+    emergencyExitWaitEnter: boolean,
+    bailoutWaitEnter: boolean,
 }
 
 interface IOptions {
@@ -74,6 +78,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         votingPeriodLength: 0,     // 投票有多少个区间段
         gracePeriodLength: 0,      // 公示有多少个区间段
         abortWindow: 0,            // 撤回投票的窗口期
+        emergencyExitWait: 0,
+        bailoutWait: 0,
         proposalDeposit: "",        // 提议的押金
         dilutionBound: 3,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认3
         processingReward: "",       // 处理提案的人所得到的奖励
@@ -95,19 +101,33 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         officialWebsiteEnter: false,
         abortWindowError: false,
         processingRewardError: false,
+        emergencyExitWaitEnter: false,
+        bailoutWaitEnter: false,
     }
     // DAO版本选择
     private versionOptions: IOptions[] = [
         { 'id': 'molochdao1.0', 'name': 'molochdao1.0' },
-        // { 'id': 'molochdao2.0', 'name': 'molochdao2.0' }
+        { 'id': 'molochdao2.0', 'name': 'molochdao2.0' },
     ]
     // 期间选择项
     private dayOptions: IOptions[] = [
-        { name: '1天', id: 5 },
-        { name: '2天', id: 10 },
-        { name: '3天', id: 15 },
-        { name: '4天', id: 20 },
-        { name: '5天', id: 25 }
+        { name: '1天', id: 1 },
+        { name: '2天', id: 2 },
+        { name: '3天', id: 3 },
+        { name: '4天', id: 4 },
+        { name: '5天', id: 5 },
+        { name: '6天', id: 6 },
+        { name: '7天', id: 7 },
+    ]
+    // 踢人宽限期选项 
+    private bailoutWaitOptions: IOptions[] = [
+        { name: '8天', id: 8 },
+        { name: '9天', id: 9 },
+        { name: '10天', id: 10 },
+        { name: '11天', id: 11 },
+        { name: '12天', id: 12 },
+        { name: '13天', id: 13 },
+        { name: '14天', id: 14 },
     ]
     // 代币选择项
     private tokenOptions: IOptions[] =
@@ -245,15 +265,46 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                         </>
                     }
                 </div>
-                <div className="info-group">
-                    <div className="group-name"><b>取消投票窗口期</b><span className="red-type"> *</span></div>
-                    <div className="inline-box left">
-                        <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} />
+                {
+                    this.state.version === "molochdao1.0" &&
+                    <div className="info-group">
+                        <div className="group-name"><b>取消投票窗口期</b><span className="red-type"> *</span></div>
+                        <div className="inline-box left">
+                            <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} />
+                            {
+                                this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? "取消窗口期不得大于投票期时间" : this.intrl.edit.error}</span>
+                            }
+                        </div>
+                    </div>
+                }
+                {
+                    this.state.version === "molochdao2.0" &&
+                    <div className="info-group">
+                        <div className="inline-box left">
+                            <div className="group-name"><b>提案处理期限</b><span className="red-type"> *</span></div>
+                            <Select text="" options={this.dayOptions} onCallback={this.handleSelectEmergencyExitWait} />
+                        </div>
+                        <div className="inline-box">
+                            <div className="group-name"><b>踢出成员执行宽限期</b><span className="red-type"> *</span></div>
+                            <Select text="" options={this.bailoutWaitOptions} onCallback={this.handleSelectBailoutWait} />
+                        </div>
                         {
-                            this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? "取消窗口期不得大于投票期时间" : this.intrl.edit.error}</span>
+                            (this.state.emergencyExitWaitEnter || this.state.bailoutWaitEnter) &&
+                            <>
+                                <div className="inline-box left">
+                                    {
+                                        this.state.emergencyExitWaitEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                                    }
+                                </div>
+                                <div className="inline-box">
+                                    {
+                                        this.state.bailoutWaitEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                                    }
+                                </div>
+                            </>
                         }
                     </div>
-                </div>
+                }
                 <div className="info-group">
                     <div className="inline-box left">
                         <div className="group-name"><b>发起投票押金</b><span className="red-type"> *</span></div>
@@ -441,6 +492,22 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             abortWindow: event.id,
             abortWindowEnter: false,
             abortWindowError: false
+        })
+    }
+
+    // 如果在此之后仍未处理提案，则直接跳过(应该是提案处理期限)
+    private handleSelectEmergencyExitWait = (event) => {
+        this.setState({
+            emergencyExitWait: event.id,
+            emergencyExitWaitEnter: false
+        })
+    }
+
+    // 返还资产等待区间段（应该是踢出成员执行宽限期 ）
+    private handleSelectBailoutWait = (event) => {
+        this.setState({
+            bailoutWait: event.id,
+            bailoutWaitEnter: false
         })
     }
 
