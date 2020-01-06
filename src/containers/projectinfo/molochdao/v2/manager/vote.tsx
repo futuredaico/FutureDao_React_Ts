@@ -1,5 +1,5 @@
 /**
- * 项目详情页
+ * 投票模块
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
@@ -16,7 +16,7 @@ interface IState
     isVoteEnd: boolean, // 投票时间已经结束
 }
 @observer
-class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
+class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state: IState = {
         isVoteEnd: false
@@ -316,4 +316,4 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     }
 }
 
-export default injectIntl(MolochManagerInfo);
+export default injectIntl(MolochManagerVote);

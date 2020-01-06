@@ -1,0 +1,180 @@
+.message-wrapper {
+    .textarea-wrapper {
+      padding: 15px 0;
+      border-bottom: 1px solid @bg-e5;
+      margin-bottom: 20px;
+      .hei-textarea {
+        margin-top: 15px;
+        &:read-only{
+          background: @bg-f6;
+          color:@t-b9;
+        }
+      }
+  
+      .message-textarea {
+        width: 100%;
+        min-height: 56px;
+        padding: 5px;
+        border: 1px solid @bg-e5;
+        margin-bottom: 15px;
+        border-radius: 3px;
+      }
+  
+      .people-message {
+        clear: both;
+        .people-img {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+          vertical-align: middle;
+          border-radius: 50%;
+        }
+        .normal-button {
+          float: right;
+        }
+      }
+    }
+  
+    .message-comment {
+      .comment-list {
+        clear: both;
+        border-bottom: 1px solid @bg-e5;
+        padding-bottom: 20px;
+  
+        .comment-people {
+          margin-top: 35px;
+          .people-img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+            border-radius: 50%;
+          }
+        }
+  
+        p {
+          padding: 20px 0 20px 40px;
+          margin-bottom: 0;
+        }
+  
+        .time-tips {
+          font-size: 12px;
+          color: @t-a0;
+          margin-left: 40px;
+        }
+  
+        .right-other {
+          float: right;
+          margin-right: 25px;
+          .zan-img,.message-img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+            cursor: pointer;
+          }
+  
+          .message-img {
+            margin-right: 30px;
+          }
+  
+          span {
+            font-size: 12px;
+            vertical-align: middle;
+          }
+        }
+  
+        .comment-input {
+          text-align: right;
+          margin-left: 40px;
+  
+          .reply-textarea {
+            display: block;
+            height: auto;
+            min-height: 40px;
+            margin-bottom: 15px;
+            margin-top: 20px;
+            width: 100%;
+            padding: 5px;
+            border: 1px solid @bg-e5;
+            border-radius: 3px;
+            // width: 730px;
+          }
+        }
+  
+        .reply-comment {
+          background: #F6F6F6;
+          border-radius: 3px;
+          margin-left: 15px;
+          clear: both;
+          box-sizing: border-box;
+          padding: 20px 20px 0 20px;
+          margin-top: 25px;
+  
+          .reply-list {
+            border-bottom: 1px solid @bg-e5;
+            // border: 1px solid red;
+            padding: 20px 0;
+  
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+  
+          .reply-people {
+            .people-img {
+              width: 30px;
+              height: 30px;
+              margin-right: 10px;
+              vertical-align: middle;
+              border-radius: 50%;
+            }
+          }
+  
+          p {
+            padding: 20px 0 20px 40px;
+            margin-bottom: 0;
+          }
+  
+          .time-tips {
+            font-size: 12px;
+            color: @t-a0;
+            margin-left: 40px;
+          }
+  
+          .right-other {
+            float: right;
+            margin-right: 5px;
+            img {
+              width: 20px;
+              height: 20px;
+              margin-right: 5px;
+              vertical-align: middle;
+            }
+            .message-img {
+              margin-right: 30px;
+            }
+            span {
+              font-size: 12px;
+              vertical-align: middle;
+            }
+          }
+          .reply-input {
+            text-align: right;
+            margin: 20px 0 0 40px;
+            .reply-textarea {
+              display: block;
+              height: auto;
+              min-height: 40px;
+              width: 100%;
+              padding: 5px;
+              box-sizing: border-box;
+              margin: 0 0 15px 0;
+              border: 1px solid @bg-e5;
+              border-radius: 3px;
+            }
+          }
+        }
+      }
+    }
+  }

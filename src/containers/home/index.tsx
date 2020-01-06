@@ -120,7 +120,7 @@ class Home extends React.Component<IHomeProps, any> {
   // 跳转到项目详情页todo
   private handleToProjectInfo = (item:IMolochProjList) =>
   {
-    this.props.history.push('/molochinfov1/' + item.projId);
+    this.props.history.push('/molochinfo/' + item.projId);
   }
   // 分页
   private handleChangePage = (index: number) =>
