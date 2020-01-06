@@ -75,18 +75,19 @@ export default class Header extends React.Component<IProps, IState>{
   private handleToCreateProject = () => {
     if (!this.props.common.userInfo) {
       // 未登录
-      this.handleToLogin();
+      // this.handleToLogin();
+      this.props.common.openNotificationWithIcon('error', this.props.locale.error, this.props.locale.loginerr);
     }
     else {
       // 正常访问
-      const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
-      window.location.href = href + '/create'
+      // const href = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+      this.props.history.push('/create')
     }
   }
   // 登录
   private handleToLogin = () => {
     // this.props.history.push('/load/login');
-    this.props.common.loginFutureDao();
+    // this.props.common.loginFutureDao();
   }
 
   // 进入个人中心
