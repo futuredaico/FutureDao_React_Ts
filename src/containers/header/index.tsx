@@ -87,7 +87,7 @@ export default class Header extends React.Component<IProps, IState>{
   // 登录
   private handleToLogin = () => {
     // this.props.history.push('/load/login');
-    // this.props.common.loginFutureDao();
+    this.props.common.loginFutureDao();
   }
 
   // 进入个人中心

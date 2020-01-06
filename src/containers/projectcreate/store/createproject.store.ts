@@ -53,9 +53,9 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
         this.createContent.abortWindow,
-        this.createContent.proposalDeposit,
+        metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(),
         this.createContent.dilutionBound,
-        this.createContent.processingReward
+        metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray()
       );
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
