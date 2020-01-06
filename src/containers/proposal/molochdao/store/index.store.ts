@@ -6,6 +6,7 @@ import { AbiItem } from 'web3-utils';
 import { Web3Contract } from '@/utils/web3Contract';
 import Moloch from '@/utils/Moloch';
 import { toMyNumber } from '@/utils/numberTool';
+import metamaskwallet from '@/store/metamaskwallet';
 
 class MolochProposal implements IMolochProposalStore
 {
@@ -54,14 +55,17 @@ class MolochProposal implements IMolochProposalStore
       const decimals = Math.pow(10,this.fundDecimals);
       console.log(decimals)
       const giveMoney = toMyNumber(giveNum).mul(decimals);
-      const giveMoneyNum = parseFloat(giveMoney.toString());
+      const giveMoneyNum = parseFloat(giveMoney.toString()) 
+      // metamaskwallet.web3.utils.toBN().toArray();
       console.log('giveMoney:'+giveMoneyNum)
       const money = parseFloat(this.proposalFee.toString())+giveMoneyNum;
-      console.log('money:'+money);
-      console.log(addr+"-----"+giveMoneyNum+"-----"+requireNum+"-----"+des)
+      console.log('money:'+money);      
+      const giveMoneyArray = metamaskwallet.web3.utils.toBN(giveMoneyNum).toArray();
+      const requireArray = metamaskwallet.web3.utils.toBN(requireNum).toArray();
+      console.log(addr+"-----"+giveMoneyArray.toString()+"-----"+requireArray.toString()+"-----"+des);
       erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("submitProposal", [addr,giveMoneyNum, requireNum, des], { from: myaddr });
+      const submitRes = molochContract.contractSend("submitProposal", [addr,giveMoneyArray, requireArray, des], { from: myaddr });
       submitRes.onTransactionHash().then(()=>{sendCall()})
       submitRes.onConfrim().then(res=>{confrimCall()})      
       return true
