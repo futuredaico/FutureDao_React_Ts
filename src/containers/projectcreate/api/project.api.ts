@@ -427,6 +427,8 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             ]
         ]
     }
+    console.log(opts);
+
     return request(opts);
 
 }

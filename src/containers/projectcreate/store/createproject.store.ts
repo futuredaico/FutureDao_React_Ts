@@ -40,8 +40,8 @@ class CreateProject implements ICreateProjectStore {
       const summoner = metamaskwallet.metamaskAddress;
       const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
       const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
-      const proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals);
-      const processingReward = toMyNumber(this.createContent.processingReward).mul(decimals);
+      this.createContent.proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals).value;
+      this.createContent.processingReward = toMyNumber(this.createContent.processingReward).mul(decimals).value;
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
       // 部署合约
@@ -53,9 +53,9 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
         this.createContent.abortWindow,
-        proposalDeposit.value,
+        this.createContent.proposalDeposit,
         this.createContent.dilutionBound,
-        processingReward.value
+        this.createContent.processingReward
       );
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
