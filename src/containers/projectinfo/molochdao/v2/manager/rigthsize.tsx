@@ -47,7 +47,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
                     (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text={this.intrl.btn.proposal} btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                         : (
                             <div className="notallow-wrapper">
-                                <span>{this.intrl.btn.proposal}</span>
+                                <span>发起预发布提案</span>
                                 <span className="sm-time">{this.state.sendTime}</span>
                             </div>
                         )

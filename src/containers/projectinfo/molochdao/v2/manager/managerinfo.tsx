@@ -90,8 +90,19 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 <div className="iline-left">
                                     <strong>{this.intrl.manager.apply}</strong>
                                 </div>
-                                <div className="iline-right">
-                                    <span>{this.props.molochmanager.proposalInfo.sharesRequested}</span>
+                                <div className="iline-right ver-top">
+                                    <div className="little-wrapper">
+                                        <span>股份</span><br/>
+                                        <span>1000</span>
+                                    </div>
+                                    <div className="little-wrapper">
+                                        <span>无表决权股</span><br/>
+                                        <span>300</span>
+                                    </div>
+                                    <div className="little-wrapper">
+                                        <span>DAI支持的代币1</span><br/>
+                                        <span>200</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className="info-line">
@@ -103,7 +114,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                 </div>
                             </div>
                             {/* 提出成员类型 */}
-                            <div className="info-line">
+                            {/* <div className="info-line">
                                 <div className="iline-left">
                                     <strong>提出成员</strong>
                                 </div>
@@ -117,16 +128,16 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                         <span>{this.props.molochmanager.proposalInfo.applicant}</span>
                                     </div>
                                 </div>
-                            </div>      
+                            </div>       */}
                             {/* 添加支持代币类型 */}
-                            <div className="info-line">
+                            {/* <div className="info-line">
                                 <div className="iline-left">
                                     <strong>添加支持代币</strong>
                                 </div>
                                 <div className="iline-right">
                                     <span>0x1234567890987654321</span>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
