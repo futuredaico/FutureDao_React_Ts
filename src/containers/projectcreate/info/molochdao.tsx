@@ -39,12 +39,15 @@ interface IState {
     infoEnter: boolean,             // 内容确认
     imgEnter: boolean,              // 
     detailEnter: boolean,
+    officialWebsiteEnter: boolean;         // 验证
     approvedTokenEnter: boolean,
     votingPeriodLengthEnter: boolean,
     gracePeriodLengthEnter: boolean,
     abortWindowEnter: boolean,
+    abortWindowError: boolean,
     proposalDepositEnter: boolean,
     processingRewardEnter: boolean,
+    processingRewardError: boolean,
     createButtonState: boolean,
 }
 
@@ -88,7 +91,10 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         abortWindowEnter: false,
         proposalDepositEnter: false,
         processingRewardEnter: false,
-        createButtonState: true
+        createButtonState: true,
+        officialWebsiteEnter: false,
+        abortWindowError: false,
+        processingRewardError: false,
     }
     // DAO版本选择
     private versionOptions: IOptions[] = [
@@ -191,6 +197,9 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 <div className="info-group">
                     <div className="group-name"><b>官方网站</b></div>
                     <Input value={this.state.officialWebsite} type="text" onChange={this.handleChangeOfficialWebsite} />
+                    {
+                        this.state.officialWebsiteEnter && <span className="err-span">请填写完整的网站URL(http://xxx.xxx... | https://xxx.xxx...)</span>
+                    }
                 </div>
                 <div className="info-group">
                     <div className="group-name"><b>DAO支持代币</b><span className="red-type"> *</span></div>
@@ -241,7 +250,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     <div className="inline-box left">
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} />
                         {
-                            this.state.abortWindowEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                            this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? "取消窗口期不得大于投票期时间" : this.intrl.edit.error}</span>
                         }
                     </div>
                 </div>
@@ -274,7 +283,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                             </div>
                             <div className="inline-box">
                                 {
-                                    this.state.processingRewardEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                                    this.state.processingRewardEnter && <span className="err-span">{this.state.processingRewardError ? "奖励不得大于押金" : this.intrl.edit.error}</span>
                                 }
                             </div>
                         </>
@@ -319,7 +328,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     // 官网修改
     private handleChangeOfficialWebsite = (event) => {
         this.setState({
-            officialWebsite: event.target.value
+            officialWebsite: event.target.value,
+            officialWebsiteEnter: false
         })
     }
 
@@ -425,11 +435,12 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         })
     }
 
-    // 选择公示期期时长
+    // 取消窗口期投票市场
     private handleSelectAbortWindow = (event) => {
         this.setState({
             abortWindow: event.id,
-            abortWindowEnter: false
+            abortWindowEnter: false,
+            abortWindowError: false
         })
     }
 
@@ -439,7 +450,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         const number = asNumber(str);
         this.setState({
             proposalDeposit: number,
-            proposalDepositEnter: false
+            proposalDepositEnter: false,
+            processingRewardError: false
         })
     }
 
@@ -467,6 +479,18 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             this.setState({ infoEnter: true });
             window.scrollTo(0, 250)
             return false;
+        }
+        // 验证官网是否是符合格式
+        if (this.state.officialWebsite) {
+            const re = new RegExp(/((https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])/gi);
+            if (!re.test(this.state.officialWebsite)) {
+                this.setState({ officialWebsiteEnter: true })
+                window.scrollTo(0, 1350)
+                return false;
+            }
+            else {
+                this.setState({ officialWebsiteEnter: false })
+            }
         }
         // 支持代币不可为空
         if (!this.state.approvedToken) {
@@ -500,7 +524,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         }
         // 窗口期不可大于投票期
         if (this.state.abortWindow > this.state.votingPeriodLength) {
-            this.setState({ abortWindowEnter: true });
+            this.setState({ abortWindowEnter: true, abortWindowError: true });
             window.scrollTo(0, 1950)
             return false;
         }
@@ -518,7 +542,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         }
         // 处理投票奖励不可超过押金数量
         if (parseFloat(this.state.processingReward) > parseFloat(this.state.proposalDeposit)) {
-            this.setState({ processingRewardEnter: true });
+            this.setState({ processingRewardEnter: true, processingRewardError: true });
             window.scrollTo(0, 2150)
             return false;
         }
