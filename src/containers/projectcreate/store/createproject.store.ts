@@ -21,7 +21,7 @@ class CreateProject implements ICreateProjectStore {
     approvedToken: '',          // 允许交易的token
     approvedTokenSymbol: '',
     approvedDecimals: 0,
-    periodDuration: 120,         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
+    periodDuration: (process.env.REACT_APP_SERVER_ENV === 'DEV') ? 120 : 17280,         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
     votingPeriodLength: 5,     // 投票有多少个区间段
     gracePeriodLength: 5,      // 公示有多少个区间段
     abortWindow: 2,            // 撤回投票的窗口期
@@ -40,8 +40,8 @@ class CreateProject implements ICreateProjectStore {
       const summoner = metamaskwallet.metamaskAddress;
       const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
       const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
-      const proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals);
-      const processingReward = toMyNumber(this.createContent.processingReward).mul(decimals);
+      this.createContent.proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals).value;
+      this.createContent.processingReward = toMyNumber(this.createContent.processingReward).mul(decimals).value;
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
       // 部署合约
@@ -53,9 +53,9 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
         this.createContent.abortWindow,
-        proposalDeposit.value,
+        this.createContent.proposalDeposit,
         this.createContent.dilutionBound,
-        processingReward.value
+        this.createContent.processingReward
       );
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
