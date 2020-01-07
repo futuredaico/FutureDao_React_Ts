@@ -157,7 +157,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             if (this.props.molochmanager.upBalance <= 0)
             {
                 return false;
-            } 
+            }
         } else
         {
             if (this.props.molochmanager.proposalBalance <= 0)
@@ -165,15 +165,18 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 return false;
             }
         }
-        await this.props.metamaskwallet.inintWeb3();
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const res = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
 
         return true;
@@ -197,7 +200,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             if (this.props.molochmanager.upBalance <= 0)
             {
                 return false
-            } 
+            }
         } else
         {
             if (this.props.molochmanager.proposalBalance <= 0)
@@ -205,16 +208,20 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 return false
             }
         }
-        await this.props.metamaskwallet.inintWeb3();
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const res = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
+
         return true
     }
     // 处理提案
@@ -229,16 +236,20 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const res = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
+
         return true
     }
 

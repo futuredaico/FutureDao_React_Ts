@@ -2,7 +2,7 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IProjectInfoStore } from "@/containers/projectinfo/futuredao/interface/projectinfo.interface";
 import { IProjectTransationStore } from "@/containers/projectinfo/futuredao/interface/transation.interface";
-import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 export interface IOrderStore {
     orderMenu:number,
@@ -28,7 +28,7 @@ export interface IOrderStore {
     projectinfo: IProjectInfoStore,
     transation: IProjectTransationStore,
     teemowallet:ITeemoWalletStore,
-    metamaskwallet:IMetaMastWalletStore,
+    metamaskwallet:IMetaMaskWalletStore,
     intl:any
   }
 

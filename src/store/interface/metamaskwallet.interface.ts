@@ -1,4 +1,4 @@
-export interface IMetaMastWalletStore
+export interface IMetaMaskWalletStore
 {
     metamaskAddress: string,
     isLoadMetaMask: boolean,
@@ -13,7 +13,7 @@ export interface IMetaMastWalletStore
 }
 export interface IMetaMastWalletProps
 {
-    metamask: IMetaMastWalletStore
+    metamaskwallet: IMetaMaskWalletStore
 }
 export enum MetaMaskNetworkCode {
     // 1为主网，3为Ropsten测试链,4为Rinkeby测试链，42为Kovan测试链，5为Goerli测试链

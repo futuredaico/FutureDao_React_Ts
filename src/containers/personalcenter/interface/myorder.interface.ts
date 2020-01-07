@@ -5,7 +5,7 @@ import { ICommonStore } from "@/store/interface/common.interface";
 import { IOrderStore } from "@/containers/order/interface/order.interface";
 import { IProjectTransationStore } from "@/containers/projectinfo/futuredao/interface/transation.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
-import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 export interface IMyOrderStore
 {
   isShowInfo:boolean,
@@ -26,7 +26,7 @@ export interface IMyOrderProps  extends RouteComponentProps
   order:IOrderStore,
   transation:IProjectTransationStore,
   teemowallet:ITeemoWalletStore,
-  metamaskwallet:IMetaMastWalletStore,
+  metamaskwallet:IMetaMaskWalletStore,
   intl: any
 }
 export interface IOrderList {

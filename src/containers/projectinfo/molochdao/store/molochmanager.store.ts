@@ -313,7 +313,6 @@ class IMolochManager
       const submitRes = molochContract.contractSend("processProposal", [indexArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
       console.log(subtxid)
-      console.log(submitRes)
     } catch (e)
     {
       return false;
@@ -345,8 +344,9 @@ class IMolochManager
     {
       const valueArr =  metamaskwallet.web3.utils.toBN(value).toArray();
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
-      const submitRes = molochContract.contractSend('ragequit', [valueArr], { from: myaddr })
-      console.log(submitRes);
+      const submitRes = molochContract.contractSend('ragequit', [valueArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid);
     } catch (e)
     {
       return false;

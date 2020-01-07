@@ -14,7 +14,8 @@ import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import { asNumber } from '@/utils/numberTool';
 // import metamaskwallet from '@/store/metamaskwallet';
-interface IState {
+interface IState
+{
     version: string;                // 版本
     projectName: string;            // 项目名称
     officialWebsite: string;         // 官网
@@ -51,12 +52,13 @@ interface IState {
     createButtonState: boolean,
 }
 
-interface IOptions {
+interface IOptions
+{
     id: string | number,
     name: string
 }
 
-@inject('createproject', 'common')
+@inject('createproject', 'common', 'metamaskwallet')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
@@ -123,13 +125,14 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 { name: '其他', id: '' }
             ]
 
-    public render() {
+    public render()
+    {
         return (
             <div className="molochdao-create">
                 <div className="info-title"><b>DAO信息</b></div>
                 <div className="info-group">
                     <div className="group-name"><b>DAO版本</b></div>
-                    <Select text="" defaultValue={this.versionOptions[ 0 ].id} options={this.versionOptions} onCallback={this.handleDaoVersionSelect} />
+                    <Select text="" defaultValue={this.versionOptions[0].id} options={this.versionOptions} onCallback={this.handleDaoVersionSelect} />
                 </div>
                 <div className="info-group">
                     <div className="group-name"><b>名称</b><span className="red-type"> *</span></div>
@@ -311,14 +314,16 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 监听版本变更
-    private handleDaoVersionSelect = (event) => {
+    private handleDaoVersionSelect = (event) =>
+    {
         this.setState({
             version: event.id
         })
     }
 
     // 监听项目名称变更
-    private handleChangeProjectName = (event) => {
+    private handleChangeProjectName = (event) =>
+    {
         this.setState({
             projectName: event.target.value,
             nameEnter: false
@@ -326,7 +331,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 官网修改
-    private handleChangeOfficialWebsite = (event) => {
+    private handleChangeOfficialWebsite = (event) =>
+    {
         this.setState({
             officialWebsite: event.target.value,
             officialWebsiteEnter: false
@@ -334,9 +340,11 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 限制图片上传大小与格式
-    private beforeUpload = (file: RcFile) => {
+    private beforeUpload = (file: RcFile) =>
+    {
         // 限制大小3M以下
-        if (file.size / 1024 / 1024 > 3) {
+        if (file.size / 1024 / 1024 > 3)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             return false;
         }
@@ -348,15 +356,18 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         return true;
     }
     // 上传封面
-    private handleUploadCoverPicture = async (file: RcFile) => {
+    private handleUploadCoverPicture = async (file: RcFile) =>
+    {
         const res = await this.props.common.uploadFile(file);
-        if (res) {
+        if (res)
+        {
             this.setState({
                 imageUrl: res,
                 imgEnter: false,
                 loading: false
             })
-        } else {
+        } else
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             this.setState({
                 imageUrl: '',
@@ -367,7 +378,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 当textarea内容改变时，改变项目简介的值
-    private handleChangeInfo = (event) => {
+    private handleChangeInfo = (event) =>
+    {
         const str = event.target.value;
         this.setState({
             info: str,
@@ -378,10 +390,12 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 文本框的输入
-    private onChangeEditorValue = (value: any) => {
+    private onChangeEditorValue = (value: any) =>
+    {
         // todo
         const text = value.toText();
-        if (text !== "") {
+        if (text !== "")
+        {
             this.setState({
                 projDetail: BraftEditor.createEditorState(value).toHTML().replace(/\s\s/g, '&nbsp;&nbsp;'),
                 projectDetails: BraftEditor.createEditorState(value),
@@ -391,26 +405,31 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 当Token的输入框内容发生改变的时候
-    private hadleChangeApprovedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private hadleChangeApprovedToken = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const isToken = web3.isAddress(str);
         this.setState({
             approvedToken: str,
             approvedTokenEnter: !isToken
         })
-        if (isToken) {
-            this.props.createproject.getTokenInfo(str).then(asset => {
+        if (isToken)
+        {
+            this.props.createproject.getTokenInfo(str).then(asset =>
+            {
                 this.setState({
                     approvedTokenSymbol: asset.symbol.toLocaleUpperCase()
                 })
-            }).catch(err => {
+            }).catch(err =>
+            {
                 console.log(err);
             })
         }
     }
 
     // 允许交易的Token
-    private hadleSelectApprovedToken = (event) => {
+    private hadleSelectApprovedToken = (event) =>
+    {
         this.setState({
             approvedToken: event.id,
             otherToken: !event.id,
@@ -420,7 +439,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 选择投票期时长
-    private handleSelectVotingPeriodLength = (event) => {
+    private handleSelectVotingPeriodLength = (event) =>
+    {
         this.setState({
             votingPeriodLength: event.id,
             votingPeriodLengthEnter: false
@@ -428,7 +448,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 选择公示期期时长
-    private handleSelectGracePeriodLength = (event) => {
+    private handleSelectGracePeriodLength = (event) =>
+    {
         this.setState({
             gracePeriodLength: event.id,
             gracePeriodLengthEnter: false
@@ -436,7 +457,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 取消窗口期投票市场
-    private handleSelectAbortWindow = (event) => {
+    private handleSelectAbortWindow = (event) =>
+    {
         this.setState({
             abortWindow: event.id,
             abortWindowEnter: false,
@@ -445,7 +467,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 提议押金
-    private handleChangeProposalDeposit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChangeProposalDeposit = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const number = asNumber(str);
         this.setState({
@@ -456,7 +479,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 处理人奖励
-    private handleChangeProcessingReward = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChangeProcessingReward = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const number = asNumber(str);
         this.setState({
@@ -466,82 +490,97 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 输入检测
-    private checkInputStatus = () => {
+    private checkInputStatus = () =>
+    {
         // window.scrollTo(0, 0)
         // 项目名不可为空且字数不能超过40
-        if (!this.state.projectName || this.state.projectName.length > 40) {
+        if (!this.state.projectName || this.state.projectName.length > 40)
+        {
             this.setState({ nameEnter: true });
             window.scrollTo(0, 0)
             return false;
         }
         // 项目简介不可为空且字数不能超过400
-        if (!this.state.info || this.state.infoLength > 400) {
+        if (!this.state.info || this.state.infoLength > 400)
+        {
             this.setState({ infoEnter: true });
             window.scrollTo(0, 250)
             return false;
         }
         // 验证官网是否是符合格式
-        if (this.state.officialWebsite) {
+        if (this.state.officialWebsite)
+        {
             const re = new RegExp(/((https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])/gi);
-            if (!re.test(this.state.officialWebsite)) {
+            if (!re.test(this.state.officialWebsite))
+            {
                 this.setState({ officialWebsiteEnter: true })
                 window.scrollTo(0, 1350)
                 return false;
             }
-            else {
+            else
+            {
                 this.setState({ officialWebsiteEnter: false })
             }
         }
         // 支持代币不可为空
-        if (!this.state.approvedToken) {
+        if (!this.state.approvedToken)
+        {
             this.setState({ approvedTokenEnter: true });
             window.scrollTo(0, 1500)
             return false;
         }
         // 支持代币不是正确的格式
-        if (!web3.isAddress(this.state.approvedToken)) {
+        if (!web3.isAddress(this.state.approvedToken))
+        {
             this.setState({ approvedTokenEnter: true });
             window.scrollTo(0, 1500)
             return false;
         }
         // 判断投票期限不可小于等于0
-        if (this.state.votingPeriodLength <= 0) {
+        if (this.state.votingPeriodLength <= 0)
+        {
             this.setState({ votingPeriodLengthEnter: true });
             window.scrollTo(0, 1750)
             return false;
         }
         // 公示期不可为小于等于0
-        if (this.state.gracePeriodLength <= 0) {
+        if (this.state.gracePeriodLength <= 0)
+        {
             this.setState({ gracePeriodLengthEnter: true });
             window.scrollTo(0, 1750)
             return false;
         }
         // 窗口期不可小于等于0
-        if (this.state.abortWindow <= 0) {
+        if (this.state.abortWindow <= 0)
+        {
             this.setState({ abortWindowEnter: true });
             window.scrollTo(0, 1950)
             return false;
         }
         // 窗口期不可大于投票期
-        if (this.state.abortWindow > this.state.votingPeriodLength) {
+        if (this.state.abortWindow > this.state.votingPeriodLength)
+        {
             this.setState({ abortWindowEnter: true, abortWindowError: true });
             window.scrollTo(0, 1950)
             return false;
         }
         // 投票押金数量不能为空且不能为0
-        if (!this.state.proposalDeposit || parseFloat(this.state.proposalDeposit) <= 0) {
+        if (!this.state.proposalDeposit || parseFloat(this.state.proposalDeposit) <= 0)
+        {
             this.setState({ proposalDepositEnter: true });
             window.scrollTo(0, 2150)
             return false;
         }
         // 投票结果奖励不能为空且不能为0
-        if (!this.state.processingReward || parseFloat(this.state.processingReward) <= 0) {
+        if (!this.state.processingReward || parseFloat(this.state.processingReward) <= 0)
+        {
             this.setState({ processingRewardEnter: true });
             window.scrollTo(0, 2150)
             return false;
         }
         // 处理投票奖励不可超过押金数量
-        if (parseFloat(this.state.processingReward) > parseFloat(this.state.proposalDeposit)) {
+        if (parseFloat(this.state.processingReward) > parseFloat(this.state.proposalDeposit))
+        {
             this.setState({ processingRewardEnter: true, processingRewardError: true });
             window.scrollTo(0, 2150)
             return false;
@@ -550,34 +589,43 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 创建项目
-    private handleToCreateProject = async () => {
+    private handleToCreateProject = async () =>
+    {
         const check = this.checkInputStatus();
-        if (check) {
-            this.props.createproject.createContent = {
-                version: this.state.version,                                // 版本
-                projectName: this.state.projectName,                        // 项目名称
-                projectBrief: this.state.info,                              // 项目简介
-                projectDetail: this.state.projDetail,                       // 文本编辑内容 详情
-                projectConverUrl: this.state.imageUrl,                         // 项目封面URL
-                officialWebUrl: this.state.officialWebsite,
-                approvedToken: this.state.approvedToken,                    // 允许交易的token
-                periodDuration: this.state.periodDuration,                  // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
-                votingPeriodLength: this.state.votingPeriodLength,          // 投票有多少个区间段
-                gracePeriodLength: this.state.gracePeriodLength,            // 公示有多少个区间段
-                abortWindow: this.state.abortWindow,                        // 撤回投票的窗口期
-                proposalDeposit: parseFloat(this.state.proposalDeposit),    // 提议的押金
-                dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
-                processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
-            }
-            this.setState({ createButtonState: false })
-            try {
-                const result = await this.props.createproject.createProject();
-                if (result) {
+        if (check)
+        {
+            const res = await this.props.metamaskwallet.inintWeb3();
+            if (res)
+            {
+                this.props.createproject.createContent = {
+                    version: this.state.version,                                // 版本
+                    projectName: this.state.projectName,                        // 项目名称
+                    projectBrief: this.state.info,                              // 项目简介
+                    projectDetail: this.state.projDetail,                       // 文本编辑内容 详情
+                    projectConverUrl: this.state.imageUrl,                         // 项目封面URL
+                    officialWebUrl: this.state.officialWebsite,
+                    approvedToken: this.state.approvedToken,                    // 允许交易的token
+                    periodDuration: this.state.periodDuration,                  // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
+                    votingPeriodLength: this.state.votingPeriodLength,          // 投票有多少个区间段
+                    gracePeriodLength: this.state.gracePeriodLength,            // 公示有多少个区间段
+                    abortWindow: this.state.abortWindow,                        // 撤回投票的窗口期
+                    proposalDeposit: parseFloat(this.state.proposalDeposit),    // 提议的押金
+                    dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
+                    processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
+                }
+                this.setState({ createButtonState: false })
+                try
+                {
+                    const result = await this.props.createproject.createProject();
+                    if (result)
+                    {
+                        this.setState({ createButtonState: true })
+                    }
+                    this.setState({ createButtonState: true })
+                } catch (error)
+                {
                     this.setState({ createButtonState: true })
                 }
-                this.setState({ createButtonState: true })
-            } catch (error) {
-                this.setState({ createButtonState: true })
             }
         }
     }

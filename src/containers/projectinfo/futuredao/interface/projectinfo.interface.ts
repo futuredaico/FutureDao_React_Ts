@@ -2,7 +2,7 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { IProjectUpdateStore } from "./update.interface";
 import { IProjectTransationStore } from "./transation.interface";
-import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 export interface IProjectInfoStore
 {
@@ -45,7 +45,7 @@ export interface IProjectInfoProps extends RouteComponentProps<{ projectId: stri
   transation: IProjectTransationStore,
   common: ICommonStore,
   teemowallet:ITeemoWalletStore,
-  metamaskwallet:IMetaMastWalletStore,
+  metamaskwallet:IMetaMaskWalletStore,
   intl: any
 }
 
