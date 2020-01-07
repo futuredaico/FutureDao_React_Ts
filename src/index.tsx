@@ -40,6 +40,7 @@ if (window[ "ethereum" ]) {
   ethereum.on("networkChanged", accounts => {
     console.log(accounts);
     // common.logoutFutureDao();
+    ethereum.autoRefreshOnNetworkChange = false;
     MetamaskWallet.changeNetwork();
   })
 }

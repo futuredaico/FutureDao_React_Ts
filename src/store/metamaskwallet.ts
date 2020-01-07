@@ -66,7 +66,7 @@ class MetaMastWallet implements IMetaMastWalletStore {
         if (common.language === 'en') {
           common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
         } else {
-          common.openNotificationWithIcon('info', '请注意', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
         }
       }
     } else { // 主网
