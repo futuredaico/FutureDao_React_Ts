@@ -342,6 +342,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             return false
         }
         await this.props.metamaskwallet.inintWeb3();
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const res = await this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
         if (res)
         {
@@ -371,7 +372,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
-
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         await this.props.metamaskwallet.inintWeb3();
         // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
         const res = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);

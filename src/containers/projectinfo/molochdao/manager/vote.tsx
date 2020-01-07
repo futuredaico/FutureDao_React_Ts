@@ -141,9 +141,14 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     // 投赞同票 1是true
     private handeToVoteYes = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
         }
         // 是否被别人委托了
         if (this.props.molochmanager.upAddress)
@@ -151,16 +156,17 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             // 委托人资金为0了
             if (this.props.molochmanager.upBalance <= 0)
             {
-                return false
+                return false;
             } 
         } else
         {
             if (this.props.molochmanager.proposalBalance <= 0)
             {
-                return false
+                return false;
             }
         }
         await this.props.metamaskwallet.inintWeb3();
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const res = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {
@@ -170,14 +176,19 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
         }
 
-        return true
+        return true;
     }
     // 投反对票 2是false
     private handeToVoteNo = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
         }
         // 是否被别人委托了
         if (this.props.molochmanager.upAddress)
@@ -195,6 +206,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             }
         }
         await this.props.metamaskwallet.inintWeb3();
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const res = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {
@@ -208,11 +220,17 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     // 处理提案
     private handleProcessProposal = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
         }
         await this.props.metamaskwallet.inintWeb3();
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const res = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
         if (res)
         {

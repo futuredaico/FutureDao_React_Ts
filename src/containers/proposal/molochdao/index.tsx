@@ -245,9 +245,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
         await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
-        {
+        {            
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
         }, () =>

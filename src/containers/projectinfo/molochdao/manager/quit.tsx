@@ -97,6 +97,7 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
             return false;
         }
         await this.props.metamaskwallet.inintWeb3();
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
         const value = parseInt(this.state.exitShareInput,10)
         const res = await this.props.molochmanager.quitShares(value, this.props.common.userInfo.address);
