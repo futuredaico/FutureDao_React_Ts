@@ -7,7 +7,7 @@ import PersonEdit from '../containers/personalcenter/store/personedit.store';
 import { toMyNumber } from '@/utils/numberTool';
 
 class MetaMastWallet implements IMetaMastWalletStore {
-  @observable public metamaskAddress: string = ""; // 获取MetaMask钱包上登陆的地址
+  @observable public metamaskAddress: string = ""; // 获取MetaMask钱包上登录的地址
   @observable public isLoadMetaMask: boolean = false; // 检测是否有MetaMask钱包
   @observable public isLoginMetaMaskFlag: number = 0;// 默认不显示,1表示未检查到MetaMask钱包,2为未登录钱包
   @observable public web3: Web3;
@@ -81,7 +81,7 @@ class MetaMastWallet implements IMetaMastWalletStore {
     }
 
   }
-  // 获取MetaMask钱包上登陆的地址
+  // 获取MetaMask钱包上登录的地址
   @action public initAccount = () => {
     return new Promise<string>((r, j) => {
       this.web3.eth.getAccounts((err, account) => {

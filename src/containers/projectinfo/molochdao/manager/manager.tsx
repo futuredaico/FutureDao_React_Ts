@@ -195,7 +195,7 @@ class MolochManager extends React.Component<IMolochInfoProps, IState> {
     // 发起提案
     private handleToProposal = () =>
     {
-        // 验证是否登陆
+        // 验证是否登录
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);

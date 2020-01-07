@@ -142,7 +142,7 @@ class Order extends React.Component<IOrderProps, IState> {
             // 检测是否连接钱包
             if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             {
-                // 获取MetaMask钱包上登陆的地址
+                // 获取MetaMask钱包上登录的地址
                 await this.props.metamaskwallet.inintWeb3();
                 await this.props.metamaskwallet.checkIsCurrendBindAddress();
 
@@ -180,12 +180,12 @@ class Order extends React.Component<IOrderProps, IState> {
             }
             else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
             {
-                // 获取Teemo钱包上登陆的地址                
+                // 获取Teemo钱包上登录的地址                
             }
         }
         else
         {
-            // 假如没有登陆
+            // 假如没有登录
             this.setState({
                 isCanBuyBtn: false,
                 address: ''

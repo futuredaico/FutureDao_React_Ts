@@ -18,7 +18,7 @@ interface IState
     balance: string, // 当前连接账户余额    
     minSellPrice: string, // 至少获得多少资金（卖出）
     wholeMinSell: string, // 至少获得多少资金（卖出）(完整的数据)
-    address: string // 当前登陆的地址
+    address: string // 当前登录的地址
     idDoingSell:boolean // 是否点击了卖出按钮
 }
 
@@ -99,7 +99,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             // 检测是否连接钱包
             if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             {
-                // 获取MetaMask钱包上登陆的地址
+                // 获取MetaMask钱包上登录的地址
                 await this.props.metamaskwallet.inintWeb3();
                 const checkRes = await this.props.metamaskwallet.checkIsCurrendBindAddress();
                 // 若与绑定的地址不一致
@@ -131,12 +131,12 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             }
             else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
             {
-                // 获取Teemo钱包上登陆的地址                
+                // 获取Teemo钱包上登录的地址                
             }
         }
         else
         {
-            // 假如没有登陆
+            // 假如没有登录
             this.setState({
                 isCanSellBtn: false,
                 isShowBalance: false,

@@ -78,7 +78,7 @@ class Common implements ICommonStore {
         if (this.language === 'en') {
           this.openNotificationWithIcon('error', 'Login failed', 'Please set Metamask to mainnet and try again.');
         } else {
-          this.openNotificationWithIcon('error', '登陆失败', '请将Metamask切换至主网后重试');
+          this.openNotificationWithIcon('error', '登录失败', '请将Metamask切换至主网后重试');
         }
         return false
       }
@@ -113,7 +113,7 @@ class Common implements ICommonStore {
     }
     return true;
   }
-  // 验证登陆
+  // 验证登录
   @action public loginCheck = async (data: string) => {
     let result: any = [];
     try {

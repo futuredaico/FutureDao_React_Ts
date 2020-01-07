@@ -6,17 +6,17 @@ import common from './common'
 
 class TeemoWallet implements ITeemoWalletStore
 {
-    @observable public teemoAddress: string = ""; // 获取Teemo钱包上登陆的地址
+    @observable public teemoAddress: string = ""; // 获取Teemo钱包上登录的地址
     @observable public isLoadTeemo: boolean = false; // 检测是否有Teemo钱包
     @observable public isLoginFlag: number = 0;// 默认不显示,1表示未检查到teemo钱包,2为未登录钱包
 
-    // 获取Teemo钱包上登陆的地址
+    // 获取Teemo钱包上登录的地址
     @action public loginTeemo = async () =>
     {
         // 第一步 检测Teemo钱包是否存在
         if (this.isLoadTeemo)
         {
-            // 第二步 查看是否登陆了Teemo钱包
+            // 第二步 查看是否登录了Teemo钱包
             const loginFlag: any = await Wallet.getAccount();         
             if (!loginFlag)
             {

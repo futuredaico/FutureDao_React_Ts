@@ -4,7 +4,7 @@ export default {
     go: "跳转至"
   },
   btn: {
-    login: "登陆",
+    login: "登录",
     sign: "注册",
     cancel: "取消",
     reset: "重置密码",
@@ -59,7 +59,7 @@ export default {
     center: "个人中心",
     myproject: "我的项目",
     exit: "退出账号",
-    login: "Metamask 登陆",
+    login: "Metamask 登录",
     sign: "注册",
     loginerr: "请先登录",
     error: "操作失败",
@@ -85,7 +85,7 @@ export default {
   },
   login: {
     email: "邮箱",
-    password: "登陆密码",
+    password: "登录密码",
     forgot: "忘记密码？",
     signtips: "还没有帐户？立即注册",
   },
@@ -96,7 +96,7 @@ export default {
   },
   sign: {
     username: "用户名",
-    gologin: "已有帐户？登陆",
+    gologin: "已有帐户？登录",
     pwd: "密码"
   },
   email: {
@@ -169,7 +169,7 @@ export default {
     website: "官方网站",
     manager: "治理",
     member: "成员",
-    textarea2: "请先登陆",
+    textarea2: "请先登录",
   },
   update: {
     update: "发布更新",
@@ -257,9 +257,9 @@ export default {
     sendfail: "交易发送失败",
     senddone: "您的提案已发出",
     membererr: "您还不是成员，不能发起提案",
-    logintitle: "登陆失败",
+    logintitle: "登录失败",
     logincheck: "请将Metamask切换至主网后重试",
-    logouttips: "钱包状态已更改，您已退出登陆。",
+    logouttips: "钱包状态已更改，您已退出登录。",
     comfirm: "确认"
   },
   manager: {

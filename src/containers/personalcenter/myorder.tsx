@@ -413,7 +413,7 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
             // 检测是否连接钱包
             if (this.props.myorder.orderDetail && (this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase() === 'eth'|| this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase()==='dai'))
             {
-                // 获取MetaMask钱包上登陆的地址
+                // 获取MetaMask钱包上登录的地址
                 await this.props.metamaskwallet.inintWeb3();
                 await this.props.metamaskwallet.checkIsCurrendBindAddress();
 
@@ -453,12 +453,12 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
             }
             else if (this.props.myorder.orderDetail && (this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase() === 'neo'|| this.props.myorder.orderDetail.totalCostUnit.toLocaleLowerCase()==='gas'))
             {
-                // 获取Teemo钱包上登陆的地址                
+                // 获取Teemo钱包上登录的地址                
             }
         }
         else
         {
-            // 假如没有登陆
+            // 假如没有登录
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }

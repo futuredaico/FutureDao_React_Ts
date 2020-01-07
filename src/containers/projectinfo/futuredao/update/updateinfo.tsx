@@ -288,7 +288,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
     // 一切操作之前的验证 
     private handleCheckOption = () =>
     {
-        // 验证是否登陆
+        // 验证是否登录
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);

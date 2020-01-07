@@ -109,7 +109,7 @@ class InvifyCheck extends React.Component<IEmailCheckProps, IState>
     // 进入我的项目
     private handleToGoMyProject = async () =>
     {
-        // 检查登陆状况
+        // 检查登录状况
         await this.props.common.getLoginStatus();
         if (this.props.common.userInfo)
         {
