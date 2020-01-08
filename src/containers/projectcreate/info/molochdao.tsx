@@ -60,7 +60,7 @@ interface IOptions {
     name: string
 }
 
-@inject('createproject', 'common')
+@inject('createproject', 'common', 'metamaskwallet')
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
@@ -617,38 +617,46 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 创建项目
-    private handleToCreateProject = async () => {
+    private handleToCreateProject = async () =>
+    {
         const check = this.checkInputStatus();
-        if (check) {
-            this.props.createproject.createContent = {
-                version: this.state.version,                                // 版本
-                projectName: this.state.projectName,                        // 项目名称
-                projectBrief: this.state.info,                              // 项目简介
-                projectDetail: this.state.projDetail,                       // 文本编辑内容 详情
-                projectConverUrl: this.state.imageUrl,                         // 项目封面URL
-                officialWebUrl: this.state.officialWebsite,
-                approvedToken: this.state.approvedToken,                    // 允许交易的token
-                periodDuration: this.state.periodDuration,                  // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
-                votingPeriodLength: this.state.votingPeriodLength,          // 投票有多少个区间段
-                gracePeriodLength: this.state.gracePeriodLength,            // 公示有多少个区间段
-                abortWindow: this.state.abortWindow,                        // 撤回投票的窗口期
-                proposalDeposit: parseFloat(this.state.proposalDeposit),    // 提议的押金
-                dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
-                processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
-            }
-            this.setState({ createButtonState: false })
-            try {
-                const result = await this.props.createproject.createProject();
-                if (result) {
+        if (check)
+        {
+            const res = await this.props.metamaskwallet.inintWeb3();
+            if (res)
+            {
+                this.props.createproject.createContent = {
+                    version: this.state.version,                                // 版本
+                    projectName: this.state.projectName,                        // 项目名称
+                    projectBrief: this.state.info,                              // 项目简介
+                    projectDetail: this.state.projDetail,                       // 文本编辑内容 详情
+                    projectConverUrl: this.state.imageUrl,                         // 项目封面URL
+                    officialWebUrl: this.state.officialWebsite,
+                    approvedToken: this.state.approvedToken,                    // 允许交易的token
+                    periodDuration: this.state.periodDuration,                  // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
+                    votingPeriodLength: this.state.votingPeriodLength,          // 投票有多少个区间段
+                    gracePeriodLength: this.state.gracePeriodLength,            // 公示有多少个区间段
+                    abortWindow: this.state.abortWindow,                        // 撤回投票的窗口期
+                    proposalDeposit: parseFloat(this.state.proposalDeposit),    // 提议的押金
+                    dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
+                    processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
+                }
+                this.setState({ createButtonState: false })
+                try
+                {
+                    const result = await this.props.createproject.createProject();
+                    if (result)
+                    {
+                        this.setState({ createButtonState: true })
+                    }
+                    this.setState({ createButtonState: true })
+                } catch (error)
+                {
                     this.setState({ createButtonState: true })
                 }
-                this.setState({ createButtonState: true })
-            } catch (error) {
-                this.setState({ createButtonState: true })
             }
         }
     }
-
 }
 
 export default injectIntl(CreateProject);

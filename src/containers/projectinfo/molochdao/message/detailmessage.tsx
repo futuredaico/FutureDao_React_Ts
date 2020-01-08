@@ -89,7 +89,7 @@ class DetailMessage extends React.Component<IMolochInfoProps, IState> {
                                         <div className="comment-list" key={index}>
                                             <div className="comment-people">
                                                 <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                                <strong>{item.username}</strong>
+                                                <strong>{item.username?item.username:this.intrl.user.shen}</strong>
                                             </div>
                                             <p>{item.discussContent}</p>
                                             <span className="time-tips">{formatTime.computeTime(item.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en' ? ' ago' : '前更新'}</span>
@@ -125,9 +125,9 @@ class DetailMessage extends React.Component<IMolochInfoProps, IState> {
                                                                     <div className="reply-list" key={num}>
                                                                         <div className="reply-people">
                                                                             <img src={replyItem.headIconUrl ? replyItem.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
-                                                                            <strong>{replyItem.username}</strong>
+                                                                            <strong>{replyItem.username?replyItem.username:this.intrl.user.shen}</strong>
                                                                         </div>
-                                                                        <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername}：</strong>{replyItem.discussContent}</p>
+                                                                        <p><strong>{this.intrl.projinfo.reply} {replyItem.preUsername?replyItem.preUsername:this.intrl.user.shen}：</strong>{replyItem.discussContent}</p>
                                                                         <span className="time-tips">{formatTime.computeTime(replyItem.time.toString(), this.props.intl.locale)} {this.props.intl.locale === 'en' ? ' ago' : '前更新'}</span>
                                                                         <div className="right-other">
                                                                             <img src={require('@/img/message-un.png')} className="message-img" alt="message-un.png" onClick={this.handleOpenReplyOther.bind(this, replyItem)} />
@@ -225,7 +225,7 @@ class DetailMessage extends React.Component<IMolochInfoProps, IState> {
     // 一切操作之前的验证 
     private handleCheckOption = () =>
     {
-        // 验证是否登陆
+        // 验证是否登录
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);

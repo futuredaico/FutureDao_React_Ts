@@ -94,7 +94,7 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
     // 发起提案(变成预发布提案)
     private handleToProposal = () =>
     {
-        // 验证是否登陆
+        // 验证是否登录
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
@@ -152,14 +152,17 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
-        await this.props.metamaskwallet.inintWeb3();
-        const res = await this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
-        if (res)
-        {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+       const res = await this.props.metamaskwallet.inintWeb3();
+        if(res){
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
         return true;
     }
@@ -181,19 +184,21 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
+        }        
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if(res){
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
+            const res2 = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
+            this.handleToCloseEntrust();
         }
-
-        await this.props.metamaskwallet.inintWeb3();
-        // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
-        const res = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);
-        if (res)
-        {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
-        }
-        this.handleToCloseEntrust();
         return true;
     }
     // 关闭权限委托窗口
