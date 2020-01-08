@@ -206,7 +206,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if(!res){
+            return false;
+        }
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
         const fiveNum = parseFloat(this.state.tianContribution);
         const requireNum = parseInt(this.state.tianRequire, 10);
@@ -233,9 +236,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
-        await this.props.index.applyProposal(contractHash, assetHash, this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
-        {
+        await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        {            
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
         }, () =>
