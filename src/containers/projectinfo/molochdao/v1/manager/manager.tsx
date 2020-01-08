@@ -212,6 +212,30 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             return 'End'
         }
     }
+    // 待处理倒计时
+    // private computeProcessTime = (item: IMolochProposalList) =>
+    // {
+    //     // 公示剩余时间=公示时间+投票时间-（当前时间点-发布合约的时间点）
+    //     const nowTime = new Date().getTime() / 1000;
+    //     const nowTimeInt = parseInt(nowTime.toString(), 10);
+    //     const agoTime = nowTimeInt - item.timestamp;
+    //     if (this.props.molochinfo.projInfo)
+    //     {
+    //         const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+    //         const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
+    //         const endTime = graceTime + voteTime - agoTime;
+    //         if (endTime < 0)
+    //         {
+    //             return 'End'
+    //         } else
+    //         {
+    //             return onCountRemainTime(endTime)
+    //         }
+    //     } else
+    //     {
+    //         return 'End'
+    //     }
+    // }
 }
 
 export default injectIntl(MolochManager);
