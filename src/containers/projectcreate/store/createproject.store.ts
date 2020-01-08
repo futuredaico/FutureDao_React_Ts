@@ -34,7 +34,7 @@ class CreateProject implements ICreateProjectStore {
    */
   @action public createProject = async () => {
     try {
-      await metamaskwallet.inintWeb3(); // 初始化 web3
+      // await metamaskwallet.inintWeb3(); // 初始化 web3
       const abi = Moloch.abi as AbiItem[];
       const bytecode = Moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
@@ -53,9 +53,9 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
         this.createContent.abortWindow,
-        this.createContent.proposalDeposit,
+        metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(),
         this.createContent.dilutionBound,
-        this.createContent.processingReward
+        metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray()
       );
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
@@ -87,8 +87,7 @@ class CreateProject implements ICreateProjectStore {
     return true;
   }
 
-  @action public getTokenInfo = async (token: string) => {
-    await metamaskwallet.inintWeb3();
+  @action public getTokenInfo = async (token: string) => {    
     const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
     const contract = new Web3Contract(abi, token);
     const symbol = await contract.contractCall("symbol");

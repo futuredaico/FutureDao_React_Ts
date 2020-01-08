@@ -382,6 +382,13 @@ export const exportOrderFile = (userId: string, token: string, projId: string) =
     return request(opts);
 }
 
+/**
+ * 保存 项目信息
+ * @param contractContent 合约信息
+ * @param summoner 发起人
+ * @param molochhash molochdao hash
+ * @param bankhash bank hash
+ */
 export const saveContractInfo = (contractContent: ICreateContent, summoner: string, molochhash: string, bankhash: string) => {
     const {
         version,                // 版本
@@ -427,6 +434,8 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             ]
         ]
     }
+    console.log(opts);
+
     return request(opts);
 
 }

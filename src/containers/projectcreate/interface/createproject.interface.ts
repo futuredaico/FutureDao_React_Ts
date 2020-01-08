@@ -1,5 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
+import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 
 export interface IProjectStore {
   isEdit: boolean,
@@ -25,6 +26,7 @@ export interface ICreateProjectProps extends RouteComponentProps<{ projectId: st
   project: IProjectStore,
   createproject: ICreateProjectStore,
   common: ICommonStore,
+  metamaskwallet:IMetaMaskWalletStore,
   intl: any
 }
 
