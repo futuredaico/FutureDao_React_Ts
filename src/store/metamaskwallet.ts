@@ -1,13 +1,13 @@
 // 存储全局变量
 import { observable, action } from 'mobx';
-import { IMetaMastWalletStore, MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
+import { IMetaMaskWalletStore, MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
 import Web3 from 'web3';
 import common from './common'
 import PersonEdit from '../containers/personalcenter/store/personedit.store';
 import { toMyNumber } from '@/utils/numberTool';
 
-class MetaMastWallet implements IMetaMastWalletStore {
-  @observable public metamaskAddress: string = ""; // 获取MetaMask钱包上登陆的地址
+class MetaMaskWallet implements IMetaMaskWalletStore {
+  @observable public metamaskAddress: string = ""; // 获取MetaMask钱包上登录的地址
   @observable public isLoadMetaMask: boolean = false; // 检测是否有MetaMask钱包
   @observable public isLoginMetaMaskFlag: number = 0;// 默认不显示,1表示未检查到MetaMask钱包,2为未登录钱包
   @observable public web3: Web3;
@@ -39,8 +39,7 @@ class MetaMastWallet implements IMetaMastWalletStore {
       return false
     }
     // this.getMetamaskNetwork();
-    this.changeNetwork();
-    return true;
+    return this.changeNetwork()
   }
   // 没有检测到钱包
   @action public canNotDetectWallet = () => {
@@ -66,8 +65,9 @@ class MetaMastWallet implements IMetaMastWalletStore {
         if (common.language === 'en') {
           common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
         } else {
-          common.openNotificationWithIcon('info', '请注意', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
         }
+        return false;
       }
     } else { // 主网
       if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
@@ -77,11 +77,12 @@ class MetaMastWallet implements IMetaMastWalletStore {
         } else {
           common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
         }
+        return false
       }
     }
-
+    return true
   }
-  // 获取MetaMask钱包上登陆的地址
+  // 获取MetaMask钱包上登录的地址
   @action public initAccount = () => {
     return new Promise<string>((r, j) => {
       this.web3.eth.getAccounts((err, account) => {
@@ -129,4 +130,4 @@ class MetaMastWallet implements IMetaMastWalletStore {
 }
 
 // 外部使用require
-export default new MetaMastWallet();
+export default new MetaMaskWallet();

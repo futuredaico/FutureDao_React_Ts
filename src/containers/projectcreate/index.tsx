@@ -99,12 +99,11 @@ class Project extends React.Component<IProps, IState> {
 
     // 项目创建成功跳转到对应的项目详情页
     private handleGoIndex = () => {
-        // if (process.env.REACT_APP_SERVER_ENV === 'DEV') {
-        //     this.props.history.push('/test/molochinfo/' + this.props.createproject.projectID);
-        // } else {
-        //     this.props.history.push('/molochinfo/' + this.props.createproject.projectID);
-        // }
-        this.props.history.push('/molochinfo/' + this.props.createproject.projectID);
+        if (process.env.REACT_APP_SERVER_ENV === 'DEV') {
+            window.location.href = '/test/molochinfo/' + this.props.createproject.projectID;
+        } else {
+            window.location.href = '/molochinfo/' + this.props.createproject.projectID;
+        }
     }
 
 }

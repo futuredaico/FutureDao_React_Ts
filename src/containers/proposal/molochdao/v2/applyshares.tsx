@@ -9,7 +9,7 @@ import { Input } from 'antd';
 import Button from '@/components/Button';
 // import classnames from 'classnames';
 // import { getQueryString } from '@/utils/function';
-// import Select from '@/components/select';
+import Select from '@/components/select';
 import TextArea from 'antd/lib/input/TextArea';
 import { IMolochProposalProps } from '../interface/index.interface';
 import { saveDecimal } from '@/utils/numberTool';
@@ -26,13 +26,14 @@ interface IState
     tianRequire: string,   // 申请股份
     tianContribution: string // 贡献资金
     canSendFlag: boolean, // 是否可发起提案
+    assetType: string, // 资金的选择
 }
 
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class ApplyShares extends React.Component<IMolochProposalProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
+    public state: IState = {
         isDoingSave: false,
         tianName: '',
         tianDes: '',
@@ -41,17 +42,18 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         tianRequire: '',
         tianContribution: '',
         canSendFlag: false,
+        assetType: '1'
     }
-    // private assetOption = [
-    //     {
-    //         id: "1",
-    //         name: 'ETH'
-    //     },
-    //     {
-    //         id: "2",
-    //         name: 'DAI'
-    //     }
-    // ]
+    private assetOption = [
+        {
+            id: "1",
+            name: 'ETH'
+        },
+        {
+            id: "2",
+            name: 'DAI'
+        }
+    ]
 
     public componentDidMount()
     {
@@ -93,11 +95,26 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                     <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
                 </div>
                 <div className="inline-title">
-                    <strong>{this.intrl.proposal.require}</strong>&nbsp;
-                            <span className="red-type">*</span>
+                    <strong>申请资产</strong>&nbsp;
+                    <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
-                    <Input className="sort-inputtext" value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
+                    <div className="smline-box">
+                        <span className="smline-span">申请股份数:</span>
+                        <Input value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
+                    </div>
+                    <div className="smline-box">
+                        <span className="smline-span">申请无表决权股份数::</span>
+                        <Input value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
+                    </div>
+                    <div className="smline-box">
+                        <span className="smline-span">申请资产及其数量:</span>
+                        <Select options={this.assetOption} text='' onCallback={this.handleChoiceProposalType} defaultValue={this.state.assetType} />
+                    </div>
+                    <div className="smline-box">
+                        {/* <span className="smline-span">申请股份数:</span> */}
+                        <Input  value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
+                    </div>
                 </div>
                 <div className="inline-title">
                     <strong>{this.intrl.proposal.gong}</strong>&nbsp;
@@ -105,10 +122,10 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">{this.intrl.proposal.gongtips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input className="sort-inputtext" suffix={this.props.index.fundSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
-                    {/* <div className="sort-select">
-                                <Select options={this.assetOption} text='' onCallback={this.handleChoiceProposalType} defaultValue={this.state.assetType} />
-                            </div> */}
+                    <Input className="sort-inputtext" value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
+                    <div className="sort-select">
+                        <Select options={this.assetOption} text='' onCallback={this.handleChoiceProposalType} defaultValue={this.state.assetType} />
+                    </div>
                 </div>
                 <div className="inline-btn">
                     <Button
@@ -202,6 +219,10 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             this.checkAllInput()
         })
         return true
+    }
+    private handleChoiceProposalType = () =>
+    {
+        //
     }
     // 发起提案
     private handleSendProposal = async () =>

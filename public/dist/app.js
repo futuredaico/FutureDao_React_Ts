@@ -455,11 +455,11 @@ var WalletApi;
                     _this.wallet.fromJsonStr(walletstr);
                 }
             };
-            this.title = WalletApi.$('div', "title", [], "登陆钱包");
+            this.title = WalletApi.$('div', "title", [], "登录钱包");
             this.fileInput = WalletApi.$('span', "wallet-input disable", [], "选择您的钱包文件");
             this.fileSelect = WalletApi.$('input', "select-file", []);
             this.passwordInput = WalletApi.$('input', "wallet-input", [], "输入您的密码");
-            this.loginBtn = WalletApi.$("span", "wallet-button", [], "登陆");
+            this.loginBtn = WalletApi.$("span", "wallet-button", [], "登录");
             this.passwordInput.type = "password";
             this.fileSelect.type = "file";
             this.createHref = WalletApi.$('span', "foot-href", [], "我还没有钱包！点我创建！");
@@ -490,7 +490,7 @@ var WalletApi;
                         ]),
                         WalletApi.$('div', "hr", []),
                         WalletApi.$('div', "con-foot", [
-                            WalletApi.$('span', "foot-title", [], "使用其他方式登陆"),
+                            WalletApi.$('span', "foot-title", [], "使用其他方式登录"),
                             WalletApi.$('div', "foot-box", [
                                 this.wifBtn,
                                 this.nep2Btn

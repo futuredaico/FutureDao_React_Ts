@@ -94,7 +94,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
     // 发起提案(变成预发布提案)
     private handleToProposal = () =>
     {
-        // 验证是否登陆
+        // 验证是否登录
         if (!this.props.common.userInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
@@ -109,7 +109,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
                     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
                 } else
                 {
-                    this.props.history.push('/sendproposalv1/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposalv2/menu/' + this.props.molochinfo.projId)
                 }
             } else
             {
@@ -119,7 +119,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
                 }
                 else
                 {
-                    this.props.history.push('/sendproposalv1/' + this.props.molochinfo.projId)
+                    this.props.history.push('/sendproposalv2/menu/' + this.props.molochinfo.projId)
                 }
             }
         }

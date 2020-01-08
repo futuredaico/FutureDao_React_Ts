@@ -12,7 +12,7 @@ export function getAccount()
   {
     if (common.language === 'zh')
     {
-      common.openNotificationWithIcon('error', "操作失败", "请登陆Teemo。");
+      common.openNotificationWithIcon('error', "操作失败", "请登录Teemo。");
     } else
     {
       common.openNotificationWithIcon('error', "Operation failed", "Please login Teemo wallet.");
@@ -32,10 +32,10 @@ export function getAccount()
         TeemoWallet.isLoginFlag = 2;
         if (common.language === 'zh')
         {
-          common.openNotificationWithIcon('error', "操作失败", "请手动登陆Teemo钱包");
+          common.openNotificationWithIcon('error', "操作失败", "请手动登录Teemo钱包");
         } else
         {
-          common.openNotificationWithIcon('error', "Operation failed", "请手动登陆Teemo钱包");
+          common.openNotificationWithIcon('error', "Operation failed", "请手动登录Teemo钱包");
         }
         return false;
       })
@@ -50,7 +50,7 @@ export function getBalance()
   {
     if (common.language === 'zh')
     {
-      common.openNotificationWithIcon('error', "操作失败", "请登陆Teemo。");
+      common.openNotificationWithIcon('error', "操作失败", "请登录Teemo。");
     } else
     {
       common.openNotificationWithIcon('error', "Operation failed", "Please login Teemo wallet.");
@@ -91,7 +91,7 @@ export function invoke(params: InvokeArgs)
   {
     if (common.language === 'zh')
     {
-      common.openNotificationWithIcon('error', "操作失败", "请登陆Teemo。");
+      common.openNotificationWithIcon('error', "操作失败", "请登录Teemo。");
     } else
     {
       common.openNotificationWithIcon('error', "Operation failed", "Please login Teemo wallet.");
@@ -135,7 +135,7 @@ export function invokeGroup(params: InvokeGroup)
   {
     if (common.language === 'zh')
     {
-      common.openNotificationWithIcon('error', "操作失败", "请登陆Teemo。");
+      common.openNotificationWithIcon('error', "操作失败", "请登录Teemo。");
     } else
     {
       common.openNotificationWithIcon('error', "Operation failed", "Please login Teemo wallet.");
@@ -181,7 +181,7 @@ export function getApplicationLog(params: string)
   {
     if (common.language === 'zh')
     {
-      common.openNotificationWithIcon('error', "操作失败", "请登陆Teemo。");
+      common.openNotificationWithIcon('error', "操作失败", "请登录Teemo。");
     } else
     {
       common.openNotificationWithIcon('error', "Operation failed", "Please login Teemo wallet.");
