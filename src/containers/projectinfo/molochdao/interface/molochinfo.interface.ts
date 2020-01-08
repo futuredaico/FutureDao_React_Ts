@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
-import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 import { IMolochManagerStore } from "./molochmanager.interface";
 export interface IMolochInfoStore
@@ -30,7 +30,7 @@ export interface IMolochInfoProps extends RouteComponentProps<{ projectId: strin
   common: ICommonStore,
   molochmanager: IMolochManagerStore,
   teemowallet:ITeemoWalletStore,
-  metamaskwallet:IMetaMaskWalletStore,
+  metamaskwallet:IMetaMastWalletStore,
   intl: any
 }
 

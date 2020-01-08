@@ -73,13 +73,13 @@ export default function request(opts: IOpts): Promise<any> {
               if (common.language === 'en') {
                 common.openNotificationWithIcon('error', 'Operation failed', 'The login status is abnormal, please log in again.');
               } else {
-                common.openNotificationWithIcon('error', '操作失败', '登录状态异常，请重新登录');
+                common.openNotificationWithIcon('error', '操作失败', '登陆状态异常，请重新登陆');
               }
             } else if (data.data.result[0].resultCode === CodeType.invalidAccessToken || data.data.result[0].resultCode === CodeType.expireAccessToken) {
               if (common.language === 'en') {
                 common.openNotificationWithIcon('error', 'Operation failed', 'Login timed out, please log in again');
               } else {
-                common.openNotificationWithIcon('error', '操作失败', '登录超时，请重新登录');
+                common.openNotificationWithIcon('error', '操作失败', '登陆超时，请重新登陆');
               }
             }
           }

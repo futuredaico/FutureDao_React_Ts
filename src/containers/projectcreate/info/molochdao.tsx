@@ -29,10 +29,10 @@ interface IState {
     votingPeriodLength: number;     // 投票有多少个区间段
     gracePeriodLength: number;      // 公示有多少个区间段
     abortWindow: number;            // 撤回投票的窗口期
-    proposalDeposit: string;        // 提议的押金
-    dilutionBound: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
     emergencyExitWait: number;       // 如果在此之后仍未处理提案，则直接跳过
     bailoutWait: number              // 返还资产等待区间段
+    proposalDeposit: string;        // 提议的押金
+    dilutionBound: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
     processingReward: string;       // 处理提案的人所得到的奖励
     loading: boolean;               // 图片上传加载中的状态
     otherToken: boolean;
@@ -249,8 +249,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                         <div className="group-name"><b>投票结果公示期</b><span className="red-type"> *</span></div>
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectGracePeriodLength} />
                     </div>
-                    {
-                        (this.state.votingPeriodLengthEnter || this.state.gracePeriodLengthEnter) &&
+                    {(this.state.votingPeriodLengthEnter || this.state.gracePeriodLengthEnter) &&
                         <>
                             <div className="inline-box left">
                                 {
@@ -617,14 +616,11 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 创建项目
-    private handleToCreateProject = async () =>
-    {
+    private handleToCreateProject = async () => {
         const check = this.checkInputStatus();
-        if (check)
-        {
+        if (check) {
             const res = await this.props.metamaskwallet.inintWeb3();
-            if (res)
-            {
+            if (res) {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                 this.props.createproject.createContent = {
                     version: this.state.version,                                // 版本
@@ -643,21 +639,19 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
                 }
                 this.setState({ createButtonState: false })
-                try
-                {
+                try {
                     const result = await this.props.createproject.createProject();
-                    if (result)
-                    {
+                    if (result) {
                         this.setState({ createButtonState: true })
                     }
                     this.setState({ createButtonState: true })
-                } catch (error)
-                {
+                } catch (error) {
                     this.setState({ createButtonState: true })
                 }
             }
         }
     }
+
 }
 
 export default injectIntl(CreateProject);

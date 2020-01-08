@@ -3,7 +3,7 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
-import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IMetaMastWalletStore } from "@/store/interface/metamaskwallet.interface";
 export interface IPersonEditStore
 {
   newEmailCode: string,
@@ -21,6 +21,6 @@ export interface IPersonProps  extends RouteComponentProps
   personedit: IPersonEditStore,
   common:ICommonStore,
   teemowallet:ITeemoWalletStore,
-  metamaskwallet:IMetaMaskWalletStore,
+  metamaskwallet:IMetaMastWalletStore,
   intl: any
 }

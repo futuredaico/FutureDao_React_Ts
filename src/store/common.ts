@@ -70,7 +70,6 @@ class Common implements ICommonStore {
   // 登录
   @action public loginFutureDao = async () => {
     const res = await metamaskwallet.inintWeb3();
-    console.log("网络状态:"+process.env.REACT_APP_SERVER_ENV)
     // 是主网版本时
     if(process.env.REACT_APP_SERVER_ENV !== 'DEV'){
       // 不是主网网络
@@ -78,7 +77,7 @@ class Common implements ICommonStore {
         if (this.language === 'en') {
           this.openNotificationWithIcon('error', 'Login failed', 'Please set Metamask to mainnet and try again.');
         } else {
-          this.openNotificationWithIcon('error', '登录失败', '请将Metamask切换至主网后重试');
+          this.openNotificationWithIcon('error', '登陆失败', '请将Metamask切换至主网后重试');
         }
         return false
       }
@@ -113,7 +112,7 @@ class Common implements ICommonStore {
     }
     return true;
   }
-  // 验证登录
+  // 验证登陆
   @action public loginCheck = async (data: string) => {
     let result: any = [];
     try {
