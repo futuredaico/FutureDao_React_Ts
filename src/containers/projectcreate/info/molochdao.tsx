@@ -625,6 +625,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
             const res = await this.props.metamaskwallet.inintWeb3();
             if (res)
             {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                 this.props.createproject.createContent = {
                     version: this.state.version,                                // 版本
                     projectName: this.state.projectName,                        // 项目名称
