@@ -26,7 +26,7 @@ export interface ICreateProjectProps extends RouteComponentProps<{ projectId: st
   project: IProjectStore,
   createproject: ICreateProjectStore,
   common: ICommonStore,
-  metamaskwallet:IMetaMaskWalletStore,
+  metamaskwallet: IMetaMaskWalletStore,
   intl: any
 }
 
