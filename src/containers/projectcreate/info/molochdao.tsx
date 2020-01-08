@@ -249,8 +249,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                         <div className="group-name"><b>投票结果公示期</b><span className="red-type"> *</span></div>
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectGracePeriodLength} />
                     </div>
-                    {
-                        (this.state.votingPeriodLengthEnter || this.state.gracePeriodLengthEnter) &&
+                    {(this.state.votingPeriodLengthEnter || this.state.gracePeriodLengthEnter) &&
                         <>
                             <div className="inline-box left">
                                 {
