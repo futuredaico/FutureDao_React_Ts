@@ -33,7 +33,9 @@ export default {
     cweituo: "取消权限委托",
     quit: "立即退出",
     do: "处理提案",
-    done: "已处理"
+    done: "已处理",
+    continue:"继续",
+    again:"重试",
   },
   card: {
     game: "游戏",
@@ -199,7 +201,8 @@ export default {
     email: "邮箱",
     website: "官网",
     community: "社区",
-    error: "填写本栏信息"
+    error: "填写本栏信息",
+    days:"天"
   },
   team: {
     team: "团队成员",
@@ -309,5 +312,34 @@ export default {
     require: "申请股份",
     gong: "贡献资金",
     gongtips: "（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
+  },
+  create:{
+    bigtitle:"创建新DAO",
+    title1:"DAO信息",
+    title2:"投票信息",
+    version:"DAO版本",
+    name:"名称",
+    des:"简介",
+    detail:"详情",
+    headimg:"项目封面",
+    website:"官方网站",
+    asset:"DAO支持代币 ",
+    other:"其他",
+    votetime:"投票期限",
+    notingtime:"投票结果公示期",
+    canceltime:"取消投票窗口期",
+    cash:"发起投票押金",
+    voteresult:"处理投票结果奖励",
+    doingtips:"正在发布DAO合约",
+    waiting:"请等待...",
+    tips2:"处理这些事物可能需要较长时间，取决于网络状态",
+    tips3:"处理期间请勿关闭本页",
+    success:"成功！",
+    fail:"失败！",
+    new:"新的",
+    urlerror:"请填写完整的网站URL",
+    error1:"不得大于投票期",
+    error2:"不得大于押金",
+    days:"天"
   }
 }

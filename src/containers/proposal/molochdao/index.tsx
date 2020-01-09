@@ -218,7 +218,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if(!res){
+            return false;
+        }
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
         const fiveNum = parseFloat(this.state.tianContribution);
         const requireNum = parseInt(this.state.tianRequire, 10);

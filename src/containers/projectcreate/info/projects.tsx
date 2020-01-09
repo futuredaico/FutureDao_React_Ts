@@ -17,7 +17,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public render() {
         return (
             <div className="project-module" onClick={this.handleShowCreateProjectInfo}>
-                <div className="module-title"><b>新的<br />MolochoDao</b></div>
+                <div className="module-title"><b>{this.intrl.create.new}<br />MolochoDao</b></div>
             </div>
         );
     }

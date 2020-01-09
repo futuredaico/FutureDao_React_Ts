@@ -35,7 +35,7 @@ class Project extends React.Component<IProps, IState> {
     public render() {
         return (
             <div className="create-project-index">
-                <div className="index-title"><b>创建新DAO</b></div>
+                <div className="index-title"><b>{this.intrl.create.bigtitle}</b></div>
                 <div className="router-wrapper" hidden={this.props.createproject.createStatus !== 0}>
                     {
                         renderRoutes(this.props.route.children)
@@ -46,15 +46,16 @@ class Project extends React.Component<IProps, IState> {
 
                     <div className="going-on-wrapper">
                         <div className="going-on-content going-on-edit">
-                            <strong className="going-bigtext">正在发布DAO合约</strong>
+                            <strong className="going-bigtext">{this.intrl.create.doingtips}</strong>
                             {
                                 (this.props.createproject.createStatus === 1) && (
                                     <>
                                         <div className="loading-going">
                                             <Spin indicator={<Icon type="loading" style={{ fontSize: 24 }} />} size="small" />
-                                            <span>请等待...</span>
+                                            <span>{this.intrl.create.waiting}</span>
                                         </div>
-                                        <p className="going-p">处理这些事物可能需要较长时间，取决于网络状态处理期间请勿关闭本页</p>
+                                        <p className="going-p">{this.intrl.create.tips2}</p>
+                                        <p className="going-p">{this.intrl.create.tips3}</p>
                                     </>
                                 )
                             }
@@ -63,10 +64,10 @@ class Project extends React.Component<IProps, IState> {
                                     <>
                                         <div className="done-going">
                                             <img src={require("@/img/done.png")} width={14} alt="" />
-                                            <span>成功！</span>
+                                            <span>{this.intrl.create.success}</span>
                                         </div>
                                         <div className="goon-btn">
-                                            <Button text="继续" btnSize="md-bg-btn" onClick={this.handleGoIndex} />
+                                            <Button text={this.intrl.btn.continue} btnSize="md-bg-btn" onClick={this.handleGoIndex} />
                                         </div>
                                     </>
                                 )
@@ -76,10 +77,10 @@ class Project extends React.Component<IProps, IState> {
                                     <>
                                         <div className="done-going">
                                             <img src={require("@/img/close.png")} alt="" width={18} />
-                                            <span>失败！</span>
+                                            <span>{this.intrl.create.fail}</span>
                                         </div>
                                         <div className="goon-btn">
-                                            <Button text="重试" btnSize="md-bg-btn" onClick={this.handleGoRetry} />
+                                            <Button text={this.intrl.btn.again} btnSize="md-bg-btn" onClick={this.handleGoRetry} />
                                         </div>
                                     </>
                                 )

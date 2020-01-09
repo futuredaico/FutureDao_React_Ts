@@ -33,7 +33,9 @@ export default {
     cweituo: "Cancel delegation",
     quit: "Quit",
     do: "Processing proposal",
-    done: "Processed"
+    done: "Processed",
+    continue:"Continue",
+    again:"Retry"
   },
   card: {
     game: "Games",
@@ -309,5 +311,34 @@ export default {
     require: "Shares requested",
     gong: "Tribute",
     gongtips: "（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
+  },
+  create:{
+    bigtitle:"Create new DAO",
+    title1:"DAO Information",
+    title2:"Voting information",
+    version:"DAO version",
+    name:"Title",
+    des:"Introduction",
+    detail:"Details",
+    headimg:"Project cover",
+    website:"Official website",
+    asset:"Token whitelist ",
+    other:"Others",
+    votetime:"Voting period",
+    notingtime:"Publicity period",
+    canceltime:"Proposal withdrawal period",
+    cash:"Proposal Deposit",
+    voteresult:"Handling proposal rewards",
+    doingtips:"DAO contract is being issued",
+    waiting:"Please wait...",
+    tips2:"Processing these things can take a long time, depending on the network status.",
+    tips3:"Do not close this page during processing",
+    success:"Success!",
+    fail:"Failed!",
+    new:"New",
+    urlerror:"Please complete the website URL.",
+    error1:"No more than voting period",
+    error2:"No more than deposit",
+    days:" Days"
   }
 }

@@ -105,44 +105,44 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     ]
     // 期间选择项
     private dayOptions: IOptions[] = [
-        { name: '1天', id: 5 },
-        { name: '2天', id: 10 },
-        { name: '3天', id: 15 },
-        { name: '4天', id: 20 },
-        { name: '5天', id: 25 }
+        { name: '1'+this.intrl.create.days, id: 5 },
+        { name: '2'+this.intrl.create.days, id: 10 },
+        { name: '3'+this.intrl.create.days, id: 15 },
+        { name: '4'+this.intrl.create.days, id: 20 },
+        { name: '5'+this.intrl.create.days, id: 25 }
     ]
     // 代币选择项
     private tokenOptions: IOptions[] =
         (process.env.REACT_APP_SERVER_ENV === 'DEV') ?
             [
                 { name: 'USDF', id: '0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7' },
-                { name: '其他', id: '' }
+                { name: this.intrl.create.other, id: '' }
             ] :
             [
                 { name: 'SAI', id: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359' },
                 { name: 'DAI', id: '0x6b175474e89094c44da98b954eedeac495271d0f' },
                 { name: 'WETH', id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
-                { name: '其他', id: '' }
+                { name: this.intrl.create.other, id: '' }
             ]
 
     public render()
     {
         return (
             <div className="molochdao-create">
-                <div className="info-title"><b>DAO信息</b></div>
+                <div className="info-title"><b>{this.intrl.create.title1}</b></div>
                 <div className="info-group">
-                    <div className="group-name"><b>DAO版本</b></div>
+                    <div className="group-name"><b>{this.intrl.create.version}</b></div>
                     <Select text="" defaultValue={this.versionOptions[0].id} options={this.versionOptions} onCallback={this.handleDaoVersionSelect} />
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>名称</b><span className="red-type"> *</span></div>
+                    <div className="group-name"><b>{this.intrl.create.name}</b><span className="red-type"> *</span></div>
                     <Input maxLength={40} value={this.state.projectName} type="text" onChange={this.handleChangeProjectName} className={this.state.nameEnter ? "err-active" : ''} />
                     {
                         this.state.nameEnter && <span className="err-span">{this.intrl.edit.error}</span>
                     }
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>简介</b><span className="red-type"> *</span></div>
+                    <div className="group-name"><b>{this.intrl.create.des}</b><span className="red-type"> *</span></div>
                     <textarea
                         className={this.state.infoEnter ? "textarea-wrapper err-active" : "textarea-wrapper"}
                         maxLength={400}
@@ -155,7 +155,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>详情</b></div>
+                    <div className="group-name"><b>{this.intrl.create.detail}</b></div>
                     <div style={{ width: 750, minHeight: 500, maxHeight: 1000 }}>
                         <Editor
                             onChange={this.onChangeEditorValue}
@@ -168,7 +168,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     </div>
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>项目封面</b></div>
+                    <div className="group-name"><b>{this.intrl.create.headimg}</b></div>
                     <Upload
                         name="avatar"
                         listType="picture-card"
@@ -198,14 +198,14 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>官方网站</b></div>
+                    <div className="group-name"><b>{this.intrl.create.website}</b></div>
                     <Input value={this.state.officialWebsite} type="text" onChange={this.handleChangeOfficialWebsite} />
                     {
-                        this.state.officialWebsiteEnter && <span className="err-span">请填写完整的网站URL(http://xxx.xxx... | https://xxx.xxx...)</span>
+                    this.state.officialWebsiteEnter && <span className="err-span">{this.intrl.create.urlerror}(http://xxx.xxx... | https://xxx.xxx...)</span>
                     }
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>DAO支持代币</b><span className="red-type"> *</span></div>
+                    <div className="group-name"><b>{this.intrl.create.asset}</b><span className="red-type"> *</span></div>
                     <div className="inline-box left">
                         <Select text="" options={this.tokenOptions} onCallback={this.hadleSelectApprovedToken} />
                         {this.state.otherToken &&
@@ -221,15 +221,15 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     </div>
                 </div>
                 <div className="info-group">
-                    <div className="info-title">投票信息</div>
+                    <div className="info-title">{this.intrl.create.title2}</div>
                 </div>
                 <div className="info-group">
                     <div className="inline-box left">
-                        <div className="group-name"><b>投票期限</b><span className="red-type"> *</span></div>
+                        <div className="group-name"><b>{this.intrl.create.votetime}</b><span className="red-type"> *</span></div>
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectVotingPeriodLength} />
                     </div>
                     <div className="inline-box">
-                        <div className="group-name"><b>投票结果公示期</b><span className="red-type"> *</span></div>
+                        <div className="group-name"><b>{this.intrl.create.notingtime}</b><span className="red-type"> *</span></div>
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectGracePeriodLength} />
                     </div>
                     {
@@ -249,17 +249,17 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 <div className="info-group">
-                    <div className="group-name"><b>取消投票窗口期</b><span className="red-type"> *</span></div>
+                    <div className="group-name"><b>{this.intrl.create.canceltime}</b><span className="red-type"> *</span></div>
                     <div className="inline-box left">
                         <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} />
                         {
-                            this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? "取消窗口期不得大于投票期时间" : this.intrl.edit.error}</span>
+                            this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? this.intrl.create.error1 : this.intrl.edit.error}</span>
                         }
                     </div>
                 </div>
                 <div className="info-group">
                     <div className="inline-box left">
-                        <div className="group-name"><b>发起投票押金</b><span className="red-type"> *</span></div>
+                        <div className="group-name"><b>{this.intrl.create.cash}</b><span className="red-type"> *</span></div>
                         <Input
                             value={this.state.proposalDeposit}
                             onChange={this.handleChangeProposalDeposit}
@@ -268,7 +268,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                         />
                     </div>
                     <div className="inline-box">
-                        <div className="group-name"><b>处理投票结果奖励</b><span className="red-type"> *</span></div>
+                        <div className="group-name"><b>{this.intrl.create.voteresult}</b><span className="red-type"> *</span></div>
                         <Input
                             value={this.state.processingReward}
                             onChange={this.handleChangeProcessingReward}
@@ -286,7 +286,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                             </div>
                             <div className="inline-box">
                                 {
-                                    this.state.processingRewardEnter && <span className="err-span">{this.state.processingRewardError ? "奖励不得大于押金" : this.intrl.edit.error}</span>
+                                    this.state.processingRewardEnter && <span className="err-span">{this.state.processingRewardError ? this.intrl.create.error2 : this.intrl.edit.error}</span>
                                 }
                             </div>
                         </>
