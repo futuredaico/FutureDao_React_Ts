@@ -63,7 +63,7 @@ class MetaMastWallet implements IMetaMaskWalletStore {
       if (this.metamaskNetwork === MetaMaskNetworkCode.Mainnet) {
         // 
         if (common.language === 'en') {
-          common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', 'Note', 'Please note your current network status.');
         } else {
           common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
         }
@@ -73,7 +73,7 @@ class MetaMastWallet implements IMetaMaskWalletStore {
       if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
         // 
         if (common.language === 'en') {
-          common.openNotificationWithIcon('info', 'Please attention', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', 'Note', 'Please note your current network status.');
         } else {
           common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
         }
