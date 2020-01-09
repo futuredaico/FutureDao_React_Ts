@@ -8,6 +8,7 @@ import metamaskwallet from '@/store/metamaskwallet';
 import Moloch from '@/utils/Moloch';
 import { toMyNumber } from '@/utils/numberTool';
 import { saveContractInfo } from '../api/project.api';
+import common from '@/store/common';
 class CreateProject implements ICreateProjectStore {
   @observable public createStatus = 0; // 创建项目的状态 0 是编辑状态 1是发布中 2是发布成功 3是发布失败
   @observable public projectID = "";     // 创建项目成功后得到的项目ID
@@ -35,6 +36,7 @@ class CreateProject implements ICreateProjectStore {
   @action public createProject = async () => {
     try {
       // await metamaskwallet.inintWeb3(); // 初始化 web3
+      const periods = 5;
       const abi = Moloch.abi as AbiItem[];
       const bytecode = Moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
@@ -50,13 +52,18 @@ class CreateProject implements ICreateProjectStore {
         summoner,
         this.createContent.approvedToken,
         this.createContent.periodDuration,
-        this.createContent.votingPeriodLength,
-        this.createContent.gracePeriodLength,
-        this.createContent.abortWindow,
+        this.createContent.votingPeriodLength * periods,
+        this.createContent.gracePeriodLength * periods,
+        this.createContent.abortWindow * periods,
         metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(),
         this.createContent.dilutionBound,
         metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray()
       );
+      if (common.language === 'zh') {
+        common.openNotificationWithIcon('success', "操作成功", "交易已生成，请在钱包确认。");
+      } else {
+        common.openNotificationWithIcon('success', "Operation successful", "Transaction requested, please confirm in wallet.");
+      }
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
       this.createStatus = 1;
@@ -87,7 +94,7 @@ class CreateProject implements ICreateProjectStore {
     return true;
   }
 
-  @action public getTokenInfo = async (token: string) => {    
+  @action public getTokenInfo = async (token: string) => {
     const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
     const contract = new Web3Contract(abi, token);
     const symbol = await contract.contractCall("symbol");
