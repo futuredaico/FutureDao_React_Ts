@@ -33,7 +33,7 @@ export const getMemberList = (projId: string, page: number, pageSize: number) =>
  * @param addr 地址
  * @param type 类型，0为预发布提案，1为正式提案，默认为1，可不填
  */
-export const getProposalList = (projId: string, page: number, pageSize: number,addr:string,type?:string) =>
+export const getProposalList = (projId: string, page: number, pageSize: number,addr:string,type:string) =>
 {
     const opts = {
         method: 'getProjProposalListV3',

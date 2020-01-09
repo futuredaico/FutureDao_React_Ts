@@ -32,16 +32,16 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                 <div className="manager-left">
                     <div className="manager-list-type">
                         <ul className="title-ul">
-                            <li className={this.props.molochmanager.proposalMenuNum === 1 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 1)}>
+                            <li className={this.props.molochmanager.proposalMenuNum === '1' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '1')}>
                                 {this.intrl.manager.tian}
                             </li>
-                            <li className={this.props.molochmanager.proposalMenuNum === 2 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 2)}>
+                            <li className={this.props.molochmanager.proposalMenuNum === '0' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '0')}>
                                 预发布提案<span className="sm-graytime">（4小时30分钟后可用）</span>
                             </li>
                         </ul>
                     </div>
                     {
-                        this.props.molochmanager.proposalMenuNum === 1 && (
+                        this.props.molochmanager.proposalMenuNum === '1' && (
                             <>
                                 {
                                     this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
@@ -75,33 +75,45 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         )
                                                     }
                                                     {/* 待处理期 */}
-                                                    {/* <div className="transparent-toupiao green-willdo">
-                                                        <span className="big-text">待处理</span>&nbsp;&nbsp;
+                                                    {
+                                                        item.proposalState === ProposalType.WaitHandle && (
+                                                            <div className="transparent-toupiao green-willdo">
+                                                                <span className="big-text">待处理</span>&nbsp;&nbsp;
                                                         <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
-                                                    </div> */}
+                                                            </div>
+                                                        )
+                                                    }
                                                     {/* 已通过 */}
                                                     {
                                                         item.proposalState === ProposalType.PassYes && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
                                                     }
                                                     {/* 未通过 */}
                                                     {
-                                                        item.proposalState === ProposalType.PassNot && <Card text={this.intrl.manager.notallow} colortype="transparent-gray" cardsize="md-sm-card" />
+                                                        (item.proposalState === ProposalType.PassNot || item.proposalState === ProposalType.HandleTimeOut) && (
+                                                            <>
+                                                                <Card text={this.intrl.manager.notallow} colortype="transparent-gray" cardsize="md-sm-card" />
+                                                                {/* 未处理 */}
+                                                                {
+                                                                    item.handleState === '0' && (
+                                                                        <div className="notdo-wrapper">
+                                                                            <Card text={this.intrl.manager.doing} colortype="transparent-red" cardsize="md-sm-card" />
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            </>
+                                                        )
                                                     }
-                                                    {/* 未处理 */}
-                                                    <div className="notdo-wrapper">
-                                                        <Card text={this.intrl.manager.doing} colortype="transparent-red" cardsize="md-sm-card" />
-                                                    </div>                                                    
                                                 </div>
                                                 <div className="mcontent-down mcontentv2-down">
                                                     {/* 贡献显示 */}
-                                                    {/* <div className="mcontent-count">
+                                                    <div className="mcontent-count">
                                                         <div>
                                                             <span>{this.intrl.manager.request} </span>
-                                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
-                                                        </div>                                                        
+                                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                        </div>
                                                         <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
-                                                    </div> */}
+                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
+                                                    </div>
                                                     {/* 支持代币 */}
                                                     {/* <div className="mcontent-count">
                                                         <div>
@@ -110,12 +122,12 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
                                                     </div> */}
                                                     {/* 踢出成员 */}
-                                                    <div className="mcontent-count">
+                                                    {/* <div className="mcontent-count">
                                                         <div>
                                                             <span>踢出成员</span>
                                                         </div>                                        
                                                         <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
-                                                    </div>
+                                                    </div> */}
                                                     {/* 投票比例显示 */}
                                                     <div className="manager-votebox">
                                                         <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
@@ -140,7 +152,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                         )
                     }
                     {
-                        this.props.molochmanager.proposalMenuNum === 2 && (
+                        this.props.molochmanager.proposalMenuNum === '0' && (
                             <>
                                 {
                                     this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
@@ -149,18 +161,37 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                             <div className="manager-list manager-ready-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
                                                 <div className="mcontent-top">
                                                     <div className="mcontent-title">
-                                                        <span className="title-gray">#{item.proposalIndex}</span>
+                                                        <span className="title-gray">#{item.proposalQueueIndex}</span>&nbsp;&nbsp;&nbsp;
                                                         <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                                     </div>
-                                                    <Card text="我的" colortype="transparent-purple" cardsize="md-sm-card" />
+                                                    {
+                                                        item.isMine && <Card text="我的" colortype="transparent-purple" cardsize="md-sm-card" />
+                                                    }
                                                 </div>
-                                                <div className="mcontent-down">
+                                                <div className="mcontent-down mcontentv2-down">
+                                                    {/* 贡献显示 */}
                                                     <div className="mcontent-count">
-                                                        <span>{this.intrl.manager.request} </span>
-                                                        <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
+                                                        <div>
+                                                            <span>{this.intrl.manager.request} </span>
+                                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                        </div>
                                                         <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
+                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
                                                     </div>
+                                                    {/* 支持代币 */}
+                                                    {/* <div className="mcontent-count">
+                                                        <div>
+                                                            <span>添加支持代币</span>
+                                                        </div>                                        
+                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
+                                                    </div> */}
+                                                    {/* 踢出成员 */}
+                                                    {/* <div className="mcontent-count">
+                                                        <div>
+                                                            <span>踢出成员</span>
+                                                        </div>                                        
+                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         )
@@ -184,9 +215,12 @@ class MolochManager extends React.Component<IMolochInfoProps> {
         );
     }
     // 选择查看什么类型的提案
-    private handleShowListType = (num: number) =>
+    private handleShowListType = (num: string) =>
     {
         this.props.molochmanager.proposalMenuNum = num;
+        this.props.molochmanager.proposalPage = 1;
+        this.props.molochmanager.proposalList = [];
+        this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);        
     }
     // 翻页
     private handleChangeManagerPage = (index: number) =>

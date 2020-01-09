@@ -34,7 +34,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     }
     public render()
     {
-        if (!this.props.molochmanager.proposalInfo)
+        if (!this.props.molochmanager.proposalInfo || !this.props.molochmanager.proposalListItem)
         {
             return <div />;
         }
@@ -43,7 +43,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                 <div className="manager-left">
                     <h3 className="title-h3">
                         {this.props.molochmanager.proposalInfo.proposalTitle?this.props.molochmanager.proposalInfo.proposalTitle:'null'}
-                        <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>
+                        {!this.props.molochmanager.proposalListItem.proposalQueueIndex&& this.props.molochmanager.proposalListItem.isMine && <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>}                        
                     </h3>
                     <div className="manager-info">
                         {/* 提案人 */}
@@ -110,7 +110,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                     <strong>{this.intrl.manager.gong2}</strong>
                                 </div>
                                 <div className="iline-right">
-                                    <span>{this.props.molochmanager.proposalInfo.tokenTribute} {this.props.molochmanager.proposalInfo.tokenTributeSymbol.toLocaleUpperCase()}</span>
+                                    <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             {/* 提出成员类型 */}

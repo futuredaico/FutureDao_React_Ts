@@ -2,7 +2,7 @@
 // import { ICommonStore } from "@/store/interface/common.interface";
 export interface IMolochManagerStore
 {
-  proposalMenuNum: number,
+  proposalMenuNum: string,
   proposalPage:number,
   proposalPageSize:number,
   proposalList:IMolochProposalList[],
@@ -16,7 +16,7 @@ export interface IMolochManagerStore
   upAddress:string,
   voteInfo:IVoteInfo,
   contractInfo:IContractInfo|null,
-  getMolochProposalList:(projId: string,type?:string)=>Promise<boolean>,
+  getMolochProposalList:(projId: string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
   getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
   changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>,
@@ -37,51 +37,47 @@ export interface IMolochManagerStore
 //   intl: any
 // }
 
-export interface IMolochProposalList {
-  projId:string,
-  proposalIndex:string, // 提案索引
-  proposalTitle:string, // 提案标题
-  sharesRequested:string, // 要求股份
-  tokenTribute:string, // 贡献股份数量
-  tokenTributeSymbol:string, // 贡献股份单位
+export interface IMolochProposalList extends IMolochProposalBase{
   timestamp:number, // 创建提案时间
   voteYesCount:number, // 赞成票数
   voteNotCount:number, // 反对票数
   hasVote:boolean, // 是否投票
   proposalState:string // 提案状态
   handleState:string, // 处理状态，0为未处理，1为已处理
+  isMine:boolean // 提案是否是自己的
 }
-export interface IMolochProposalDetail {
-  projId:string,
-  proposalIndex:string,// 提案索引
-  proposalTitle:string,// 提案标题
+export interface IMolochProposalDetail extends IMolochProposalBase {  
   proposer:string, // 提案者
   username:string, // 提案者用户名
   headIconUrl:string, // 提案者头像
   proposalDetail:string, // 提案详情
-  sharesRequested:string, // 要求股份
-  tokenTribute:string, // 贡献股份数量
-  tokenTributeSymbol:string, // 贡献股份单位
-  tokenReceiver:string // 股份接收者
   applicant:string,  // 受益人地址
   applicantUsername:string,  // 受益人名称
-  applicantHeadIconUrl:string // 受益人头像
+  applicantHeadIconUrl:string // 受益人头像  
+}
+export interface IMolochProposalBase {
+  projId:string,
+  proposalIndex:string,// 提案索引
+  proposalQueueIndex:string, // 正式提案的标记
+  proposalTitle:string,// 提案标题
+  version:string,   // 版本
+  sharesRequested:string, // 申请的股份数量（可投票）  
+  lootRequested:number,// 申请的股份数量（不可投票）
+  tributeOffered:string, // 贡献的资产数量
+  tributeOfferedSymbol:string, // 贡献的资产简称
+  paymentRequested:number, // 申请的资产数量
+  paymentRequestedSymbol:string, // 申请的资产简称
+  startingPeriod:number // 提案在当前项目处理的时间段位置
 }
 export enum ProposalType {
-  // voting = '10151', // 投票中
-  // showing = '10152', // 公示中
-  // pass = '10153', // 已通过
-  // fail = '10154', // 未通过
-  // aborted = '10155', // 已终止
-
   PreVote = "10150",      // 预发布
   Voting = "10151",       // 投票中
   Noting = "10152",       // 公示中
   PassYes = "10153",      // 已通过
   PassNot = "10154",     // 未通过
   Aborted = "10155",      // 已终止
-  HandleTimeOut = "10156",      // 处理超时
-
+  WaitHandle = "10156",   // 处理期
+  HandleTimeOut = "10157",      // 处理超时
 }
 export interface IVoteInfo {
   voteCount:string,

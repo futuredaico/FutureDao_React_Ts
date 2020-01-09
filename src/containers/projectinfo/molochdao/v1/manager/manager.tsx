@@ -34,7 +34,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                 <div className="manager-left">
                     <div className="manager-list-type">
                         <ul className="title-ul">
-                            <li className={this.props.molochmanager.proposalMenuNum === 1 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 1)}>
+                            <li className={this.props.molochmanager.proposalMenuNum === '1' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '1')}>
                                 {this.intrl.manager.tian}
                             </li>
                         </ul>
@@ -94,7 +94,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                             <span>{this.intrl.manager.request} </span>
                                             <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
                                             <span>{this.intrl.manager.gong} </span>
-                                            <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
+                                            <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
                                         </div>
                                         {/* 投票比例显示 */}
                                         <div className="manager-votebox">
@@ -122,7 +122,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
         );
     }
     // 选择查看什么类型的提案
-    private handleShowListType = (num: number) =>
+    private handleShowListType = (num: string) =>
     {
         this.props.molochmanager.proposalMenuNum = num;
     }
