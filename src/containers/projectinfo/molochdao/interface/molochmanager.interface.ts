@@ -16,7 +16,7 @@ export interface IMolochManagerStore
   upAddress:string,
   voteInfo:IVoteInfo,
   contractInfo:IContractInfo|null,
-  getMolochProposalList:(projId: string)=>Promise<boolean>,
+  getMolochProposalList:(projId: string,type?:string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
   getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
   changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>,

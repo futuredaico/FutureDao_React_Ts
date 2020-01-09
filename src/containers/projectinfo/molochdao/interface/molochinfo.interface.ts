@@ -55,6 +55,9 @@ export interface IMolochInfo
   cancelPreriod:string // 取消期时长，单位秒
   startTime:number // 项目创建时间
   projVersion:string, // 项目版本
+  contractHash:string, // 项目合约地址
+  contractName:string, // 项目合约名称
+  summonerAddress:string, // 项目创建者
 }
 
 export interface IProjectMember

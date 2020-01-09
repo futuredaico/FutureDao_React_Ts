@@ -31,13 +31,13 @@ class IMolochManager
   /**
    * 获取提案列表
    */
-  @action public getMolochProposalList = async (projId: string) =>
+  @action public getMolochProposalList = async (projId: string,type?:string) =>
   {
     let result: any = [];
     const addr = common.userInfo ? common.userInfo.address : ''
     try
     {
-      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr);
+      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr,type);
     } catch (e)
     {
       return false;

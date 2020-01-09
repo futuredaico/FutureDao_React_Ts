@@ -31,12 +31,13 @@ export const getMemberList = (projId: string, page: number, pageSize: number) =>
  * @param page 
  * @param pageSize 
  * @param addr 地址
+ * @param type 类型，0为预发布提案，1为正式提案，默认为1，可不填
  */
-export const getProposalList = (projId: string, page: number, pageSize: number,addr:string) =>
+export const getProposalList = (projId: string, page: number, pageSize: number,addr:string,type?:string) =>
 {
     const opts = {
         method: 'getProjProposalListV3',
-        params: [projId, page, pageSize,addr]
+        params: [projId, page, pageSize,addr,type]
     }
     return request(opts);
 }
