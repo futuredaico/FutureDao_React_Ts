@@ -54,6 +54,7 @@ export interface IMolochInfo
   notePeriod:string, // 公示时长，单位秒
   cancelPreriod:string // 取消期时长，单位秒
   startTime:number // 项目创建时间
+  projVersion:string, // 项目版本
 }
 
 export interface IProjectMember

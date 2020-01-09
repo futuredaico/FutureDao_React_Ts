@@ -13,7 +13,8 @@ interface IOpts {
 
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
-const baseUrl: string = "https://apidao.nel.group/api/" + network;
+// https://apidao.nel.group/api/ V1版的请求地址
+const baseUrl: string = "https://apidaodev.nel.group/api/" + network;
 // const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
 const fileUrl: string = "https://apioss.nel.group/api/file/" + network;
 const videoUrl: string = "https://apioss.nel.group/api/file/" + network + 'bi';

@@ -58,7 +58,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     </div>
                                                     {/* 投票期 */}
                                                     {
-                                                        item.proposalState === ProposalType.voting && (
+                                                        item.proposalState === ProposalType.Voting && (
                                                             <div className="transparent-toupiao">
                                                                 <span className="big-text">{this.intrl.manager.voting}</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeVoteTime(item)}</span>
@@ -67,7 +67,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     }
                                                     {/* 公示期 */}
                                                     {
-                                                        item.proposalState === ProposalType.showing && (
+                                                        item.proposalState === ProposalType.Noting && (
                                                             <div className="transparent-toupiao purple-gongshi">
                                                                 <span className="big-text">{this.intrl.manager.showing}</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
@@ -81,11 +81,11 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     </div> */}
                                                     {/* 已通过 */}
                                                     {
-                                                        item.proposalState === ProposalType.pass && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
+                                                        item.proposalState === ProposalType.PassYes && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
                                                     }
                                                     {/* 未通过 */}
                                                     {
-                                                        item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-gray" cardsize="md-sm-card" />
+                                                        item.proposalState === ProposalType.PassNot && <Card text={this.intrl.manager.notallow} colortype="transparent-gray" cardsize="md-sm-card" />
                                                     }
                                                     {/* 未处理 */}
                                                     <div className="notdo-wrapper">

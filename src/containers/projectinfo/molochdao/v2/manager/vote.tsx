@@ -28,8 +28,8 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             return <div />;
         }
         const voteClassName = classnames('vote-box', {
-            'agree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass ? true : false,
-            'disagree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail ? true : false,
+            'agree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes ? true : false,
+            'disagree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot ? true : false,
         })
         return (
             <>
@@ -54,7 +54,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                                 this.props.molochmanager.voteInfo.voteType === '' && (
                                     <>
                                         {
-                                            this.props.molochmanager.proposalListItem.proposalState === ProposalType.voting ? (
+                                            this.props.molochmanager.proposalListItem.proposalState === ProposalType.Voting ? (
                                                 <>
                                                     {
                                                         this.computeVoteTime(this.props.molochmanager.proposalListItem) === 'End' ? (
@@ -115,7 +115,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     </div>
                 </div>
                 {
-                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.voting && (
+                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.Voting && (
                         <div className="going-box">
                             <strong className="left-str">{this.intrl.manager.voting}</strong><br />
                             <span className="small-right-str">{this.intrl.manager.time}：{this.computeVoteTime(this.props.molochmanager.proposalListItem)}</span>
@@ -123,7 +123,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     )
                 }
                 {
-                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.showing && (
+                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.Noting && (
                         <div className="going-box">
                             <strong className="left-str">{this.intrl.manager.showing}</strong><br />
                             <span className="small-right-str">{this.intrl.manager.time}：{this.computeShowTime(this.props.molochmanager.proposalListItem)}</span>
@@ -131,20 +131,20 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     )
                 }
                 {
-                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass || this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail) && (
+                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot) && (
                         this.props.molochmanager.proposalListItem.handleState === '0'
                             ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} />
                             : (
                                 <>
                                     {
-                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.pass && (
+                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes && (
                                             <div className="going-box pass-str">
                                                 <strong>提案已通过</strong>
                                             </div>
                                         )
                                     }
                                     {
-                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.fail && (
+                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot && (
                                             <div className="going-box fail-str">
                                                 <strong>提案未通过</strong>
                                             </div>

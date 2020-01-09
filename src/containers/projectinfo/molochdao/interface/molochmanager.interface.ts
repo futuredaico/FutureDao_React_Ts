@@ -68,11 +68,20 @@ export interface IMolochProposalDetail {
   applicantHeadIconUrl:string // 受益人头像
 }
 export enum ProposalType {
-  voting = '10151', // 投票中
-  showing = '10152', // 公示中
-  pass = '10153', // 已通过
-  fail = '10154', // 未通过
-  aborted = '10155' // 已终止
+  // voting = '10151', // 投票中
+  // showing = '10152', // 公示中
+  // pass = '10153', // 已通过
+  // fail = '10154', // 未通过
+  // aborted = '10155', // 已终止
+
+  PreVote = "10150",      // 预发布
+  Voting = "10151",       // 投票中
+  Noting = "10152",       // 公示中
+  PassYes = "10153",      // 已通过
+  PassNot = "10154",     // 未通过
+  Aborted = "10155",      // 已终止
+  HandleTimeOut = "10156",      // 处理超时
+
 }
 export interface IVoteInfo {
   voteCount:string,
