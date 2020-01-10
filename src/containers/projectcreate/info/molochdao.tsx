@@ -212,6 +212,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 value={this.state.approvedToken}
                                 onChange={this.hadleChangeApprovedToken}
                                 className={this.state.approvedTokenEnter ? "err-active" : ''}
+                                placeholder={this.intrl.create.approvedplaceholder}
                             />
                         }
                         {
