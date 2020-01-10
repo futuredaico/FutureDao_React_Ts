@@ -5,17 +5,17 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-// import PbottomV1 from './v1/pbottom';
+import PbottomV1 from './v1/pbottom';
 import PbottomV2 from './v2/pbottom';
 import { IMolochInfoProps } from './interface/molochinfo.interface';
-// import TopRightV1 from './v1/topinfov1';
+import TopRightV1 from './v1/topinfov1';
 import TopRightV2 from './v2/topinfov2';
 
 interface IState
 {
     isShowVideo: boolean
 }
-@inject('molochinfo', 'common', 'teemowallet', 'metamaskwallet','molochmanager')
+@inject('molochinfo', 'common', 'teemowallet', 'metamaskwallet', 'molochmanager')
 @observer
 class MolochInfo extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
@@ -29,6 +29,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         if (projectId)
         {
             this.props.molochinfo.getMolochProjInfo(projectId);
+            this.props.molochinfo.getMolochFundTotal(projectId);
         }
     }
     public componentWillUnmount()
@@ -53,7 +54,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                         <div className="ptop-left">
                             <div className="ptop-img">
                                 {
-                                    this.props.molochinfo.projInfo.projCoverUrl ? <img src={this.props.molochinfo.projInfo.projCoverUrl} alt="" />:<img src={require("@/img/projdefault.png")} alt="" />
+                                    this.props.molochinfo.projInfo.projCoverUrl ? <img src={this.props.molochinfo.projInfo.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
                                 }
                                 {/* {
                                     this.state.isShowVideo ? <video src={this.props.molochinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
@@ -64,12 +65,16 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                                 } */}
                             </div>
                         </div>
-                        {/* <TopRightV1 {...this.props} /> */}
-                        <TopRightV2 {...this.props} />
+                        {
+                            this.props.molochinfo.projInfo.projVersion === '1.0' ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
+                        }
+                        {/*  */}
+
                     </div>
                 </div>
-                {/* <PbottomV1 {...this.props} /> */}
-                <PbottomV2 {...this.props} />
+                {
+                    this.props.molochinfo.projInfo.projVersion === '1.0' ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
+                }
             </div >
         );
     }

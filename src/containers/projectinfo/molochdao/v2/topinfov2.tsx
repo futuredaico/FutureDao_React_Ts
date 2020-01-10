@@ -34,8 +34,20 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                         <div className="going-gray">{this.intrl.projinfo.asset}</div>
                         <div className={listClassName}>
                             <div className="list-asset-num">
-                                <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))} {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
-                                <br />
+                                <strong className="purple-big">
+                                    {
+                                        this.props.molochinfo.fundTotalList
+                                            ? saveDecimal(this.props.molochinfo.fundTotalList.list[0].fundTotal, 4)
+                                            : 0
+                                    }
+                                </strong>
+                                <strong className="purple-sm">
+                                    {
+                                        this.props.molochinfo.fundTotalList
+                                            ? this.props.molochinfo.fundTotalList.list[0].fundSymbol.toLocaleUpperCase()
+                                            : ''
+                                    }
+                                </strong><br />
                                 <strong className="purple-big">12345678.1234 ETH</strong><br />
                                 <strong className="purple-big">12345 ETH</strong>
                                 {
@@ -59,7 +71,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                     <div className="list-asset-wrapper" onClick={this.handleToShowList}>
                                         <span className="take-up">收起<span className="trage-gray" /></span>
                                     </div>
-                                    )
+                                )
                             }
 
                         </div>
@@ -95,9 +107,10 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
         );
     }
     // 展开与收起
-    private handleToShowList = ()=>{        
+    private handleToShowList = () =>
+    {
         this.setState({
-            showAllAsset:!this.state.showAllAsset
+            showAllAsset: !this.state.showAllAsset
         })
     }
 }

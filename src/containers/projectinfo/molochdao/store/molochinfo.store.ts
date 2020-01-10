@@ -1,8 +1,8 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList } from '../interface/molochinfo.interface';
-import { toMyNumber, toNonExponential } from '@/utils/numberTool';
+import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IFundList } from '../interface/molochinfo.interface';
+// import { toMyNumber, toNonExponential } from '@/utils/numberTool';
 
 class MolochInfo
 {
@@ -18,6 +18,7 @@ class MolochInfo
   @observable public projUpdateCount: number = 0; // 项目更新日志总数
   @observable public projDiscussList: IDiscussList[] = []; // 项目评论列表
   @observable public isShowManagerInfo = false; // 是否显示治理详情
+  @observable public fundTotalList:IFundList|null = null; // 项目所有资产列表
   /**
    * 获取项目基本详情
    */
@@ -37,9 +38,35 @@ class MolochInfo
       return false
     }
     this.projInfo = result[0].data||null;
-    if(this.projInfo){
-      this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
+    // if(this.projInfo){
+    //   this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
+    // }
+    
+    return true;
+  }
+  /**
+   * 获取多资产
+   */
+  @action public getMolochFundTotal = async (projId: string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.getMolochFundTotal(projId,1,10);
+    } catch (e)
+    {
+      return false;
     }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.fundTotalList = result[0].data||null;
+    console.log(this.fundTotalList)
+    // if(this.projInfo){
+    //   this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
+    // }
     
     return true;
   }

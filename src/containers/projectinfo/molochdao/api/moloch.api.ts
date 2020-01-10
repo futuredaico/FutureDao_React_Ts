@@ -12,6 +12,20 @@ export const getMolochProjInfo = (projId: string) =>
     return request(opts);
 }
 /**
+ * 查询该项目的所有资产
+ * @param projId 项目ID
+ * @param page 页码
+ * @param pageSize 条数
+ */
+export const getMolochFundTotal = (projId: string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getProjFundTotal',
+        params: [projId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
  * 获取项目成员信息
  * @param projId 项目id
  * @param page 当前页

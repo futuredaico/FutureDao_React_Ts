@@ -161,7 +161,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                             <div className="manager-list manager-ready-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
                                                 <div className="mcontent-top">
                                                     <div className="mcontent-title">
-                                                        <span className="title-gray">#{item.proposalQueueIndex}</span>&nbsp;&nbsp;&nbsp;
+                                                        <span className="title-gray">#{item.proposalIndex}</span>&nbsp;&nbsp;&nbsp;
                                                         <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                                     </div>
                                                     {
