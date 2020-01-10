@@ -60,22 +60,21 @@ class MetaMastWallet implements IMetaMaskWalletStore {
     this.getMetamaskNetwork();
     // 测试网
     if (process.env.REACT_APP_SERVER_ENV === 'DEV') {
-      if (this.metamaskNetwork === MetaMaskNetworkCode.Mainnet) {
+      if (this.metamaskNetwork === MetaMaskNetworkCode.Mainnet||this.metamaskNetwork !== MetaMaskNetworkCode.Ropsten) {
         // 
         if (common.language === 'en') {
-          common.openNotificationWithIcon('info', 'Note', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', 'Note', 'Please switch to Ropsten network.');
         } else {
-          common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
+          common.openNotificationWithIcon('info', '请注意', '请切换到Ropsten测试网络。');
         }
         return false;
       }
     } else { // 主网
       if (this.metamaskNetwork !== MetaMaskNetworkCode.Mainnet) {
-        // 
         if (common.language === 'en') {
-          common.openNotificationWithIcon('info', 'Note', 'Please note your current network status.');
+          common.openNotificationWithIcon('info', 'Note', 'Please switch to Mainnet network.');
         } else {
-          common.openNotificationWithIcon('info', '请注意', '请注意您当前网络状态。');
+          common.openNotificationWithIcon('info', '请注意', '请切换到主网络');
         }
         return false
       }
