@@ -105,6 +105,7 @@ class Project extends React.Component<IProps, IState> {
         // } else {
         //     this.props.history.push('/molochinfo/' + this.props.createproject.projectID);
         // }
+        this.props.createproject.createStatus = 0;
         this.props.history.push('/molochinfo/' + this.props.createproject.projectID);
     }
 
