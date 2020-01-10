@@ -190,7 +190,7 @@ export default {
     type: "Project type",
     typetips: "(Classify your project)",
     cover: "Project cover",
-    uploadcover: "Upload cover image",
+    uploadcover: "Upload cover picture",
     covertips: "Size: 750*480, jpg or png format, resolution: 72 pixels / inch, no more than 3MB",
     intro: "Project intro",
     videotitle: "Video intro",

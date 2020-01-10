@@ -221,7 +221,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     </div>
                 </div>
                 <div className="info-group">
-                    <div className="info-title">{this.intrl.create.title2}</div>
+                    <div className="info-title"><b>{this.intrl.create.title2}</b></div>
                 </div>
                 <div className="info-group">
                     <div className="inline-box left">
