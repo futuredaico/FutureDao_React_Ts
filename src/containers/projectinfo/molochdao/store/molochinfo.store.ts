@@ -10,7 +10,8 @@ class MolochInfo
   @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IMolochInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID
-  @observable public projMemberList: IProjectMember[] = []; // 项目团队列表  
+  @observable public projMemberList: IProjectMember[] = []; // 项目团队列表(有投票权的）
+  @observable public projMemberCount:number = 0; // 团队总数（有投票权的）
   @observable public memberPage:number = 1; // 成员当前页
   @observable public memberPageSize:number = 15; // 成员每页显示个数
   @observable public projDiscussPage: number = 1; // 项目评论当前页
@@ -19,6 +20,10 @@ class MolochInfo
   @observable public projDiscussList: IDiscussList[] = []; // 项目评论列表
   @observable public isShowManagerInfo = false; // 是否显示治理详情
   @observable public fundTotalList:IFundList|null = null; // 项目所有资产列表
+  @observable public projMemberList2: IProjectMember[] = []; // 项目团队列表 （没有投票权的）
+  @observable public projMemberCount2:number = 0; // 团队总数（没有投票权的）
+  @observable public memberPage2:number = 1; // 成员当前页
+  @observable public memberPageSize2:number = 15; // 成员每页显示个数
   /**
    * 获取项目基本详情
    */
@@ -73,13 +78,17 @@ class MolochInfo
   /**
    * 获取成员信息
    */
-  @action public getMemberData = async () =>
+  @action public getMemberData = async (type:string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.getMemberList(this.projId, this.memberPage, this.memberPageSize);
+      if(type==='1'){
+        result = await Api.getMemberList(this.projId, this.memberPage, this.memberPageSize,type);
+      }else{
+        result = await Api.getMemberList(this.projId, this.memberPage2, this.memberPageSize2,type);
+      }
     } catch (e)
     {
       return false;
@@ -88,7 +97,13 @@ class MolochInfo
     {
       return false
     }
-    this.projMemberList = result[0].data.list;
+    if(type === '1'){
+      this.projMemberCount = result[0].data.count;
+      this.projMemberList = result[0].data.list;
+    }else{
+      this.projMemberCount2 = result[0].data.count;
+      this.projMemberList2 = result[0].data.list;
+    }
     return true;
   }
   /**

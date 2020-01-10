@@ -12,7 +12,7 @@ import { Pagination } from 'antd';
 class MolochMember extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
     public componentDidMount (){
-        this.props.molochinfo.getMemberData()
+        this.props.molochinfo.getMemberData('1')
     }
     public render()
     {
@@ -56,7 +56,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
     private handleChangePage = (index: number) =>
     {
         this.props.molochinfo.memberPage = index;
-        this.props.molochinfo.getMemberData();
+        this.props.molochinfo.getMemberData('1');
     }
 }
 

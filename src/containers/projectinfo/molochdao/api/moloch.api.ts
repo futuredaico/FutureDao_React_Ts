@@ -26,16 +26,28 @@ export const getMolochFundTotal = (projId: string,page:number,pageSize:number) =
     return request(opts);
 }
 /**
+ * 获取eth的价格
+ */
+export const getMolochEthPrice = () =>
+{
+    const opts = {
+        method: 'getProjBidPrice',
+        params: []
+    }
+    return request(opts);
+}
+/**
  * 获取项目成员信息
  * @param projId 项目id
  * @param page 当前页
  * @param pageSize 每页显示条数
+ * @param type 成员类型，0为查询总股数大于3的地址数，1为查询普通股（有投票权），2为查询无投票劝的
  */
-export const getMemberList = (projId: string, page: number, pageSize: number) =>
+export const getMemberList = (projId: string, page: number, pageSize: number,type:string) =>
 {
     const opts = {
         method: 'getProjMemberListV3',
-        params: [projId, page, pageSize]
+        params: [projId, page, pageSize,type]
     }
     return request(opts);
 }
