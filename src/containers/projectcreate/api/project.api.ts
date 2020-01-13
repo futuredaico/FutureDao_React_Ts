@@ -406,7 +406,11 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
         abortWindow,            // 撤回投票的窗口期
         proposalDeposit,        // 提议的押金
         // 目前用不上 dilutionBound,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
-        processingReward       // 处理提案的人所得到的奖励
+        processingReward,       // 处理提案的人所得到的奖励
+        emergencyExitWait,
+        bailoutWait,
+        approvedTokens,
+        createTime,
     } = contractContent
 
     const opts = {
@@ -431,7 +435,11 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             [
                 { name: 'moloch', hash: molochhash },
                 { name: 'bank', hash: bankhash }
-            ]
+            ],
+            emergencyExitWait,
+            bailoutWait,
+            createTime,
+            approvedTokens,
         ]
     }
     console.log(opts);

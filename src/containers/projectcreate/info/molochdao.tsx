@@ -672,7 +672,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
                     processingReward: parseFloat(this.state.processingReward),   // 处理提案的人所得到的奖励
                     emergencyExitWait: this.state.emergencyExitWait,
-                    bailoutWait: this.state.bailoutWait
+                    bailoutWait: this.state.bailoutWait,
+                    approvedTokens: []
                 }
                 this.setState({ createButtonState: false })
                 try {
