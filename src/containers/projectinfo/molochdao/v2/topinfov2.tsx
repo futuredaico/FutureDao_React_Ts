@@ -126,7 +126,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                         <div className="going-normal">
                             <strong>≈ $ {parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 6))}</strong>
                             <div className="everyshare-box">
-                                <p>11.111 Eth</p>
+                                <p>99.9999 Eth</p>
                                 <p>11.111 Eth</p>
                                 <p>11.111 Eth</p>
                             </div>

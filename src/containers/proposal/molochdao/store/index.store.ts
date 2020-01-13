@@ -42,7 +42,7 @@ class MolochProposal implements IMolochProposalStore
   }
   
   /**
-   * 发起提案
+   * 发起提案V1版
    */
   @action public applyProposal = async (contractHash:string,assetHash:string,addr: string, giveNum: number, requireNum: number, des: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
   {
@@ -67,6 +67,49 @@ class MolochProposal implements IMolochProposalStore
       erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
       const submitRes = molochContract.contractSend("submitProposal", [addr,giveMoneyArray, requireArray, des], { from: myaddr });
+      submitRes.onTransactionHash().then(()=>{sendCall()})
+      submitRes.onConfrim().then(res=>{confrimCall()})      
+      return true
+    } catch (e)
+    {
+      console.log(e);
+      
+      return false;
+    }
+  }
+  /**
+   * 发起提案V2版-申请股份
+   * @param contractHash 合约的hash
+   * @param addr 申请人
+   * @param requestShare 申请的股份数量
+   * @param lootRequest 申请无表决权的股份数量
+   * @param payNum 愿意支付的token数量
+   * @param payToken 愿意支付哪种token
+   * @param requestNum 索要的资产数量
+   * @param requestToken 索要的哪种资产
+   * @param details 附带信息（提案标题，提案详情）
+   * @param myaddr 当前钱包地址
+   */
+  @action public applyProposalToGetShares = async (contractHash:string,addr: string, requestShare: number,lootRequest:number, payNum: number,payToken:string,requestNum:number,requestToken:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
+  {
+    try
+    {
+      // const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+      // const erc20Contract = new Web3Contract(abi,assetHash);
+      // const decimals = Math.pow(10,this.fundDecimals);
+      // console.log(decimals)
+      // const giveMoney = toMyNumber(giveNum).mul(decimals);
+      // const giveMoneyNum = parseFloat(giveMoney.toString()) 
+      // // metamaskwallet.web3.utils.toBN().toArray();
+      // console.log('giveMoney:'+giveMoneyNum)
+      // const money = parseFloat(this.proposalFee.toString())+giveMoneyNum;
+      // console.log('money:'+money);      
+      // const giveMoneyArray = metamaskwallet.web3.utils.toBN(giveMoneyNum).toArray();
+      // const requireArray = metamaskwallet.web3.utils.toBN(requireNum).toArray();
+      // console.log(addr+"-----"+giveMoneyArray.toString()+"-----"+requireArray.toString()+"-----"+des);
+      // erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const submitRes = molochContract.contractSend("SubmitProposal", [addr,requestShare,lootRequest,payNum,payToken,requestNum,requestToken, details], { from: myaddr });
       submitRes.onTransactionHash().then(()=>{sendCall()})
       submitRes.onConfrim().then(res=>{confrimCall()})      
       return true
