@@ -1,4 +1,7 @@
 export default {
+  notfound:{
+    btn:"Go Home"
+  },
   page: {
     page: " page",
     go: "Jump to page "

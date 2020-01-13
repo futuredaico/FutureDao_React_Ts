@@ -285,7 +285,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             tianAddrBtn: false,
             tianRequire: '',
             tianContribution: '',
-            canSendFlag: false
+            canSendFlag: false,
+            isDoingSave:false
         })
         const projectId = this.props.match.params['projectId'];
         this.props.history.push('/molochinfo/' + projectId);

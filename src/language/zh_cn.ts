@@ -1,4 +1,7 @@
 export default {
+  notfound:{
+    btn:"返回主页"
+  },
   page: {
     page: " 页",
     go: "跳转至"

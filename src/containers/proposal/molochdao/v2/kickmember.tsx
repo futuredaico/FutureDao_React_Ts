@@ -98,7 +98,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             this.checkAllInput()
         })
     }
-    // 股份申请人的输入
+    // 踢出成员地址的输入
     private handleChangeTianKickAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         this.setState({
@@ -126,12 +126,15 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
-        // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5        
-        // const tianStr = {
-        //     title: this.state.tianName,
-        //     description: this.state.tianDes
-        // }
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (!res)
+        {
+            return false;
+        }
+        const tianStr = {
+            title: this.state.tianName,
+            description: this.state.tianDes
+        }
         this.setState({
             isDoingSave: true
         })
@@ -151,15 +154,16 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
         // const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
-        // await this.props.index.applyProposal(contractHash, assetHash,this.state.tianKickAddr, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
-        // {
-        //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        this.initData();
-        // }, () =>
-        // {
-        //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
-        // });
+        await this.props.index.applyProposalToKick(contractHash, this.state.tianKickAddr, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            this.initData();
+        }, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+        });
         return true;
     }
     private checkAllInput = () =>
@@ -189,7 +193,8 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             tianDes: '',
             tianKickAddr: '',
             tianKickAddrBtn: false,
-            canSendFlag: false
+            canSendFlag: false,
+            isDoingSave: false
         })
         const projectId = this.props.match.params['projectId'];
         this.props.history.push('/molochinfo/' + projectId);

@@ -353,6 +353,48 @@ class IMolochManager
     }
     return true
   }
+  /**
+   * 发布正式提案
+   */
+  @action public sponsorProposal = async (proposalIndex: string, myaddr: string,assetHash:string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      // 数据转换
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      console.log(indexArr.toString())
+      // 先aprove押金
+      // const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+      // const erc20Contract = new Web3Contract(abi,assetHash);      
+      // erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const submitRes = molochContract.contractSend("sponsorProposal", [indexArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
 }
 
 export default new IMolochManager();
