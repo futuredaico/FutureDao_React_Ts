@@ -28,13 +28,13 @@ class MolochProposalMenu extends React.Component<IMolochProposalProps,IState> {
     {
         return (
             <div className="proposal-content">
-                <Link to={"/sendproposalv2/apply/"+this.state.projId} className="type-box-wrapper">
+                <Link to={"/proposalv2/apply/"+this.state.projId} className="type-box-wrapper">
                     <div className="middle-box">申请股份</div>
                 </Link>
-                <Link to={"/sendproposalv2/kick/"+this.state.projId} className="type-box-wrapper" >
+                <Link to={"/proposalv2/kick/"+this.state.projId} className="type-box-wrapper" >
                     <div className="middle-box">踢出成员</div>
                 </Link>
-                <Link to={"/sendproposalv2/token/"+this.state.projId} className="type-box-wrapper">
+                <Link to={"/proposalv2/token/"+this.state.projId} className="type-box-wrapper">
                     <div className="middle-box">添加支持代币</div>
                 </Link>
             </div>

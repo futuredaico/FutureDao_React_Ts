@@ -61,7 +61,7 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
                 </div>
                 <div className="inline-title">
                     <strong>添加代币Hash</strong>&nbsp;
-                            <span className="red-type">*</span>
+                    <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
                     <Input value={this.state.tianTokenHash} onChange={this.handleChangeTianTokenHash} />
@@ -125,12 +125,16 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (!res)
+        {
+            return false;
+        }
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
-        // const tianStr = {
-        //     title: this.state.tianName,
-        //     description: this.state.tianDes
-        // }
+        const tianStr = {
+            title: this.state.tianName,
+            description: this.state.tianDes
+        }
         this.setState({
             isDoingSave: true
         })
@@ -150,15 +154,15 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
-        // const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
-        // await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
-        // {
-        //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        this.initData();
-        // }, () =>
-        // {
-        //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
-        // });
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+        await this.props.index.applyProposalToAddToken(contractHash, this.state.tianTokenHash, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            this.initData();
+        }, () =>
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+        });
         return true;
     }
     private checkAllInput = () =>

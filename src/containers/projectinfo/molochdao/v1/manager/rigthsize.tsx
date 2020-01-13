@@ -109,7 +109,7 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
                 } else
                 {
-                    this.props.history.push('/sendproposalv1/' + this.props.molochinfo.projId)
+                    this.props.history.push('/proposalv1/' + this.props.molochinfo.projId)
                 }
             } else
             {
@@ -119,7 +119,7 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                 }
                 else
                 {
-                    this.props.history.push('/sendproposalv1/' + this.props.molochinfo.projId)
+                    this.props.history.push('/proposalv1/' + this.props.molochinfo.projId)
                 }
             }
         }

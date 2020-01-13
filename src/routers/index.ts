@@ -12,26 +12,26 @@ export default [
   },
   {
     component: asyncComponent(() => import('../containers/proposal/molochdao/v1')),
-    path: '/sendproposalv1/:projectId',
+    path: '/proposalv1/:projectId',
   },
   {
     component: asyncComponent(() => import('../containers/proposal/molochdao/v2')),
-    path: '/sendproposalv2/:projectId',
+    path: '/proposalv2/:projectId',
     children: [
       {
-        path: '/sendproposalv2/token/:projectId',
+        path: '/proposalv2/token/:projectId',
         component: asyncComponent(() => import('../containers/proposal/molochdao/v2/addtoken')),
       },
       {
-        path: '/sendproposalv2/kick/:projectId',
+        path: '/proposalv2/kick/:projectId',
         component: asyncComponent(() => import('../containers/proposal/molochdao/v2/kickmember')),
       },
       {
-        path: '/sendproposalv2/apply/:projectId',
+        path: '/proposalv2/apply/:projectId',
         component: asyncComponent(() => import('../containers/proposal/molochdao/v2/applyshares')),
       },
       {
-        path: '/sendproposalv2/menu/:projectId',
+        path: '/proposalv2/menu/:projectId',
         component: asyncComponent(() => import('../containers/proposal/molochdao/v2/menu')),
       }
     ]

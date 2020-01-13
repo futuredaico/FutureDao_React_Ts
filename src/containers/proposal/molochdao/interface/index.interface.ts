@@ -11,6 +11,9 @@ export interface IMolochProposalStore
   fundDecimals:number,
   getFundData:(projectId:string)=>Promise<boolean>,
   applyProposal:(contractHash:string,assetHash:string,addr:string,giveNum:number,requireNum:number,des:string,myaddr:string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
+  applyProposalToGetShares:(contractHash:string,addr: string, requestShare: number,lootRequest:number, payNum: number,payToken:string,requestNum:number,requestToken:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
+  applyProposalToAddToken:(contractHash:string,token:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
+  applyProposalToKick:(contractHash:string,addr:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>Promise<boolean>
 }
 
 
