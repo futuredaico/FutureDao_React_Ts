@@ -5,7 +5,6 @@ import { ICreateContent, ICreateProjectStore } from '../interface/createproject.
 import { Web3Contract } from '@/utils/web3Contract';
 import { AbiItem } from "web3-utils";
 import metamaskwallet from '@/store/metamaskwallet';
-import Moloch from '@/utils/Moloch';
 import { toMyNumber } from '@/utils/numberTool';
 import { saveContractInfo } from '../api/project.api';
 class CreateProject implements ICreateProjectStore {
@@ -27,16 +26,20 @@ class CreateProject implements ICreateProjectStore {
     abortWindow: 2,            // 撤回投票的窗口期
     proposalDeposit: 0,        // 提议的押金
     dilutionBound: 3,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
-    processingReward: 0,       // 处理提案的人所得到的奖励
+    processingReward: 0,       // 处理提案的人所得到的奖励    
+    emergencyExitWait: 0,       // 如果在此之后仍未处理提案，则直接跳过
+    bailoutWait: 0,              // 返还资产等待区间段
   }
   /**
    * 创建项目
    */
   @action public createProject = async () => {
     try {
+      // const 
       // await metamaskwallet.inintWeb3(); // 初始化 web3
-      const abi = Moloch.abi as AbiItem[];
-      const bytecode = Moloch.bytecode;
+      const moloch = this.createContent.version === "molochdao1.0" ? require("utils/contractFiles/Moloch.json") : require("utils/contractFiles/Moloch2.json");
+      const abi = moloch.abi as AbiItem[];
+      const bytecode = moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
       const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
       const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
@@ -44,6 +47,7 @@ class CreateProject implements ICreateProjectStore {
       this.createContent.processingReward = toMyNumber(this.createContent.processingReward).mul(decimals).value;
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
+      const variableArray = this.createContent.version === "molochdao1.0" ? [ this.createContent.abortWindow ] : [ this.createContent.emergencyExitWait, this.createContent.bailoutWait ]
       // 部署合约
       const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
@@ -52,7 +56,7 @@ class CreateProject implements ICreateProjectStore {
         this.createContent.periodDuration,
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
-        this.createContent.abortWindow,
+        ...variableArray,   // 解构参数
         metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(),
         this.createContent.dilutionBound,
         metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray()
@@ -87,7 +91,7 @@ class CreateProject implements ICreateProjectStore {
     return true;
   }
 
-  @action public getTokenInfo = async (token: string) => {    
+  @action public getTokenInfo = async (token: string) => {
     const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
     const contract = new Web3Contract(abi, token);
     const symbol = await contract.contractCall("symbol");

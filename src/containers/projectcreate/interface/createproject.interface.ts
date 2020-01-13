@@ -44,6 +44,8 @@ export interface ICreateContent {
   votingPeriodLength: number;     // 投票有多少个区间段
   gracePeriodLength: number;      // 公示有多少个区间段
   abortWindow: number;            // 撤回投票的窗口期
+  emergencyExitWait: number;       // 如果在此之后仍未处理提案，则直接跳过
+  bailoutWait: number              // 返还资产等待区间段
   proposalDeposit: number;        // 提议的押金
   dilutionBound?: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
   processingReward: number;       // 处理提案的人所得到的奖励
