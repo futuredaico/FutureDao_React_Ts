@@ -10,7 +10,7 @@ import metamaskwallet from '@/store/metamaskwallet';
 
 class IMolochManager
 {
-  @observable public proposalMenuNum: number = 1; // 菜单切换 1为正式提案，2为预发布提案
+  @observable public proposalMenuNum: string = '1'; // 菜单切换 1为正式提案，0为预发布提案
   @observable public proposalPage: number = 1;
   @observable public proposalPageSize: number = 10;
   @observable public proposalList: IMolochProposalList[] = []; // 提案列表
@@ -34,10 +34,10 @@ class IMolochManager
   @action public getMolochProposalList = async (projId: string) =>
   {
     let result: any = [];
-    const addr = common.userInfo ? common.userInfo.address : ''
+    const addr = common.userInfo ? common.userInfo.address : '';
     try
     {
-      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr);
+      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr,this.proposalMenuNum);
     } catch (e)
     {
       return false;

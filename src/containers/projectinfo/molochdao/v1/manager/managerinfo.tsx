@@ -99,7 +99,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                     <strong>{this.intrl.manager.gong2}</strong>
                                 </div>
                                 <div className="iline-right">
-                                    <span>{this.props.molochmanager.proposalInfo.tokenTribute} {this.props.molochmanager.proposalInfo.tokenTributeSymbol.toLocaleUpperCase()}</span>
+                                    <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                         </div>

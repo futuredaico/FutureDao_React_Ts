@@ -34,7 +34,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                 <div className="manager-left">
                     <div className="manager-list-type">
                         <ul className="title-ul">
-                            <li className={this.props.molochmanager.proposalMenuNum === 1 ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, 1)}>
+                            <li className={this.props.molochmanager.proposalMenuNum === '1' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '1')}>
                                 {this.intrl.manager.tian}
                             </li>
                         </ul>
@@ -55,7 +55,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                         </div>
                                         {/* 投票期 */}
                                         {
-                                            item.proposalState === ProposalType.voting && (
+                                            item.proposalState === ProposalType.Voting && (
                                                 <div className="transparent-toupiao">
                                                     <span className="big-text">{this.intrl.manager.voting}</span>&nbsp;&nbsp;
                                                     <span className="sm-text">{this.intrl.manager.other} {this.computeVoteTime(item)}</span>
@@ -64,7 +64,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                         }
                                         {/* 公示期 */}
                                         {
-                                            item.proposalState === ProposalType.showing && (
+                                            item.proposalState === ProposalType.Noting && (
                                                 <div className="transparent-toupiao purple-gongshi">
                                                     <span className="big-text">{this.intrl.manager.showing}</span>&nbsp;&nbsp;
                                                     <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
@@ -73,15 +73,15 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                         }
                                         {/* 已通过 */}
                                         {
-                                            item.proposalState === ProposalType.pass && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
+                                            item.proposalState === ProposalType.PassYes && <Card text={this.intrl.manager.pass} colortype="transparent-green" cardsize="md-sm-card" />
                                         }
                                         {/* 未通过 */}
                                         {
-                                            item.proposalState === ProposalType.fail && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
+                                            item.proposalState === ProposalType.PassNot && <Card text={this.intrl.manager.notallow} colortype="transparent-red" cardsize="md-sm-card" />
                                         }
                                         {/* 待处理 */}
                                         {
-                                            (item.proposalState === ProposalType.pass || item.proposalState === ProposalType.fail) && item.handleState === '0' && (
+                                            (item.proposalState === ProposalType.PassYes || item.proposalState === ProposalType.PassNot) && item.handleState === '0' && (
                                                 <div className="notdo-wrapper">
                                                     <Card text={this.intrl.manager.doing} colortype="transparent-purple" cardsize="md-sm-card" />
                                                 </div>
@@ -94,7 +94,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                             <span>{this.intrl.manager.request} </span>
                                             <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu}</strong>
                                             <span>{this.intrl.manager.gong} </span>
-                                            <strong>{item.tokenTribute} {item.tokenTributeSymbol.toLocaleUpperCase()}</strong>
+                                            <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
                                         </div>
                                         {/* 投票比例显示 */}
                                         <div className="manager-votebox">
@@ -122,7 +122,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
         );
     }
     // 选择查看什么类型的提案
-    private handleShowListType = (num: number) =>
+    private handleShowListType = (num: string) =>
     {
         this.props.molochmanager.proposalMenuNum = num;
     }

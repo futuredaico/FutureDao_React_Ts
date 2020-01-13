@@ -12,16 +12,42 @@ export const getMolochProjInfo = (projId: string) =>
     return request(opts);
 }
 /**
+ * 查询该项目的所有资产
+ * @param projId 项目ID
+ * @param page 页码
+ * @param pageSize 条数
+ */
+export const getMolochFundTotal = (projId: string,page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'getProjFundTotal',
+        params: [projId,page,pageSize]
+    }
+    return request(opts);
+}
+/**
+ * 获取eth的价格
+ */
+export const getMolochEthPrice = () =>
+{
+    const opts = {
+        method: 'getProjBidPrice',
+        params: []
+    }
+    return request(opts);
+}
+/**
  * 获取项目成员信息
  * @param projId 项目id
  * @param page 当前页
  * @param pageSize 每页显示条数
+ * @param type 成员类型，0为查询总股数大于3的地址数，1为查询普通股（有投票权），2为查询无投票劝的
  */
-export const getMemberList = (projId: string, page: number, pageSize: number) =>
+export const getMemberList = (projId: string, page: number, pageSize: number,type:string) =>
 {
     const opts = {
         method: 'getProjMemberListV3',
-        params: [projId, page, pageSize]
+        params: [projId, page, pageSize,type]
     }
     return request(opts);
 }
@@ -31,12 +57,13 @@ export const getMemberList = (projId: string, page: number, pageSize: number) =>
  * @param page 
  * @param pageSize 
  * @param addr 地址
+ * @param type 类型，0为预发布提案，1为正式提案，默认为1，可不填
  */
-export const getProposalList = (projId: string, page: number, pageSize: number,addr:string) =>
+export const getProposalList = (projId: string, page: number, pageSize: number,addr:string,type:string) =>
 {
     const opts = {
         method: 'getProjProposalListV3',
-        params: [projId, page, pageSize,addr]
+        params: [projId, page, pageSize,addr,type]
     }
     return request(opts);
 }

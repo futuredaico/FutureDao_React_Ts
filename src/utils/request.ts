@@ -11,9 +11,19 @@ interface IOpts {
   isUpload?: boolean, // 是否上传
 }
 
+// 1.开发环境：
+// apidaodev.nel.group/api/testnet
+
+// 2.测试环境：
+// apidaotest.nel.group/api/testnet
+
+// 3.主网环境:
+// apidao.nel.group/api/mainnet
+
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
-const baseUrl: string = "https://apidao.nel.group/api/" + network;
+// https://apidao.nel.group/api/ V1版的请求地址
+const baseUrl: string =process.env.REACT_APP_SERVER_ENV === 'DEV' ? "https://apidaodev.nel.group/api/" + network : "apidao.nel.group/api/mainnet" + network;
 // const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
 const fileUrl: string = "https://apioss.nel.group/api/file/" + network;
 const videoUrl: string = "https://apioss.nel.group/api/file/" + network + 'bi';

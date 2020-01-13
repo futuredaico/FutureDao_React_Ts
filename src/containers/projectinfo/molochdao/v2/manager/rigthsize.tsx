@@ -44,7 +44,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
         return (
             <div className="manager-right">
                 {
-                    (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text={this.intrl.btn.proposal} btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                    (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text="发起预发布提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                         : (
                             <div className="notallow-wrapper">
                                 <span>发起预发布提案</span>
