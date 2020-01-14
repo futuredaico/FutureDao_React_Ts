@@ -15,7 +15,7 @@ interface IState
 {
     isShowVideo: boolean
 }
-@inject('molochinfo', 'common', 'teemowallet', 'metamaskwallet', 'molochmanager')
+@inject('molochinfo', 'common', 'teemowallet', 'metamaskwallet', 'molochmanager','index')
 @observer
 class MolochInfo extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;

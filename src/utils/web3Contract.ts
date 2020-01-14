@@ -98,6 +98,9 @@ export class Web3Contract {
      * @param sendArgs 
      */
     public contractSend(methods: string, args?: any[], sendArgs?: SendOptions) {
+        console.log(methods)
+        console.log(args);
+        console.log(sendArgs);
         try {
             const method = this.contract.methods[ methods ];    // 先 取得method 用于下一步执行
             const methodResult = Array.isArray(args) ? method(...args) : method();  // 根据参数判断如何执行方法，是否传参

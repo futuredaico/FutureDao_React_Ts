@@ -18,6 +18,15 @@ class MolochProposal extends React.Component<IMolochProposalProps> {
         this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
     }
+    public componentWillUnmount(){
+        this.props.index.depositHash = ''; 
+        this.props.index.depositSymbol = ''; 
+        this.props.index.proposalFee = ''; 
+        this.props.index.depositDecimals = 0; 
+        this.props.index.fundList = []; 
+        this.props.index.fundCount = 0; 
+        this.props.index.fundOption=[];
+    }
     public render()
     {
         return (

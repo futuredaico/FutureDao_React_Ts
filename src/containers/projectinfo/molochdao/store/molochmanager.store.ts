@@ -354,9 +354,9 @@ class IMolochManager
     return true
   }
   /**
-   * 发布正式提案
+   * 发布正式提案--V2版
    */
-  @action public sponsorProposal = async (proposalIndex: string, myaddr: string,assetHash:string) =>
+  @action public sponsorProposal = async (proposalIndex: string, myaddr: string,assetHash:string,depositNum:string) =>
   {
     if (!this.contractInfo)
     {
@@ -381,11 +381,13 @@ class IMolochManager
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       console.log(indexArr.toString())
-      // 先aprove押金
-      // const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
-      // const erc20Contract = new Web3Contract(abi,assetHash);      
-      // erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      // 先aprove押金      
+      const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+      const erc20Contract = new Web3Contract(abi,assetHash);      
+      erc20Contract.contractSend("approve",[contractHash,depositNum],{from:myaddr});
+      // 批准正式提案
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("sponsorProposal", [indexArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
       console.log(subtxid)

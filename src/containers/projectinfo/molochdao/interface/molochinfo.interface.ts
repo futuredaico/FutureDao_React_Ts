@@ -3,6 +3,7 @@ import { ICommonStore } from "@/store/interface/common.interface";
 import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
 import { IMolochManagerStore } from "./molochmanager.interface";
+import { IMolochProposalStore } from "@/containers/proposal/molochdao/interface/index.interface";
 export interface IMolochInfoStore
 {
   menuNum: number,
@@ -38,6 +39,7 @@ export interface IMolochInfoProps extends RouteComponentProps<{ projectId: strin
   molochmanager: IMolochManagerStore,
   teemowallet: ITeemoWalletStore,
   metamaskwallet: IMetaMaskWalletStore,
+  index: IMolochProposalStore,
   intl: any
 }
 

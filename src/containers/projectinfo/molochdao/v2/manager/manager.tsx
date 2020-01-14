@@ -112,7 +112,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                             <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
                                                         </div>
                                                         <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
+                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol&&item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
                                                     </div>
                                                     {/* 支持代币 */}
                                                     {/* <div className="mcontent-count">
@@ -176,7 +176,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                             <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
                                                         </div>
                                                         <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
+                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol&&item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
                                                     </div>
                                                     {/* 支持代币 */}
                                                     {/* <div className="mcontent-count">

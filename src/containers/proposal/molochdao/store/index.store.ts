@@ -10,8 +10,7 @@ import metamaskwallet from '@/store/metamaskwallet';
 
 class MolochProposal implements IMolochProposalStore
 {
-  @observable public proposalMenu: number = 0; // 发起提案的菜单选择，0为首页，1为申请，2为踢出，3为添加代币
-  @observable public depositHash: string = ''; // 贡献资金的hash
+ @observable public depositHash: string = ''; // 贡献资金的hash
   @observable public depositSymbol: string = ''; // 贡献资金的简称
   @observable public proposalFee: string = ''; // 押金（手续费）
   @observable public depositDecimals: number = 0; // 精度
@@ -145,13 +144,17 @@ class MolochProposal implements IMolochProposalStore
       const payArray = metamaskwallet.web3.utils.toBN(payBigNum).toArray();
       const requestArray = metamaskwallet.web3.utils.toBN(requestBuyNum).toArray();
       // 计算多少钱供合约调用
-      const money = parseFloat(this.proposalFee.toString()) + payBigNum;
-      // 调用合约
+      console.log("approve了多少",payArray.toString());
+      console.log("submitproposal了什么",addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details)
+      // 合约可调动金额
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
       const erc20Contract = new Web3Contract(abi, payToken);
-      erc20Contract.contractSend("approve", [contractHash, money], { from: myaddr });
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
-      const submitRes = molochContract.contractSend("SubmitProposal", [addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details], { from: myaddr });
+      // 预发布提案（暂不交押金）
+      erc20Contract.contractSend("approve", [contractHash, payArray], { from: myaddr });
+      // 发送预发布提案
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("submitProposal", [addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details], { from: myaddr });
       submitRes.onTransactionHash().then(() => { sendCall() })
       submitRes.onConfrim().then(res => { confrimCall() })
       return true

@@ -8,16 +8,19 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import VoteBox from './vote';
+import { ProposalType, IMolochProposalList } from '../../interface/molochmanager.interface';
+interface IState
+{
+    showDeletBox: boolean, // 是否显示终止提案弹窗
+    sendTime: string // 可批准成正式提案剩余时间
+}
 
 @observer
-class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
+class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
-        managerDiscuss: '',
-        managerReply: '',
-        managerReplyOther: '',
-        isOpenStopBox: false,
-        showDeletBox: false
+    public state: IState = {
+        showDeletBox: false,
+        sendTime: ''
     }
     public componentDidMount()
     {
@@ -26,6 +29,15 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         {
             this.props.molochmanager.getVoteData(this.props.molochinfo.projId, this.props.molochmanager.proposalIndex, this.props.common.userInfo.address)
         }
+        this.handleComputeTimeIndex();
+        // 发起提案资格显示(委托人不是自己)
+        if (this.props.molochmanager.proposalAddress && this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
+        {
+            this.setState({
+                sendTime: this.intrl.manager.no
+            })
+        }
+        this.props.index.getDepositData(this.props.molochinfo.projId);
     }
     public componentWillUnmount()
     {
@@ -101,7 +113,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                         <span>{this.props.molochmanager.proposalInfo.lootRequested}</span>
                                     </div>
                                     <div className="little-wrapper">
-                                        <span>{this.props.molochmanager.proposalInfo.paymentRequestedSymbol.toLocaleUpperCase()}</span><br />
+                                        <span>{this.props.molochmanager.proposalInfo.paymentRequestedSymbol && this.props.molochmanager.proposalInfo.paymentRequestedSymbol.toLocaleUpperCase()}</span><br />
                                         <span>{this.props.molochmanager.proposalInfo.paymentRequested}</span>
                                     </div>
                                 </div>
@@ -111,7 +123,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                                     <strong>{this.intrl.manager.gong2}</strong>
                                 </div>
                                 <div className="iline-right">
-                                    <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
+                                    <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol && this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
                                 </div>
                             </div>
                             {/* 提出成员类型 */}
@@ -150,15 +162,21 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
                     {
                         !this.props.molochmanager.proposalListItem.proposalQueueIndex && (
                             <>
-                                <Button text="批准为正式提案" btnSize="bg-bg-btn" />
-                                <div className="notallow-wrapper">
-                                    <span>批准为正式提案</span>
-                                    <span className="sm-time">（ 4小时48分钟后可用 ）</span>
-                                </div>
+                                {
+                                    (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
+                                        : (
+                                            <div className="notallow-wrapper">
+                                                <span>批准为正式提案</span>
+                                                <span className="sm-time">{this.state.sendTime}</span>
+                                            </div>
+                                        )
+                                }
                             </>
                         )
                     }
-                    <VoteBox {...this.props} />
+                    {
+                        this.props.molochmanager.proposalListItem.proposalState !== ProposalType.PreVote && <VoteBox {...this.props} />
+                    }
                 </div>
                 {
                     this.state.showDeletBox && (
@@ -176,25 +194,21 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
             </div>
         );
     }
-    // 取消提案
+    // 打开取消提案窗口
     private handleToOpenStop = () =>
     {
         this.setState({
             showDeletBox: true
         })
     }
+    // 关闭取消提案窗口
     private handleToCloseStop = () =>
     {
         this.setState({
-            isOpenStopBox: false,
             showDeletBox: false
         })
     }
-    // private handleToShowCheckStop = () => {
-    //     this.setState({
-    //         showDeletBox:true
-    //     })
-    // }
+    // 发送取消提案交易
     private handleStopProposal = () =>
     {
         // todo
@@ -204,6 +218,141 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
     private handleBackManagerList = () =>
     {
         this.props.molochinfo.isShowManagerInfo = false;
+    }
+    // 批准为正式提案
+    private handleToApproveProposal = ()=>{
+        // 验证是否登录
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+        } else
+        {
+            // 是否被别人委托了
+            if (this.props.molochmanager.upAddress)
+            {
+                // 委托人资金为0了
+                if (this.props.molochmanager.upBalance <= 0)
+                {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                } else
+                {
+                    this.handleDoApprove();
+                }
+            } else
+            {
+                if (this.props.molochmanager.proposalBalance <= 0)
+                {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                }
+                else
+                {
+                    this.handleDoApprove();
+                }
+            }
+        }
+    }
+    // 批准为正式提案调用
+    private handleDoApprove = async ()=>{
+        //
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
+        }
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (res)
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address,this.props.index.depositHash,this.props.index.proposalFee);
+            console.log("res2",res2)
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                console.log("触发了失败")
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
+        }
+        return true
+    }
+
+    // 计算时间区间所在周期    
+    private computeIndex = (newTime: number, createTime: number, betweenTime: number) =>
+    {
+        // （当前时间-项目创建时间）/4.8*60*60----------向下取整
+        const agoTime = newTime - createTime;
+        const index = Math.floor(agoTime / betweenTime);
+        return index
+    }
+    // 计算是否可批准正式提案剩余时间
+    private handleComputeTimeIndex = () =>
+    {
+        if (!this.props.molochmanager.contractInfo || !this.props.molochinfo.projInfo)
+        {
+            return false
+        }
+        // 项目如今所在周期
+        // 当前时间
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 项目创建时间
+        const startTime = this.props.molochinfo.projInfo.startTime;
+        const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
+        console.log("betweenTime:" + betweenTime)
+        const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);
+        console.log("nowIndex:" + nowIndex);
+        if (this.props.molochmanager.proposalList.length > 0)
+        {
+            // 获取最新的一个提案
+            const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
+            console.log("最新提案时间")
+            console.log(new Date())
+            console.log(new Date(item.timestamp * 1000))
+            const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
+            console.log("tianIndex:" + tianIndex)
+            if (nowIndex === tianIndex)
+            {
+                // 计算剩余的时间
+                const latestIndexTime = (nowIndex + 1) * betweenTime;
+                const endTime = latestIndexTime + startTime;
+                const remainTime = endTime - nowTime;
+                console.log(remainTime)
+                let h = 0;
+                let m = 0;
+                let s = 0;
+                let str = '';
+                if (remainTime >= 0)
+                {
+                    h = Math.floor(remainTime / (60 * 60) % 24);
+                    m = Math.floor(remainTime / 60 % 60);
+                    s = Math.floor(remainTime % 60);
+                    if (h > 0)
+                    {
+                        str = h + this.intrl.manager.hours;
+                    }
+                    if (m > 0)
+                    {
+                        str = str + m + this.intrl.manager.min;
+                    }
+                    console.log(s)
+                    if (s > 0)
+                    {
+                        str = str + s + this.intrl.manager.second;
+                    }
+                }
+                console.log('打印发提案剩余时间')
+                console.log(str)
+                this.setState({
+                    sendTime: str
+                })
+            }
+        }
+        return true;
     }
 }
 

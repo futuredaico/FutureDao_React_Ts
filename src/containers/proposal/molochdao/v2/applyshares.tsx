@@ -23,6 +23,7 @@ interface IState
     tianDes: string,  // 提案详情
     tianAddress: string, // 提案股份申请人
     tianAddrBtn: boolean, // 地址的格式确认
+    addErrMsg:string, // 地址错误提示
     tianRequestShares: string,   // 申请股份
     tianLootRequire: string, // 无表决权的股份
     tianRequestNum: string,// 申请资金的数量
@@ -43,6 +44,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianAddress: '',
         tianAddrBtn: true,
+        addErrMsg:"",
         tianRequestShares: '0',
         tianLootRequire: '0',
         tianRequestNum: '0',
@@ -91,7 +93,10 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">{this.intrl.proposal.peopletips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
+                    <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} className={!this.state.tianAddrBtn ? "err-active" : ''} />
+                    {
+                        !this.state.tianAddrBtn && <span className="err-span">{this.state.addErrMsg}</span>
+                    }
                 </div>
                 <div className="inline-title">
                     <strong>申请资产</strong>&nbsp;
@@ -178,7 +183,8 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
     {
         const res = web3.isAddress(this.state.tianAddress);
         this.setState({
-            tianAddrBtn: res
+            tianAddrBtn: res,
+            addErrMsg:res?'':this.intrl.proposal.addrerr
         }, () =>
         {
             this.checkAllInput()
@@ -321,7 +327,6 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         const lootRequest = parseInt(this.state.tianLootRequire, 10);
         const payNum = parseFloat(this.state.tianPayNum);
         const requestNum = parseFloat(this.state.tianRequestNum);
-        console.log(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr))
         await this.props.index.applyProposalToGetShares(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

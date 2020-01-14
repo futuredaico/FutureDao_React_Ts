@@ -23,6 +23,7 @@ interface IState
     tianDes: string,  // 提案详情
     tianAddress: string, // 提案股份申请人
     tianAddrBtn: boolean, // 地址的格式确认
+    addErrMsg:string, // 地址错误提示
     tianRequire: string,   // 申请股份
     tianContribution: string // 贡献资金
     canSendFlag: boolean, // 是否可发起提案
@@ -37,6 +38,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianAddress: '',
         tianAddrBtn: true,
+        addErrMsg:"",
         tianRequire: '',
         tianContribution: '',
         canSendFlag: false,
@@ -52,6 +54,15 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                 tianAddress: this.props.common.userInfo ? this.props.common.userInfo.address : ''
             })
         )
+    }
+    public componentWillUnmount(){
+        this.props.index.depositHash = ''; 
+        this.props.index.depositSymbol = ''; 
+        this.props.index.proposalFee = ''; 
+        this.props.index.depositDecimals = 0; 
+        this.props.index.fundList = []; 
+        this.props.index.fundCount = 0; 
+        this.props.index.fundOption=[];
     }
     public render()
     {
@@ -83,7 +94,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">{this.intrl.proposal.peopletips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
+                    <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} className={!this.state.tianAddrBtn ? "err-active" : ''} />
+                    {
+                        !this.state.tianAddrBtn && <span className="err-span">{this.state.addErrMsg}</span>
+                    }
                 </div>
                 <div className="inline-title">
                     <strong>{this.intrl.proposal.require}</strong>&nbsp;
@@ -152,7 +166,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
     {
         const res = web3.isAddress(this.state.tianAddress);
         this.setState({
-            tianAddrBtn: res
+            tianAddrBtn: res,
+            addErrMsg:res?'':this.intrl.proposal.addrerr
         }, () =>
         {
             this.checkAllInput()

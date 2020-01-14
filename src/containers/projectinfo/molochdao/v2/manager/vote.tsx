@@ -160,9 +160,14 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
     // 投赞同票 1是true
     private handeToVoteYes = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
         }
         // 是否被别人委托了
         if (this.props.molochmanager.upAddress)
@@ -179,14 +184,18 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                 return false
             }
         }
-        await this.props.metamaskwallet.inintWeb3();
-        const res = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
 
         return true
@@ -194,9 +203,14 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
     // 投反对票 2是false
     private handeToVoteNo = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
         }
         // 是否被别人委托了
         if (this.props.molochmanager.upAddress)
@@ -213,32 +227,45 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                 return false
             }
         }
-        await this.props.metamaskwallet.inintWeb3();
-        const res = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
         return true
     }
     // 处理提案
     private handleProcessProposal = async () =>
     {
-        if (!this.props.common.userInfo || !this.props.molochmanager.proposalIndex)
+        if (!this.props.common.userInfo)
         {
-            return false
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
         }
-        await this.props.metamaskwallet.inintWeb3();
-        const res = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
+        }
+        const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-        } else
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }
         return true
     }
