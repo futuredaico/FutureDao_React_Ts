@@ -39,7 +39,7 @@ class CreateProject implements ICreateProjectStore {
     try {
       // const 
       // await metamaskwallet.inintWeb3(); // 初始化 web3
-      const moloch = this.createContent.version === "molochdao1.0" ? require("utils/contractFiles/Moloch.json") : require("utils/contractFiles/Moloch2.json");
+      const moloch = this.createContent.version === "1.0" ? require("utils/contractFiles/Moloch.json") : require("utils/contractFiles/Moloch2.json");
       const abi = moloch.abi as AbiItem[];
       const bytecode = moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
@@ -50,12 +50,12 @@ class CreateProject implements ICreateProjectStore {
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
       this.createContent.approvedTokens = [ { hash: this.createContent.approvedToken, symbol: asset.symbol, decimals: asset.decimals } ]
-      const variableArray = this.createContent.version === "molochdao1.0" ? [ this.createContent.abortWindow ] : [ this.createContent.emergencyExitWait, this.createContent.bailoutWait ]
+      const variableArray = this.createContent.version === "1.0" ? [ this.createContent.abortWindow ] : [ this.createContent.emergencyExitWait, this.createContent.bailoutWait ]
       // 部署合约
       const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
-        this.createContent.version === "molochdao1.0" ? this.createContent.approvedToken : [ this.createContent.approvedToken ],
+        this.createContent.version === "1.0" ? this.createContent.approvedToken : [ this.createContent.approvedToken ],
         this.createContent.periodDuration,
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,

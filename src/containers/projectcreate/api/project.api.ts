@@ -397,9 +397,9 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
         projectDetail,          // 文本编辑内容 详情
         projectConverUrl,          // 项目封面URL
         officialWebUrl,         // 官网URL
-        approvedToken,          // 允许交易的token
-        approvedTokenSymbol,
-        approvedDecimals,
+        // approvedToken,          // 允许交易的token
+        // approvedTokenSymbol,
+        // approvedDecimals,
         periodDuration,         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
         votingPeriodLength,     // 投票有多少个区间段
         gracePeriodLength,     // 公示有多少个区间段
@@ -422,9 +422,10 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             projectDetail,
             projectConverUrl,
             officialWebUrl,
-            approvedToken,
-            approvedTokenSymbol,
-            approvedDecimals,
+            // approvedToken,
+            // approvedTokenSymbol,
+            // approvedDecimals,
+            "", "", 0,
             periodDuration,
             votingPeriodLength,
             gracePeriodLength,
