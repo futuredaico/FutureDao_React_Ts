@@ -106,8 +106,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
     // DAO版本选择
     private versionOptions: IOptions[] = [
-        { 'id': 'molochdao1.0', 'name': 'molochdao1.0' },
-        { 'id': 'molochdao2.0', 'name': 'molochdao2.0' },
+        { 'id': '1.0', 'name': 'molochdao1.0' },
+        { 'id': '2.0', 'name': 'molochdao2.0' },
     ]
     // 期间选择项
     private dayOptions: IOptions[] = [
@@ -266,7 +266,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 {
-                    this.state.version === "molochdao1.0" &&
+                    this.state.version === "1.0" &&
                     <div className="info-group">
                         <div className="group-name"><b>取消投票窗口期</b><span className="red-type"> *</span></div>
                         <div className="inline-box left">
@@ -278,7 +278,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     </div>
                 }
                 {
-                    this.state.version === "molochdao2.0" &&
+                    this.state.version === "2.0" &&
                     <div className="info-group">
                         <div className="inline-box left">
                             <div className="group-name"><b>提案处理期限</b><span className="red-type"> *</span></div>
@@ -341,6 +341,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     }
                 </div>
                 <div className="info-group" style={{ textAlign: "center" }}>
+                    {(this.state.version === "1.0" ? !this.state.abortWindow : false) + " |"}
+                    {(this.state.version === "2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : false) + ""}
                     {
                         this.state.createButtonState ?
                             <Button
@@ -356,9 +358,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         !this.state.approvedToken ||
                                         !this.state.votingPeriodLength ||
                                         !this.state.gracePeriodLength ||
-                                        (this.state.version === "molochdao1.0" ? !this.state.abortWindow : false) ||
-                                        (this.state.version === "molochdao2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : false) ||
-                                        !this.state.abortWindow ||
+                                        (this.state.version === "1.0" ? !this.state.abortWindow : false) ||
+                                        (this.state.version === "2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : false) ||
                                         !this.state.proposalDeposit ||
                                         !this.state.processingReward
                                     ) ? 'gray-btn' : ''
