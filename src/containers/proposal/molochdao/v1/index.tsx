@@ -44,7 +44,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
     public componentDidMount()
     {
         const projectId = this.props.match.params['projectId'];
-        this.props.index.getFundData(projectId);
+        this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
         when(
             () => !!this.props.common.userInfo,
@@ -98,7 +98,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">{this.intrl.proposal.gongtips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input className="sort-inputtext" suffix={this.props.index.fundSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
+                    <Input className="sort-inputtext" suffix={this.props.index.depositSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
                     {/* <div className="sort-select">
                                 <Select options={this.assetOption} text='' onCallback={this.handleChoiceProposalType} defaultValue={this.state.assetType} />
                             </div> */}
@@ -237,7 +237,7 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             return false
         }
         this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
+        const assetHash = this.props.index.depositHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
         await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {            
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

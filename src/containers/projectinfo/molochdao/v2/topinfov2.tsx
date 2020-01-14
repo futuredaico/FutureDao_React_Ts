@@ -38,7 +38,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                     this.props.molochinfo.fundTotalList && (
                                         <>
                                             {
-                                                this.props.molochinfo.fundTotalList.count > 3 && this.props.molochinfo.fundTotalList.list.map((item: IFundInfo, index: number) =>
+                                                this.props.molochinfo.fundTotalList.count > 0 && this.props.molochinfo.fundTotalList.list.map((item: IFundInfo, index: number) =>
                                                 {
                                                     return (
                                                         <>

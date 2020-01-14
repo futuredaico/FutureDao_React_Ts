@@ -11,7 +11,7 @@ import Button from '@/components/Button';
 // import { getQueryString } from '@/utils/function';
 import Select from '@/components/select';
 import TextArea from 'antd/lib/input/TextArea';
-import { IMolochProposalProps } from '../interface/index.interface';
+import { IMolochProposalProps, IAssetOption } from '../interface/index.interface';
 import { saveDecimal } from '@/utils/numberTool';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 import { when } from 'mobx';
@@ -24,11 +24,11 @@ interface IState
     tianAddress: string, // 提案股份申请人
     tianAddrBtn: boolean, // 地址的格式确认
     tianRequestShares: string,   // 申请股份
-    tianLootRequire:string, // 无表决权的股份
-    tianRequestNum:string,// 申请资金的数量
-    tianRequestToken:string,// 申请资金的hash
+    tianLootRequire: string, // 无表决权的股份
+    tianRequestNum: string,// 申请资金的数量
+    tianRequestToken: string,// 申请资金的hash
     tianPayNum: string // 贡献资金数量
-    tianPayToken:string, // 贡献资金hash
+    tianPayToken: string, // 贡献资金hash
     canSendFlag: boolean, // 是否可发起提案
     // assetType: string, // 资金的选择
 }
@@ -44,33 +44,20 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         tianAddress: '',
         tianAddrBtn: true,
         tianRequestShares: '0',
-        tianLootRequire:'0',
-        tianRequestNum:'',
-        tianRequestToken:'1',
-        tianPayNum: '',
-        tianPayToken:'1',
+        tianLootRequire: '0',
+        tianRequestNum: '0',
+        tianRequestToken: '',
+        tianPayNum: '0',
+        tianPayToken: '',
         canSendFlag: false,
         // assetType: '1'
     }
-    private assetOption = [
-        {
-            id:'1',
-            name:"无"
-        },
-        {
-            id: "2",
-            name: 'ETH'
-        },
-        {
-            id: "3",
-            name: 'DAI'
-        }        
-    ]
 
     public componentDidMount()
     {
         const projectId = this.props.match.params['projectId'];
-        this.props.index.getFundData(projectId);
+        this.props.index.getDepositData(projectId);
+        this.props.index.getFundList(projectId);
         this.props.molochmanager.getContractInfo(projectId);
         when(
             () => !!this.props.common.userInfo,
@@ -119,13 +106,12 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                         <span className="smline-span">申请无表决权股份数:</span>
                         <Input value={this.state.tianLootRequire} onChange={this.handleChangeTianLootRequire} onFocus={this.handleOnFous} />
                     </div>
-                    <div className="smline-box">
-                        <span className="smline-span">申请资产及其数量:</span>
-                        <Select options={this.assetOption} text='' onCallback={this.handleChoiceRequestToken} defaultValue={this.state.tianRequestToken} />
-                    </div>
-                    <div className="smline-box">
-                        {/* <span className="smline-span">申请股份数:</span> */}
-                        <Input  value={this.state.tianRequestNum} onChange={this.handleChangeTianRequestNum} />
+                    <div className="smline-span">申请资产及其数量:</div>
+                    <Input className="sort-inputtext" value={this.state.tianRequestNum} onChange={this.handleChangeTianRequestNum} />
+                    <div className="sort-select">
+                        {
+                            this.props.index.fundOption.length > 0 && <Select options={this.props.index.fundOption} text='' onCallback={this.handleChoiceRequestToken} defaultValue={this.props.index.fundOption[0].id} />
+                        }
                     </div>
                 </div>
                 <div className="inline-title">
@@ -134,9 +120,11 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">{this.intrl.proposal.gongtips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input className="sort-inputtext" value={this.state.tianPayNum} onChange={this.handleChangetianPayNum} />
+                    <Input className="sort-inputtext" value={this.state.tianPayNum} onChange={this.handleChangetianPayNum} onFocus={this.handleOnFous} />
                     <div className="sort-select">
-                        <Select options={this.assetOption} text='' onCallback={this.handleChoicePayToken} defaultValue={this.state.tianPayToken} />
+                        {
+                            this.props.index.fundOption.length > 0 && <Select options={this.props.index.fundOption} text='' onCallback={this.handleChoicePayToken} defaultValue={this.props.index.fundOption[0].id} />
+                        }
                     </div>
                 </div>
                 <div className="inline-btn">
@@ -150,7 +138,8 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             </div>
         );
     }
-    private handleOnFous =(ev: React.ChangeEvent<HTMLInputElement>)=>{
+    private handleOnFous = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    {
         //
         ev.target.select();
     }
@@ -278,19 +267,17 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         return true
     }
     // 申请资金选择的资产
-    private handleChoiceRequestToken = (item) =>
+    private handleChoiceRequestToken = (item: IAssetOption) =>
     {
-        //
         this.setState({
-            tianRequestToken:item.id
+            tianRequestToken: item.id
         })
     }
     // 贡献资金选择的资产
-    private handleChoicePayToken = (item) =>
+    private handleChoicePayToken = (item: IAssetOption) =>
     {
-        //
         this.setState({
-            tianPayToken:item.id
+            tianPayToken: item.id
         })
     }
     // 发起提案
@@ -301,7 +288,8 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             return false;
         }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if(!res){
+        if (!res)
+        {
             return false;
         }
         const tianStr = {
@@ -327,12 +315,14 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
+
         this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const requestShares = parseInt(this.state.tianRequestShares,10);
-        const lootRequest = parseInt(this.state.tianLootRequire,10);
+        const requestShares = parseInt(this.state.tianRequestShares, 10);
+        const lootRequest = parseInt(this.state.tianLootRequire, 10);
         const payNum = parseFloat(this.state.tianPayNum);
         const requestNum = parseFloat(this.state.tianRequestNum);
-        await this.props.index.applyProposalToGetShares(contractHash, this.state.tianAddress,requestShares,lootRequest,payNum,this.state.tianPayToken,requestNum,this.state.tianRequestToken,JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
+        console.log(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr))
+        await this.props.index.applyProposalToGetShares(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
@@ -386,11 +376,13 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             tianAddress: '',
             tianAddrBtn: false,
             tianRequestShares: '',
-            tianLootRequire:'',
-            tianRequestNum:'',
+            tianLootRequire: '',
+            tianRequestNum: '',
+            tianRequestToken:this.props.index.fundOption[0].id,
             tianPayNum: '',
+            tianPayToken:this.props.index.fundOption[0].id,
             canSendFlag: false,
-            isDoingSave:false
+            isDoingSave: false
         })
         const projectId = this.props.match.params['projectId'];
         this.props.history.push('/molochinfo/' + projectId);

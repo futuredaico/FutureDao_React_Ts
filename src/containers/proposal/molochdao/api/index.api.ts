@@ -18,7 +18,7 @@ export const getMoloProjAssetInfo = (projId: string) =>
 export const getMoloProjDeposit = (projId: string) =>
 {
     const opts = {
-        method: 'getProjDeposit4MultiAsset',
+        method: 'getProjDepositInfo',
         params: [projId]
     }
     return request(opts);
@@ -31,7 +31,7 @@ export const getMoloProjDeposit = (projId: string) =>
  */
 export const getMoloProjFuntList = (projId:string,page:number,size:number)=>{
     const opts = {
-        method: 'getProjFundInfo4MultiAsset',
+        method: 'getProjFundList',
         params: [projId,page,size]
     }
     return request(opts);

@@ -37,7 +37,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
     public componentDidMount()
     {
         const projectId = this.props.match.params['projectId'];
-        this.props.index.getFundData(projectId);
+        this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
     }
     public render()
@@ -155,7 +155,6 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             return false
         }
         this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        // const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
         await this.props.index.applyProposalToKick(contractHash, this.state.tianKickAddr, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

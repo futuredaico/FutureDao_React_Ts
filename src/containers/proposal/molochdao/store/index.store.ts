@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/index.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IMolochProposalStore } from '../interface/index.interface';
+import { IMolochProposalStore, IFundList, IAssetOption } from '../interface/index.interface';
 import { AbiItem } from 'web3-utils';
 import { Web3Contract } from '@/utils/web3Contract';
 import Moloch from '@/utils/Moloch';
@@ -10,22 +10,26 @@ import metamaskwallet from '@/store/metamaskwallet';
 
 class MolochProposal implements IMolochProposalStore
 {
-  @observable public proposalMenu:number = 0; // 发起提案的菜单选择，0为首页，1为申请，2为踢出，3为添加代币
-  @observable public fundHash: string = ''; // 贡献资金的hash
-  @observable public fundSymbol: string = ''; // 贡献资金的简称
-  @observable public proposalFee:string = ''; // 押金（手续费）
-  @observable public fundDecimals:number=0; // 精度
+  @observable public proposalMenu: number = 0; // 发起提案的菜单选择，0为首页，1为申请，2为踢出，3为添加代币
+  @observable public depositHash: string = ''; // 贡献资金的hash
+  @observable public depositSymbol: string = ''; // 贡献资金的简称
+  @observable public proposalFee: string = ''; // 押金（手续费）
+  @observable public depositDecimals: number = 0; // 精度
+  @observable public fundList: IFundList[] = []; // 多资产的数据
+  @observable public fundCount: number = 0; // 多资产的统计
+  @observable public fundOption:IAssetOption[]=[];// select显示数据
+
 
   /**
-   * 获取项目基本详情
+   * 获取押金基本详情
    */
-  @action public getFundData = async (projId: string) =>
+  @action public getDepositData = async (projId: string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.getMoloProjAssetInfo(projId);
+      result = await Api.getMoloProjDeposit(projId);
     } catch (e)
     {
       return false;
@@ -34,13 +38,42 @@ class MolochProposal implements IMolochProposalStore
     {
       return false
     }
-    this.fundHash = result[0].data.fundHash || '';
-    this.fundSymbol = result[0].data.fundSymbol || '';    
-    this.fundDecimals = result[0].data.fundDecimals || 0;
+    this.depositHash = result[0].data.fundHash || '';
+    this.depositSymbol = result[0].data.fundSymbol || '';
+    this.depositDecimals = result[0].data.fundDecimals || 0;
     this.proposalFee = result[0].data.proposalDeposit || '';
     return true;
   }
-  
+  /**
+   * 获取多资产列表
+   */
+  @action public getFundList = async (projId: string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.getMoloProjFuntList(projId, 1, 50);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.fundCount = result[0].data.count || 0;
+    this.fundList = result[0].data.list || [];
+    const option = result[0].data.list.map((item:IFundList)=>{
+      return {
+        id:item.fundHash,
+        name:item.fundSymbol.toLocaleUpperCase()
+      }
+    });
+    this.fundOption = [...option]
+    console.log(this.fundOption)
+    return true;
+  }
   /**
    * 发起提案V1版
    * @param contractHash 合约的hash
@@ -51,7 +84,7 @@ class MolochProposal implements IMolochProposalStore
    * @param des 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposal = async (contractHash:string,assetHash:string,addr: string, giveNum: number, requireNum: number, des: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
+  @action public applyProposal = async (contractHash: string, assetHash: string, addr: string, giveNum: number, requireNum: number, des: string, myaddr: string, sendCall: () => void, confrimCall: () => void) =>
   {
     // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
     // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
@@ -59,29 +92,29 @@ class MolochProposal implements IMolochProposalStore
     try
     {
       // 单位转换
-      const decimals = Math.pow(10,this.fundDecimals);
+      const decimals = Math.pow(10, this.depositDecimals);
       console.log(decimals)
       const giveMoneyNum = toMyNumber(giveNum).mul(decimals).value;
       // 数字转换
       const giveMoneyArray = metamaskwallet.web3.utils.toBN(giveMoneyNum).toArray();
       const requireArray = metamaskwallet.web3.utils.toBN(requireNum).toArray();
       // 计算多少钱供合约调用
-      const money = parseFloat(this.proposalFee.toString())+giveMoneyNum;
-      console.log('giveMoney:'+giveMoneyNum)      
-      console.log('money:'+money);            
-      console.log(addr+"-----"+giveMoneyArray.toString()+"-----"+requireArray.toString()+"-----"+des);
+      const money = parseFloat(this.proposalFee.toString()) + giveMoneyNum;
+      console.log('giveMoney:' + giveMoneyNum)
+      console.log('money:' + money);
+      console.log(addr + "-----" + giveMoneyArray.toString() + "-----" + requireArray.toString() + "-----" + des);
       // 调用合约
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
-      const erc20Contract = new Web3Contract(abi,assetHash);      
-      erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("submitProposal", [addr,giveMoneyArray, requireArray, des], { from: myaddr });
-      submitRes.onTransactionHash().then(()=>{sendCall()})
-      submitRes.onConfrim().then(res=>{confrimCall()})      
+      const erc20Contract = new Web3Contract(abi, assetHash);
+      erc20Contract.contractSend("approve", [contractHash, money], { from: myaddr });
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const submitRes = molochContract.contractSend("submitProposal", [addr, giveMoneyArray, requireArray, des], { from: myaddr });
+      submitRes.onTransactionHash().then(() => { sendCall() })
+      submitRes.onConfrim().then(res => { confrimCall() })
       return true
     } catch (e)
     {
-      console.log(e);      
+      console.log(e);
       return false;
     }
   }
@@ -98,12 +131,12 @@ class MolochProposal implements IMolochProposalStore
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToGetShares = async (contractHash:string,addr: string, requestShare: number,lootRequest:number, payNum: number,payToken:string,requestNum:number,requestToken:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
+  @action public applyProposalToGetShares = async (contractHash: string, addr: string, requestShare: number, lootRequest: number, payNum: number, payToken: string, requestNum: number, requestToken: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) =>
   {
     try
     {
       // 单位转换
-      const decimals = Math.pow(10,this.fundDecimals);
+      const decimals = Math.pow(10, this.depositDecimals);
       const payBigNum = toMyNumber(payNum).mul(decimals).value;
       const requestBuyNum = toMyNumber(requestNum).mul(decimals).value;
       // 数字转换
@@ -112,19 +145,19 @@ class MolochProposal implements IMolochProposalStore
       const payArray = metamaskwallet.web3.utils.toBN(payBigNum).toArray();
       const requestArray = metamaskwallet.web3.utils.toBN(requestBuyNum).toArray();
       // 计算多少钱供合约调用
-      const money = parseFloat(this.proposalFee.toString())+payBigNum;
+      const money = parseFloat(this.proposalFee.toString()) + payBigNum;
       // 调用合约
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
-      const erc20Contract = new Web3Contract(abi,payToken);
-      erc20Contract.contractSend("approve",[contractHash,money],{from:myaddr});
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
-      const submitRes = molochContract.contractSend("SubmitProposal", [addr,shareArray,lootArray,payArray,payToken,requestArray,requestToken, details], { from: myaddr });
-      submitRes.onTransactionHash().then(()=>{sendCall()})
-      submitRes.onConfrim().then(res=>{confrimCall()})      
+      const erc20Contract = new Web3Contract(abi, payToken);
+      erc20Contract.contractSend("approve", [contractHash, money], { from: myaddr });
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const submitRes = molochContract.contractSend("SubmitProposal", [addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details], { from: myaddr });
+      submitRes.onTransactionHash().then(() => { sendCall() })
+      submitRes.onConfrim().then(res => { confrimCall() })
       return true
     } catch (e)
     {
-      console.log(e);      
+      console.log(e);
       return false;
     }
   }
@@ -135,19 +168,19 @@ class MolochProposal implements IMolochProposalStore
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToAddToken = async (contractHash:string,token:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
+  @action public applyProposalToAddToken = async (contractHash: string, token: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) =>
   {
     try
-    {     
+    {
       // 调用合约      
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
       const submitRes = molochContract.contractSend("submitWhitelistProposal", [token, details], { from: myaddr });
-      submitRes.onTransactionHash().then(()=>{sendCall()})
-      submitRes.onConfrim().then(res=>{confrimCall()})      
+      submitRes.onTransactionHash().then(() => { sendCall() })
+      submitRes.onConfrim().then(res => { confrimCall() })
       return true
     } catch (e)
     {
-      console.log(e);      
+      console.log(e);
       return false;
     }
   }
@@ -158,19 +191,19 @@ class MolochProposal implements IMolochProposalStore
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToKick = async (contractHash:string,addr:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void) =>
+  @action public applyProposalToKick = async (contractHash: string, addr: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) =>
   {
     try
-    {     
+    {
       // 调用合约      
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[],contractHash);
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
       const submitRes = molochContract.contractSend("submitGuildKickProposal", [addr, details], { from: myaddr });
-      submitRes.onTransactionHash().then(()=>{sendCall()})
-      submitRes.onConfrim().then(res=>{confrimCall()})      
+      submitRes.onTransactionHash().then(() => { sendCall() })
+      submitRes.onConfrim().then(res => { confrimCall() })
       return true
     } catch (e)
     {
-      console.log(e);      
+      console.log(e);
       return false;
     }
   }

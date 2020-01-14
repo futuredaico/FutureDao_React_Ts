@@ -5,11 +5,15 @@ import { IMolochManagerStore } from "@/containers/projectinfo/molochdao/interfac
 import { History } from 'history';
 export interface IMolochProposalStore
 {
-  fundHash:string,
-  fundSymbol:string,
+  depositHash:string,
+  depositSymbol:string,
   proposalFee:string,
-  fundDecimals:number,
-  getFundData:(projectId:string)=>Promise<boolean>,
+  depositDecimals:number,
+  fundList:IFundList[],
+  fundCount:number,
+  fundOption:IAssetOption[],
+  getDepositData:(projectId:string)=>Promise<boolean>,
+  getFundList:(projectId:string)=>Promise<boolean>,
   applyProposal:(contractHash:string,assetHash:string,addr:string,giveNum:number,requireNum:number,des:string,myaddr:string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
   applyProposalToGetShares:(contractHash:string,addr: string, requestShare: number,lootRequest:number, payNum: number,payToken:string,requestNum:number,requestToken:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
   applyProposalToAddToken:(contractHash:string,token:string, details: string, myaddr: string,sendCall:()=>void,confrimCall:()=>void)=>Promise<boolean>,
@@ -28,4 +32,13 @@ export interface IMolochProposalProps extends RouteComponentProps<{ projectId: s
   metamaskwallet:IMetaMaskWalletStore,
   molochmanager: IMolochManagerStore,
   intl: any
+}
+export interface IFundList{
+  fundHash:string,
+  fundSymbol:string,
+  fundDecimals:string
+}
+export interface IAssetOption {
+  id:string,
+  name:string
 }

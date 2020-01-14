@@ -15,7 +15,7 @@ class MolochProposal extends React.Component<IMolochProposalProps> {
     public componentDidMount()
     {
         const projectId = this.props.match.params['projectId'];
-        this.props.index.getFundData(projectId);
+        this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
     }
     public render()
