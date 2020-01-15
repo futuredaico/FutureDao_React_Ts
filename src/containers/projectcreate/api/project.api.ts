@@ -389,7 +389,7 @@ export const exportOrderFile = (userId: string, token: string, projId: string) =
  * @param molochhash molochdao hash
  * @param bankhash bank hash
  */
-export const saveContractInfo = (contractContent: ICreateContent, summoner: string, molochhash: string, bankhash: string) => {
+export const saveContractInfo = (contractContent: ICreateContent, summoner: string, molochhash: string, bankhash: string, txid: string) => {
     const {
         version,                // 版本
         projectName,            // 项目名称
@@ -441,6 +441,7 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             bailoutWait,
             createTime,
             approvedTokens,
+            txid
         ]
     }
     console.log(opts);

@@ -81,7 +81,7 @@ class CreateProject implements ICreateProjectStore {
         console.log("block timestamp", blockInfo.timestamp);
       }
 
-      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress); // 上传项目信息给服务端
+      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress, txid); // 上传项目信息给服务端
       if (result && result[ 0 ] && result[ 0 ].resultCode === "00000") {
         this.projectID = result[ 0 ].data.projId;
         this.createStatus = 2;
