@@ -11,6 +11,8 @@ export interface IMolochManagerStore
   proposalListItem:IMolochProposalList|null,
   proposalIndex:string,
   proposalBalance:number,
+  sharesBalance:number,
+  lootBalance:number,
   proposalAddress:string,
   upBalance:number,
   upAddress:string,
@@ -18,20 +20,27 @@ export interface IMolochManagerStore
   contractInfo:IContractInfo|null,
   getMolochProposalList:(projId: string)=>Promise<boolean>,
   getMolochProposalDetail:(projId: string)=>Promise<boolean>,
-  getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,
+  getTokenBalance:(projId:string,addr:string)=>Promise<boolean>,  
+  getVoteData:(projId:string,proposalIndex:string,addr:string)=>Promise<boolean>,  
+  getContractInfo:(projId:string)=>Promise<boolean>,  
+  getUpStreamData:(projId:string,addr:string)=>Promise<boolean>,
+  // 以下，v1调用合约方法
   changeDelegateKey:(addr:string,myaddr:string)=>Promise<boolean>,
-  getVoteData:(projId:string,proposalIndex:string,addr:string)=>Promise<boolean>,
   applyYesVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   applyNoVote:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
-  getContractInfo:(projId:string)=>Promise<boolean>,
   quitShares:(value:number,myaddr:string)=>Promise<boolean>,
-  getUpStreamData:(projId:string,addr:string)=>Promise<boolean>,
+  // 以下，V2调用合约方法
+  changeDelegateKeyV2:(addr:string,myaddr:string)=>Promise<boolean>,
   sponsorProposal:(proposalIndex: string, myaddr: string,assetHash:string,depositNum:string)=>Promise<boolean>,
   applyYesVoteV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   applyNoVoteV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processProposalV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
-  quitSharesV2:(value:number,myaddr:string)=>Promise<boolean>,
+  processWhiteListProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  processKickProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  processKickPeople:(kickAddress:string,myaddr:string)=>Promise<boolean>,  
+  stopProposalV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  quitSharesV2:(sharesValue: number,lootValue:number, myaddr: string)=>Promise<boolean>,
 
 }
 
@@ -50,7 +59,7 @@ export interface IMolochProposalList extends IMolochProposalBase{
   hasVote:boolean, // 是否投票
   proposalState:string // 提案状态
   handleState:string, // 处理状态，0为未处理，1为已处理
-  isMine:boolean // 提案是否是自己的
+  isMine:boolean // 提案是否是自己的  
 }
 export interface IMolochProposalDetail extends IMolochProposalBase {  
   proposer:string, // 提案者
@@ -73,7 +82,10 @@ export interface IMolochProposalBase {
   tributeOfferedSymbol:string, // 贡献的资产简称
   paymentRequested:number, // 申请的资产数量
   paymentRequestedSymbol:string, // 申请的资产简称
-  startingPeriod:number // 提案在当前项目处理的时间段位置
+  startingPeriod:number // 提案在当前项目处理的时间段位置  
+  proposalType:string, // 提案类型，0为申请股份，1为添加代币，2为踢出成员
+  tributeToken:string,// 添加代币的哈市
+  applicant:string,// 踢出成员的地址
 }
 export enum ProposalType {
   PreVote = "10150",      // 预发布

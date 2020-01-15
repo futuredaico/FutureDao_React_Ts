@@ -316,7 +316,8 @@ export default {
     require: "申请股份",
     gong: "贡献资金",
     gongtips: "（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
-    addrerr:"地址格式不正确。"
+    addrerr:"地址格式不正确。",
+    hasherr:"Hash格式不正确"
   },
   create: {
     bigtitle: "创建新DAO",

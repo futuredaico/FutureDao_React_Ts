@@ -18,6 +18,7 @@ interface IState
     tianDes: string,  // 提案详情
     tianKickAddr: string, // 踢出成员地址
     tianKickAddrBtn: boolean, // 地址的格式确认
+    addErrMsg:string, // 地址错误提示
     canSendFlag: boolean, // 是否可发起提案
 }
 
@@ -31,6 +32,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianKickAddr: '',
         tianKickAddrBtn: true,
+        addErrMsg:"",
         canSendFlag: false
     }
 
@@ -65,7 +67,10 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
                     <span className="tips-text">（ 该成员股份将被全部按比例兑换成资产 ）</span>
                 </div>
                 <div className="inline-enter">
-                    <Input value={this.state.tianKickAddr} onChange={this.handleChangeTianKickAddr} />
+                    <Input value={this.state.tianKickAddr} onChange={this.handleChangeTianKickAddr} className={!this.state.tianKickAddrBtn ? "err-active" : ''} />
+                    {
+                        !this.state.tianKickAddrBtn && <span className="err-span">{this.state.addErrMsg}</span>
+                    }
                 </div>
                 <div className="inline-btn">
                     <Button
@@ -113,7 +118,8 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
     {
         const res = web3.isAddress(this.state.tianKickAddr);
         this.setState({
-            tianKickAddrBtn: res
+            tianKickAddrBtn: res,
+            addErrMsg:res?'':this.intrl.proposal.addrerr
         }, () =>
         {
             this.checkAllInput()
@@ -173,6 +179,10 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             isOk = false;
         }
         if (!this.state.tianDes)
+        {
+            isOk = false;
+        }
+        if (!this.state.tianKickAddr)
         {
             isOk = false;
         }

@@ -1265,47 +1265,49 @@
   }
 }
 .member-wrapper{
-  .member-list-box{
-    margin-top: 30px;
-    border: 1px solid @bg-e5;
-    border-radius: 3px;
-    padding: 20px 15px;
-    width: 340px;
-    height: 70px;
-    display: inline-block;
-    margin-right: 30px;
-    position: relative;
-    &:nth-of-type(3n){
-      margin-right: 0;
-    }
-    .member-img{
-      display: inline-block;      
-      margin-right: 10px;
-      img{
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        vertical-align: middle;
-      }
-    }
-    .member-name-addr{
+  .member-sbox-wrapper{
+    .member-list-box{
+      margin-top: 30px;
+      border: 1px solid @bg-e5;
+      border-radius: 3px;
+      padding: 20px 15px;
+      width: 340px;
+      height: 70px;
       display: inline-block;
-      vertical-align: middle;
-      .member-name{
-        display: block;
+      margin-right: 30px;
+      position: relative;
+      &:nth-of-type(3n){
+        margin-right: 0;
+      }
+      .member-img{
+        display: inline-block;      
+        margin-right: 10px;
+        img{
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          vertical-align: middle;
+        }
+      }
+      .member-name-addr{
+        display: inline-block;
+        vertical-align: middle;
+        .member-name{
+          display: block;
+        }
+      }
+      .member-count{
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        margin-top: -10px;
       }
     }
-    .member-count{
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      margin-top: -10px;
+    .member-page-warpper{
+      text-align: center;
+      margin-top: 50px;
     }
-  }
-  .member-page-warpper{
-    text-align: center;
-    margin-top: 50px;
-  }
+  }  
 }
 .entrust-wrapper{
   position: fixed;

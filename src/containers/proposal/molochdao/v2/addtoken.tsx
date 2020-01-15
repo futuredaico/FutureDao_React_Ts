@@ -19,19 +19,21 @@ interface IState
     tianTokenHash: string, // 添加代币hash
     tianHashBtn: boolean, // Hash的格式确认
     canSendFlag: boolean, // 是否可发起提案
+    hashErrMsg:string // hash地址错误提示
 }
 
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class AddToken extends React.Component<IMolochProposalProps, IState> {
     public intrl = this.props.intl.messages;
-    public state = {
+    public state:IState = {
         isDoingSave: false,
         tianName: '',
         tianDes: '',
         tianTokenHash: '',
         tianHashBtn: true,
-        canSendFlag: false
+        canSendFlag: false,
+        hashErrMsg:''
     }
 
     public componentDidMount()
@@ -64,7 +66,10 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
                     <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
-                    <Input value={this.state.tianTokenHash} onChange={this.handleChangeTianTokenHash} />
+                    <Input value={this.state.tianTokenHash} onChange={this.handleChangeTianTokenHash} className={!this.state.tianHashBtn ? "err-active" : ''} />
+                    {
+                        !this.state.tianHashBtn && <span className="err-span">{this.state.hashErrMsg}</span>
+                    }
                 </div>
                 <div className="inline-btn">
                     <Button
@@ -112,7 +117,8 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
     {
         const res = web3.isAddress(this.state.tianTokenHash);
         this.setState({
-            tianHashBtn: res
+            tianHashBtn: res,
+            hashErrMsg:res?'':this.intrl.proposal.hasherr
         }, () =>
         {
             this.checkAllInput()
@@ -173,6 +179,10 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
             isOk = false;
         }
         if (!this.state.tianDes)
+        {
+            isOk = false;
+        }
+        if (!this.state.tianTokenHash)
         {
             isOk = false;
         }

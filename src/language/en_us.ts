@@ -315,7 +315,8 @@ export default {
     require: "Shares requested",
     gong: "Tribute",
     gongtips: "（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
-    addrerr:"The address format is incorrect."
+    addrerr:"The address format is incorrect.",
+    hasherr:"The Hash format is incorrect."
   },
   create: {
     bigtitle: "Create new DAO",

@@ -107,28 +107,41 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                 </div>
                                                 <div className="mcontent-down mcontentv2-down">
                                                     {/* 贡献显示 */}
-                                                    <div className="mcontent-count">
-                                                        <div>
-                                                            <span>{this.intrl.manager.request} </span>
-                                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
-                                                        </div>
-                                                        <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol&&item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
-                                                    </div>
+                                                    {
+                                                        item.proposalType === '0' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>{this.intrl.manager.request} </span>
+                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                                </div>
+                                                                <span>{this.intrl.manager.gong} </span>
+                                                                <strong>{item.tributeOffered} {item.tributeOfferedSymbol && item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
+                                                            </div>
+                                                        )
+                                                    }
+
                                                     {/* 支持代币 */}
-                                                    {/* <div className="mcontent-count">
-                                                        <div>
-                                                            <span>添加支持代币</span>
-                                                        </div>                                        
-                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
-                                                    </div> */}
+                                                    {
+                                                        item.proposalType === '1' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>添加支持代币</span>
+                                                                </div>
+                                                                <strong>{item.tributeToken}</strong>
+                                                            </div>
+                                                        )
+                                                    }
                                                     {/* 踢出成员 */}
-                                                    {/* <div className="mcontent-count">
-                                                        <div>
-                                                            <span>踢出成员</span>
-                                                        </div>                                        
-                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
-                                                    </div> */}
+                                                    {
+                                                        item.proposalType === '2' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>踢出成员</span>
+                                                                </div>
+                                                                <strong>{item.applicant}</strong>
+                                                            </div>
+                                                        )
+                                                    }
                                                     {/* 投票比例显示 */}
                                                     <div className="manager-votebox">
                                                         <div className="green-sai" style={{ "width": this.computePercentage(item, true) + "%" }} />
@@ -171,28 +184,41 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                 </div>
                                                 <div className="mcontent-down mcontentv2-down">
                                                     {/* 贡献显示 */}
-                                                    <div className="mcontent-count">
-                                                        <div>
-                                                            <span>{this.intrl.manager.request} </span>
-                                                            <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
-                                                        </div>
-                                                        <span>{this.intrl.manager.gong} </span>
-                                                        <strong>{item.tributeOffered} {item.tributeOfferedSymbol&&item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
-                                                    </div>
+                                                    {
+                                                        item.proposalType === '0' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>{this.intrl.manager.request} </span>
+                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                                </div>
+                                                                <span>{this.intrl.manager.gong} </span>
+                                                                <strong>{item.tributeOffered} {item.tributeOfferedSymbol && item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
+                                                            </div>
+                                                        )
+                                                    }
+
                                                     {/* 支持代币 */}
-                                                    {/* <div className="mcontent-count">
-                                                        <div>
-                                                            <span>添加支持代币</span>
-                                                        </div>                                        
-                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
-                                                    </div> */}
+                                                    {
+                                                        item.proposalType === '1' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>添加支持代币</span>
+                                                                </div>
+                                                                <strong>{item.tributeToken}</strong>
+                                                            </div>
+                                                        )
+                                                    }
                                                     {/* 踢出成员 */}
-                                                    {/* <div className="mcontent-count">
-                                                        <div>
-                                                            <span>踢出成员</span>
-                                                        </div>                                        
-                                                        <strong>0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2</strong>
-                                                    </div> */}
+                                                    {
+                                                        item.proposalType === '2' && (
+                                                            <div className="mcontent-count">
+                                                                <div>
+                                                                    <span>踢出成员</span>
+                                                                </div>
+                                                                <strong>{item.applicant}</strong>
+                                                            </div>
+                                                        )
+                                                    }
                                                 </div>
                                             </div>
                                         )
@@ -221,7 +247,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
         this.props.molochmanager.proposalMenuNum = num;
         this.props.molochmanager.proposalPage = 1;
         this.props.molochmanager.proposalList = [];
-        this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);        
+        this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 翻页
     private handleChangeManagerPage = (index: number) =>
@@ -310,7 +336,8 @@ class MolochManager extends React.Component<IMolochInfoProps> {
         }
     }
     // 计算处理期倒计时
-    private computeProcessTime = (item:IMolochProposalList)=>{
+    private computeProcessTime = (item: IMolochProposalList) =>
+    {
         // emergencyExitWait
         // 处理期剩余时间=投票时间+公示时间+处理时间-（当前时间-发布合约的时间点）
         const nowTime = new Date().getTime() / 1000;
@@ -321,11 +348,12 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             let processTime = 0;
-            if(this.props.molochmanager.contractInfo){
+            if (this.props.molochmanager.contractInfo)
+            {
                 processTime = toMyNumber(this.props.molochmanager.contractInfo.emergencyExitWait).mul(this.props.molochmanager.contractInfo.periodDuration).value;
             }
             // const processTime = parseFloat(this.props.molochinfo.projInfo)
-            const endTime =processTime + graceTime + voteTime - agoTime;
+            const endTime = processTime + graceTime + voteTime - agoTime;
             if (endTime < 0)
             {
                 return 'End'

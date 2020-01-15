@@ -25,9 +25,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     public componentDidMount()
     {
         this.props.molochmanager.getMolochProposalDetail(this.props.molochinfo.projId);
-        if (this.props.common.userInfo)
+        if (this.props.common.userInfo && this.props.molochmanager.proposalListItem)
         {
-            this.props.molochmanager.getVoteData(this.props.molochinfo.projId, this.props.molochmanager.proposalIndex, this.props.common.userInfo.address)
+            this.props.molochmanager.getVoteData(this.props.molochinfo.projId, this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address)
         }
         this.handleComputeTimeIndex();
         // 发起提案资格显示(委托人不是自己)
@@ -84,73 +84,87 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">暂无说明</p>
                             }
                             {/* 申请股份类型 */}
-                            <div className="info-line">
-                                <div className="iline-left">
-                                    <strong>{this.intrl.manager.applicant}</strong>
-                                </div>
-                                <div className="iline-right">
-                                    {
-                                        this.props.molochmanager.proposalInfo.applicantHeadIconUrl ? <img src={this.props.molochmanager.proposalInfo.applicantHeadIconUrl} alt="" className="people-headicon" />
-                                            : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
-                                    }
-                                    <div className="people-swrap">
-                                        <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
-                                        <span>{this.props.molochmanager.proposalInfo.applicant}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="info-line">
-                                <div className="iline-left">
-                                    <strong>{this.intrl.manager.apply}</strong>
-                                </div>
-                                <div className="iline-right ver-top">
-                                    <div className="little-wrapper">
-                                        <span>股份</span><br />
-                                        <span>{this.props.molochmanager.proposalInfo.sharesRequested}</span>
-                                    </div>
-                                    <div className="little-wrapper">
-                                        <span>无表决权股</span><br />
-                                        <span>{this.props.molochmanager.proposalInfo.lootRequested}</span>
-                                    </div>
-                                    <div className="little-wrapper">
-                                        <span>{this.props.molochmanager.proposalInfo.paymentRequestedSymbol && this.props.molochmanager.proposalInfo.paymentRequestedSymbol.toLocaleUpperCase()}</span><br />
-                                        <span>{this.props.molochmanager.proposalInfo.paymentRequested}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="info-line">
-                                <div className="iline-left">
-                                    <strong>{this.intrl.manager.gong2}</strong>
-                                </div>
-                                <div className="iline-right">
-                                    <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol && this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
-                                </div>
-                            </div>
-                            {/* 提出成员类型 */}
-                            {/* <div className="info-line">
-                                <div className="iline-left">
-                                    <strong>提出成员</strong>
-                                </div>
-                                <div className="iline-right">
-                                    {
-                                        this.props.molochmanager.proposalInfo.applicantHeadIconUrl ? <img src={this.props.molochmanager.proposalInfo.applicantHeadIconUrl} alt="" className="people-headicon" />
-                                            : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
-                                    }
-                                    <div className="people-swrap">
-                                        <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
-                                        <span>{this.props.molochmanager.proposalInfo.applicant}</span>
-                                    </div>
-                                </div>
-                            </div>       */}
+                            {
+                                this.props.molochmanager.proposalInfo.proposalType === '0' && (
+                                    <>
+                                        <div className="info-line">
+                                            <div className="iline-left">
+                                                <strong>{this.intrl.manager.applicant}</strong>
+                                            </div>
+                                            <div className="iline-right">
+                                                {
+                                                    this.props.molochmanager.proposalInfo.applicantHeadIconUrl ? <img src={this.props.molochmanager.proposalInfo.applicantHeadIconUrl} alt="" className="people-headicon" />
+                                                        : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
+                                                }
+                                                <div className="people-swrap">
+                                                    <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
+                                                    <span>{this.props.molochmanager.proposalInfo.applicant}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="info-line">
+                                            <div className="iline-left">
+                                                <strong>{this.intrl.manager.apply}</strong>
+                                            </div>
+                                            <div className="iline-right ver-top">
+                                                <div className="little-wrapper">
+                                                    <span>股份</span><br />
+                                                    <span>{this.props.molochmanager.proposalInfo.sharesRequested}</span>
+                                                </div>
+                                                <div className="little-wrapper">
+                                                    <span>无表决权股</span><br />
+                                                    <span>{this.props.molochmanager.proposalInfo.lootRequested}</span>
+                                                </div>
+                                                <div className="little-wrapper">
+                                                    <span>{this.props.molochmanager.proposalInfo.paymentRequestedSymbol && this.props.molochmanager.proposalInfo.paymentRequestedSymbol.toLocaleUpperCase()}</span><br />
+                                                    <span>{this.props.molochmanager.proposalInfo.paymentRequested}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="info-line">
+                                            <div className="iline-left">
+                                                <strong>{this.intrl.manager.gong2}</strong>
+                                            </div>
+                                            <div className="iline-right">
+                                                <span>{this.props.molochmanager.proposalInfo.tributeOffered} {this.props.molochmanager.proposalInfo.tributeOfferedSymbol && this.props.molochmanager.proposalInfo.tributeOfferedSymbol.toLocaleUpperCase()}</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                            }
                             {/* 添加支持代币类型 */}
-                            {/* <div className="info-line">
-                                <div className="iline-left">
-                                    <strong>添加支持代币</strong>
-                                </div>
-                                <div className="iline-right">
-                                    <span>0x1234567890987654321</span>
-                                </div>
-                            </div> */}
+                            {
+                                this.props.molochmanager.proposalInfo.proposalType === '1' && (
+                                    <div className="info-line">
+                                        <div className="iline-left">
+                                            <strong>添加支持代币</strong>
+                                        </div>
+                                        <div className="iline-right">
+                                            <span>0x1234567890987654321</span>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                            {/* 踢出成员类型 */}
+                            {
+                                this.props.molochmanager.proposalInfo.proposalType === '2' && (
+                                    <div className="info-line">
+                                        <div className="iline-left">
+                                            <strong>提出成员</strong>
+                                        </div>
+                                        <div className="iline-right">
+                                            {
+                                                this.props.molochmanager.proposalInfo.applicantHeadIconUrl ? <img src={this.props.molochmanager.proposalInfo.applicantHeadIconUrl} alt="" className="people-headicon" />
+                                                    : <img src={require('@/img/default.png')} alt="" className="people-headicon" />
+                                            }
+                                            <div className="people-swrap">
+                                                <strong className="member-name">{this.props.molochmanager.proposalInfo.applicantUsername ? this.props.molochmanager.proposalInfo.applicantUsername : this.intrl.user.shen}</strong>
+                                                <span>{this.props.molochmanager.proposalInfo.applicant}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -209,10 +223,33 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         })
     }
     // 发送取消提案交易
-    private handleStopProposal = () =>
+    private handleStopProposal = async () =>
     {
         // todo
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.props.molochmanager.proposalIndex)
+        {
+            return false;
+        }
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (res)
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            const res2 = await this.props.molochmanager.stopProposalV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            if (res2)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
+        }
         this.handleToCloseStop();
+        return true
     }
     // 返回列表页
     private handleBackManagerList = () =>
@@ -220,7 +257,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         this.props.molochinfo.isShowManagerInfo = false;
     }
     // 批准为正式提案
-    private handleToApproveProposal = ()=>{
+    private handleToApproveProposal = () =>
+    {
         // 验证是否登录
         if (!this.props.common.userInfo)
         {
@@ -233,7 +271,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 // 委托人资金为0了
                 if (this.props.molochmanager.upBalance <= 0)
                 {
-                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '您还不是成员，无权限批准提案');
                 } else
                 {
                     this.handleDoApprove();
@@ -242,7 +280,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             {
                 if (this.props.molochmanager.proposalBalance <= 0)
                 {
-                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr);
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '您还不是成员，无权限批准提案');
                 }
                 else
                 {
@@ -252,7 +290,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         }
     }
     // 批准为正式提案调用
-    private handleDoApprove = async ()=>{
+    private handleDoApprove = async () =>
+    {
         //
         if (!this.props.common.userInfo)
         {
@@ -267,8 +306,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
-            const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address,this.props.index.depositHash,this.props.index.proposalFee);
-            console.log("res2",res2)
+            const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address, this.props.index.depositHash, this.props.index.proposalFee);
+            console.log("res2", res2)
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

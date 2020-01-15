@@ -19,6 +19,8 @@ class IMolochManager
   @observable public proposalIndex: string = ""; // 提案索引
   @observable public proposalBalance: number = 0; // 当前地址的项目占股数量
   @observable public proposalAddress: string = ''; // 委托人给谁了
+  @observable public sharesBalance: number = 0; // 当前地址的项目可投票股数
+  @observable public lootBalance: number = 0; // 当前地址的项目无表决权股数
   @observable public upAddress: string = ''; // 被谁委托了
   @observable public upBalance: number = 0; // 委托人的股数
   @observable public contractInfo: IContractInfo | null = null;// 合约相关数据
@@ -37,7 +39,7 @@ class IMolochManager
     const addr = common.userInfo ? common.userInfo.address : '';
     try
     {
-      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr,this.proposalMenuNum);
+      result = await Api.getProposalList(projId, this.proposalPage, this.proposalPageSize, addr, this.proposalMenuNum);
     } catch (e)
     {
       return false;
@@ -99,7 +101,9 @@ class IMolochManager
       return false
     }
     this.proposalBalance = result[0].data.balance || 0;
-    this.proposalAddress = result[0].data.newDelegateKey || ''
+    this.proposalAddress = result[0].data.newDelegateKey || '';
+    this.sharesBalance = result[0].data.sharesBalance || 0;
+    this.lootBalance = result[0].data.lootBalance || 0;
 
     return true;
   }
@@ -167,7 +171,7 @@ class IMolochManager
     return true
   }
   /**
-   * 权限委托
+   * 权限委托-V1版
    */
   @action public changeDelegateKey = async (addr: string, myaddr: string) =>
   {
@@ -202,7 +206,7 @@ class IMolochManager
     return true
   }
   /**
-   * 投赞同票
+   * 投赞同票-V1版
    */
   @action public applyYesVote = async (proposalIndex: string, myaddr: string) =>
   {
@@ -231,7 +235,7 @@ class IMolochManager
       const res = await molochContract.contractCall("getCurrentPeriod");
       console.log("赞同票")
       console.log(JSON.stringify(res));
-      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      const res2 = await molochContract.contractCall("proposalQueue", [index]);
       console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 1], { from: myaddr });
       console.log(submitRes)
@@ -243,7 +247,7 @@ class IMolochManager
     return true
   }
   /**
-   * 投反对票
+   * 投反对票-V1版
    */
   @action public applyNoVote = async (proposalIndex: string, myaddr: string) =>
   {
@@ -271,7 +275,7 @@ class IMolochManager
       console.log("反对票")
       const res = await molochContract.contractCall("getCurrentPeriod");
       console.log(JSON.stringify(res));
-      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      const res2 = await molochContract.contractCall("proposalQueue", [index]);
       console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 2], { from: myaddr })
       console.log(submitRes)
@@ -283,7 +287,7 @@ class IMolochManager
     return true
   }
   /**
-   * 处理提案
+   * 处理提案-V1版
    */
   @action public processProposal = async (proposalIndex: string, myaddr: string) =>
   {
@@ -320,7 +324,7 @@ class IMolochManager
     return true
   }
   /**
-   * 退出股数
+   * 退出股数-V1版
    */
   @action public quitShares = async (value: number, myaddr: string) =>
   {
@@ -342,7 +346,7 @@ class IMolochManager
     }
     try
     {
-      const valueArr =  metamaskwallet.web3.utils.toBN(value).toArray();
+      const valueArr = metamaskwallet.web3.utils.toBN(value).toArray();
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
       const submitRes = molochContract.contractSend('ragequit', [valueArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
@@ -356,7 +360,7 @@ class IMolochManager
   /**
    * 发布正式提案--V2版
    */
-  @action public sponsorProposal = async (proposalIndex: string, myaddr: string,assetHash:string,depositNum:string) =>
+  @action public sponsorProposal = async (proposalIndex: string, myaddr: string, assetHash: string, depositNum: string) =>
   {
     if (!this.contractInfo)
     {
@@ -383,8 +387,8 @@ class IMolochManager
       console.log(indexArr.toString())
       // 先aprove押金      
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
-      const erc20Contract = new Web3Contract(abi,assetHash);      
-      erc20Contract.contractSend("approve",[contractHash,depositNum],{from:myaddr});
+      const erc20Contract = new Web3Contract(abi, assetHash);
+      erc20Contract.contractSend("approve", [contractHash, depositNum], { from: myaddr });
       // 批准正式提案
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
@@ -398,7 +402,7 @@ class IMolochManager
     return true
   }
   /**
-   * 投赞同票
+   * 投赞同票--V2版
    */
   @action public applyYesVoteV2 = async (proposalIndex: string, myaddr: string) =>
   {
@@ -420,16 +424,16 @@ class IMolochManager
     }
     try
     {
-
+      console.log(proposalIndex)
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
-      const res = await molochContract.contractCall("getCurrentPeriod");
-      console.log("赞同票")
-      console.log(JSON.stringify(res));
-      const res2 = await molochContract.contractCall("proposalQueue",[index]);
-      console.log(res2)
+      // const res = await molochContract.contractCall("getCurrentPeriod");
+      // console.log("赞同票")
+      // console.log(JSON.stringify(res));
+      // const res2 = await molochContract.contractCall("proposalQueue", [index]);
+      // console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 1], { from: myaddr });
       console.log(submitRes)
       await submitRes.onTransactionHash();
@@ -440,7 +444,7 @@ class IMolochManager
     return true
   }
   /**
-   * 投反对票
+   * 投反对票--V2版
    */
   @action public applyNoVoteV2 = async (proposalIndex: string, myaddr: string) =>
   {
@@ -469,7 +473,7 @@ class IMolochManager
       console.log("反对票")
       const res = await molochContract.contractCall("getCurrentPeriod");
       console.log(JSON.stringify(res));
-      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      const res2 = await molochContract.contractCall("proposalQueue", [index]);
       console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 2], { from: myaddr })
       console.log(submitRes)
@@ -481,7 +485,7 @@ class IMolochManager
     return true
   }
   /**
-   * 处理提案
+   * 处理提案--V2版处理申请股份的提案
    */
   @action public processProposalV2 = async (proposalIndex: string, myaddr: string) =>
   {
@@ -519,9 +523,158 @@ class IMolochManager
     return true
   }
   /**
-   * 退出股数
+   * 处理提案--V2版增加白名单的提案
    */
-  @action public quitSharesV2 = async (value: number, myaddr: string) =>
+  @action public processWhiteListProposal = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      console.log(indexArr.toString())
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("processWhitelistProposal", [indexArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 处理提案--V2版踢人的提案(处理期或过期时需要的处理)
+   */
+  @action public processKickProposal = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      console.log(indexArr.toString())
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("processGuildKickProposal", [indexArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 清退某人的战利品
+   */
+  @action public processKickPeople = async (kickAddress: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("ragekick", [kickAddress], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 终止提案---V2版
+   */
+  @action public stopProposalV2 = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      console.log(indexArr.toString())
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("cancelProposal", [indexArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 退出股数--V2版
+   */
+  @action public quitSharesV2 = async (sharesValue: number, lootValue: number, myaddr: string) =>
   {
     if (!this.contractInfo)
     {
@@ -541,12 +694,48 @@ class IMolochManager
     }
     try
     {
-      const valueArr =  metamaskwallet.web3.utils.toBN(value).toArray();
+      const valueArr1 = metamaskwallet.web3.utils.toBN(sharesValue).toArray();
+      const valueArr2 = metamaskwallet.web3.utils.toBN(lootValue).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
-      const submitRes = molochContract.contractSend('ragequit', [valueArr], { from: myaddr });
+      const submitRes = molochContract.contractSend('ragequit', [valueArr1, valueArr2], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
       console.log(subtxid);
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 权限委托-V2版
+   */
+  @action public changeDelegateKeyV2 = async (addr: string, myaddr: string) =>
+  {
+    // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
+    // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    try
+    {
+      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const submitRes = molochContract.contractSend("updateDelegateKey", [addr], { from: myaddr });
+      console.log(submitRes)
+      await submitRes.onTransactionHash();
     } catch (e)
     {
       return false;

@@ -176,7 +176,8 @@ class MolochProposal implements IMolochProposalStore
     try
     {
       // 调用合约      
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("submitWhitelistProposal", [token, details], { from: myaddr });
       submitRes.onTransactionHash().then(() => { sendCall() })
       submitRes.onConfrim().then(res => { confrimCall() })
@@ -199,7 +200,8 @@ class MolochProposal implements IMolochProposalStore
     try
     {
       // 调用合约      
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("submitGuildKickProposal", [addr, details], { from: myaddr });
       submitRes.onTransactionHash().then(() => { sendCall() })
       submitRes.onConfrim().then(res => { confrimCall() })

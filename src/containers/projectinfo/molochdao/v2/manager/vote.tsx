@@ -165,7 +165,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalIndex)
+        if (!this.props.molochmanager.proposalListItem)
         {
             return false;
         }
@@ -188,7 +188,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.applyYesVoteV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.applyYesVoteV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
@@ -208,7 +208,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalIndex)
+        if (!this.props.molochmanager.proposalListItem)
         {
             return false;
         }
@@ -231,7 +231,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.applyNoVoteV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.applyNoVoteV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
@@ -250,7 +250,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalIndex)
+        if (!this.props.molochmanager.proposalListItem)
         {
             return false;
         }
@@ -258,7 +258,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
