@@ -20,6 +20,9 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
         }
         return (
             <>
+            {
+                console.log(this.props.molochinfo.projInfo)
+            }
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     <div className="contract-projectinfo">

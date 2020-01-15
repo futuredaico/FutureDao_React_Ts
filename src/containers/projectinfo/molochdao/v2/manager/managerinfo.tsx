@@ -266,7 +266,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
             const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address,this.props.index.depositHash,this.props.index.proposalFee);
             console.log("res2",res2)
             if (res2)

@@ -131,7 +131,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     )
                 }
                 {
-                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot) && (
+                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot||this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut||this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle) && (
                         this.props.molochmanager.proposalListItem.handleState === '0'
                             ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} />
                             : (
@@ -188,7 +188,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.applyYesVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.applyYesVoteV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
@@ -231,7 +231,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.applyNoVote(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.applyNoVoteV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
@@ -258,7 +258,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.processProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
+            const res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

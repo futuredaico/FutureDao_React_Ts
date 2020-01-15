@@ -322,7 +322,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             return false
         }
 
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
         const requestShares = parseInt(this.state.tianRequestShares, 10);
         const lootRequest = parseInt(this.state.tianLootRequire, 10);
         const payNum = parseFloat(this.state.tianPayNum);

@@ -260,6 +260,7 @@ export default {
     updateerr: "修改失败",
     sendok: "交易已发送，等待链上确认。",
     sendcheck: "交易已生成，请在钱包确认。",
+    sendchecktwo:"已生成两笔交易，请在钱包确认。",
     sendfail: "交易发送失败",
     senddone: "您的提案已发出",
     membererr: "您还不是成员，不能发起提案",

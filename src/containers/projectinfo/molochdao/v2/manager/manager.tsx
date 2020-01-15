@@ -11,6 +11,7 @@ import { Pagination } from 'antd';
 import { IMolochProposalList, ProposalType } from '../../interface/molochmanager.interface';
 import { onCountRemainTime } from '@/utils/formatTime';
 import ManagerRight from './rigthsize';
+import { toMyNumber } from '@/utils/numberTool';
 
 @observer
 class MolochManager extends React.Component<IMolochInfoProps> {
@@ -79,7 +80,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         item.proposalState === ProposalType.WaitHandle && (
                                                             <div className="transparent-toupiao green-willdo">
                                                                 <span className="big-text">待处理</span>&nbsp;&nbsp;
-                                                        <span className="sm-text">{this.intrl.manager.other} {this.computeShowTime(item)}</span>
+                                                                <span className="sm-text">{this.intrl.manager.other} {this.computeProcessTime(item)}</span>
                                                             </div>
                                                         )
                                                     }
@@ -296,6 +297,35 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             const endTime = graceTime + voteTime - agoTime;
+            if (endTime < 0)
+            {
+                return 'End'
+            } else
+            {
+                return onCountRemainTime(endTime)
+            }
+        } else
+        {
+            return 'End'
+        }
+    }
+    // 计算处理期倒计时
+    private computeProcessTime = (item:IMolochProposalList)=>{
+        // emergencyExitWait
+        // 处理期剩余时间=投票时间+公示时间+处理时间-（当前时间-发布合约的时间点）
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        const agoTime = nowTimeInt - item.timestamp;
+        if (this.props.molochinfo.projInfo)
+        {
+            const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
+            const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
+            let processTime = 0;
+            if(this.props.molochmanager.contractInfo){
+                processTime = toMyNumber(this.props.molochmanager.contractInfo.emergencyExitWait).mul(this.props.molochmanager.contractInfo.periodDuration).value;
+            }
+            // const processTime = parseFloat(this.props.molochinfo.projInfo)
+            const endTime =processTime + graceTime + voteTime - agoTime;
             if (endTime < 0)
             {
                 return 'End'

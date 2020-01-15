@@ -397,6 +397,162 @@ class IMolochManager
     }
     return true
   }
+  /**
+   * 投赞同票
+   */
+  @action public applyYesVoteV2 = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    try
+    {
+
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log("赞同票")
+      console.log(JSON.stringify(res));
+      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      console.log(res2)
+      const submitRes = molochContract.contractSend("submitVote", [indexArr, 1], { from: myaddr });
+      console.log(submitRes)
+      await submitRes.onTransactionHash();
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 投反对票
+   */
+  @action public applyNoVoteV2 = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    try
+    {
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      console.log("反对票")
+      const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log(JSON.stringify(res));
+      const res2 = await molochContract.contractCall("proposalQueue",[index]);
+      console.log(res2)
+      const submitRes = molochContract.contractSend("submitVote", [indexArr, 2], { from: myaddr })
+      console.log(submitRes)
+      await submitRes.onTransactionHash();
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 处理提案
+   */
+  @action public processProposalV2 = async (proposalIndex: string, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    console.log(contractHash)
+    try
+    {
+      const index = parseInt(proposalIndex, 10);
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      console.log(indexArr.toString())
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend("processProposal", [indexArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
+  /**
+   * 退出股数
+   */
+  @action public quitSharesV2 = async (value: number, myaddr: string) =>
+  {
+    if (!this.contractInfo)
+    {
+      return false
+    }
+    let contractHash = '';
+    this.contractInfo.contractHashs.map((item: IContractHash) =>
+    {
+      if (item.name === 'moloch')
+      {
+        contractHash = item.hash
+      }
+    })
+    if (!contractHash)
+    {
+      return false
+    }
+    try
+    {
+      const valueArr =  metamaskwallet.web3.utils.toBN(value).toArray();
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const submitRes = molochContract.contractSend('ragequit', [valueArr], { from: myaddr });
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid);
+    } catch (e)
+    {
+      return false;
+    }
+    return true
+  }
 }
 
 export default new IMolochManager();

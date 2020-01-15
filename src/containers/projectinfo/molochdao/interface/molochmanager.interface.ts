@@ -28,6 +28,10 @@ export interface IMolochManagerStore
   quitShares:(value:number,myaddr:string)=>Promise<boolean>,
   getUpStreamData:(projId:string,addr:string)=>Promise<boolean>,
   sponsorProposal:(proposalIndex: string, myaddr: string,assetHash:string,depositNum:string)=>Promise<boolean>,
+  applyYesVoteV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  applyNoVoteV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  processProposalV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  quitSharesV2:(value:number,myaddr:string)=>Promise<boolean>,
 
 }
 
