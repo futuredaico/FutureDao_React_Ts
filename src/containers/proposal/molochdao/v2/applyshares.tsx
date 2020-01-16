@@ -15,6 +15,7 @@ import { IMolochProposalProps, IAssetOption } from '../interface/index.interface
 import { saveDecimal } from '@/utils/numberTool';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 import { when } from 'mobx';
+import { HASH_CONFIG } from '@/config';
 
 interface IState
 {
@@ -23,7 +24,7 @@ interface IState
     tianDes: string,  // 提案详情
     tianAddress: string, // 提案股份申请人
     tianAddrBtn: boolean, // 地址的格式确认
-    addErrMsg:string, // 地址错误提示
+    addErrMsg: string, // 地址错误提示
     tianRequestShares: string,   // 申请股份
     tianLootRequire: string, // 无表决权的股份
     tianRequestNum: string,// 申请资金的数量
@@ -44,7 +45,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianAddress: '',
         tianAddrBtn: true,
-        addErrMsg:"",
+        addErrMsg: "",
         tianRequestShares: '0',
         tianLootRequire: '0',
         tianRequestNum: '0',
@@ -112,7 +113,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                         <Input value={this.state.tianLootRequire} onChange={this.handleChangeTianLootRequire} onFocus={this.handleOnFous} />
                     </div>
                     <div className="smline-span">申请资产及其数量:</div>
-                    <Input className="sort-inputtext" value={this.state.tianRequestNum} onChange={this.handleChangeTianRequestNum} />
+                    <Input className="sort-inputtext" value={this.state.tianRequestNum} onChange={this.handleChangeTianRequestNum} onFocus={this.handleOnFous} />
                     <div className="sort-select">
                         {
                             this.props.index.fundOption.length > 0 && <Select options={this.props.index.fundOption} text='' onCallback={this.handleChoiceRequestToken} defaultValue={this.props.index.fundOption[0].id} />
@@ -184,7 +185,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         const res = web3.isAddress(this.state.tianAddress);
         this.setState({
             tianAddrBtn: res,
-            addErrMsg:res?'':this.intrl.proposal.addrerr
+            addErrMsg: res ? '' : this.intrl.proposal.addrerr
         }, () =>
         {
             this.checkAllInput()
@@ -198,20 +199,31 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        const reg = /^[0-9]*[1-9][0-9]*$/;
-        if (value.toString().length > 0)
+        if (parseFloat(value.toString()) === 0)
         {
-            if (!reg.test(ev.target.value))
+            this.setState({
+                tianRequestShares: '0'
+            }, () =>
             {
-                return false;
-            }
-        }
-        this.setState({
-            tianRequestShares: value.toString()
-        }, () =>
+                this.checkAllInput()
+            })
+        } else
         {
-            this.checkAllInput()
-        })
+            const reg = /^[0-9]*[1-9][0-9]*$/;
+            if (value.toString().length > 0)
+            {
+                if (!reg.test(ev.target.value))
+                {
+                    return false;
+                }
+            }
+            this.setState({
+                tianRequestShares: value.toString()
+            }, () =>
+            {
+                this.checkAllInput()
+            })
+        }
         return true
     }
     // 无表决权的股份的输入，限正整数
@@ -222,20 +234,31 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
-        const reg = /^[0-9]*[1-9][0-9]*$/;
-        if (value.toString().length > 0)
+        if (parseFloat(value.toString()) === 0)
         {
-            if (!reg.test(ev.target.value))
+            this.setState({
+                tianRequestShares: '0'
+            }, () =>
             {
-                return false;
-            }
-        }
-        this.setState({
-            tianLootRequire: value.toString()
-        }, () =>
+                this.checkAllInput()
+            })
+        } else
         {
-            this.checkAllInput()
-        })
+            const reg = /^[0-9]*[1-9][0-9]*$/;
+            if (value.toString().length > 0)
+            {
+                if (!reg.test(ev.target.value))
+                {
+                    return false;
+                }
+            }
+            this.setState({
+                tianLootRequire: value.toString()
+            }, () =>
+            {
+                this.checkAllInput()
+            })
+        }
         return true
     }
     // 申请资金的输入
@@ -247,8 +270,16 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
+        let valueStr = '';
+        if (this.state.tianRequestToken === HASH_CONFIG.ID_WETH)
+        {
+            valueStr = saveDecimal(value.toString(), 4);
+        } else
+        {
+            valueStr = saveDecimal(value.toString(), 2);
+        }
         this.setState({
-            tianRequestNum: saveDecimal(value.toString(), 4)
+            tianRequestNum: valueStr
         }, () =>
         {
             this.checkAllInput()
@@ -264,8 +295,16 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         {
             return false;
         }
+        let valueStr = '';
+        if (this.state.tianRequestToken === HASH_CONFIG.ID_WETH)
+        {
+            valueStr = saveDecimal(value.toString(), 4);
+        } else
+        {
+            valueStr = saveDecimal(value.toString(), 2);
+        }
         this.setState({
-            tianPayNum: saveDecimal(value.toString(), 4)
+            tianPayNum: valueStr
         }, () =>
         {
             this.checkAllInput()
@@ -333,7 +372,11 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             this.initData();
         }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone, this.intrl.notify.detailbtn, () =>
+            {
+                const projectId = this.props.match.params['projectId'];
+                this.props.history.push('/molochinfo/' + projectId);
+            });
         });
         return true;
     }
@@ -383,9 +426,9 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             tianRequestShares: '',
             tianLootRequire: '',
             tianRequestNum: '',
-            tianRequestToken:this.props.index.fundOption[0].id,
+            tianRequestToken: this.props.index.fundOption[0].id,
             tianPayNum: '',
-            tianPayToken:this.props.index.fundOption[0].id,
+            tianPayToken: this.props.index.fundOption[0].id,
             canSendFlag: false,
             isDoingSave: false
         })

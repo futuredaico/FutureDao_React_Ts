@@ -117,8 +117,18 @@ class QuitMolochProject extends React.Component<IMolochInfoProps, IState> {
         if(res){
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
             // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
+            let lootValue = 0;
+            let sharesValue = 0;
             const value = parseInt(this.state.exitShareInput,10);
-            const res2 = await this.props.molochmanager.quitSharesV2(value,value, this.props.common.userInfo.address);
+            if(value>this.props.molochmanager.lootBalance){
+                lootValue = this.props.molochmanager.lootBalance;
+                sharesValue = value-this.props.molochmanager.lootBalance;
+            }else{
+                lootValue = value;
+            }
+            console.log('lootValue',lootValue);
+            console.log("sharesValue",sharesValue);
+            const res2 = await this.props.molochmanager.quitSharesV2(sharesValue,lootValue, this.props.common.userInfo.address);
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

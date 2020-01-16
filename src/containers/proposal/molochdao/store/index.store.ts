@@ -134,17 +134,29 @@ class MolochProposal implements IMolochProposalStore
   {
     try
     {
+      // 取精度（贡献的代币，索要的代币）
+      let payDecimals = 0;
+      let requestDecimals = 0;
+      this.fundList.map((item:IFundList)=>{
+        if(item.fundHash===payToken){
+          payDecimals=parseInt(item.fundDecimals,10);
+        }
+        if(item.fundHash === requestToken){
+          requestDecimals=parseInt(item.fundDecimals,10);
+        }
+      })
       // 单位转换
-      const decimals = Math.pow(10, this.depositDecimals);
-      const payBigNum = toMyNumber(payNum).mul(decimals).value;
-      const requestBuyNum = toMyNumber(requestNum).mul(decimals).value;
+      const payDecimalsBig = Math.pow(10, payDecimals);
+      const requestDecimalsBig = Math.pow(10,requestDecimals)
+      const payBigNum = toMyNumber(payNum).mul(payDecimalsBig).value;
+      const requestBuyNum = toMyNumber(requestNum).mul(requestDecimalsBig).value;
       // 数字转换
       const shareArray = metamaskwallet.web3.utils.toBN(requestShare).toArray();
       const lootArray = metamaskwallet.web3.utils.toBN(lootRequest).toArray();
       const payArray = metamaskwallet.web3.utils.toBN(payBigNum).toArray();
       const requestArray = metamaskwallet.web3.utils.toBN(requestBuyNum).toArray();
       // 计算多少钱供合约调用
-      console.log("approve了多少",payArray.toString());
+      console.log("approve了多少",payBigNum);
       console.log("submitproposal了什么",addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details)
       // 合约可调动金额
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];

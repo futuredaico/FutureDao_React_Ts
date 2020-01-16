@@ -267,7 +267,8 @@ export default {
     logintitle: "登录失败",
     logincheck: "请将Metamask切换至主网后重试",
     logouttips: "钱包状态已更改，您已退出登录。",
-    comfirm: "确认"
+    comfirm: "确认",
+    detailbtn:"查看详情"
   },
   manager: {
     tian: "正式提案",
@@ -317,7 +318,8 @@ export default {
     gong: "贡献资金",
     gongtips: "（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
     addrerr:"地址格式不正确。",
-    hasherr:"Hash格式不正确"
+    hasherr:"代币hash错误",
+    membererr:"该地址不是Dao成员"    
   },
   create: {
     bigtitle: "创建新DAO",

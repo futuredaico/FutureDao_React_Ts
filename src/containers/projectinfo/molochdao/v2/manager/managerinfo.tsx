@@ -307,13 +307,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
             const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address, this.props.index.depositHash, this.props.index.proposalFee);
-            console.log("res2", res2)
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             } else
             {
-                console.log("触发了失败")
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
             }
         }

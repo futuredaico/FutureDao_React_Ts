@@ -164,7 +164,8 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
     {
         //
         this.setState({
-            showEntrust: false
+            showEntrust: false,
+            addrInput:''
         })
     }
 

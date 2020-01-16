@@ -259,7 +259,10 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             this.initData();
         }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone,this.intrl.notify.detailbtn,()=>{
+                const projectId = this.props.match.params['projectId'];
+                this.props.history.push('/molochinfo/' + projectId);
+            });
         });
         return true;
     }

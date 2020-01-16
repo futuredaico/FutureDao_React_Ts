@@ -19,21 +19,21 @@ interface IState
     tianTokenHash: string, // 添加代币hash
     tianHashBtn: boolean, // Hash的格式确认
     canSendFlag: boolean, // 是否可发起提案
-    hashErrMsg:string // hash地址错误提示
+    hashErrMsg: string // hash地址错误提示
 }
 
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class AddToken extends React.Component<IMolochProposalProps, IState> {
     public intrl = this.props.intl.messages;
-    public state:IState = {
+    public state: IState = {
         isDoingSave: false,
         tianName: '',
         tianDes: '',
         tianTokenHash: '',
         tianHashBtn: true,
         canSendFlag: false,
-        hashErrMsg:''
+        hashErrMsg: ''
     }
 
     public componentDidMount()
@@ -115,14 +115,27 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
     // 代币hash格式验证
     private handleChangeHashByMetamask = () =>
     {
-        const res = web3.isAddress(this.state.tianTokenHash);
-        this.setState({
-            tianHashBtn: res,
-            hashErrMsg:res?'':this.intrl.proposal.hasherr
-        }, () =>
+        if (this.state.tianTokenHash === '0x0000000000000000000000000000000000000000')
         {
-            this.checkAllInput()
-        })
+            this.setState({
+                tianHashBtn: false,
+                hashErrMsg: this.intrl.proposal.hasherr
+            }, () =>
+            {
+                this.checkAllInput()
+            })
+        } else
+        {
+            const res = web3.isAddress(this.state.tianTokenHash);
+            this.setState({
+                tianHashBtn: res,
+                hashErrMsg: res ? '' : this.intrl.proposal.hasherr
+            }, () =>
+            {
+                this.checkAllInput()
+            })
+        }
+
     }
     // 发起提案
     private handleSendProposal = async () =>
@@ -167,7 +180,10 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
             this.initData();
         }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone,this.intrl.notify.detailbtn,()=>{
+                const projectId = this.props.match.params['projectId'];
+                this.props.history.push('/molochinfo/' + projectId);
+            });
         });
         return true;
     }

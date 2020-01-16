@@ -49,7 +49,7 @@ class IMolochManager
       return false
     }
     this.proposalCount = result[0].data.count || 0;
-    this.proposalList = result[0].data.list || []
+    this.proposalList = result[0].data.list || [];
     return true;
   }
 
@@ -381,10 +381,10 @@ class IMolochManager
     console.log(contractHash)
     try
     {
+      console.log("提案index:"+proposalIndex)
       // 数据转换
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      console.log(indexArr.toString())
       // 先aprove押金      
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
       const erc20Contract = new Web3Contract(abi, assetHash);
@@ -429,11 +429,6 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
-      // const res = await molochContract.contractCall("getCurrentPeriod");
-      // console.log("赞同票")
-      // console.log(JSON.stringify(res));
-      // const res2 = await molochContract.contractCall("proposalQueue", [index]);
-      // console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 1], { from: myaddr });
       console.log(submitRes)
       await submitRes.onTransactionHash();
@@ -470,11 +465,6 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
-      console.log("反对票")
-      const res = await molochContract.contractCall("getCurrentPeriod");
-      console.log(JSON.stringify(res));
-      const res2 = await molochContract.contractCall("proposalQueue", [index]);
-      console.log(res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 2], { from: myaddr })
       console.log(submitRes)
       await submitRes.onTransactionHash();
@@ -505,12 +495,11 @@ class IMolochManager
     {
       return false
     }
-    console.log(contractHash)
+    console.log("proposalIndex",proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      console.log(indexArr.toString())
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("processProposal", [indexArr], { from: myaddr });
@@ -543,12 +532,11 @@ class IMolochManager
     {
       return false
     }
-    console.log(contractHash)
+    console.log("proposalIndex",proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      console.log(indexArr.toString())
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("processWhitelistProposal", [indexArr], { from: myaddr });
@@ -581,12 +569,11 @@ class IMolochManager
     {
       return false
     }
-    console.log(contractHash)
+    console.log("proposalIndex",proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      console.log(indexArr.toString())
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("processGuildKickProposal", [indexArr], { from: myaddr });
@@ -619,7 +606,7 @@ class IMolochManager
     {
       return false
     }
-    console.log(contractHash)
+    console.log("kickAddress",kickAddress)
     try
     {
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
@@ -654,12 +641,11 @@ class IMolochManager
     {
       return false
     }
-    console.log(contractHash)
+    console.log("proposalIndex",proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      console.log(indexArr.toString())
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("cancelProposal", [indexArr], { from: myaddr });
@@ -732,10 +718,11 @@ class IMolochManager
     }
     try
     {
-      const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("updateDelegateKey", [addr], { from: myaddr });
-      console.log(submitRes)
-      await submitRes.onTransactionHash();
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid);
     } catch (e)
     {
       return false;

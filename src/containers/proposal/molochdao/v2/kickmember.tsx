@@ -18,7 +18,7 @@ interface IState
     tianDes: string,  // 提案详情
     tianKickAddr: string, // 踢出成员地址
     tianKickAddrBtn: boolean, // 地址的格式确认
-    addErrMsg:string, // 地址错误提示
+    addErrMsg: string, // 地址错误提示
     canSendFlag: boolean, // 是否可发起提案
 }
 
@@ -32,7 +32,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianKickAddr: '',
         tianKickAddrBtn: true,
-        addErrMsg:"",
+        addErrMsg: "",
         canSendFlag: false
     }
 
@@ -41,6 +41,13 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         const projectId = this.props.match.params['projectId'];
         this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
+    }
+    public componentWillUnmount()
+    {
+        this.props.molochmanager.proposalBalance = 0;
+        this.props.molochmanager.proposalAddress = '';
+        this.props.molochmanager.sharesBalance = 0;
+        this.props.molochmanager.lootBalance = 0;
     }
     public render()
     {
@@ -110,7 +117,7 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             tianKickAddr: ev.target.value
         }, () =>
         {
-            this.handleChangeAddrByMetamask()
+            this.handleChangeAddrByMetamask();
         })
     }
     // 地址格式验证
@@ -119,12 +126,33 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
         const res = web3.isAddress(this.state.tianKickAddr);
         this.setState({
             tianKickAddrBtn: res,
-            addErrMsg:res?'':this.intrl.proposal.addrerr
+            addErrMsg: res ? '' : this.intrl.proposal.addrerr
+        }, () =>
+        {
+            if (res)
+            {
+                this.handleCheckMember();
+            } else
+            {
+                this.checkAllInput();
+            }
+        })
+    }
+    // 验证是否是成员
+    private handleCheckMember = async () =>
+    {
+        const projectId = this.props.match.params['projectId'];
+        await this.props.molochmanager.getTokenBalance(projectId, this.state.tianKickAddr);
+        this.setState({
+            tianKickAddrBtn: this.props.molochmanager.proposalBalance <= 0 ? false : true,
+            addErrMsg: this.props.molochmanager.proposalBalance <= 0 ? this.intrl.proposal.membererr : ''
         }, () =>
         {
             this.checkAllInput()
         })
     }
+    // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
+    // 0x85ff9877d421e3004535221eae55f6b2df1468c5
     // 发起提案
     private handleSendProposal = async () =>
     {
@@ -167,7 +195,10 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
             this.initData();
         }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone,this.intrl.notify.detailbtn,()=>{
+                const projectId = this.props.match.params['projectId'];
+                this.props.history.push('/molochinfo/' + projectId);
+            });
         });
         return true;
     }

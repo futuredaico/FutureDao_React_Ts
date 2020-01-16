@@ -131,7 +131,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     )
                 }
                 {
-                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot||this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut||this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle) && (
+                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut || this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle) && (
                         this.props.molochmanager.proposalListItem.handleState === '0'
                             ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} />
                             : (
@@ -258,7 +258,33 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         if (res)
         {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-            const res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
+            let res2 = false;
+            if (this.props.molochmanager.proposalListItem.proposalType === '0')
+            {
+                // 申请股份的处理
+                res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
+            } else if (this.props.molochmanager.proposalListItem.proposalType === '1')
+            {
+                // 添加代币的处理
+                res2 = await this.props.molochmanager.processWhiteListProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
+            } else if (this.props.molochmanager.proposalListItem.proposalType === '2')
+            {
+                // 踢人的处理
+                res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
+                if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle && this.props.molochmanager.proposalInfo)
+                {
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+                    const res3 = await this.props.molochmanager.processKickPeople(this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
+                    if (res3)
+                    {
+                        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                    } else
+                    {
+                        this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+                    }
+                }
+            }
+
             if (res2)
             {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);

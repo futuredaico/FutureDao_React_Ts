@@ -47,8 +47,8 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                                                     <>
                                                                         <strong className="purple-big" key={index}>
                                                                             {
-                                                                                index === 1 ?saveDecimal(item.fundTotal, 4)+' ' + item.fundSymbol.toLocaleUpperCase()
-                                                                                :saveDecimal(item.fundTotal, 2)+' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                index === 1 ?(item.fundTotal?saveDecimal(item.fundTotal, 4):'0')+' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                :(item.fundTotal?saveDecimal(item.fundTotal, 2):'0')+' ' + item.fundSymbol.toLocaleUpperCase()
                                                                             }
                                                                         </strong><br />
                                                                     </>
@@ -56,11 +56,11 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                                                         <>
                                                                             <strong className="purple-big" key={index}>
                                                                                 {
-                                                                                    saveDecimal(item.fundTotal, 2) +' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                    (item.fundTotal?saveDecimal(item.fundTotal, 2):'0') +' ' + item.fundSymbol.toLocaleUpperCase()
                                                                                 }
                                                                             </strong>
                                                                             {
-                                                                                !this.state.showAllAsset && (
+                                                                                !this.state.showAllAsset &&this.props.molochinfo.fundTotalList&&this.props.molochinfo.fundTotalList.count>3 && (
                                                                                     (
                                                                                         <div className="show-all" onClick={this.handleToShowList}>
                                                                                             <span>全部</span>

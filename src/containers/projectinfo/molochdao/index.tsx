@@ -31,6 +31,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
             this.props.molochinfo.getMolochProjInfo(projectId);
             this.props.molochinfo.getMolochFundTotal(projectId);
         }
+        console.log('当前子菜单是什么',this.props.molochinfo.menuNum)
     }
     public componentWillUnmount()
     {
