@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import VoteBox from './vote';
-import { ProposalType, IMolochProposalList } from '../../interface/molochmanager.interface';
+import { ProposalType } from '../../interface/molochmanager.interface';
 interface IState
 {
     showDeletBox: boolean, // 是否显示终止提案弹窗
@@ -29,7 +29,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         {
             this.props.molochmanager.getVoteData(this.props.molochinfo.projId, this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address)
         }
-        this.handleComputeTimeIndex();
+        if(this.props.molochmanager.proposalListItem&&!this.props.molochmanager.proposalListItem.proposalQueueIndex){
+            this.handleComputeTimeIndex();
+        }        
         // 发起提案资格显示(委托人不是自己)
         if (this.props.molochmanager.proposalAddress && this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
         {
@@ -177,7 +179,15 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                         !this.props.molochmanager.proposalListItem.proposalQueueIndex && (
                             <>
                                 {
-                                    (!!!this.state.sendTime || (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0)) ? <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
+                                    !this.state.sendTime
+                                        ? (
+                                            <>
+                                                {
+                                                    (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0) ? <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
+                                                        : <Button text="批准为正式提案" btnSize="bg-bg-btn" btnColor="gray-btn" />
+                                                }
+                                            </>
+                                        )
                                         : (
                                             <div className="notallow-wrapper">
                                                 <span>批准为正式提案</span>
@@ -323,7 +333,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     {
         // （当前时间-项目创建时间）/4.8*60*60----------向下取整
         const agoTime = newTime - createTime;
-        const index = Math.floor(agoTime / betweenTime);
+        console.log(agoTime / betweenTime)
+        const index = Math.ceil(agoTime / betweenTime);
         return index
     }
     // 计算是否可批准正式提案剩余时间
@@ -346,16 +357,16 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         if (this.props.molochmanager.proposalList.length > 0)
         {
             // 获取最新的一个提案
-            const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
+            // const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
             console.log("最新提案时间")
-            console.log(new Date())
-            console.log(new Date(item.timestamp * 1000))
-            const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
-            console.log("tianIndex:" + tianIndex)
-            if (nowIndex === tianIndex)
+            // console.log(new Date())
+            // console.log(new Date(item.timestamp * 1000))
+            // const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
+            console.log("tianIndex:" + this.props.molochmanager.latestProposalPeriod)
+            if (parseInt(this.props.molochmanager.latestProposalPeriod, 10) === nowIndex)
             {
                 // 计算剩余的时间
-                const latestIndexTime = (nowIndex + 1) * betweenTime;
+                const latestIndexTime = (parseInt(this.props.molochmanager.latestProposalPeriod, 10) + 1) * betweenTime;
                 const endTime = latestIndexTime + startTime;
                 const remainTime = endTime - nowTime;
                 console.log(remainTime)

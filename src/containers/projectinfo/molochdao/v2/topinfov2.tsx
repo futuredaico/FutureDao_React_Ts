@@ -124,11 +124,15 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                     <div className="going-line">
                         <div className="going-gray">{this.intrl.projinfo.every}</div>
                         <div className="going-normal">
-                            <strong>≈ $ {parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 6))}</strong>
+                            <strong>≈ $ {parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4))}</strong>
                             <div className="everyshare-box">
-                                <p>99.9999 Eth</p>
-                                <p>11.111 Eth</p>
-                                <p>11.111 Eth</p>
+                                {
+                                    this.props.molochinfo.everyFundList.length>0 && this.props.molochinfo.everyFundList.map((item:IFundInfo,index:number)=>{                                        
+                                        return (                                            
+                                        <p key={index}>{parseFloat((item.fundTotal?saveDecimal(item.fundTotal, 4):'0'))} {item.fundSymbol&&item.fundSymbol.toLocaleUpperCase()}</p>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -140,7 +144,6 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                             </div>
                         )
                     }
-
                 </div>
             </div>
         );

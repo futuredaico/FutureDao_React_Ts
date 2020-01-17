@@ -29,15 +29,14 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         if (projectId)
         {
             this.props.molochinfo.getMolochProjInfo(projectId);
-            this.props.molochinfo.getMolochFundTotal(projectId);
         }
-        console.log('当前子菜单是什么',this.props.molochinfo.menuNum)
     }
     public componentWillUnmount()
     {
         this.props.molochinfo.projId = '';
         this.props.molochinfo.menuNum = 1;
         this.props.molochinfo.isShowUpdateInfo = false;
+        this.props.molochinfo.isShowManagerInfo = false;
         this.props.molochinfo.projInfo = null;
     }
     public render()
@@ -47,7 +46,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
             return null;
         }
         return (
-            <div className="molochinfo-page">
+            <div className="molochinfo-page">                
                 <div className="project-top">
                     <h2>{this.props.molochinfo.projInfo.projName}</h2>
                     <p className="title-p">{this.props.molochinfo.projInfo.projBrief}</p>

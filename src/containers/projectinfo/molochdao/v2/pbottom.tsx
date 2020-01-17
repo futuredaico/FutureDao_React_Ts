@@ -63,7 +63,7 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
               this.props.molochinfo.isShowManagerInfo && <ManagerInfo {...this.props} />
             }
             {
-              (!this.props.molochinfo.isShowUpdateInfo && !this.props.molochinfo.isShowManagerInfo) && (
+              !this.props.molochinfo.isShowManagerInfo && (
                 <>
                   {
                     (this.props.molochinfo.menuNum === 1 || this.props.molochinfo.menuNum === 2) && (
@@ -96,6 +96,10 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
     {
       // todo
       window.location.hash = 'message'
+    }
+    if (this.props.molochinfo.projId)
+    {
+        this.props.molochinfo.getMolochProjInfo(this.props.molochinfo.projId);
     }
   }
   private handleNumCount = (id: number) =>

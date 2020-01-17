@@ -22,6 +22,8 @@ export interface IMolochInfoStore
   projMemberCount2:number,
   memberPage2: number,
   memberPageSize2: number,
+  everyFundList: IFundInfo[],
+  ethValue:string,
   getMolochProjInfo: (projId: string) => Promise<boolean>,
   getMemberData: (type:string) => Promise<boolean>,
   getMolochDiscussList: () => Promise<boolean>,
@@ -29,6 +31,7 @@ export interface IMolochInfoStore
   sendMolochZan: (discussId: string) => Promise<boolean>,
   getMolochDiscussReplyList: (childId: string) => Promise<[]>
   getMolochFundTotal: (projId: string) => Promise<boolean>,
+  getEthValue:()=>Promise<boolean>
 }
 
 
@@ -110,5 +113,6 @@ export interface IFundList
 }
 export interface IFundInfo {
   fundTotal: string,
-  fundSymbol: string
+  fundSymbol: string,
+  fundHash:string
 }

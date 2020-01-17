@@ -2,7 +2,8 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
 import { IMolochInfo, IProjectMember, IDiscussList, IDiscussReplyList, IFundList, IFundInfo } from '../interface/molochinfo.interface';
-// import { toMyNumber, toNonExponential } from '@/utils/numberTool';
+import { toMyNumber, toNonExponential } from '@/utils/numberTool';
+import { HASH_CONFIG } from '@/config';
 
 class MolochInfo
 {
@@ -25,6 +26,7 @@ class MolochInfo
   @observable public memberPage2: number = 1; // 成员当前页
   @observable public memberPageSize2: number = 15; // 成员每页显示个数
   @observable public everyFundList: IFundInfo[] = []; // 每种资产的每股价值
+  @observable public ethValue: string = ''; // eth的美元价值
 
   /**
    * 获取项目基本详情
@@ -48,7 +50,29 @@ class MolochInfo
     // if(this.projInfo){
     //   this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
     // }
+    this.getMolochFundTotal(projId);
+    return true;
+  }
+  /**
+   * 获取eth美元价
+   */
+  @action public getEthValue = async () =>
+  {
+    let result: any = [];
 
+    try
+    {
+      result = await Api.getMolochEthPrice();
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.ethValue = result[0].data || null;
+    
     return true;
   }
   /**
@@ -69,22 +93,55 @@ class MolochInfo
     {
       return false
     }
+    this.getEthValue();
     this.fundTotalList = result[0].data || null;
-    console.log(this.fundTotalList)
-    // if(this.projInfo){
-    //   this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
-    // }
-    // if (this.projInfo)
-    // {
-    //   if (this.fundTotalList)
-    //   {
-    //     this.fundTotalList.list.map((item: IFundInfo, index: number) =>
-    //     {
-    //       // toNonExponential(toMyNumber(item.fundTotal).div(this.projInfo.shares).value)
-    //     })
-    //   }
-    // }
+    console.log(JSON.stringify(this.fundTotalList));  
+    this.computeEachAssetValue();  
     return true;
+  }
+  @action public computeEachAssetValue = () =>
+  {
+    if (this.fundTotalList)
+    {
+      let dollarTotal = 0;
+      const eachValue = this.fundTotalList.list.map((item: IFundInfo) =>
+      {
+        if (this.projInfo)
+        {
+          console.log('a', item.fundTotal);
+          console.log('b', toMyNumber(item.fundTotal).div(this.projInfo.shares).value);
+          console.log('c', toNonExponential(toMyNumber(item.fundTotal).div(this.projInfo.shares).value));
+          const eachItem = {
+            fundTotal: toNonExponential(toMyNumber(item.fundTotal).div(this.projInfo.shares).value),
+            fundHash: item.fundHash,
+            fundSymbol: item.fundSymbol
+          }
+          if(item.fundHash === HASH_CONFIG.ID_WETH){
+            dollarTotal = dollarTotal+toMyNumber(item.fundTotal).mul(this.ethValue).value;
+          }else if(item.fundHash === HASH_CONFIG.ID_SAI){
+            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
+          }else if(item.fundHash === HASH_CONFIG.ID_DAI){
+            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
+          }else if(item.fundHash === HASH_CONFIG.ID_USDF){
+            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
+          }
+          return eachItem
+        }else{
+          return {
+            fundTotal: '0',
+            fundHash: '',
+            fundSymbol: ''
+          }
+        }        
+      })
+      console.log(JSON.stringify(eachValue));
+      console.log(dollarTotal);
+      this.everyFundList = eachValue;
+      console.log(JSON.stringify(this.everyFundList))
+      if(this.projInfo){
+        this.projInfo.valuePerShare = toNonExponential(toMyNumber(dollarTotal).div(this.projInfo.shares).value);
+      }
+    }
   }
   /**
    * 获取成员信息

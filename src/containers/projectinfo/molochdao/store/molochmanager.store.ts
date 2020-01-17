@@ -29,6 +29,7 @@ class IMolochManager
     voteType: '',
     balance: '0'
   }
+  @observable public latestProposalPeriod:string = '0'; // 最新的提案发布在哪个index
 
   /**
    * 获取提案列表
@@ -50,6 +51,10 @@ class IMolochManager
     }
     this.proposalCount = result[0].data.count || 0;
     this.proposalList = result[0].data.list || [];
+
+    if(parseInt(this.latestProposalPeriod,10)<parseInt(result[0].data.list[0].startingPeriod,10)){
+      this.latestProposalPeriod = result[0].data.list[0].startingPeriod||'0';
+    }
     return true;
   }
 
@@ -76,7 +81,6 @@ class IMolochManager
       // this.proposalInfo.proposalDetail = result[0].data.proposalDetail.replace(/\\n/gi, "<br/>").replace(/↵/gi,"<br/>");
       this.proposalInfo.proposalDetail = result[0].data.proposalDetail.replace(/(\\n|\n)/gi, "<br/>").
         replace(/((https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])/gi, '<a href="$1" target="_blank">$1</a>')
-      console.log(this.proposalInfo.proposalDetail)
     }
 
     return true;
