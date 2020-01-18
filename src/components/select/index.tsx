@@ -14,7 +14,7 @@ interface IProps {
 	options: IOptions[],
 	text: string,
 	onCallback?: (event: any) => void,
-	style?: object,
+	style?: React.CSSProperties,
 	placeholder?: string,
 	defaultValue?: string | number
 }
@@ -34,7 +34,7 @@ export default class Select extends React.Component<IProps, IState> {
 	public componentDidMount() {
 		if (this.props.defaultValue) {
 			this.setState({
-				options: this.props.options.filter((item) => item.id === this.props.defaultValue)[0]
+				options: this.props.options.filter((item) => item.id === this.props.defaultValue)[ 0 ]
 			}, () => {
 				if (this.props.onCallback) {
 					this.props.onCallback(this.state.options);
@@ -77,7 +77,7 @@ export default class Select extends React.Component<IProps, IState> {
 	public render() {
 		const selectBox = classnames('select-box', { 'disNone': !this.state.expand })
 		const { options = [] } = this.props;
-		let showName: string = this.props.placeholder || options[0][name];
+		let showName: string = this.props.placeholder || options[ 0 ][ name ];
 		if (this.state.options && this.state.options.name) {
 			showName = this.state.options.name
 		}
