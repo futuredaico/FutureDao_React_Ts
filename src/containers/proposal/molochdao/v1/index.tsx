@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import { observer, inject } from 'mobx-react';
-import './index.less';
+import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Input } from 'antd';
 import Button from '@/components/Button';
@@ -11,10 +11,10 @@ import Button from '@/components/Button';
 // import { getQueryString } from '@/utils/function';
 // import Select from '@/components/select';
 import TextArea from 'antd/lib/input/TextArea';
-import { IMolochProposalProps } from './interface/index.interface';
 import { saveDecimal } from '@/utils/numberTool';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 import { when } from 'mobx';
+import { IMolochProposalProps } from '../interface/index.interface';
 
 interface IState
 {
@@ -23,11 +23,11 @@ interface IState
     tianDes: string,  // 提案详情
     tianAddress: string, // 提案股份申请人
     tianAddrBtn: boolean, // 地址的格式确认
+    addErrMsg:string, // 地址错误提示
     tianRequire: string,   // 申请股份
     tianContribution: string // 贡献资金
     canSendFlag: boolean, // 是否可发起提案
 }
-
 @inject('index', 'common', 'metamaskwallet', 'molochmanager')
 @observer
 class MolochProposal extends React.Component<IMolochProposalProps, IState> {
@@ -38,26 +38,15 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         tianDes: '',
         tianAddress: '',
         tianAddrBtn: true,
+        addErrMsg:"",
         tianRequire: '',
         tianContribution: '',
         canSendFlag: false,
-        sendState: false
     }
-    // private assetOption = [
-    //     {
-    //         id: "1",
-    //         name: 'ETH'
-    //     },
-    //     {
-    //         id: "2",
-    //         name: 'DAI'
-    //     }
-    // ]
-
     public componentDidMount()
     {
         const projectId = this.props.match.params['projectId'];
-        this.props.index.getFundData(projectId);
+        this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
         when(
             () => !!this.props.common.userInfo,
@@ -65,6 +54,15 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                 tianAddress: this.props.common.userInfo ? this.props.common.userInfo.address : ''
             })
         )
+    }
+    public componentWillUnmount(){
+        this.props.index.depositHash = ''; 
+        this.props.index.depositSymbol = ''; 
+        this.props.index.proposalFee = ''; 
+        this.props.index.depositDecimals = 0; 
+        this.props.index.fundList = []; 
+        this.props.index.fundCount = 0; 
+        this.props.index.fundOption=[];
     }
     public render()
     {
@@ -75,60 +73,64 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
                         <h2>{this.intrl.proposal.title}</h2>
                     </div>
                     <div className="proposal-content">
-                        <div className="inline-title">
-                            <strong>{this.intrl.proposal.name}</strong>&nbsp;
+                <div className="inline-title">
+                    <strong>{this.intrl.proposal.name}</strong>&nbsp;
                         <span className="red-type">*</span>
-                        </div>
-                        <div className="inline-enter">
-                            <Input maxLength={40} value={this.state.tianName} onChange={this.handleChangeTianName} />
-                        </div>
-                        <div className="inline-title">
-                            <strong>{this.intrl.proposal.des}</strong>&nbsp;
+                </div>
+                <div className="inline-enter">
+                    <Input maxLength={40} value={this.state.tianName} onChange={this.handleChangeTianName} />
+                </div>
+                <div className="inline-title">
+                    <strong>{this.intrl.proposal.des}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">{this.intrl.proposal.destips}</span>
-                        </div>
-                        <div className="inline-enter">
-                            <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
-                        </div>
-                        <div className="inline-title">
-                            <strong>{this.intrl.proposal.people}</strong>&nbsp;
+                    <span className="tips-text">{this.intrl.proposal.destips}</span>
+                </div>
+                <div className="inline-enter">
+                    <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
+                </div>
+                <div className="inline-title">
+                    <strong>{this.intrl.proposal.people}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">{this.intrl.proposal.peopletips}</span>
-                        </div>
-                        <div className="inline-enter">
-                            <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} />
-                        </div>
-                        <div className="inline-title">
-                            <strong>{this.intrl.proposal.require}</strong>&nbsp;
+                    <span className="tips-text">{this.intrl.proposal.peopletips}</span>
+                </div>
+                <div className="inline-enter">
+                    <Input value={this.state.tianAddress} onChange={this.handleChangeTianAddress} className={!this.state.tianAddrBtn ? "err-active" : ''} />
+                    {
+                        !this.state.tianAddrBtn && <span className="err-span">{this.state.addErrMsg}</span>
+                    }
+                </div>
+                <div className="inline-title">
+                    <strong>{this.intrl.proposal.require}</strong>&nbsp;
                             <span className="red-type">*</span>
-                        </div>
-                        <div className="inline-enter">
-                            <Input className="sort-inputtext" value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
-                        </div>
-                        <div className="inline-title">
-                            <strong>{this.intrl.proposal.gong}</strong>&nbsp;
+                </div>
+                <div className="inline-enter">
+                    <Input className="sort-inputtext" value={this.state.tianRequire} onChange={this.handleChangeTianRequire} />
+                </div>
+                <div className="inline-title">
+                    <strong>{this.intrl.proposal.gong}</strong>&nbsp;
                             <span className="red-type">*</span>
-                            <span className="tips-text">{this.intrl.proposal.gongtips}</span>
-                        </div>
-                        <div className="inline-enter">
-                            <Input className="sort-inputtext" suffix={this.props.index.fundSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
-                            {/* <div className="sort-select">
+                    <span className="tips-text">{this.intrl.proposal.gongtips}</span>
+                </div>
+                <div className="inline-enter">
+                    <Input className="sort-inputtext" suffix={this.props.index.depositSymbol.toLocaleUpperCase()} value={this.state.tianContribution} onChange={this.handleChangeTianContribution} />
+                    {/* <div className="sort-select">
                                 <Select options={this.assetOption} text='' onCallback={this.handleChoiceProposalType} defaultValue={this.state.assetType} />
                             </div> */}
-                        </div>
-                        <div className="inline-btn">
-                            <Button
-                                text={this.intrl.btn.proposal}
-                                btnSize="bg-btn"
-                                btnColor={this.state.canSendFlag ? "" : "gray-btn"}
-                                onClick={this.handleSendProposal}
-                            />
-                        </div>
-                    </div>
+                </div>
+                <div className="inline-btn">
+                    <Button
+                        text={this.intrl.btn.proposal}
+                        btnSize="bg-btn"
+                        btnColor={this.state.canSendFlag ? "" : "gray-btn"}
+                        onClick={this.handleSendProposal}
+                    />
+                </div>
+            </div>
                 </div>
             </div>
         );
     }
+    
     // 提案名称的输入
     private handleChangeTianName = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
@@ -164,7 +166,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
     {
         const res = web3.isAddress(this.state.tianAddress);
         this.setState({
-            tianAddrBtn: res
+            tianAddrBtn: res,
+            addErrMsg:res?'':this.intrl.proposal.addrerr
         }, () =>
         {
             this.checkAllInput()
@@ -248,15 +251,18 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
         {
             return false
         }
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        const assetHash = this.props.index.fundHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
+        const assetHash = this.props.index.depositHash;// "0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
         await this.props.index.applyProposal(contractHash, assetHash,this.state.tianAddress, fiveNum, requireNum, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
         {            
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
         }, () =>
         {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone);
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone,this.intrl.notify.detailbtn,()=>{
+                const projectId = this.props.match.params['projectId'];
+                this.props.history.push('/molochinfo/' + projectId);
+            });
         });
         return true;
     }
@@ -297,7 +303,8 @@ class MolochProposal extends React.Component<IMolochProposalProps, IState> {
             tianAddrBtn: false,
             tianRequire: '',
             tianContribution: '',
-            canSendFlag: false
+            canSendFlag: false,
+            isDoingSave:false
         })
         const projectId = this.props.match.params['projectId'];
         this.props.history.push('/molochinfo/' + projectId);
