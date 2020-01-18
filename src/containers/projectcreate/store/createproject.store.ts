@@ -5,10 +5,8 @@ import { ICreateContent, ICreateProjectStore } from '../interface/createproject.
 import { Web3Contract } from '@/utils/web3Contract';
 import { AbiItem } from "web3-utils";
 import metamaskwallet from '@/store/metamaskwallet';
-import Moloch from '@/utils/Moloch';
 import { toMyNumber } from '@/utils/numberTool';
 import { saveContractInfo } from '../api/project.api';
-import common from '@/store/common';
 class CreateProject implements ICreateProjectStore {
   @observable public createStatus = 0; // 创建项目的状态 0 是编辑状态 1是发布中 2是发布成功 3是发布失败
   @observable public projectID = "";     // 创建项目成功后得到的项目ID
@@ -28,17 +26,22 @@ class CreateProject implements ICreateProjectStore {
     abortWindow: 2,            // 撤回投票的窗口期
     proposalDeposit: 0,        // 提议的押金
     dilutionBound: 3,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
-    processingReward: 0,       // 处理提案的人所得到的奖励
+    processingReward: 0,       // 处理提案的人所得到的奖励    
+    emergencyExitWait: 0,       // 如果在此之后仍未处理提案，则直接跳过
+    bailoutWait: 0,              // 返还资产等待区间段
+    approvedTokens: [],
+    createTime: ""
   }
   /**
    * 创建项目
    */
   @action public createProject = async () => {
     try {
+      // const 
       // await metamaskwallet.inintWeb3(); // 初始化 web3
-      const periods = 5;
-      const abi = Moloch.abi as AbiItem[];
-      const bytecode = Moloch.bytecode;
+      const moloch = this.createContent.version === "1.0" ? require("utils/contractFiles/Moloch.json") : require("utils/contractFiles/Moloch2.json");
+      const abi = moloch.abi as AbiItem[];
+      const bytecode = moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
       const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
       const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
@@ -46,34 +49,39 @@ class CreateProject implements ICreateProjectStore {
       this.createContent.processingReward = toMyNumber(this.createContent.processingReward).mul(decimals).value;
       this.createContent.approvedDecimals = parseFloat(asset.decimals)
       this.createContent.approvedTokenSymbol = asset.symbol;
+      this.createContent.approvedTokens = [ { hash: this.createContent.approvedToken, symbol: asset.symbol, decimals: asset.decimals } ]
+      const variableArray = this.createContent.version === "1.0" ? [ this.createContent.abortWindow ] : [ this.createContent.emergencyExitWait, this.createContent.bailoutWait ]
       // 部署合约
       const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
-        this.createContent.approvedToken,
+        this.createContent.version === "1.0" ? this.createContent.approvedToken : [ this.createContent.approvedToken ],
         this.createContent.periodDuration,
-        this.createContent.votingPeriodLength * periods,
-        this.createContent.gracePeriodLength * periods,
-        this.createContent.abortWindow * periods,
-        metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(),
+        this.createContent.votingPeriodLength,
+        this.createContent.gracePeriodLength,
+        ...variableArray,   // 解构参数
+        metamaskwallet.web3.utils.toBN(this.createContent.proposalDeposit).toArray(), // 将number类型通过 bignumber转换成 uint256类型
         this.createContent.dilutionBound,
-        metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray()
+        metamaskwallet.web3.utils.toBN(this.createContent.processingReward).toArray() // 将number类型通过 bignumber转换成 uint256类型
       );
-      if (common.language === 'zh') {
-        common.openNotificationWithIcon('success', "操作成功", "交易已生成，请在钱包确认。");
-      } else {
-        common.openNotificationWithIcon('success', "Operation successful", "Transaction requested, please confirm in wallet.");
-      }
       // 得到交易id 判断已经进入加载状态，修改状态 createStatus = 1
       const txid = await deployResult.onTransactionHash();
       this.createStatus = 1;
-      console.log('txid', txid);
       const newContactInstance = await deployResult.promise;  // 合约部署成功后获得新的合约对象
       const contractAddress = newContactInstance.options.address;
       const newContract = new Web3Contract(abi, contractAddress, newContactInstance);
       const guildBankAddress = await newContract.contractCall("guildBank"); // 获得 bank合约hash
-      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress); // 上传项目信息给服务端
-      console.log(result);
+      console.log("transactionBlockTimeout", newContactInstance.transactionBlockTimeout);
+      console.log("transactionConfirmationBlocks", newContactInstance.transactionConfirmationBlocks);
+      console.log("transactionPollingTimeout", newContactInstance.transactionPollingTimeout);
+      const txinfo = await metamaskwallet.web3.eth.getTransaction(txid);
+      if (txinfo.blockHash) {
+        const blockInfo = await metamaskwallet.web3.eth.getBlock(txinfo.blockHash)
+        this.createContent.createTime = blockInfo.timestamp.toString();
+        console.log("block timestamp", blockInfo.timestamp);
+      }
+
+      const result = await saveContractInfo(this.createContent, summoner, contractAddress, guildBankAddress, txid); // 上传项目信息给服务端
       if (result && result[ 0 ] && result[ 0 ].resultCode === "00000") {
         this.projectID = result[ 0 ].data.projId;
         this.createStatus = 2;

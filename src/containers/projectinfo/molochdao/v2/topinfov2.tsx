@@ -124,7 +124,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                     <div className="going-line">
                         <div className="going-gray">{this.intrl.projinfo.every}</div>
                         <div className="going-normal">
-                            <strong>≈ $ {parseFloat(saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4))}</strong>
+                            <strong>≈ $ {parseFloat(this.props.molochinfo.projInfo.valuePerShare?saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4):'0')}</strong>
                             <div className="everyshare-box">
                                 {
                                     this.props.molochinfo.everyFundList.length>0 && this.props.molochinfo.everyFundList.map((item:IFundInfo,index:number)=>{                                        

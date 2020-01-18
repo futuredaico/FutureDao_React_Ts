@@ -35,9 +35,9 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
     {
         this.props.molochinfo.projId = '';
         this.props.molochinfo.menuNum = 1;
-        this.props.molochinfo.isShowUpdateInfo = false;
         this.props.molochinfo.isShowManagerInfo = false;
         this.props.molochinfo.projInfo = null;
+        this.props.molochmanager.proposalAddress = '';
     }
     public render()
     {
@@ -66,14 +66,14 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                             </div>
                         </div>
                         {
-                            this.props.molochinfo.projInfo.projVersion === '1.0' ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
+                            this.props.molochinfo.projInfo.projVersion.includes('1.0') ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
                         }
                         {/*  */}
 
                     </div>
                 </div>
                 {
-                    this.props.molochinfo.projInfo.projVersion === '1.0' ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
+                    this.props.molochinfo.projInfo.projVersion.includes('1.0') ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
                 }
             </div >
         );

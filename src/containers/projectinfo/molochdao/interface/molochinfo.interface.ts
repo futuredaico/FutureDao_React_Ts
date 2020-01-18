@@ -7,7 +7,6 @@ import { IMolochProposalStore } from "@/containers/proposal/molochdao/interface/
 export interface IMolochInfoStore
 {
   menuNum: number,
-  isShowUpdateInfo: boolean,
   projInfo: IMolochInfo | null,
   projId: string,
   projUpdateCount: number,

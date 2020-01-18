@@ -8,7 +8,6 @@ import { HASH_CONFIG } from '@/config';
 class MolochInfo
 {
   @observable public menuNum = 1; // 菜单切换 1为项目详情，2为留言，3为治理，4为成员
-  @observable public isShowUpdateInfo = false; // 是否显示更新日志详情
   @observable public projInfo: IMolochInfo | null = null; // 项目详情
   @observable public projId: string = ''; // 项目ID
   @observable public projMemberList: IProjectMember[] = []; // 项目团队列表(有投票权的）
@@ -47,10 +46,16 @@ class MolochInfo
       return false
     }
     this.projInfo = result[0].data || null;
-    // if(this.projInfo){
-    //   this.projInfo.valuePerShare = this.projInfo.shares?toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value):"0";
-    // }
-    this.getMolochFundTotal(projId);
+    if (result[0].data.projVersion.includes('1.0'))
+    {
+      if (this.projInfo)
+      {
+        this.projInfo.valuePerShare = this.projInfo.shares ? toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value) : "0";
+      }
+    } else
+    {
+      this.getMolochFundTotal(projId);
+    }
     return true;
   }
   /**
@@ -72,7 +77,7 @@ class MolochInfo
       return false
     }
     this.ethValue = result[0].data || null;
-    
+
     return true;
   }
   /**
@@ -95,8 +100,7 @@ class MolochInfo
     }
     this.getEthValue();
     this.fundTotalList = result[0].data || null;
-    console.log(JSON.stringify(this.fundTotalList));  
-    this.computeEachAssetValue();  
+    this.computeEachAssetValue();
     return true;
   }
   @action public computeEachAssetValue = () =>
@@ -108,38 +112,38 @@ class MolochInfo
       {
         if (this.projInfo)
         {
-          console.log('a', item.fundTotal);
-          console.log('b', toMyNumber(item.fundTotal).div(this.projInfo.shares).value);
-          console.log('c', toNonExponential(toMyNumber(item.fundTotal).div(this.projInfo.shares).value));
           const eachItem = {
             fundTotal: toNonExponential(toMyNumber(item.fundTotal).div(this.projInfo.shares).value),
             fundHash: item.fundHash,
             fundSymbol: item.fundSymbol
           }
-          if(item.fundHash === HASH_CONFIG.ID_WETH){
-            dollarTotal = dollarTotal+toMyNumber(item.fundTotal).mul(this.ethValue).value;
-          }else if(item.fundHash === HASH_CONFIG.ID_SAI){
-            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
-          }else if(item.fundHash === HASH_CONFIG.ID_DAI){
-            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
-          }else if(item.fundHash === HASH_CONFIG.ID_USDF){
-            dollarTotal = dollarTotal+parseFloat(item.fundTotal);
+          if (item.fundHash === HASH_CONFIG.ID_WETH)
+          {
+            dollarTotal = dollarTotal + toMyNumber(item.fundTotal).mul(this.ethValue).value;
+          } else if (item.fundHash === HASH_CONFIG.ID_SAI)
+          {
+            dollarTotal = dollarTotal + parseFloat(item.fundTotal);
+          } else if (item.fundHash === HASH_CONFIG.ID_DAI)
+          {
+            dollarTotal = dollarTotal + parseFloat(item.fundTotal);
+          } else if (item.fundHash === HASH_CONFIG.ID_USDF)
+          {
+            dollarTotal = dollarTotal + parseFloat(item.fundTotal);
           }
           return eachItem
-        }else{
+        } else
+        {
           return {
             fundTotal: '0',
             fundHash: '',
             fundSymbol: ''
           }
-        }        
+        }
       })
-      console.log(JSON.stringify(eachValue));
-      console.log(dollarTotal);
       this.everyFundList = eachValue;
-      console.log(JSON.stringify(this.everyFundList))
-      if(this.projInfo){
-        this.projInfo.valuePerShare = toNonExponential(toMyNumber(dollarTotal).div(this.projInfo.shares).value);
+      if (this.projInfo)
+      {
+        this.projInfo.valuePerShare = this.projInfo.shares ? toNonExponential(toMyNumber(dollarTotal).div(this.projInfo.shares).value) : '0';
       }
     }
   }

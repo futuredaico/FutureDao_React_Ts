@@ -51,10 +51,11 @@ class IMolochManager
     }
     this.proposalCount = result[0].data.count || 0;
     this.proposalList = result[0].data.list || [];
-
-    if(parseInt(this.latestProposalPeriod,10)<parseInt(result[0].data.list[0].startingPeriod,10)){
-      this.latestProposalPeriod = result[0].data.list[0].startingPeriod||'0';
-    }
+    if(result[0].data.list.length>0){
+      if(parseInt(this.latestProposalPeriod,10)<parseInt(result[0].data.list[0].startingPeriod,10)){
+        this.latestProposalPeriod = result[0].data.list[0].startingPeriod||'0';
+      }
+    }    
     return true;
   }
 
@@ -433,6 +434,11 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      // const res = await molochContract.contractCall("getCurrentPeriod");
+      // console.log("赞同票")
+      // console.log(JSON.stringify("getCurrentPeriod",res));
+      // const res2 = await molochContract.contractCall("getProposalQueueLength", [index]);
+      // console.log("getProposalQueueLength",res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 1], { from: myaddr });
       console.log(submitRes)
       await submitRes.onTransactionHash();
@@ -469,6 +475,11 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      // const res = await molochContract.contractCall("getCurrentPeriod");
+      // console.log("反对票")
+      // console.log(JSON.stringify("getCurrentPeriod",res));
+      // const res2 = await molochContract.contractCall("getProposalQueueLength", [index]);
+      // console.log("getProposalQueueLength",res2)
       const submitRes = molochContract.contractSend("submitVote", [indexArr, 2], { from: myaddr })
       console.log(submitRes)
       await submitRes.onTransactionHash();
@@ -506,6 +517,9 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log("getCurrentPeriod");
+      console.log(res)
       const submitRes = molochContract.contractSend("processProposal", [indexArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
       console.log(subtxid)
@@ -555,7 +569,7 @@ class IMolochManager
   /**
    * 处理提案--V2版踢人的提案(处理期或过期时需要的处理)
    */
-  @action public processKickProposal = async (proposalIndex: string, myaddr: string) =>
+  @action public processKickProposal = async (proposalIndex: string, myaddr: string,confrimCall:()=>void) =>
   {
     if (!this.contractInfo)
     {
@@ -582,6 +596,7 @@ class IMolochManager
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("processGuildKickProposal", [indexArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
+      submitRes.onConfrim().then(res => { confrimCall() })
       console.log(subtxid)
     } catch (e)
     {

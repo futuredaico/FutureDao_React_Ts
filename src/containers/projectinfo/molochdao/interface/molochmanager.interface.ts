@@ -38,7 +38,7 @@ export interface IMolochManagerStore
   applyNoVoteV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processProposalV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   processWhiteListProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
-  processKickProposal:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
+  processKickProposal:(proposalIndex:string,myaddr:string,confrimCall:()=>void)=>Promise<boolean>,
   processKickPeople:(kickAddress:string,myaddr:string)=>Promise<boolean>,  
   stopProposalV2:(proposalIndex:string,myaddr:string)=>Promise<boolean>,
   quitSharesV2:(sharesValue: number,lootValue:number, myaddr: string)=>Promise<boolean>,

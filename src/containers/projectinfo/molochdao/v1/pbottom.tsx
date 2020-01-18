@@ -89,7 +89,6 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
   {
     window.scrollTo(0, 500);
     this.props.molochinfo.menuNum = id;
-    this.props.molochinfo.isShowUpdateInfo = false;
     this.props.molochinfo.isShowManagerInfo = false;
     if (id === 2)
     {

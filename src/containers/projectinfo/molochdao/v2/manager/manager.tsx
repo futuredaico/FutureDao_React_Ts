@@ -338,7 +338,6 @@ class MolochManager extends React.Component<IMolochInfoProps> {
     // 计算处理期倒计时
     private computeProcessTime = (item: IMolochProposalList) =>
     {
-        // emergencyExitWait
         // 处理期剩余时间=投票时间+公示时间+处理时间-（当前时间-发布合约的时间点）
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);

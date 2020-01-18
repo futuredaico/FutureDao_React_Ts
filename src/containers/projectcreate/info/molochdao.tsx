@@ -14,7 +14,8 @@ import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import { asNumber } from '@/utils/numberTool';
 // import metamaskwallet from '@/store/metamaskwallet';
-interface IState {
+interface IState
+{
     version: string;                // 版本
     projectName: string;            // 项目名称
     officialWebsite: string;         // 官网
@@ -31,6 +32,8 @@ interface IState {
     abortWindow: number;            // 撤回投票的窗口期
     proposalDeposit: string;        // 提议的押金
     dilutionBound: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
+    emergencyExitWait: number;       // 如果在此之后仍未处理提案，则直接跳过
+    bailoutWait: number              // 返还资产等待区间段
     processingReward: string;       // 处理提案的人所得到的奖励
     loading: boolean;               // 图片上传加载中的状态
     otherToken: boolean;
@@ -49,9 +52,12 @@ interface IState {
     processingRewardEnter: boolean,
     processingRewardError: boolean,
     createButtonState: boolean,
+    emergencyExitWaitEnter: boolean,
+    bailoutWaitEnter: boolean,
 }
 
-interface IOptions {
+interface IOptions
+{
     id: string | number,
     name: string
 }
@@ -74,6 +80,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         votingPeriodLength: 7,     // 投票有多少个区间段
         gracePeriodLength: 7,      // 公示有多少个区间段
         abortWindow: 5,            // 撤回投票的窗口期
+        emergencyExitWait: 0,
+        bailoutWait: 0,
         proposalDeposit: "10",        // 提议的押金
         dilutionBound: 3,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认3
         processingReward: "0.1",       // 处理提案的人所得到的奖励
@@ -95,11 +103,13 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         officialWebsiteEnter: false,
         abortWindowError: false,
         processingRewardError: false,
+        emergencyExitWaitEnter: false,
+        bailoutWaitEnter: false,
     }
     // DAO版本选择
     private versionOptions: IOptions[] = [
-        { 'id': 'molochdao1.0', 'name': 'molochdao1.0' },
-        // { 'id': 'molochdao2.0', 'name': 'molochdao2.0' }
+        { 'id': '1.0', 'name': 'molochdao1.0' },
+        { 'id': '2.0', 'name': 'molochdao2.0' },
     ]
     // 期间选择项
     private dayOptions: IOptions[] = [
@@ -110,6 +120,16 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         { name: '5' + this.intrl.create.days, id: 5 },
         { name: '6' + this.intrl.create.days, id: 6 },
         { name: '7' + this.intrl.create.days, id: 7 },
+    ]
+    // 踢人宽限期选项 
+    private bailoutWaitOptions: IOptions[] = [
+        { name: '8天', id: 8 },
+        { name: '9天', id: 9 },
+        { name: '10天', id: 10 },
+        { name: '11天', id: 11 },
+        { name: '12天', id: 12 },
+        { name: '13天', id: 13 },
+        { name: '14天', id: 14 },
     ]
     // 代币选择项
     private tokenOptions: IOptions[] =
@@ -125,13 +145,14 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 { name: this.intrl.create.other, id: '' }
             ]
 
-    public render() {
+    public render()
+    {
         return (
             <div className="molochdao-create">
                 <div className="info-title"><b>{this.intrl.create.title1}</b></div>
                 <div className="info-group">
                     <div className="group-name"><b>{this.intrl.create.version}</b></div>
-                    <Select text="" defaultValue={this.versionOptions[ 0 ].id} options={this.versionOptions} onCallback={this.handleDaoVersionSelect} />
+                    <Select text="" defaultValue={this.versionOptions[0].id} options={this.versionOptions} onCallback={this.handleDaoVersionSelect} />
                 </div>
                 <div className="info-group">
                     <div className="group-name"><b>{this.intrl.create.name}</b><span className="red-type"> *</span></div>
@@ -206,7 +227,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                 <div className="info-group">
                     <div className="group-name"><b>{this.intrl.create.asset}</b><span className="red-type"> *</span></div>
                     <div className="inline-box left">
-                        <Select text="" options={this.tokenOptions} onCallback={this.hadleSelectApprovedToken} defaultValue={this.tokenOptions[ 0 ].id} />
+                        <Select text="" options={this.tokenOptions} onCallback={this.hadleSelectApprovedToken} defaultValue={this.tokenOptions[0].id} />
                         {this.state.otherToken &&
                             <Input
                                 value={this.state.approvedToken}
@@ -248,15 +269,47 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                         </>
                     }
                 </div>
-                <div className="info-group">
-                    <div className="group-name"><b>{this.intrl.create.canceltime}</b><span className="red-type"> *</span></div>
-                    <div className="inline-box left">
-                        <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} defaultValue={5} />
+                {
+                    this.state.version === "1.0" &&
+                    <div className="info-group">
+                        <div className="group-name"><b>{this.intrl.create.canceltime}</b><span className="red-type"> *</span></div>
+                        <div className="inline-box left">
+                            <Select text="" options={this.dayOptions} onCallback={this.handleSelectAbortWindow} defaultValue={5} />
+                            {
+                                this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? this.intrl.create.error1 : this.intrl.edit.error}</span>
+                            }
+                        </div>
+                    </div>
+                }
+                {
+                    this.state.version === "2.0" &&
+                    <div className="info-group">
+                        <div className="inline-box left">
+                            <div className="group-name"><b>提案处理期限</b><span className="red-type"> *</span></div>
+                            <Select text="" options={this.dayOptions} onCallback={this.handleSelectEmergencyExitWait} />
+                        </div>
+                        <div className="inline-box">
+                            <div className="group-name"><b>踢出成员执行宽限期</b><span className="red-type"> *</span></div>
+                            <Select text="" options={this.bailoutWaitOptions} onCallback={this.handleSelectBailoutWait} />
+                        </div>
                         {
-                            this.state.abortWindowEnter && <span className="err-span">{this.state.abortWindowError ? this.intrl.create.error1 : this.intrl.edit.error}</span>
+                            (this.state.emergencyExitWaitEnter || this.state.bailoutWaitEnter) &&
+                            <>
+                                <div className="inline-box left">
+                                    {
+                                        this.state.emergencyExitWaitEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                                    }
+                                </div>
+                                <div className="inline-box">
+                                    {
+                                        this.state.bailoutWaitEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                                    }
+                                </div>
+                            </>
                         }
                     </div>
-                </div>
+                }
+
                 <div className="info-group">
                     <div className="inline-box left">
                         <div className="group-name"><b>{this.intrl.create.cash}</b><span className="red-type"> *</span></div>
@@ -300,7 +353,20 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 btnSize="bg-btn"
                                 onClick={this.handleToCreateProject}
                                 // disabled={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward)}
-                                btnColor={(!this.state.projectName || !this.state.info || !this.state.approvedToken || !this.state.votingPeriodLength || !this.state.gracePeriodLength || !this.state.abortWindow || !this.state.proposalDeposit || !this.state.processingReward) ? 'gray-btn' : ''}
+                                btnColor=
+                                {
+                                    (
+                                        !this.state.projectName ||
+                                        !this.state.info ||
+                                        !this.state.approvedToken ||
+                                        !this.state.votingPeriodLength ||
+                                        !this.state.gracePeriodLength ||
+                                        (this.state.version === "1.0" ? !this.state.abortWindow : false) ||
+                                        (this.state.version === "2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : false) ||
+                                        !this.state.proposalDeposit ||
+                                        !this.state.processingReward
+                                    ) ? 'gray-btn' : ''
+                                }
                             /> :
                             <Button
                                 text={this.intrl.btn.editstep1}
@@ -314,14 +380,16 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 监听版本变更
-    private handleDaoVersionSelect = (event) => {
+    private handleDaoVersionSelect = (event) =>
+    {
         this.setState({
             version: event.id
         })
     }
 
     // 监听项目名称变更
-    private handleChangeProjectName = (event) => {
+    private handleChangeProjectName = (event) =>
+    {
         this.setState({
             projectName: event.target.value,
             nameEnter: false
@@ -329,7 +397,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 官网修改
-    private handleChangeOfficialWebsite = (event) => {
+    private handleChangeOfficialWebsite = (event) =>
+    {
         this.setState({
             officialWebsite: event.target.value,
             officialWebsiteEnter: false
@@ -337,9 +406,11 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 限制图片上传大小与格式
-    private beforeUpload = (file: RcFile) => {
+    private beforeUpload = (file: RcFile) =>
+    {
         // 限制大小3M以下
-        if (file.size / 1024 / 1024 > 3) {
+        if (file.size / 1024 / 1024 > 3)
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             return false;
         }
@@ -351,15 +422,18 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         return true;
     }
     // 上传封面
-    private handleUploadCoverPicture = async (file: RcFile) => {
+    private handleUploadCoverPicture = async (file: RcFile) =>
+    {
         const res = await this.props.common.uploadFile(file);
-        if (res) {
+        if (res)
+        {
             this.setState({
                 imageUrl: res,
                 imgEnter: false,
                 loading: false
             })
-        } else {
+        } else
+        {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             this.setState({
                 imageUrl: '',
@@ -370,7 +444,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 当textarea内容改变时，改变项目简介的值
-    private handleChangeInfo = (event) => {
+    private handleChangeInfo = (event) =>
+    {
         const str = event.target.value;
         this.setState({
             info: str,
@@ -381,10 +456,12 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 文本框的输入
-    private onChangeEditorValue = (value: any) => {
+    private onChangeEditorValue = (value: any) =>
+    {
         // todo
         const text = value.toText();
-        if (text !== "") {
+        if (text !== "")
+        {
             this.setState({
                 projDetail: BraftEditor.createEditorState(value).toHTML().replace(/\s\s/g, '&nbsp;&nbsp;'),
                 projectDetails: BraftEditor.createEditorState(value),
@@ -394,26 +471,31 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 当Token的输入框内容发生改变的时候
-    private hadleChangeApprovedToken = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private hadleChangeApprovedToken = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const isToken = web3.isAddress(str);
         this.setState({
             approvedToken: str,
             approvedTokenEnter: !isToken
         })
-        if (isToken) {
-            this.props.createproject.getTokenInfo(str).then(asset => {
+        if (isToken)
+        {
+            this.props.createproject.getTokenInfo(str).then(asset =>
+            {
                 this.setState({
                     approvedTokenSymbol: asset.symbol.toLocaleUpperCase()
                 })
-            }).catch(err => {
+            }).catch(err =>
+            {
                 console.log(err);
             })
         }
     }
 
     // 允许交易的Token
-    private hadleSelectApprovedToken = (event) => {
+    private hadleSelectApprovedToken = (event) =>
+    {
         this.setState({
             approvedToken: event.id,
             otherToken: !event.id,
@@ -423,7 +505,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 选择投票期时长
-    private handleSelectVotingPeriodLength = (event) => {
+    private handleSelectVotingPeriodLength = (event) =>
+    {
         this.setState({
             votingPeriodLength: event.id,
             votingPeriodLengthEnter: false
@@ -431,7 +514,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 选择公示期期时长
-    private handleSelectGracePeriodLength = (event) => {
+    private handleSelectGracePeriodLength = (event) =>
+    {
         this.setState({
             gracePeriodLength: event.id,
             gracePeriodLengthEnter: false
@@ -439,7 +523,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 取消窗口期投票市场
-    private handleSelectAbortWindow = (event) => {
+    private handleSelectAbortWindow = (event) =>
+    {
         this.setState({
             abortWindow: event.id,
             abortWindowEnter: false,
@@ -447,8 +532,28 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         })
     }
 
+    // 如果在此之后仍未处理提案，则直接跳过(应该是提案处理期限)
+    private handleSelectEmergencyExitWait = (event) =>
+    {
+        this.setState({
+            emergencyExitWait: event.id,
+            emergencyExitWaitEnter: false
+        })
+    }
+
+    // 返还资产等待区间段（应该是踢出成员执行宽限期 ）
+    private handleSelectBailoutWait = (event) =>
+    {
+        this.setState({
+            bailoutWait: event.id,
+            bailoutWaitEnter: false
+        })
+    }
+
+
     // 提议押金
-    private handleChangeProposalDeposit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChangeProposalDeposit = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const number = asNumber(str);
         this.setState({
@@ -459,7 +564,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 处理人奖励
-    private handleChangeProcessingReward = (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleChangeProcessingReward = (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
         const str = event.target.value;
         const number = asNumber(str);
         this.setState({
@@ -469,82 +575,121 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 输入检测
-    private checkInputStatus = () => {
+    private checkInputStatus = () =>
+    {
         // window.scrollTo(0, 0)
         // 项目名不可为空且字数不能超过40
-        if (!this.state.projectName || this.state.projectName.length > 40) {
+        if (!this.state.projectName || this.state.projectName.length > 40)
+        {
             this.setState({ nameEnter: true });
             window.scrollTo(0, 0)
             return false;
         }
         // 项目简介不可为空且字数不能超过400
-        if (!this.state.info || this.state.infoLength > 400) {
+        if (!this.state.info || this.state.infoLength > 400)
+        {
             this.setState({ infoEnter: true });
             window.scrollTo(0, 250)
             return false;
         }
         // 验证官网是否是符合格式
-        if (this.state.officialWebsite) {
+        if (this.state.officialWebsite)
+        {
             const re = new RegExp(/((https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])/gi);
-            if (!re.test(this.state.officialWebsite)) {
+            if (!re.test(this.state.officialWebsite))
+            {
                 this.setState({ officialWebsiteEnter: true })
                 window.scrollTo(0, 1350)
                 return false;
             }
-            else {
+            else
+            {
                 this.setState({ officialWebsiteEnter: false })
             }
         }
         // 支持代币不可为空
-        if (!this.state.approvedToken) {
+        if (!this.state.approvedToken)
+        {
             this.setState({ approvedTokenEnter: true });
             window.scrollTo(0, 1500)
             return false;
         }
         // 支持代币不是正确的格式
-        if (!web3.isAddress(this.state.approvedToken)) {
+        if (!web3.isAddress(this.state.approvedToken))
+        {
             this.setState({ approvedTokenEnter: true });
             window.scrollTo(0, 1500)
             return false;
         }
         // 判断投票期限不可小于等于0
-        if (this.state.votingPeriodLength <= 0) {
+        if (this.state.votingPeriodLength <= 0)
+        {
             this.setState({ votingPeriodLengthEnter: true });
             window.scrollTo(0, 1750)
             return false;
         }
         // 公示期不可为小于等于0
-        if (this.state.gracePeriodLength <= 0) {
+        if (this.state.gracePeriodLength <= 0)
+        {
             this.setState({ gracePeriodLengthEnter: true });
             window.scrollTo(0, 1750)
             return false;
         }
-        // 窗口期不可小于等于0
-        if (this.state.abortWindow <= 0) {
-            this.setState({ abortWindowEnter: true });
-            window.scrollTo(0, 1950)
-            return false;
+        if (this.state.version === "molochdao1.0")
+        {
+            // 窗口期不可小于等于0
+            if (this.state.abortWindow <= 0)
+            {
+                this.setState({ abortWindowEnter: true });
+                window.scrollTo(0, 1950)
+                return false;
+            }
+            // 窗口期不可大于投票期
+            if (this.state.abortWindow > this.state.votingPeriodLength)
+            {
+                this.setState({ abortWindowEnter: true, abortWindowError: true });
+                window.scrollTo(0, 1950)
+                return false;
+            }
         }
-        // 窗口期不可大于投票期
-        if (this.state.abortWindow > this.state.votingPeriodLength) {
-            this.setState({ abortWindowEnter: true, abortWindowError: true });
-            window.scrollTo(0, 1950)
-            return false;
+        if (this.state.version === "molochdao2.0")
+        {
+            if (this.state.emergencyExitWait <= 0)
+            {
+                this.setState({ emergencyExitWaitEnter: true });
+                window.scrollTo(0, 1950)
+                return false;
+            }
+            if (this.state.bailoutWait <= 0)
+            {
+                this.setState({ bailoutWaitEnter: true });
+                window.scrollTo(0, 1950)
+                return false;
+            }
+            if (this.state.emergencyExitWait > this.state.bailoutWait)
+            {
+                this.setState({ bailoutWaitEnter: true });
+                window.scrollTo(0, 1950)
+                return false;
+            }
         }
         // 投票押金数量不能为空且不能为0
-        if (!this.state.proposalDeposit || parseFloat(this.state.proposalDeposit) <= 0) {
+        if (!this.state.proposalDeposit || parseFloat(this.state.proposalDeposit) <= 0)
+        {
             this.setState({ proposalDepositEnter: true });
             window.scrollTo(0, 2150)
             return false;
         }
         // 投票结果奖励不能为空且不能为0
-        if (!this.state.processingReward || parseFloat(this.state.processingReward) <= 0) {
+        if (!this.state.processingReward || parseFloat(this.state.processingReward) <= 0)
+        {
             this.setState({ processingRewardEnter: true });
             window.scrollTo(0, 2150)
             return false;
         }
         // 处理投票奖励不可超过押金数量
-        if (parseFloat(this.state.processingReward) > parseFloat(this.state.proposalDeposit)) {
+        if (parseFloat(this.state.processingReward) > parseFloat(this.state.proposalDeposit))
+        {
             this.setState({ processingRewardEnter: true, processingRewardError: true });
             window.scrollTo(0, 2150)
             return false;
@@ -553,11 +698,15 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
     }
 
     // 创建项目
-    private handleToCreateProject = async () => {
+    private handleToCreateProject = async () =>
+    {
         const check = this.checkInputStatus();
-        if (check) {
+        if (check)
+        {
             const res = await this.props.metamaskwallet.inintWeb3();
-            if (res) {
+            if (res)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                 this.props.createproject.createContent = {
                     version: this.state.version,                                // 版本
                     projectName: this.state.projectName,                        // 项目名称
@@ -572,16 +721,22 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     abortWindow: this.state.abortWindow,                        // 撤回投票的窗口期
                     proposalDeposit: parseFloat(this.state.proposalDeposit),    // 提议的押金
                     dilutionBound: this.state.dilutionBound,                    // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数 默认是3
-                    processingReward: parseFloat(this.state.processingReward)   // 处理提案的人所得到的奖励
+                    processingReward: parseFloat(this.state.processingReward),   // 处理提案的人所得到的奖励
+                    emergencyExitWait: this.state.emergencyExitWait,
+                    bailoutWait: this.state.bailoutWait,
+                    approvedTokens: []
                 }
                 this.setState({ createButtonState: false })
-                try {
+                try
+                {
                     const result = await this.props.createproject.createProject();
-                    if (result) {
+                    if (result)
+                    {
                         this.setState({ createButtonState: true })
                     }
                     this.setState({ createButtonState: true })
-                } catch (error) {
+                } catch (error)
+                {
                     this.setState({ createButtonState: true })
                 }
             }

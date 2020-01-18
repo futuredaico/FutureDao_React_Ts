@@ -7,18 +7,19 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import { saveDecimal } from '@/utils/numberTool';
-import { toMyNumber, toNonExponential } from '@/utils/numberTool';
-import { when } from 'mobx';
+// import { toMyNumber, toNonExponential } from '@/utils/numberTool';
+// import { when } from 'mobx';
 
 @observer
 class TopInfoV1 extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
-    public componentDidMount(){
-        when(
-            () => !!this.props.molochinfo.fundTotalList,
-            () => this.computeEachShares()
-        )        
-    }
+    // public componentDidMount()
+    // {
+    //     when(
+    //         () => !!this.props.molochinfo.fundTotalList,
+    //         () => this.computeEachShares()
+    //     )
+    // }
     public render()
     {
         if (!this.props.molochinfo.projInfo)
@@ -30,20 +31,22 @@ class TopInfoV1 extends React.Component<IMolochInfoProps> {
                 <div className="going-wrapper">
                     <div className="going-line">
                         <div className="going-purple">
-                            <strong className="purple-big">
+                            <strong className="purple-big">{parseFloat(saveDecimal(this.props.molochinfo.projInfo.fundTotal, 6))}</strong>
+                            <strong className="purple-sm"> {this.props.molochinfo.projInfo.fundSymbol.toLocaleUpperCase()}</strong>
+                            {/* <strong className="purple-big">                            
                                 {
-                                    this.props.molochinfo.fundTotalList
-                                    ? saveDecimal(this.props.molochinfo.fundTotalList.list[0].fundTotal, 4)
-                                    : 0
+                                    (this.props.molochinfo.fundTotalList && this.props.molochinfo.fundTotalList.list.length > 0)
+                                        ? saveDecimal(this.props.molochinfo.fundTotalList.list[0].fundTotal, 4)
+                                        : 0
                                 }
                             </strong>
-                            <strong className="purple-sm"> 
+                            <strong className="purple-sm">
                                 {
-                                    this.props.molochinfo.fundTotalList
-                                    ? this.props.molochinfo.fundTotalList.list[0].fundSymbol.toLocaleUpperCase()
-                                    : ''
+                                    (this.props.molochinfo.fundTotalList && this.props.molochinfo.fundTotalList.list.length > 0)
+                                        ? this.props.molochinfo.fundTotalList.list[0].fundSymbol.toLocaleUpperCase()
+                                        : ''
                                 }
-                            </strong>
+                            </strong> */}
                         </div>
                         <div className="going-gray">{this.intrl.projinfo.asset}</div>
                     </div>
@@ -71,14 +74,18 @@ class TopInfoV1 extends React.Component<IMolochInfoProps> {
             </div>
         );
     }
-    private computeEachShares = ()=>{
-        if(this.props.molochinfo.projInfo){
-            if(this.props.molochinfo.fundTotalList){
-                this.props.molochinfo.projInfo.valuePerShare = toNonExponential(toMyNumber(this.props.molochinfo.fundTotalList.list[0].fundTotal).div(this.props.molochinfo.projInfo.shares).value)
-            }else{
-                this.props.molochinfo.projInfo.valuePerShare = '0'
-            }
-        }
-    }
+    // private computeEachShares = () =>
+    // {
+    //     if (this.props.molochinfo.projInfo)
+    //     {
+    //         if (this.props.molochinfo.fundTotalList)
+    //         {
+    //             this.props.molochinfo.projInfo.valuePerShare = toNonExponential(toMyNumber(this.props.molochinfo.fundTotalList.list[0].fundTotal).div(this.props.molochinfo.projInfo.shares).value)
+    //         } else
+    //         {
+    //             this.props.molochinfo.projInfo.valuePerShare = '0'
+    //         }
+    //     }
+    // }
 }
 export default injectIntl(TopInfoV1)

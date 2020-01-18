@@ -389,7 +389,7 @@ export const exportOrderFile = (userId: string, token: string, projId: string) =
  * @param molochhash molochdao hash
  * @param bankhash bank hash
  */
-export const saveContractInfo = (contractContent: ICreateContent, summoner: string, molochhash: string, bankhash: string) => {
+export const saveContractInfo = (contractContent: ICreateContent, summoner: string, molochhash: string, bankhash: string, txid: string) => {
     const {
         version,                // 版本
         projectName,            // 项目名称
@@ -397,16 +397,20 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
         projectDetail,          // 文本编辑内容 详情
         projectConverUrl,          // 项目封面URL
         officialWebUrl,         // 官网URL
-        approvedToken,          // 允许交易的token
-        approvedTokenSymbol,
-        approvedDecimals,
+        // approvedToken,          // 允许交易的token
+        // approvedTokenSymbol,
+        // approvedDecimals,
         periodDuration,         // 区间段的时间 测试网默认一个区间时段是120秒 2分钟
         votingPeriodLength,     // 投票有多少个区间段
         gracePeriodLength,     // 公示有多少个区间段
         abortWindow,            // 撤回投票的窗口期
         proposalDeposit,        // 提议的押金
         // 目前用不上 dilutionBound,          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
-        processingReward       // 处理提案的人所得到的奖励
+        processingReward,       // 处理提案的人所得到的奖励
+        emergencyExitWait,
+        bailoutWait,
+        approvedTokens,
+        createTime,
     } = contractContent
 
     const opts = {
@@ -418,9 +422,10 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             projectDetail,
             projectConverUrl,
             officialWebUrl,
-            approvedToken,
-            approvedTokenSymbol,
-            approvedDecimals,
+            // approvedToken,
+            // approvedTokenSymbol,
+            // approvedDecimals,
+            "", "", 0,
             periodDuration,
             votingPeriodLength,
             gracePeriodLength,
@@ -431,7 +436,12 @@ export const saveContractInfo = (contractContent: ICreateContent, summoner: stri
             [
                 { name: 'moloch', hash: molochhash },
                 { name: 'bank', hash: bankhash }
-            ]
+            ],
+            emergencyExitWait,
+            bailoutWait,
+            createTime,
+            approvedTokens,
+            txid
         ]
     }
     console.log(opts);

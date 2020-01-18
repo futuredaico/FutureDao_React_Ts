@@ -270,19 +270,10 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             } else if (this.props.molochmanager.proposalListItem.proposalType === '2')
             {
                 // 踢人的处理
-                res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
-                if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle && this.props.molochmanager.proposalInfo)
+                res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address, () =>
                 {
-                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-                    const res3 = await this.props.molochmanager.processKickPeople(this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
-                    if (res3)
-                    {
-                        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-                    } else
-                    {
-                        this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
-                    }
-                }
+                    this.handleKickPeople();
+                });
             }
 
             if (res2)
@@ -294,6 +285,38 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             }
         }
         return true
+    }
+    /**
+     * 清退某人
+     */
+    private handleKickPeople = async () =>
+    {
+        if (!this.props.molochmanager.proposalListItem)
+        {
+            return false;
+        }
+        if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle && this.props.molochmanager.proposalInfo)
+        {
+            if (!this.props.common.userInfo)
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+                return false;
+            }
+            const res = await this.props.metamaskwallet.inintWeb3();
+            if (res)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+                const res3 = await this.props.molochmanager.processKickPeople(this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
+                if (res3)
+                {
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                } else
+                {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+                }
+            }            
+        }
+        return true;
     }
 
     // 计算投票所占百分比

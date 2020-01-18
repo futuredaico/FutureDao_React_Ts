@@ -13,6 +13,7 @@ interface IState
 {
     showDeletBox: boolean, // 是否显示终止提案弹窗
     sendTime: string // 可批准成正式提案剩余时间
+    isDoingSend:boolean // 是否正在发送请求交易
 }
 
 @observer
@@ -20,7 +21,8 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     public intrl = this.props.intl.messages;
     public state: IState = {
         showDeletBox: false,
-        sendTime: ''
+        sendTime: '',
+        isDoingSend:false
     }
     public componentDidMount()
     {
@@ -142,7 +144,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                             <strong>添加支持代币</strong>
                                         </div>
                                         <div className="iline-right">
-                                            <span>0x1234567890987654321</span>
+                                            <span>{this.props.molochmanager.proposalInfo.tributeToken}</span>
                                         </div>
                                     </div>
                                 )
@@ -181,12 +183,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 {
                                     !this.state.sendTime
                                         ? (
-                                            <>
-                                                {
-                                                    (this.props.molochmanager.upAddress && this.props.molochmanager.upBalance > 0) ? <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
-                                                        : <Button text="批准为正式提案" btnSize="bg-bg-btn" btnColor="gray-btn" />
-                                                }
-                                            </>
+                                            <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
                                         )
                                         : (
                                             <div className="notallow-wrapper">
@@ -269,6 +266,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     // 批准为正式提案
     private handleToApproveProposal = () =>
     {
+        if(this.state.isDoingSend){
+            return 
+        }
         // 验证是否登录
         if (!this.props.common.userInfo)
         {
@@ -312,9 +312,12 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
+        this.setState({
+            isDoingSend:true
+        })
         const res = await this.props.metamaskwallet.inintWeb3();
         if (res)
-        {
+        {            
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
             const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address, this.props.index.depositHash, this.props.index.proposalFee);
             if (res2)
@@ -325,6 +328,9 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
             }
         }
+        this.setState({
+            isDoingSend:false
+        })
         return true
     }
 

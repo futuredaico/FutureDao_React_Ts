@@ -33,7 +33,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, any> {
         this.props.molochmanager.proposalListItem = null;
     }
     public render()
-    {
+    {        
         if (!this.props.molochmanager.proposalInfo)
         {
             return <div />;
