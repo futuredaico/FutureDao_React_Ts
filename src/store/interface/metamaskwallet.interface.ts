@@ -11,7 +11,7 @@ export interface IMetaMaskWalletStore
     getMetamaskNetwork:()=>void,
     changeNetwork:()=>void
 }
-export interface IMetaMastWalletProps
+export interface IMetaMaskWalletProps
 {
     metamaskwallet: IMetaMaskWalletStore
 }

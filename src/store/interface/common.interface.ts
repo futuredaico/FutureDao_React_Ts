@@ -16,7 +16,7 @@ export interface ICommonStore
   logoutFutureDao: () => void,
   getLoginStatus: () => void,
   getUserInfo: () => void,
-  openNotificationWithIcon: (type: string, message: string, des: string) => void,
+  openNotificationWithIcon: (type: string, message: string, des: string, btnText?: string, callback?: () => void) => void,
   reSendEmail: () => void,
   // changeAccount:()=>Promise<boolean>
 }
