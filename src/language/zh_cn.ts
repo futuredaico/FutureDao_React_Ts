@@ -1,4 +1,7 @@
 export default {
+  notfound:{
+    btn:"返回主页"
+  },
   page: {
     page: " 页",
     go: "跳转至"
@@ -257,13 +260,15 @@ export default {
     updateerr: "修改失败",
     sendok: "交易已发送，等待链上确认。",
     sendcheck: "交易已生成，请在钱包确认。",
+    sendchecktwo:"已生成两笔交易，请在钱包确认。",
     sendfail: "交易发送失败",
     senddone: "您的提案已发出",
     membererr: "您还不是成员，不能发起提案",
     logintitle: "登录失败",
     logincheck: "请将Metamask切换至主网后重试",
     logouttips: "钱包状态已更改，您已退出登录。",
-    comfirm: "确认"
+    comfirm: "确认",
+    detailbtn:"查看详情"
   },
   manager: {
     tian: "正式提案",
@@ -312,6 +317,9 @@ export default {
     require: "申请股份",
     gong: "贡献资金",
     gongtips: "（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
+    addrerr:"地址格式不正确。",
+    hasherr:"代币hash错误",
+    membererr:"该地址不是Dao成员"    
   },
   create: {
     bigtitle: "创建新DAO",

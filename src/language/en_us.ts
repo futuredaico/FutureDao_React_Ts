@@ -1,4 +1,7 @@
 export default {
+  notfound:{
+    btn:"Go Home"
+  },
   page: {
     page: " page",
     go: "Jump to page "
@@ -256,13 +259,15 @@ export default {
     updateerr: "Change failed",
     sendok: "Transaction sent, waiting for confirmation on blockchain.",
     sendcheck: "Transaction requested, please confirm in wallet.",
+    sendchecktwo:"Two transaction generated. Please confirm in the wallet.",
     sendfail: "Transaction sending failed.",
     senddone: "Your proposal has been sent.",
     membererr: "You are not a member and cannot initiate a proposal",
     logintitle: "Login failed",
     logincheck: "Please set Metamask to mainnet and try again.",
     logouttips: "Wallet has changed. Account is logged out.",
-    comfirm: "Comfirm"
+    comfirm: "Comfirm",
+    detailbtn:"View details "
   },
   manager: {
     tian: "Published proposals",
@@ -311,6 +316,9 @@ export default {
     require: "Shares requested",
     gong: "Tribute",
     gongtips: "（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
+    addrerr:"The address format is incorrect.",
+    hasherr:"Token hash error.",
+    membererr:"The address is not Dao member"
   },
   create: {
     bigtitle: "Create new DAO",
