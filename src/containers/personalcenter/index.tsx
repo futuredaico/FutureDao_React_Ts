@@ -2,12 +2,11 @@
  * 个人中心
  */
 import * as React from 'react';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { renderRoutes } from 'react-router-config';
 import './index.less';
 import { injectIntl } from 'react-intl';
 import { History } from 'history';
-import { IMyOrderStore } from './interface/myorder.interface';
 interface IProps
 {
     route: {
@@ -15,9 +14,7 @@ interface IProps
     };
     history: History,
     intl: any,
-    myorder: IMyOrderStore
 }
-@inject('myorder')
 @observer
 class PersonalCenter extends React.Component<IProps, any> {
     public intrl = this.props.intl.messages;
@@ -58,21 +55,8 @@ class PersonalCenter extends React.Component<IProps, any> {
     // 菜单选择
     private mapUnderline = (str: string) =>
     {
-        this.props.myorder.isShowInfo = false;
-        this.props.myorder.orderPage = 1;
-        
-        if(str === '/personalcenter/myorder'){
-            const pathname = this.props.history.location.pathname;
-            if(pathname.includes('/personalcenter/myorder')){
-                console.log(2)
-                this.props.myorder.getMyOrderList();
-            }else{
-                this.props.history.push(str);
-            } 
-        }
-        else{
-            this.props.history.push(str);
-        }        
+        this.props.history.push(str);
+       
     }
     // 菜单选择样式
     private mapChildClick = (path) =>
