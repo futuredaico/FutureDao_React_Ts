@@ -5,5 +5,9 @@ export default {
   {
     "74f2dc36a68fdc4682034178eb2220729231db76":8, // CGAS 小数位数8位
     "fc732edee1efdf968c23c20a9628eaa5a6ccb934":2, // NNC 
-  }
+  },
+  ID_SAI:"0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359",
+  ID_DAI:"0x6b175474e89094c44da98b954eedeac495271d0f",
+  ID_WETH:"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  ID_USDF:"0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7"
 }
