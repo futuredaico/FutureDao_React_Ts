@@ -29,7 +29,7 @@ class IMolochManager
     voteType: '',
     balance: '0'
   }
-  @observable public latestProposalPeriod:string = '0'; // 最新的提案发布在哪个index
+  @observable public latestProposalPeriod: string = '0'; // 最新的提案发布在哪个index
 
   /**
    * 获取提案列表
@@ -51,11 +51,13 @@ class IMolochManager
     }
     this.proposalCount = result[0].data.count || 0;
     this.proposalList = result[0].data.list || [];
-    if(result[0].data.list.length>0){
-      if(parseInt(this.latestProposalPeriod,10)<parseInt(result[0].data.list[0].startingPeriod,10)){
-        this.latestProposalPeriod = result[0].data.list[0].startingPeriod||'0';
+    if (result[0].data.list.length > 0)
+    {
+      if (parseInt(this.latestProposalPeriod, 10) < parseInt(result[0].data.list[0].startingPeriod, 10))
+      {
+        this.latestProposalPeriod = result[0].data.list[0].startingPeriod || '0';
       }
-    }    
+    }
     return true;
   }
 
@@ -319,6 +321,8 @@ class IMolochManager
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
       console.log(indexArr.toString())
       const molochContract = new Web3Contract(Moloch.abi as AbiItem[], contractHash);
+      const res = await molochContract.contractCall("getCurrentPeriod");
+      console.log(JSON.stringify(res));
       const submitRes = molochContract.contractSend("processProposal", [indexArr], { from: myaddr });
       const subtxid = await submitRes.onTransactionHash();
       console.log(subtxid)
@@ -386,7 +390,7 @@ class IMolochManager
     console.log(contractHash)
     try
     {
-      console.log("提案index:"+proposalIndex)
+      console.log("提案index:" + proposalIndex)
       // 数据转换
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
@@ -506,7 +510,7 @@ class IMolochManager
     {
       return false
     }
-    console.log("proposalIndex",proposalIndex)
+    console.log("proposalIndex", proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
@@ -546,7 +550,7 @@ class IMolochManager
     {
       return false
     }
-    console.log("proposalIndex",proposalIndex)
+    console.log("proposalIndex", proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
@@ -568,7 +572,7 @@ class IMolochManager
   /**
    * 处理提案--V2版踢人的提案(处理期或过期时需要的处理)
    */
-  @action public processKickProposal = async (proposalIndex: string, myaddr: string,confrimCall:()=>void) =>
+  @action public processKickProposal = async (proposalIndex: string, myaddr: string, confrimCall: () => void) =>
   {
     if (!this.contractInfo)
     {
@@ -586,7 +590,7 @@ class IMolochManager
     {
       return false
     }
-    console.log("proposalIndex",proposalIndex)
+    console.log("proposalIndex", proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
@@ -627,7 +631,7 @@ class IMolochManager
     {
       return false
     }
-    console.log("kickAddress",kickAddress)
+    console.log("kickAddress", kickAddress)
     try
     {
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
@@ -662,7 +666,7 @@ class IMolochManager
     {
       return false
     }
-    console.log("proposalIndex",proposalIndex)
+    console.log("proposalIndex", proposalIndex)
     try
     {
       const index = parseInt(proposalIndex, 10);
