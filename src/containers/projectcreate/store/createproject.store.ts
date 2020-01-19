@@ -30,7 +30,8 @@ class CreateProject implements ICreateProjectStore {
     emergencyExitWait: 0,       // 如果在此之后仍未处理提案，则直接跳过
     bailoutWait: 0,              // 返还资产等待区间段
     approvedTokens: [],
-    createTime: ""
+    createTime: "",
+    approvedTokensHash: []
   }
   /**
    * 创建项目
@@ -43,19 +44,25 @@ class CreateProject implements ICreateProjectStore {
       const abi = moloch.abi as AbiItem[];
       const bytecode = moloch.bytecode;
       const summoner = metamaskwallet.metamaskAddress;
-      const asset = await this.getTokenInfo(this.createContent.approvedToken);  // 获得 资产信息 单位 简称
-      const decimals = Math.pow(10, parseFloat(asset.decimals));  // 单位 (8位 100000000 )
+      this.createContent.approvedTokens = new Array(this.createContent.approvedTokensHash.length);
+      // tslint:disable-next-line:prefer-for-of
+      for (let index = 0; index < this.createContent.approvedTokensHash.length; index++) {
+        const hash = this.createContent.approvedTokensHash[ index ];
+        const asset = await this.getTokenInfo(hash);  // 获得 资产信息 单位 简称
+        this.createContent.approvedTokens[ index ] = { hash, symbol: asset.symbol, decimals: parseFloat(asset.decimals) };
+      }
+      const decimals = Math.pow(10, (this.createContent.approvedTokens[ 0 ].decimals));  // 单位 (8位 100000000 )
       this.createContent.proposalDeposit = toMyNumber(this.createContent.proposalDeposit).mul(decimals).value;
       this.createContent.processingReward = toMyNumber(this.createContent.processingReward).mul(decimals).value;
-      this.createContent.approvedDecimals = parseFloat(asset.decimals)
-      this.createContent.approvedTokenSymbol = asset.symbol;
-      this.createContent.approvedTokens = [ { hash: this.createContent.approvedToken, symbol: asset.symbol, decimals: asset.decimals } ]
+      this.createContent.approvedDecimals = (this.createContent.approvedTokens[ 0 ].decimals)
+      this.createContent.approvedTokenSymbol = this.createContent.approvedTokens[ 0 ].symbol;
+      // this.createContent.approvedTokens = [ { hash: this.createContent.approvedTokensHash[ 0 ], symbol: asset.symbol, decimals: asset.decimals } ]
       const variableArray = this.createContent.version === "1.0" ? [ this.createContent.abortWindow ] : [ this.createContent.emergencyExitWait, this.createContent.bailoutWait ]
       // 部署合约
       const deployResult = await Web3Contract.deployContract(
         abi, bytecode, metamaskwallet.metamaskAddress,
         summoner,
-        this.createContent.version === "1.0" ? this.createContent.approvedToken : [ this.createContent.approvedToken ],
+        this.createContent.version === "1.0" ? this.createContent.approvedTokensHash[ 0 ] : this.createContent.approvedTokensHash,
         this.createContent.periodDuration,
         this.createContent.votingPeriodLength,
         this.createContent.gracePeriodLength,
@@ -102,7 +109,8 @@ class CreateProject implements ICreateProjectStore {
     return true;
   }
 
-  @action public getTokenInfo = async (token: string) => {
+  @action public getTokenInfo = async (token: string): Promise<{ symbol: string, decimals: string }> => {
+    await metamaskwallet.inintWeb3(); // 初始化 web3
     const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
     const contract = new Web3Contract(abi, token);
     const symbol = await contract.contractCall("symbol");
