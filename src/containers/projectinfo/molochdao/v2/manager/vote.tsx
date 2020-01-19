@@ -131,7 +131,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                     )
                 }
                 {
-                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut || this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle) && (
+                    (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes || this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut || this.props.molochmanager.proposalListItem.proposalState === ProposalType.Handling) && (
                         this.props.molochmanager.proposalListItem.handleState === '0'
                             ? <Button text={this.intrl.btn.do} btnSize="bg-bg-btn" onClick={this.handleProcessProposal} />
                             : (
@@ -295,7 +295,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         {
             return false;
         }
-        if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.WaitHandle && this.props.molochmanager.proposalInfo)
+        if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.Handling && this.props.molochmanager.proposalInfo)
         {
             if (!this.props.common.userInfo)
             {

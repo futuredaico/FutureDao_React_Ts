@@ -17,7 +17,7 @@ import { toMyNumber } from '@/utils/numberTool';
 class MolochManager extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
     public async componentDidMount()
-    {
+    {        
         await this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
@@ -25,6 +25,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
             await this.props.molochmanager.getUpStreamData(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
+        this.handleComputeTimeIndex()
     }
     public render()
     {
@@ -37,7 +38,8 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                 {this.intrl.manager.tian}
                             </li>
                             <li className={this.props.molochmanager.proposalMenuNum === '0' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '0')}>
-                                预发布提案<span className="sm-graytime">（4小时30分钟后可用）</span>
+                                预发布提案
+                                {/* <span className="sm-graytime">（4小时30分钟后可用）</span> */}
                             </li>
                         </ul>
                     </div>
@@ -77,7 +79,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     }
                                                     {/* 待处理期 */}
                                                     {
-                                                        item.proposalState === ProposalType.WaitHandle && (
+                                                        item.proposalState === ProposalType.Handling && (
                                                             <div className="transparent-toupiao green-willdo">
                                                                 <span className="big-text">待处理</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeProcessTime(item)}</span>
@@ -240,6 +242,81 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                 <ManagerRight {...this.props} />
             </div>
         );
+    }
+    private computeIndex = (newTime: number, createTime: number, betweenTime: number) =>
+    {
+        // （当前时间-项目创建时间）/间隔时间段         
+        // （4.8*60*60----------向下取整）
+        const agoTime = newTime - createTime;
+        const index = Math.ceil(agoTime / betweenTime);
+        return index
+    }
+    private handleComputeTimeIndex = () =>
+    {
+        if (!this.props.molochmanager.contractInfo || !this.props.molochinfo.projInfo)
+        {
+            return false
+        }
+        // 项目如今所在周期
+        // 当前时间
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 项目创建时间
+        const startTime = this.props.molochinfo.projInfo.startTime;
+        const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
+        console.log("betweenTime:" + betweenTime)
+        const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);        
+        if (this.props.molochmanager.proposalList.length > 0)
+        {
+            // 获取最新的一个提案
+            const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
+            console.log("打印最新提案数据")
+            console.log(JSON.stringify(this.props.molochmanager.proposalList[0]))
+            console.log(this.props.molochmanager.proposalList[0].startingPeriod)
+            console.log("最新提案时间")
+            console.log(new Date())
+            console.log(new Date(item.timestamp * 1000))
+            const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
+            console.log("nowIndex:" + nowIndex);
+            console.log("tianIndex:" + tianIndex)
+            if (nowIndex === tianIndex)
+            {
+                // 计算剩余的时间
+                const latestIndexTime = (nowIndex + 1) * betweenTime;
+                const endTime = latestIndexTime + startTime;
+                const remainTime = endTime - nowTime;
+                console.log(remainTime)
+                let h = 0;
+                let m = 0;
+                let s = 0;
+                let str = '';
+                if (remainTime >= 0)
+                {
+                    h = Math.floor(remainTime / (60 * 60) % 24);
+                    m = Math.floor(remainTime / 60 % 60);
+                    s = Math.floor(remainTime % 60);
+                    if (h > 0)
+                    {
+                        str = h + this.intrl.manager.hours;
+                    }
+                    if (m > 0)
+                    {
+                        str = str + m + this.intrl.manager.min;
+                    }
+                    console.log(s)
+                    if (s > 0)
+                    {
+                        str = str + s + this.intrl.manager.second;
+                    }
+                }
+                console.log('打印发提案剩余时间')
+                console.log(str)
+                this.setState({
+                    sendTime: str
+                })
+            }
+        }
+        return true;
     }
     // 选择查看什么类型的提案
     private handleShowListType = (num: string) =>

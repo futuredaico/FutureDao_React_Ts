@@ -10,6 +10,7 @@ import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import { IMolochProposalList } from '../../interface/molochmanager.interface';
 import QuitProject from './quit';
 import { Input } from 'antd';
+import { when } from 'mobx';
 
 interface IState
 {
@@ -29,8 +30,7 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         sendTime: ''
     }
     public async componentDidMount()
-    {
-        this.handleComputeTimeIndex();
+    {        
         // 发起提案资格显示(委托人不是自己)
         if (this.props.molochmanager.proposalAddress && this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
         {
@@ -38,6 +38,10 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                 sendTime: this.intrl.manager.no
             })
         }
+        when(
+            () => this.props.molochmanager.proposalList.length>0,
+            () => this.handleComputeTimeIndex()
+        )
     }
     public render()
     {
@@ -212,9 +216,10 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
     // 计算时间区间所在周期    
     private computeIndex = (newTime: number, createTime: number, betweenTime: number) =>
     {
-        // （当前时间-项目创建时间）/4.8*60*60----------向下取整
+        // （当前时间-项目创建时间）/间隔时间段         
+        // （4.8*60*60----------向下取整）
         const agoTime = newTime - createTime;
-        const index = Math.floor(agoTime / betweenTime);
+        const index = Math.ceil(agoTime / betweenTime);
         return index
     }
     // 计算是否可发起提案
@@ -231,19 +236,20 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         // 项目创建时间
         const startTime = this.props.molochinfo.projInfo.startTime;
         const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
-        console.log("betweenTime:" + betweenTime)
-        const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);
-        console.log("nowIndex:" + nowIndex);
+        
+        const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);        
         if (this.props.molochmanager.proposalList.length > 0)
         {
             // 获取最新的一个提案
             const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
-            console.log("最新提案时间")
-            console.log(new Date())
-            console.log(new Date(item.timestamp * 1000))
+            console.log("打印最新提案数据")
+            // console.log(JSON.stringify(this.props.molochmanager.proposalList[0]))
+            console.log(this.props.molochmanager.proposalList[0].proposalTitle)
             const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
+            console.log("nowIndex:" + nowIndex);
             console.log("tianIndex:" + tianIndex)
-            if (nowIndex === tianIndex)
+            console.log("betweenTime:" + betweenTime)
+            if (nowIndex <= tianIndex)
             {
                 // 计算剩余的时间
                 const latestIndexTime = (nowIndex + 1) * betweenTime;

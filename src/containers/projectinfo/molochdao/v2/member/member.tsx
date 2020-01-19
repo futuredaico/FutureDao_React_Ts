@@ -32,7 +32,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                         this.props.molochinfo.projMemberList.map((item: IProjectMember, index: number) =>
                         {
                             return (
-                                <div className="member-list-box" key={index}>
+                                <div className="member-list-box" key={index}  onClick={this.handleToCopySomething.bind(this,item.address)}>
                                     <div className="member-img">
                                         {
                                             item.headIconUrl ? <img src={item.headIconUrl} alt="" /> : <img src={require('@/img/default.png')} alt="" />
@@ -66,7 +66,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
                         this.props.molochinfo.projMemberList2.map((item: IProjectMember, index: number) =>
                         {
                             return (
-                                <div className="member-list-box" key={index}>
+                                <div className="member-list-box" key={index}  onClick={this.handleToCopySomething.bind(this,item.address)}>
                                     <div className="member-img">
                                         {
                                             item.headIconUrl ? <img src={item.headIconUrl} alt="" /> : <img src={require('@/img/default.png')} alt="" />
@@ -106,6 +106,18 @@ class MolochMember extends React.Component<IMolochInfoProps> {
     {
         this.props.molochinfo.memberPage2 = index;
         this.props.molochinfo.getMemberData('2');
+    }
+    private handleToCopySomething = (addr: string) =>
+    {
+        console.log(addr);
+        const oInput = document.createElement('input');
+        oInput.value = addr;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        this.props.common.openNotificationWithIcon("info","复制","复制成功");
     }
 }
 
