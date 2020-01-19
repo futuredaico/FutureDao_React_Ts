@@ -369,7 +369,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
             // console.log(new Date(item.timestamp * 1000))
             // const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
             console.log("tianIndex:" + this.props.molochmanager.latestProposalPeriod)
-            if (parseInt(this.props.molochmanager.latestProposalPeriod, 10) === nowIndex)
+            if (parseInt(this.props.molochmanager.latestProposalPeriod, 10) >= nowIndex)
             {
                 // 计算剩余的时间
                 const latestIndexTime = (parseInt(this.props.molochmanager.latestProposalPeriod, 10) + 1) * betweenTime;

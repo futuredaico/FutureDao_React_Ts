@@ -79,7 +79,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     }
                                                     {/* 待处理期 */}
                                                     {
-                                                        item.proposalState === ProposalType.WaitHandle && (
+                                                        item.proposalState === ProposalType.Handling && (
                                                             <div className="transparent-toupiao green-willdo">
                                                                 <span className="big-text">待处理</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeProcessTime(item)}</span>
