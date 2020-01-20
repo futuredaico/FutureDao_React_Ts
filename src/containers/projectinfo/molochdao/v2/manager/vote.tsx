@@ -272,8 +272,9 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                 // 踢人的处理
                 res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address, () =>
                 {
-                    this.handleKickPeople();
+                    // this.handleKickPeople();
                 });
+                this.handleKickPeople();
             }
 
             if (res2)

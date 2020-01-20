@@ -594,7 +594,8 @@ class IMolochManager
     try
     {
       const index = parseInt(proposalIndex, 10);
-      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+      const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();      
+
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const res2 = await molochContract.contractCall("getCurrentPeriod");
