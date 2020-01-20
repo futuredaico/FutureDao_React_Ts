@@ -394,16 +394,40 @@ class IMolochManager
       // 数据转换
       const index = parseInt(proposalIndex, 10);
       const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
-      // 先aprove押金      
       const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
-      const erc20Contract = new Web3Contract(abi, assetHash);
-      erc20Contract.contractSend("approve", [contractHash, depositNum], { from: myaddr });
-      // 批准正式提案
+      const erc20Contract = new Web3Contract(abi, depositNum);
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
-      const submitRes = molochContract.contractSend("sponsorProposal", [indexArr], { from: myaddr });
-      const subtxid = await submitRes.onTransactionHash();
-      console.log(subtxid)
+      const batch = new metamaskwallet.web3.BatchRequest();
+      const tx = web3.eth.sendTransaction.request(
+        {
+          from: myaddr,
+          to: depositNum,
+          value: '0x0',
+          data: erc20Contract.contract.methods[ 'approve' ](contractHash, depositNum).encodeABI()
+        }
+      )
+      const tx2 = web3.eth.sendTransaction.request(
+        {
+          from: myaddr,
+          to: contractHash,
+          value: '0x0',
+          data: molochContract.contract.methods[ 'sponsorProposal' ](indexArr).encodeABI()
+        }
+      )
+      batch.add(tx)
+      batch.add(tx2);
+      await batch.execute();
+      // 先aprove押金      
+      // const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+      // const erc20Contract = new Web3Contract(abi, assetHash);
+      // erc20Contract.contractSend("approve", [contractHash, depositNum], { from: myaddr });
+      // // 批准正式提案
+      // const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+      // const molochContract = new Web3Contract(molochv2Abi, contractHash);
+      // const submitRes = molochContract.contractSend("sponsorProposal", [indexArr], { from: myaddr });
+      // const subtxid = await submitRes.onTransactionHash();
+      // console.log(subtxid)
     } catch (e)
     {
       return false;
@@ -610,6 +634,34 @@ class IMolochManager
       return false;
     }
     return true
+  }
+  @action public processKickAndProposal = async (kickAddress: string, myaddr: string,proposalIndex: string,  confrimCall: () => void)=>{
+    // const index = parseInt(proposalIndex, 10);
+    //   const indexArr = metamaskwallet.web3.utils.toBN(index).toArray();
+    //   const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+    //   const erc20Contract = new Web3Contract(abi, depositNum);
+    //   const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
+    //   const molochContract = new Web3Contract(molochv2Abi, contractHash);
+    //   const batch = new metamaskwallet.web3.BatchRequest();
+    //   const tx = web3.eth.sendTransaction.request(
+    //     {
+    //       from: myaddr,
+    //       to: depositNum,
+    //       value: '0x0',
+    //       data: erc20Contract.contract.methods[ 'approve' ](contractHash, depositNum).encodeABI()
+    //     }
+    //   )
+    //   const tx2 = web3.eth.sendTransaction.request(
+    //     {
+    //       from: myaddr,
+    //       to: contractHash,
+    //       value: '0x0',
+    //       data: molochContract.contract.methods[ 'sponsorProposal' ](indexArr).encodeABI()
+    //     }
+    //   )
+    //   batch.add(tx)
+    //   batch.add(tx2);
+    //   await batch.execute();
   }
   /**
    * 清退某人的战利品

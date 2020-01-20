@@ -19,6 +19,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
     public async componentDidMount()
     {
+        this.props.molochmanager.proposalMenuNum = '1';
         await this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
