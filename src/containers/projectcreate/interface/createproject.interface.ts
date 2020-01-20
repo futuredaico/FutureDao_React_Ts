@@ -50,6 +50,7 @@ export interface ICreateContent {
   dilutionBound?: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
   processingReward: number;       // 处理提案的人所得到的奖励
   approvedTokens: IToken[];
+  approvedTokensHash: string[];   // 支持代币的 hash 数组
   createTime?: string;              // 项目创建时间戳
 }
 
