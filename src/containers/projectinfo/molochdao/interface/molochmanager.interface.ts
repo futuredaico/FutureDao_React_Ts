@@ -1,7 +1,6 @@
 // import { RouteComponentProps } from "react-router";
 // import { ICommonStore } from "@/store/interface/common.interface";
-export interface IMolochManagerStore
-{
+export interface IMolochManagerStore {
   proposalMenuNum: string,
   proposalPage: number,
   proposalPageSize: number,
@@ -38,8 +37,9 @@ export interface IMolochManagerStore
   applyNoVoteV2: (proposalIndex: string, myaddr: string) => Promise<boolean>,
   processProposalV2: (proposalIndex: string, myaddr: string) => Promise<boolean>,
   processWhiteListProposal: (proposalIndex: string, myaddr: string) => Promise<boolean>,
-  processKickProposal: (proposalIndex: string, myaddr: string, confrimCall: () => void) => Promise<boolean>,
-  processKickPeople: (kickAddress: string, myaddr: string) => Promise<boolean>,
+  processKickProposal: (proposalIndex: string, myaddr: string) => Promise<boolean>,
+  processKickAndProposal: (proposalIndex: string, kickAddress: string, myaddr: string) => Promise<boolean>,
+  // processKickPeople: (kickAddress: string, myaddr: string) => Promise<boolean>,
   stopProposalV2: (proposalIndex: string, myaddr: string) => Promise<boolean>,
   quitSharesV2: (sharesValue: number, lootValue: number, myaddr: string) => Promise<boolean>,
 
@@ -53,8 +53,7 @@ export interface IMolochManagerStore
 //   intl: any
 // }
 
-export interface IMolochProposalList extends IMolochProposalBase
-{
+export interface IMolochProposalList extends IMolochProposalBase {
   timestamp: number, // 创建提案时间
   voteYesCount: number, // 赞成票数
   voteNotCount: number, // 反对票数
@@ -63,8 +62,7 @@ export interface IMolochProposalList extends IMolochProposalBase
   handleState: string, // 处理状态，0为未处理，1为已处理
   isMine: boolean // 提案是否是自己的  
 }
-export interface IMolochProposalDetail extends IMolochProposalBase
-{
+export interface IMolochProposalDetail extends IMolochProposalBase {
   proposer: string, // 提案者
   username: string, // 提案者用户名
   headIconUrl: string, // 提案者头像
@@ -73,8 +71,7 @@ export interface IMolochProposalDetail extends IMolochProposalBase
   applicantUsername: string,  // 受益人名称
   applicantHeadIconUrl: string // 受益人头像  
 }
-export interface IMolochProposalBase
-{
+export interface IMolochProposalBase {
   projId: string,
   proposalIndex: string,// 提案索引
   proposalQueueIndex: string, // 正式提案的标记
@@ -91,8 +88,7 @@ export interface IMolochProposalBase
   tributeToken: string,// 添加代币的哈市
   applicant: string,// 踢出成员的地址
 }
-export enum ProposalType
-{
+export enum ProposalType {
   // PreVote = "10150",      // 预发布
   // Voting = "10151",       // 投票中
   // Noting = "10152",       // 公示中
@@ -113,14 +109,12 @@ export enum ProposalType
   Aborted = "10158",          // v1投票期被终止
   HandleTimeOut = "10159"    // 处理超时
 }
-export interface IVoteInfo
-{
+export interface IVoteInfo {
   voteCount: string,
   voteType: string, // 1表示赞成，2表示反对，空表示未投票
   balance: string
 }
-export interface IContractInfo
-{
+export interface IContractInfo {
   periodDuration: string, // 周期区间，单位，秒
   votingPeriodLength: string, // 投票周期
   notingPeriodLength: string, // 公示周期
@@ -128,8 +122,7 @@ export interface IContractInfo
   emergencyExitWait: string,// 处理期周期
   contractHashs: IContractHash[]
 }
-export interface IContractHash
-{
+export interface IContractHash {
   name: string,
   hash: string
 }
