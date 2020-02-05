@@ -376,8 +376,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                         !this.state.approvedToken ||
                                         !this.state.votingPeriodLength ||
                                         !this.state.gracePeriodLength ||
-                                        (this.state.version === "1.0" ? !this.state.abortWindow : false) ||
-                                        (this.state.version === "2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : false) ||
+                                        (this.state.version === "1.0" ? !this.state.abortWindow : true) ||
+                                        (this.state.version === "2.0" ? (!this.state.emergencyExitWait || !this.state.bailoutWait) : true) ||
                                         !this.state.proposalDeposit ||
                                         !this.state.processingReward
                                     ) ? 'gray-btn' : ''
@@ -396,8 +396,11 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
 
     // 监听版本变更
     private handleDaoVersionSelect = (event) => {
+        let tokens = this.state.approvedTokens;
+        tokens = event.id==="1.0"?[tokens[0]]:tokens;
         this.setState({
-            version: event.id
+            version: event.id,
+            approvedTokens:tokens
         })
     }
 
