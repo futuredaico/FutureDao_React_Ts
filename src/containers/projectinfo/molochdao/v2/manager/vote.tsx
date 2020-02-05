@@ -11,8 +11,7 @@ import { IMolochProposalList, ProposalType } from '../../interface/molochmanager
 import { onCountRemainTime } from '@/utils/formatTime';
 import classnames from 'classnames';
 
-interface IState
-{
+interface IState {
     isVoteEnd: boolean, // 投票时间已经结束
 }
 @observer
@@ -21,10 +20,8 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
     public state: IState = {
         isVoteEnd: false
     }
-    public render()
-    {
-        if (!this.props.molochmanager.proposalInfo || !this.props.molochmanager.proposalListItem)
-        {
+    public render() {
+        if (!this.props.molochmanager.proposalInfo || !this.props.molochmanager.proposalListItem) {
             return <div />;
         }
         const voteClassName = classnames('vote-box', {
@@ -158,42 +155,32 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         );
     }
     // 投赞同票 1是true
-    private handeToVoteYes = async () =>
-    {
-        if (!this.props.common.userInfo)
-        {
+    private handeToVoteYes = async () => {
+        if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalListItem)
-        {
+        if (!this.props.molochmanager.proposalListItem) {
             return false;
         }
         // 是否被别人委托了
-        if (this.props.molochmanager.upAddress)
-        {
+        if (this.props.molochmanager.upAddress) {
             // 委托人资金为0了
-            if (this.props.molochmanager.upBalance <= 0)
-            {
+            if (this.props.molochmanager.upBalance <= 0) {
                 return false
             }
-        } else
-        {
-            if (this.props.molochmanager.proposalBalance <= 0)
-            {
+        } else {
+            if (this.props.molochmanager.proposalBalance <= 0) {
                 return false
             }
         }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if (res)
-        {
+        if (res) {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
             const res2 = await this.props.molochmanager.applyYesVoteV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
-            if (res2)
-            {
+            if (res2) {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            } else
-            {
+            } else {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
             }
         }
@@ -201,192 +188,138 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         return true
     }
     // 投反对票 2是false
-    private handeToVoteNo = async () =>
-    {
-        if (!this.props.common.userInfo)
-        {
+    private handeToVoteNo = async () => {
+        if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalListItem)
-        {
+        if (!this.props.molochmanager.proposalListItem) {
             return false;
         }
         // 是否被别人委托了
-        if (this.props.molochmanager.upAddress)
-        {
+        if (this.props.molochmanager.upAddress) {
             // 委托人资金为0了
-            if (this.props.molochmanager.upBalance <= 0)
-            {
+            if (this.props.molochmanager.upBalance <= 0) {
                 return false
             }
-        } else
-        {
-            if (this.props.molochmanager.proposalBalance <= 0)
-            {
+        } else {
+            if (this.props.molochmanager.proposalBalance <= 0) {
                 return false
             }
         }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if (res)
-        {
+        if (res) {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
             const res2 = await this.props.molochmanager.applyNoVoteV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
-            if (res2)
-            {
+            if (res2) {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            } else
-            {
+            } else {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
             }
         }
         return true
     }
     // 处理提案
-    private handleProcessProposal = async () =>
-    {
-        if (!this.props.common.userInfo)
-        {
+    private handleProcessProposal = async () => {
+        if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
         }
-        if (!this.props.molochmanager.proposalListItem)
-        {
+        if (!this.props.molochmanager.proposalListItem) {
             return false;
         }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if (res)
-        {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+        if (res) {
             let res2 = false;
-            if (this.props.molochmanager.proposalListItem.proposalType === '0')
-            {
+            if (this.props.molochmanager.proposalListItem.proposalType === '0') {
                 // 申请股份的处理
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                 res2 = await this.props.molochmanager.processProposalV2(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
-            } else if (this.props.molochmanager.proposalListItem.proposalType === '1')
-            {
+            } else if (this.props.molochmanager.proposalListItem.proposalType === '1') {
                 // 添加代币的处理
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                 res2 = await this.props.molochmanager.processWhiteListProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
-            } else if (this.props.molochmanager.proposalListItem.proposalType === '2')
-            {
+            } else if (this.props.molochmanager.proposalListItem.proposalType === '2') {
                 // 踢人的处理
-                res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address, () =>
-                {
-                    this.handleKickPeople();
-                });
+                // 处于处理期间，踢人并清退某人的资产
+                if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.Handling && this.props.molochmanager.proposalInfo) {
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
+                    res2 = await this.props.molochmanager.processKickAndProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
+                } else {
+                    // 超过处理器时的处理踢人的提案
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+                    res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
+                }
             }
-
-            if (res2)
-            {
+            if (res2) {
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            } else
-            {
+            } else {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
             }
         }
         return true
     }
     /**
-     * 清退某人
+     * 踢人的处理
      */
-    private handleKickPeople = async () =>
-    {
-        if (!this.props.molochmanager.proposalListItem)
-        {
-            return false;
-        }
-        if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.Handling && this.props.molochmanager.proposalInfo)
-        {
-            if (!this.props.common.userInfo)
-            {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-                return false;
-            }
-            const res = await this.props.metamaskwallet.inintWeb3();
-            if (res)
-            {
-                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-                const res3 = await this.props.molochmanager.processKickPeople(this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
-                if (res3)
-                {
-                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-                } else
-                {
-                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
-                }
-            }            
-        }
-        return true;
-    }
+    // private handleKickPeople = async () => {
+
+    //     return true;
+    // }
 
     // 计算投票所占百分比
-    private computePercentage = (item: IMolochProposalList, type: boolean) =>
-    {
+    private computePercentage = (item: IMolochProposalList, type: boolean) => {
         const total = item.voteYesCount + item.voteNotCount;
-        if (total === 0)
-        {
+        if (total === 0) {
             return 50;
         }
-        else
-        {
+        else {
             // 支持
-            if (type)
-            {
+            if (type) {
                 const percent = item.voteYesCount / total * 100
                 return percent
             }// 反对
-            else
-            {
+            else {
                 const percent = item.voteNotCount / total * 100
                 return percent
             }
         }
     }
     // 计算投票倒计时
-    private computeVoteTime = (item: IMolochProposalList) =>
-    {
+    private computeVoteTime = (item: IMolochProposalList) => {
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
         const agoTime = nowTimeInt - item.timestamp;
-        if (this.props.molochinfo.projInfo)
-        {
+        if (this.props.molochinfo.projInfo) {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const endTime = voteTime - agoTime;
-            if (endTime < 0)
-            {
+            if (endTime < 0) {
                 return 'End'
-            } else
-            {
+            } else {
                 return onCountRemainTime(endTime)
             }
-        } else
-        {
+        } else {
             return 'End'
         }
 
         // 投票时间-（当前时间点-创建提案时间）=剩余时间      
     }
     // 计算公示倒计时
-    private computeShowTime = (item: IMolochProposalList) =>
-    {
+    private computeShowTime = (item: IMolochProposalList) => {
         // 公示剩余时间=公示时间+投票时间-（当前时间点-发布合约的时间点）
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
         const agoTime = nowTimeInt - item.timestamp;
-        if (this.props.molochinfo.projInfo)
-        {
+        if (this.props.molochinfo.projInfo) {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             const endTime = graceTime + voteTime - agoTime;
-            if (endTime < 0)
-            {
+            if (endTime < 0) {
                 return 'End'
-            } else
-            {
+            } else {
                 return onCountRemainTime(endTime)
             }
-        } else
-        {
+        } else {
             return 'End'
         }
     }

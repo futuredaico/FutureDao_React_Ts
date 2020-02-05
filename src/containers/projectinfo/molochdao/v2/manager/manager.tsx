@@ -16,19 +16,15 @@ import { toMyNumber } from '@/utils/numberTool';
 @observer
 class MolochManager extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
-    public async componentDidMount()
-    {        
+    public async componentDidMount() {
         await this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
-        if (this.props.common.userInfo)
-        {
+        if (this.props.common.userInfo) {
             await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
             await this.props.molochmanager.getUpStreamData(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
-        this.handleComputeTimeIndex()
     }
-    public render()
-    {
+    public render() {
         return (
             <div className="manager-wrapper">
                 <div className="manager-left">
@@ -47,8 +43,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                         this.props.molochmanager.proposalMenuNum === '1' && (
                             <>
                                 {
-                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
-                                    {
+                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) => {
                                         return (
                                             <div className="manager-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
                                                 <div className="mcontent-top">
@@ -121,7 +116,6 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                             </div>
                                                         )
                                                     }
-
                                                     {/* 支持代币 */}
                                                     {
                                                         item.proposalType === '1' && (
@@ -156,7 +150,6 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                         )
                                     })
                                 }
-
                                 {
                                     this.props.molochmanager.proposalCount > 10 && (
                                         <div className="proposal-page-warpper">
@@ -171,8 +164,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                         this.props.molochmanager.proposalMenuNum === '0' && (
                             <>
                                 {
-                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) =>
-                                    {
+                                    this.props.molochmanager.proposalCount > 0 && this.props.molochmanager.proposalList.map((item: IMolochProposalList, index: number) => {
                                         return (
                                             <div className="manager-list manager-ready-list" onClick={this.handleToInfo.bind(this, item)} key={index}>
                                                 <div className="mcontent-top">
@@ -243,202 +235,103 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             </div>
         );
     }
-    private computeIndex = (newTime: number, createTime: number, betweenTime: number) =>
-    {
-        // （当前时间-项目创建时间）/间隔时间段         
-        // （4.8*60*60----------向下取整）
-        const agoTime = newTime - createTime;
-        const index = Math.ceil(agoTime / betweenTime);
-        return index
-    }
-    private handleComputeTimeIndex = () =>
-    {
-        if (!this.props.molochmanager.contractInfo || !this.props.molochinfo.projInfo)
-        {
-            return false
-        }
-        // 项目如今所在周期
-        // 当前时间
-        const nowTime = new Date().getTime() / 1000;
-        const nowTimeInt = parseInt(nowTime.toString(), 10);
-        // 项目创建时间
-        const startTime = this.props.molochinfo.projInfo.startTime;
-        const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
-        console.log("betweenTime:" + betweenTime)
-        const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);        
-        if (this.props.molochmanager.proposalList.length > 0)
-        {
-            // 获取最新的一个提案
-            const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
-            console.log("打印最新提案数据")
-            console.log(JSON.stringify(this.props.molochmanager.proposalList[0]))
-            console.log(this.props.molochmanager.proposalList[0].startingPeriod)
-            console.log("最新提案时间")
-            console.log(new Date())
-            console.log(new Date(item.timestamp * 1000))
-            const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
-            console.log("nowIndex:" + nowIndex);
-            console.log("tianIndex:" + tianIndex)
-            if (nowIndex === tianIndex)
-            {
-                // 计算剩余的时间
-                const latestIndexTime = (nowIndex + 1) * betweenTime;
-                const endTime = latestIndexTime + startTime;
-                const remainTime = endTime - nowTime;
-                console.log(remainTime)
-                let h = 0;
-                let m = 0;
-                let s = 0;
-                let str = '';
-                if (remainTime >= 0)
-                {
-                    h = Math.floor(remainTime / (60 * 60) % 24);
-                    m = Math.floor(remainTime / 60 % 60);
-                    s = Math.floor(remainTime % 60);
-                    if (h > 0)
-                    {
-                        str = h + this.intrl.manager.hours;
-                    }
-                    if (m > 0)
-                    {
-                        str = str + m + this.intrl.manager.min;
-                    }
-                    console.log(s)
-                    if (s > 0)
-                    {
-                        str = str + s + this.intrl.manager.second;
-                    }
-                }
-                console.log('打印发提案剩余时间')
-                console.log(str)
-                this.setState({
-                    sendTime: str
-                })
-            }
-        }
-        return true;
-    }
     // 选择查看什么类型的提案
-    private handleShowListType = (num: string) =>
-    {
+    private handleShowListType = (num: string) => {
         this.props.molochmanager.proposalMenuNum = num;
         this.props.molochmanager.proposalPage = 1;
         this.props.molochmanager.proposalList = [];
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 翻页
-    private handleChangeManagerPage = (index: number) =>
-    {
+    private handleChangeManagerPage = (index: number) => {
         this.props.molochmanager.proposalPage = index;
         this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
     }
     // 查看提案详情
-    private handleToInfo = (item: IMolochProposalList) =>
-    {
+    private handleToInfo = (item: IMolochProposalList) => {
         this.props.molochinfo.isShowManagerInfo = true;
         this.props.molochmanager.proposalIndex = item.proposalIndex;
         this.props.molochmanager.proposalListItem = item;
     }
     // 计算投票所占百分比
-    private computePercentage = (item: IMolochProposalList, type: boolean) =>
-    {
+    private computePercentage = (item: IMolochProposalList, type: boolean) => {
         const total = item.voteYesCount + item.voteNotCount;
-        if (total === 0)
-        {
+        if (total === 0) {
             return 50;
         }
-        else
-        {
+        else {
             // 支持
-            if (type)
-            {
+            if (type) {
                 const percent = item.voteYesCount / total * 100
                 return percent
             }// 反对
-            else
-            {
+            else {
                 const percent = item.voteNotCount / total * 100
                 return percent
             }
         }
     }
     // 计算投票倒计时
-    private computeVoteTime = (item: IMolochProposalList) =>
-    {
+    private computeVoteTime = (item: IMolochProposalList) => {
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
         // 当前时间-提案创建时间=提案过去了的时间
         const agoTime = nowTimeInt - item.timestamp;
-        if (this.props.molochinfo.projInfo)
-        {
+        if (this.props.molochinfo.projInfo) {
             // 项目投票时间长度
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const endTime = voteTime - agoTime;
-            if (endTime < 0)
-            {
+            if (endTime < 0) {
                 return 'End'
-            } else
-            {
+            } else {
                 return onCountRemainTime(endTime)
             }
-        } else
-        {
+        } else {
             return 'End'
         }
 
         // 投票时间-（当前时间点-创建提案时间）=剩余时间      
     }
     // 计算公示倒计时
-    private computeShowTime = (item: IMolochProposalList) =>
-    {
+    private computeShowTime = (item: IMolochProposalList) => {
         // 公示剩余时间=公示时间+投票时间-（当前时间点-发布合约的时间点）
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
         const agoTime = nowTimeInt - item.timestamp;
-        if (this.props.molochinfo.projInfo)
-        {
+        if (this.props.molochinfo.projInfo) {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             const endTime = graceTime + voteTime - agoTime;
-            if (endTime < 0)
-            {
+            if (endTime < 0) {
                 return 'End'
-            } else
-            {
+            } else {
                 return onCountRemainTime(endTime)
             }
-        } else
-        {
+        } else {
             return 'End'
         }
     }
     // 计算处理期倒计时
-    private computeProcessTime = (item: IMolochProposalList) =>
-    {
+    private computeProcessTime = (item: IMolochProposalList) => {
         // 处理期剩余时间=投票时间+公示时间+处理时间-（当前时间-发布合约的时间点）
         const nowTime = new Date().getTime() / 1000;
         const nowTimeInt = parseInt(nowTime.toString(), 10);
         const agoTime = nowTimeInt - item.timestamp;
-        if (this.props.molochinfo.projInfo)
-        {
+        if (this.props.molochinfo.projInfo) {
             const voteTime = parseFloat(this.props.molochinfo.projInfo.votePeriod);
             const graceTime = parseFloat(this.props.molochinfo.projInfo.notePeriod);
             let processTime = 0;
-            if (this.props.molochmanager.contractInfo)
-            {
+            if (this.props.molochmanager.contractInfo) {
                 processTime = toMyNumber(this.props.molochmanager.contractInfo.emergencyExitWait).mul(this.props.molochmanager.contractInfo.periodDuration).value;
             }
             // const processTime = parseFloat(this.props.molochinfo.projInfo)
             const endTime = processTime + graceTime + voteTime - agoTime;
-            if (endTime < 0)
-            {
+            if (endTime < 0) {
                 return 'End'
-            } else
-            {
+            } else {
                 return onCountRemainTime(endTime)
             }
-        } else
-        {
+        } else {
             return 'End'
         }
     }
