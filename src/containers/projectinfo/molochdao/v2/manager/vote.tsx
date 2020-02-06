@@ -26,7 +26,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         }
         const voteClassName = classnames('vote-box', {
             'agree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes ? true : false,
-            'disagree-vote': this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot ? true : false,
+            'disagree-vote': (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut) ? true : false,
         })
         return (
             <>
@@ -141,7 +141,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                                         )
                                     }
                                     {
-                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot && (
+                                        (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut) && (
                                             <div className="going-box fail-str">
                                                 <strong>提案未通过</strong>
                                             </div>
@@ -259,13 +259,6 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         }
         return true
     }
-    /**
-     * 踢人的处理
-     */
-    // private handleKickPeople = async () => {
-
-    //     return true;
-    // }
 
     // 计算投票所占百分比
     private computePercentage = (item: IMolochProposalList, type: boolean) => {
