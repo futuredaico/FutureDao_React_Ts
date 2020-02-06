@@ -359,8 +359,8 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         if (!this.state.tianPayNum) {
             isOk = false;
         }
+        // 数字填写不能都为0
         if (parseFloat(this.state.tianRequestShares) + parseFloat(this.state.tianLootRequire) + parseFloat(this.state.tianRequestNum) + parseFloat(this.state.tianPayNum) <= 0) {
-            console.log(222)
             isOk = false;
         }
         this.setState({
