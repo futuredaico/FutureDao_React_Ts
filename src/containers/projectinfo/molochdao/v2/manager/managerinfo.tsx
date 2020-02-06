@@ -37,7 +37,6 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 sendTime: this.intrl.manager.no
             })
         }
-        this.props.index.getDepositData(this.props.molochinfo.projId);
     }
     public componentWillUnmount() {
         this.props.molochmanager.proposalInfo = null;
@@ -277,6 +276,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
     // 批准为正式提案调用
     private handleDoApprove = async () => {
         //
+        await this.props.index.getDepositData(this.props.molochinfo.projId);
         if (!this.props.common.userInfo) {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false;
