@@ -214,7 +214,7 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         }
         if (parseFloat(value.toString()) === 0) {
             this.setState({
-                tianRequestShares: '0'
+                tianLootRequire: '0'
             }, () => {
                 this.checkAllInput()
             })
@@ -357,6 +357,10 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
             isOk = false;
         }
         if (!this.state.tianPayNum) {
+            isOk = false;
+        }
+        if (parseFloat(this.state.tianRequestShares) + parseFloat(this.state.tianLootRequire) + parseFloat(this.state.tianRequestNum) + parseFloat(this.state.tianPayNum) <= 0) {
+            console.log(222)
             isOk = false;
         }
         this.setState({
