@@ -30,87 +30,102 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         })
         return (
             <>
-                <h3 className="title-h3">
-                    {this.intrl.manager.vote}
-                </h3>
-                <div className={voteClassName}>
-                    <div className="vote-title">{this.props.molochmanager.proposalInfo.proposalTitle ? this.props.molochmanager.proposalInfo.proposalTitle : 'null'}</div>
-                    <div className="manager-votebox">
-                        <div className="green-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, true) + "%" }} />
-                        <div className="red-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, false) + "%" }} />
-                        <span className="left-top">{this.intrl.manager.agree}：{this.props.molochmanager.proposalListItem.voteYesCount}</span>
-                        <span className="right-top">{this.intrl.manager.disagree}：{this.props.molochmanager.proposalListItem.voteNotCount}</span>
-                    </div>
-                    <div className="myvote">
-                        <div className="myvote-title">
-                            <strong>{this.intrl.manager.myvote}</strong>
-                        </div>
-                        <div className="myvote-btn">
+                {
+                    this.props.molochmanager.proposalListItem.proposalState !== ProposalType.UpComing && (
+                        <>
+                            <h3 className="title-h3">
+                                {this.intrl.manager.vote}
+                            </h3>
+                            <div className={voteClassName}>
+                                <div className="vote-title">{this.props.molochmanager.proposalInfo.proposalTitle ? this.props.molochmanager.proposalInfo.proposalTitle : 'null'}</div>
+                                <div className="manager-votebox">
+                                    <div className="green-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, true) + "%" }} />
+                                    <div className="red-sai" style={{ "width": this.computePercentage(this.props.molochmanager.proposalListItem, false) + "%" }} />
+                                    <span className="left-top">{this.intrl.manager.agree}：{this.props.molochmanager.proposalListItem.voteYesCount}</span>
+                                    <span className="right-top">{this.intrl.manager.disagree}：{this.props.molochmanager.proposalListItem.voteNotCount}</span>
+                                </div>
+                                <div className="myvote">
+                                    <div className="myvote-title">
+                                        <strong>{this.intrl.manager.myvote}</strong>
+                                    </div>
+                                    <div className="myvote-btn">
 
-                            {
-                                this.props.molochmanager.voteInfo.voteType === '' && (
-                                    <>
                                         {
-                                            this.props.molochmanager.proposalListItem.proposalState === ProposalType.Voting ? (
+                                            this.props.molochmanager.voteInfo.voteType === '' && (
                                                 <>
                                                     {
-                                                        this.computeVoteTime(this.props.molochmanager.proposalListItem) === 'End' ? (
-                                                            <Button text={this.intrl.manager.over} btnColor="gray-btn" btnSize="vote-btn" />
-                                                        ) : (
-                                                                <>
-                                                                    {
-                                                                        this.props.molochmanager.upAddress
-                                                                            ? (
-                                                                                <>
-                                                                                    {
-                                                                                        this.props.molochmanager.upBalance <= 0 ? (
-                                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                        this.props.molochmanager.proposalListItem.proposalState === ProposalType.Voting ? (
+                                                            <>
+                                                                {
+                                                                    this.computeVoteTime(this.props.molochmanager.proposalListItem) === 'End' ? (
+                                                                        <Button text={this.intrl.manager.over} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                    ) : (
+                                                                            <>
+                                                                                {
+                                                                                    this.props.molochmanager.upAddress
+                                                                                        ? (
+                                                                                            <>
+                                                                                                {
+                                                                                                    this.props.molochmanager.upBalance <= 0 ? (
+                                                                                                        <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                                                    )
+                                                                                                        : (
+                                                                                                            <>
+                                                                                                                <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                                                                                <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                                            </>
+                                                                                                        )
+                                                                                                }
+                                                                                            </>
                                                                                         )
-                                                                                            : (
-                                                                                                <>
-                                                                                                    <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
-                                                                                                    <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
-                                                                                                </>
-                                                                                            )
-                                                                                    }
-                                                                                </>
-                                                                            )
-                                                                            : (
-                                                                                <>
-                                                                                    {
-                                                                                        parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
-                                                                                            <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                                        : (
+                                                                                            <>
+                                                                                                {
+                                                                                                    parseFloat(this.props.molochmanager.voteInfo.balance) === 0 ? (
+                                                                                                        <Button text={this.intrl.manager.notenough} btnColor="gray-btn" btnSize="vote-btn" />
+                                                                                                    )
+                                                                                                        : (
+                                                                                                            <>
+                                                                                                                <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
+                                                                                                                <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
+                                                                                                            </>
+                                                                                                        )
+                                                                                                }
+                                                                                            </>
                                                                                         )
-                                                                                            : (
-                                                                                                <>
-                                                                                                    <Button text={this.intrl.manager.agree} btnColor="bright-green" onClick={this.handeToVoteYes} />
-                                                                                                    <Button text={this.intrl.manager.disagree} btnColor="bright-red" onClick={this.handeToVoteNo} />
-                                                                                                </>
-                                                                                            )
-                                                                                    }
-                                                                                </>
-                                                                            )
-                                                                    }
-                                                                </>
-                                                            )
+                                                                                }
+                                                                            </>
+                                                                        )
+                                                                }
+                                                            </>
+                                                        )
+                                                            : <Button text={this.intrl.manager.novote} btnColor="gray-btn" btnSize="vote-btn" />
                                                     }
+
                                                 </>
                                             )
-                                                : <Button text={this.intrl.manager.novote} btnColor="gray-btn" btnSize="vote-btn" />
                                         }
+                                        {
+                                            this.props.molochmanager.voteInfo.voteType === '1' && <Button text={this.intrl.manager.agree} btnColor="gray-btn" btnSize="vote-btn" />
+                                        }
+                                        {
+                                            this.props.molochmanager.voteInfo.voteType === '2' && <Button text={this.intrl.manager.disagree} btnColor="gray-btn" btnSize="vote-btn" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
 
-                                    </>
-                                )
-                            }
-                            {
-                                this.props.molochmanager.voteInfo.voteType === '1' && <Button text={this.intrl.manager.agree} btnColor="gray-btn" btnSize="vote-btn" />
-                            }
-                            {
-                                this.props.molochmanager.voteInfo.voteType === '2' && <Button text={this.intrl.manager.disagree} btnColor="gray-btn" btnSize="vote-btn" />
-                            }
+                {
+                    this.props.molochmanager.proposalListItem.proposalState === ProposalType.UpComing && (
+                        <div className="going-box">
+                            <strong className="left-str">即将开始</strong><br />
+                            <span className="small-right-str">{this.intrl.manager.time}：{this.computeCanVoteTime(this.props.molochmanager.proposalListItem)}</span>
                         </div>
-                    </div>
-                </div>
+                    )
+                }
                 {
                     this.props.molochmanager.proposalListItem.proposalState === ProposalType.Voting && (
                         <div className="going-box">
@@ -314,6 +329,27 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
             }
         } else {
             return 'End'
+        }
+    }
+    // 计算可投票倒计时
+    private computeCanVoteTime = (item: IMolochProposalList) => {
+        if (!this.props.molochmanager.contractInfo || !this.props.molochinfo.projInfo) {
+            return false
+        }
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 周期间隔时间（单位：秒）
+        const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
+        // 下一个周期开始时间=下一个周期耗时+项目创建时间
+        const latestIndexTime = (parseInt(item.startingPeriod.toString(), 10) + 1) * betweenTime;
+        const startTime = this.props.molochinfo.projInfo.startTime;
+        const endTime = latestIndexTime + startTime;
+        // 可投票剩余时间 = 下一个周期的开始时间-当前时间
+        const countTime = endTime - nowTimeInt;
+        if (countTime < 0) {
+            return 'End'
+        } else {
+            return onCountRemainTime(countTime)
         }
     }
 }

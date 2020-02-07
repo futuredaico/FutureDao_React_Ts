@@ -54,6 +54,15 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         }
                                                         <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                                     </div>
+                                                    {/* 即将开始投票 */}
+                                                    {
+                                                        item.proposalState === ProposalType.UpComing && (
+                                                            <div className="transparent-toupiao gray-willstart">
+                                                                <span className="big-text">即将开始</span>&nbsp;&nbsp;
+                                                                <span className="sm-text">{this.intrl.manager.other} {this.computeCanVoteTime(item)}</span>
+                                                            </div>
+                                                        )
+                                                    }
                                                     {/* 投票期 */}
                                                     {
                                                         item.proposalState === ProposalType.Voting && (
@@ -333,6 +342,27 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             }
         } else {
             return 'End'
+        }
+    }
+    // 计算可投票倒计时
+    private computeCanVoteTime = (item: IMolochProposalList) => {
+        if (!this.props.molochmanager.contractInfo || !this.props.molochinfo.projInfo) {
+            return false
+        }
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 周期间隔时间（单位：秒）
+        const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
+        // 下一个周期开始时间=下一个周期耗时+项目创建时间
+        const latestIndexTime = (parseInt(item.startingPeriod.toString(), 10) + 1) * betweenTime;
+        const startTime = this.props.molochinfo.projInfo.startTime;
+        const endTime = latestIndexTime + startTime;
+        // 可投票剩余时间 = 下一个周期的开始时间-当前时间
+        const countTime = endTime - nowTimeInt;
+        if (countTime < 0) {
+            return 'End'
+        } else {
+            return onCountRemainTime(countTime)
         }
     }
 }

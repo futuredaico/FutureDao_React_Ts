@@ -188,7 +188,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                         )
                     }
                     {
-                        ((this.props.molochmanager.proposalListItem.proposalState === ProposalType.PreVote) || (this.props.molochmanager.proposalListItem.proposalState === ProposalType.UpComing)) ? <div /> : <VoteBox {...this.props} />
+                        this.props.molochmanager.proposalListItem.proposalState !== ProposalType.PreVote && <VoteBox {...this.props} />
                     }
                 </div>
                 {
