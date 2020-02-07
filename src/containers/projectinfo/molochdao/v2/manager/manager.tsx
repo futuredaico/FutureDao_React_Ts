@@ -24,6 +24,9 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             await this.props.molochmanager.getUpStreamData(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
     }
+    public componentWillUnmount() {
+        this.props.molochmanager.latestProposalPeriod = '0';
+    }
     public render() {
         return (
             <div className="manager-wrapper">

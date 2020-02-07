@@ -246,6 +246,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.metamaskwallet.inintWeb3();
         if (res) {
             let res2 = false;
+            let flag = true;
             if (this.props.molochmanager.proposalListItem.proposalType === '0') {
                 // 申请股份的处理
                 this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
@@ -258,18 +259,27 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                 // 踢人的处理
                 // 处于处理期间，踢人并清退某人的资产
                 if (this.props.molochmanager.proposalListItem.proposalState === ProposalType.Handling && this.props.molochmanager.proposalInfo) {
+                    flag = false;
                     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
-                    res2 = await this.props.molochmanager.processKickAndProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address);
+                    await this.props.molochmanager.processKickAndProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.molochmanager.proposalInfo.applicant, this.props.common.userInfo.address, (txid: string) => {
+                        if (txid) {
+                            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                        } else {
+                            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+                        }
+                    });
                 } else {
                     // 超过处理器时的处理踢人的提案
                     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
                     res2 = await this.props.molochmanager.processKickProposal(this.props.molochmanager.proposalListItem.proposalQueueIndex, this.props.common.userInfo.address);
                 }
             }
-            if (res2) {
-                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            } else {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            if (flag) {
+                if (res2) {
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                } else {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+                }
             }
         }
         return true
