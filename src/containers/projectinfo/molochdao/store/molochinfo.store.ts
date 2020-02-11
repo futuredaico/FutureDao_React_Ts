@@ -103,6 +103,9 @@ class MolochInfo
     this.computeEachAssetValue();
     return true;
   }
+  /**
+   * 计算每种资产的每股价值
+   */
   @action public computeEachAssetValue = () =>
   {
     if (this.fundTotalList)

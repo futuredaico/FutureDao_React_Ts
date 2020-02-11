@@ -49,7 +49,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
             <div className="molochinfo-page">                
                 <div className="project-top">
                     <h2>{this.props.molochinfo.projInfo.projName}</h2>
-                    <p className="title-p">{this.props.molochinfo.projInfo.projBrief}</p>
+                    {/* <p className="title-p">{this.props.molochinfo.projInfo.projBrief}</p> */}
                     <div className="img-data">
                         <div className="ptop-left">
                             <div className="ptop-img">
