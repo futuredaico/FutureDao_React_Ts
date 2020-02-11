@@ -50,6 +50,8 @@ class IMolochManager {
       if (parseInt(this.latestProposalPeriod, 10) < parseInt(result[0].data.list[0].startingPeriod, 10)) {
         this.latestProposalPeriod = result[0].data.list[0].startingPeriod || '0';
       }
+    } else {
+      this.latestProposalPeriod = '0'
     }
     return true;
   }
@@ -310,7 +312,7 @@ class IMolochManager {
    * @param depositHash  押金的哈希
    * @param depositNum  押金的金额
    */
-  @action public sponsorProposal = async (proposalIndex: string, myaddr: string, depositHash: string, depositNum: string) => {
+  @action public sponsorProposal = async (proposalIndex: string, myaddr: string, depositHash: string, depositNum: string, sendCall: (txid: string) => void) => {
     if (!this.contractInfo) {
       return false
     }
@@ -348,6 +350,11 @@ class IMolochManager {
           to: contractHash,
           value: '0x0',
           data: molochContract.contract.methods['sponsorProposal'](indexArr).encodeABI()
+        }, (err, txid) => {
+          console.log(" 第二笔交易")
+          console.log(err);
+          console.log(txid);
+          sendCall(txid)
         }
       )
       console.log(tx);
@@ -538,7 +545,7 @@ class IMolochManager {
   /**
    * 处理提案--V2版踢人的提案(处理期时需要的处理合并发送)
    */
-  @action public processKickAndProposal = async (proposalIndex: string, kickAddress: string, myaddr: string) => {
+  @action public processKickAndProposal = async (proposalIndex: string, kickAddress: string, myaddr: string, sendCall: (txid: string) => void) => {
     if (!this.contractInfo) {
       return false
     }
@@ -578,6 +585,11 @@ class IMolochManager {
           to: contractHash,
           value: '0x0',
           data: molochContract.contract.methods['ragekick'](kickAddress).encodeABI()
+        }, (err, txid) => {
+          console.log(" 第二笔交易")
+          console.log(err);
+          console.log(txid);
+          sendCall(txid)
         }
       )
       batch.add(tx)

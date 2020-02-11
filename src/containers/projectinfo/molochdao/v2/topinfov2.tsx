@@ -9,8 +9,7 @@ import { IMolochInfoProps, IFundInfo } from '../interface/molochinfo.interface';
 import { saveDecimal } from '@/utils/numberTool';
 import classnames from 'classnames';
 
-interface IState
-{
+interface IState {
     showAllAsset: boolean
 }
 
@@ -20,10 +19,8 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
     public state: IState = {
         showAllAsset: false
     }
-    public render()
-    {
-        if (!this.props.molochinfo.projInfo)
-        {
+    public render() {
+        if (!this.props.molochinfo.projInfo) {
             return null;
         }
         const listClassName = classnames('going-purple', { 'show-list-asset': this.state.showAllAsset })
@@ -38,8 +35,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                     this.props.molochinfo.fundTotalList && (
                                         <>
                                             {
-                                                this.props.molochinfo.fundTotalList.count > 0 && this.props.molochinfo.fundTotalList.list.map((item: IFundInfo, index: number) =>
-                                                {
+                                                this.props.molochinfo.fundTotalList.count > 0 && this.props.molochinfo.fundTotalList.list.map((item: IFundInfo, index: number) => {
                                                     return (
                                                         <>
                                                             {
@@ -47,8 +43,8 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                                                     <>
                                                                         <strong className="purple-big" key={index}>
                                                                             {
-                                                                                index === 1 ?(item.fundTotal?saveDecimal(item.fundTotal, 4):'0')+' ' + item.fundSymbol.toLocaleUpperCase()
-                                                                                :(item.fundTotal?saveDecimal(item.fundTotal, 2):'0')+' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                index === 1 ? (item.fundTotal ? saveDecimal(item.fundTotal, 4) : '0') + ' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                    : (item.fundTotal ? saveDecimal(item.fundTotal, 2) : '0') + ' ' + item.fundSymbol.toLocaleUpperCase()
                                                                             }
                                                                         </strong><br />
                                                                     </>
@@ -56,11 +52,11 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                                                                         <>
                                                                             <strong className="purple-big" key={index}>
                                                                                 {
-                                                                                    (item.fundTotal?saveDecimal(item.fundTotal, 2):'0') +' ' + item.fundSymbol.toLocaleUpperCase()
+                                                                                    (item.fundTotal ? saveDecimal(item.fundTotal, 2) : '0') + ' ' + item.fundSymbol.toLocaleUpperCase()
                                                                                 }
                                                                             </strong>
                                                                             {
-                                                                                !this.state.showAllAsset &&this.props.molochinfo.fundTotalList&&this.props.molochinfo.fundTotalList.count>3 && (
+                                                                                !this.state.showAllAsset && this.props.molochinfo.fundTotalList && this.props.molochinfo.fundTotalList.count > 3 && (
                                                                                     (
                                                                                         <div className="show-all" onClick={this.handleToShowList}>
                                                                                             <span>全部</span>
@@ -124,12 +120,12 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                     <div className="going-line">
                         <div className="going-gray">{this.intrl.projinfo.every}</div>
                         <div className="going-normal">
-                            <strong>≈ $ {parseFloat(this.props.molochinfo.projInfo.valuePerShare?saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4):'0')}</strong>
+                            <strong>≈ $ {parseFloat(this.props.molochinfo.projInfo.valuePerShare ? saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4) : '0')}</strong>
                             <div className="everyshare-box">
                                 {
-                                    this.props.molochinfo.everyFundList.length>0 && this.props.molochinfo.everyFundList.map((item:IFundInfo,index:number)=>{                                        
-                                        return (                                            
-                                        <p key={index}>{parseFloat((item.fundTotal?saveDecimal(item.fundTotal, 4):'0'))} {item.fundSymbol&&item.fundSymbol.toLocaleUpperCase()}</p>
+                                    this.props.molochinfo.everyFundList.length > 0 && this.props.molochinfo.everyFundList.map((item: IFundInfo, index: number) => {
+                                        return (
+                                            <p key={index}>{parseFloat((item.fundTotal ? saveDecimal(item.fundTotal, 4) : '0'))} {item.fundSymbol && item.fundSymbol.toLocaleUpperCase()}</p>
                                         )
                                     })
                                 }
@@ -149,8 +145,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
         );
     }
     // 展开与收起
-    private handleToShowList = () =>
-    {
+    private handleToShowList = () => {
         this.setState({
             showAllAsset: !this.state.showAllAsset
         })

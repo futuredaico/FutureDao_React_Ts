@@ -74,7 +74,7 @@ class MolochProposal implements IMolochProposalStore {
    * @param des 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposal = async (contractHash: string, assetHash: string, addr: string, giveNum: number, requireNum: number, des: string, myaddr: string, sendCall: () => void, confrimCall: () => void) => {
+  @action public applyProposal = async (contractHash: string, assetHash: string, addr: string, giveNum: number, requireNum: number, des: string, myaddr: string, sendCall: (txid: string) => void, confrimCall: () => void) => {
     // moloch：0x2df40cccfb741e6bca684544821aaaccef217e46
     // usdt:0x38e5ccf55d19e54e8c4fbf55ff81462727ccf4e7
     // const contractHash = '0x2df40cccfb741e6bca684544821aaaccef217e46';
@@ -112,8 +112,11 @@ class MolochProposal implements IMolochProposalStore {
           value: '0x0',
           data: molochContract.contract.methods['submitProposal'](addr, giveMoneyArray, requireArray, des).encodeABI()
         },
-        () => {
-          sendCall()
+        (err, txid) => {
+          console.log(" 第二笔交易")
+          console.log(err);
+          console.log(txid);
+          sendCall(txid)
         }
       )
       batch.add(tx)
@@ -147,7 +150,7 @@ class MolochProposal implements IMolochProposalStore {
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToGetShares = async (contractHash: string, addr: string, requestShare: number, lootRequest: number, payNum: number, payToken: string, requestNum: number, requestToken: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) => {
+  @action public applyProposalToGetShares = async (contractHash: string, addr: string, requestShare: number, lootRequest: number, payNum: number, payToken: string, requestNum: number, requestToken: string, details: string, myaddr: string, sendCall: (txid: string) => void, confrimCall: () => void) => {
     try {
       // 取精度（贡献的代币，索要的代币）
       let payDecimals = 0;
@@ -193,8 +196,11 @@ class MolochProposal implements IMolochProposalStore {
           value: '0x0',
           data: molochContract.contract.methods['submitProposal'](addr, shareArray, lootArray, payArray, payToken, requestArray, requestToken, details).encodeABI()
         },
-        () => {
-          sendCall()
+        (err, txid) => {
+          console.log(" 第二笔交易")
+          console.log(err);
+          console.log(txid);
+          sendCall(txid)
         }
       )
       batch.add(tx)
@@ -224,14 +230,14 @@ class MolochProposal implements IMolochProposalStore {
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToAddToken = async (contractHash: string, token: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) => {
+  @action public applyProposalToAddToken = async (contractHash: string, token: string, details: string, myaddr: string) => {
     try {
       // 调用合约      
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("submitWhitelistProposal", [token, details], { from: myaddr });
-      submitRes.onTransactionHash().then(() => { sendCall() })
-      submitRes.onConfrim().then(res => { confrimCall() })
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
       return true
     } catch (e) {
       console.log(e);
@@ -245,14 +251,14 @@ class MolochProposal implements IMolochProposalStore {
    * @param details 附带信息（提案标题，提案详情）(string)
    * @param myaddr 当前钱包地址(address)
    */
-  @action public applyProposalToKick = async (contractHash: string, addr: string, details: string, myaddr: string, sendCall: () => void, confrimCall: () => void) => {
+  @action public applyProposalToKick = async (contractHash: string, addr: string, details: string, myaddr: string) => {
     try {
       // 调用合约      
       const molochv2Abi = require('@/utils/contractFiles/Moloch2.json').abi as AbiItem[];
       const molochContract = new Web3Contract(molochv2Abi, contractHash);
       const submitRes = molochContract.contractSend("submitGuildKickProposal", [addr, details], { from: myaddr });
-      submitRes.onTransactionHash().then(() => { sendCall() })
-      submitRes.onConfrim().then(res => { confrimCall() })
+      const subtxid = await submitRes.onTransactionHash();
+      console.log(subtxid)
       return true
     } catch (e) {
       console.log(e);

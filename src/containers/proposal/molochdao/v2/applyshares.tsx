@@ -319,9 +319,13 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
         const lootRequest = parseInt(this.state.tianLootRequire, 10);
         const payNum = parseFloat(this.state.tianPayNum);
         const requestNum = parseFloat(this.state.tianRequestNum);
-        await this.props.index.applyProposalToGetShares(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr), this.props.common.userInfo.address, () => {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            this.initData();
+        await this.props.index.applyProposalToGetShares(contractHash, this.state.tianAddress, requestShares, lootRequest, payNum, this.state.tianPayToken, requestNum, this.state.tianRequestToken, JSON.stringify(tianStr), this.props.common.userInfo.address, (txid: string) => {
+            if (txid) {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                this.initData();
+            } else {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+            }
         }, () => {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone, this.intrl.notify.detailbtn, () => {
                 const projectId = this.props.match.params['projectId'];

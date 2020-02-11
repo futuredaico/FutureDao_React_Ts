@@ -188,7 +188,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                         )
                     }
                     {
-                        ((this.props.molochmanager.proposalListItem.proposalState === ProposalType.PreVote) || (this.props.molochmanager.proposalListItem.proposalState === ProposalType.UpComing)) ? <div /> : <VoteBox {...this.props} />
+                        this.props.molochmanager.proposalListItem.proposalState !== ProposalType.PreVote && <VoteBox {...this.props} />
                     }
                 </div>
                 {
@@ -290,12 +290,14 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
         const res = await this.props.metamaskwallet.inintWeb3();
         if (res) {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendchecktwo);
-            const res2 = await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address, this.props.index.depositHash, this.props.index.proposalFee);
-            if (res2) {
-                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
-            } else {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
-            }
+            await this.props.molochmanager.sponsorProposal(this.props.molochmanager.proposalIndex, this.props.common.userInfo.address, this.props.index.depositHash, this.props.index.proposalFee, (txid: string) => {
+                if (txid) {
+                    this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+                } else {
+                    this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+                }
+            });
+
         }
         this.setState({
             isDoingSend: false

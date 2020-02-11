@@ -9,6 +9,7 @@ import ProjectDetail from './detail/detail'
 import Manager from './manager/manager';
 import ManagerInfo from './manager/managerinfo';
 import Member from './member/member';
+import Asset from './asset/asset';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import classnames from 'classnames';
 
@@ -20,26 +21,22 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
   }
   private pBottomTitle: React.RefObject<HTMLDivElement> = React.createRef();
 
-  public componentDidMount()
-  {
-    if (this.pBottomTitle && this.pBottomTitle.current)
-    {
+  public componentDidMount() {
+    if (this.pBottomTitle && this.pBottomTitle.current) {
       const refTop = this.pBottomTitle && this.pBottomTitle.current ? this.pBottomTitle.current.offsetTop : 0;
       this.onScrollFn.bind(this, refTop);
       window.addEventListener('scroll', this.onScrollFn.bind(this, refTop), false);
     }
   }
 
-  public componentWillUnmount()
-  {
+  public componentWillUnmount() {
     window.removeEventListener('scroll', this.onScrollFn.bind(this));
   }
 
-  public render()
-  {
+  public render() {
     return (
       <div className="project-bottom">
-        <div className="pbottom-wrapper"> 
+        <div className="pbottom-wrapper">
           <div className="pbottom-title-wrapper">
             <div className={classnames('pbottom-title', { fixed: this.state.fixed })} ref={this.pBottomTitle}>
               <ul className="title-ul">
@@ -50,7 +47,10 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                   <a href="#message">{this.intrl.projinfo.comment + ' ' + this.handleNumCount(2)} </a>
                 </li>
                 <li className={this.props.molochinfo.menuNum === 3 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 3)}>
-                  {this.intrl.projinfo.manager} 
+                  {this.intrl.projinfo.manager}
+                </li>
+                <li className={this.props.molochinfo.menuNum === 5 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 5)}>
+                  资产
                 </li>
                 <li className={this.props.molochinfo.menuNum === 4 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 4)}>
                   {this.intrl.projinfo.member} {this.handleNumCount(4)}
@@ -76,6 +76,9 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                   {
                     this.props.molochinfo.menuNum === 4 && <Member {...this.props} />
                   }
+                  {
+                    this.props.molochinfo.menuNum === 5 && <Asset {...this.props} />
+                  }
                 </>
               )
             }
@@ -85,41 +88,32 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
     );
   }
   // 菜单选择
-  private mapUnderline = (id: number) =>
-  {
+  private mapUnderline = (id: number) => {
     window.scrollTo(0, 500);
     this.props.molochinfo.menuNum = id;
     this.props.molochinfo.isShowManagerInfo = false;
     this.props.molochmanager.proposalMenuNum = '1';
-    if (id === 2)
-    {
+    if (id === 2) {
       // todo
       window.location.hash = 'message'
     }
-    if (this.props.molochinfo.projId)
-    {
-        this.props.molochinfo.getMolochProjInfo(this.props.molochinfo.projId);
+    if (this.props.molochinfo.projId) {
+      this.props.molochinfo.getMolochProjInfo(this.props.molochinfo.projId);
     }
   }
-  private handleNumCount = (id: number) =>
-  {
-    if (id === 2)
-    {
+  private handleNumCount = (id: number) => {
+    if (id === 2) {
       return this.props.molochinfo.projInfo ? this.props.molochinfo.projInfo.discussCount : '';
     }
-    else if (id === 4)
-    {
+    else if (id === 4) {
       return this.props.molochinfo.projInfo ? this.props.molochinfo.projInfo.member : '';
-    }else
-    {
+    } else {
       return ''
     }
   }
-  private onScrollFn(refTop: number)
-  {
+  private onScrollFn(refTop: number) {
     const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    if (currentScrollTop >= refTop)
-    {
+    if (currentScrollTop >= refTop) {
       this.setState({
         fixed: true
       })
