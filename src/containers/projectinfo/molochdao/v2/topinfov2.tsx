@@ -45,7 +45,7 @@ class TopInfoV2 extends React.Component<IMolochInfoProps, IState> {
                         </div>
                         <strong className="title-strong">官方网站</strong>
                             {
-                                this.props.molochinfo.projInfo.officailWeb?<a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.officailWeb}>{this.props.molochinfo.projInfo.officailWeb}{this.props.molochinfo.projInfo.officailWeb}</a>
+                                this.props.molochinfo.projInfo.officailWeb?<a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.officailWeb}>{this.props.molochinfo.projInfo.officailWeb}</a>
                                 :<p className="gray-content">暂无</p>
                             }
                     </div>
