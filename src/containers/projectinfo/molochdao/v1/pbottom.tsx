@@ -9,6 +9,7 @@ import ProjectDetail from './detail/detail'
 import Manager from './manager/manager';
 import ManagerInfo from './manager/managerinfo';
 import Member from './member/member';
+import Asset from './asset/asset';
 import { IMolochInfoProps } from '../interface/molochinfo.interface';
 import classnames from 'classnames';
 
@@ -52,6 +53,9 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                 <li className={this.props.molochinfo.menuNum === 3 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 3)}>
                   {this.intrl.projinfo.manager} 
                 </li>
+                <li className={this.props.molochinfo.menuNum === 5 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 5)}>
+                  资产
+                </li>
                 <li className={this.props.molochinfo.menuNum === 4 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 4)}>
                   {this.intrl.projinfo.member} {this.handleNumCount(4)}
                 </li>
@@ -75,6 +79,9 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                   }
                   {
                     this.props.molochinfo.menuNum === 4 && <Member {...this.props} />
+                  }
+                  {
+                    this.props.molochinfo.menuNum === 5 && <Asset {...this.props} />
                   }
                 </>
               )

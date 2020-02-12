@@ -17,11 +17,11 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
         return (
             <>
                 <div className="projectdetail-wrapper">
-                    <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
+                    {/* <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     <div className="contract-projectinfo">
                         <p>合约地址：{this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.contractHash}</p>
                         <p>创建者：{this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.summonerAddress}</p>
-                    </div>
+                    </div> */}
                     {
                         (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">暂无详情</div>
                     }

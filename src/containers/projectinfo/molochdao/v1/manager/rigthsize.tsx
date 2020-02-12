@@ -8,7 +8,6 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import { IMolochProposalList } from '../../interface/molochmanager.interface';
-import QuitProject from './quit';
 import { Input } from 'antd';
 import { when } from 'mobx';
 
@@ -67,7 +66,6 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                         </div>
                     )
                 }
-                <QuitProject {...this.props} />
                 {
                     this.state.showEntrust && (
                         <div className="entrust-wrapper">
