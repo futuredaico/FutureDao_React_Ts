@@ -166,7 +166,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     <div className="group-name"><b>{this.intrl.create.des}</b><span className="red-type"> *</span></div>
                     <textarea
                         className={this.state.infoEnter ? "textarea-wrapper err-active" : "textarea-wrapper"}
-                        maxLength={400}
+                        maxLength={180}
                         style={{ resize: 'none' }}
                         onChange={this.handleChangeInfo}
                         value={this.state.info}
@@ -464,8 +464,8 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
         this.setState({
             info: str,
             infoLength: str.length,
-            // 项目简介不可为空且字数不能超过400
-            infoEnter:!str || str.length > 400
+            // 项目简介不可为空且字数不能超过180
+            infoEnter:!str || str.length > 180
         },()=>{
             this.checkInputStatus()
         })
