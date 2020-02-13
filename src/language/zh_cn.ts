@@ -378,11 +378,19 @@ export default {
     error1: "不得大于投票期",
     error2: "不得大于押金",
     days: "天",
-    approvedplaceholder: "请填写代币合约地址"
+    approvedplaceholder: "请填写代币合约地址",
+    error3:"合约地址错误"
   },
   asset:{
     shares:"股份",
     eachprice:"每股价值",
     balance:"代币余额"
+  },
+  member:{
+    one:"普通股份持有人",
+    two:"无表决权股份持有人"
+  },
+  quit:{
+    tips:"同时持有普通股份和无表决权股份时，优先退出无表决权股份。"
   }
 }

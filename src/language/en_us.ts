@@ -377,11 +377,19 @@ export default {
     error1: "No more than voting period",
     error2: "No more than deposit",
     days: " Days",
-    approvedplaceholder: "Fill in the address of the token contract"
+    approvedplaceholder: "Fill in the address of the token contract",
+    error3:"Incorrect token address"
   },
   asset:{
     shares:"Shares",
     eachprice:"Value per share",
     balance:"Token Balance"
+  },
+  member:{
+    one:"Share holders",
+    two:"Non-voting share holders"
+  },
+  quit:{
+    tips:"When you hold both ordinary shares and non-voting shares, priority is given to withdrawing from non-voting shares."
   }
 }

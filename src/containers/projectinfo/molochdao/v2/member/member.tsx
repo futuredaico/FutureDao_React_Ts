@@ -26,7 +26,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
             <div className="member-wrapper">
                 <div className="member-sbox-wrapper">
                     {
-                        this.props.molochinfo.projMemberCount > 0 && <h3 className="title-h3">普通股份持有人</h3>
+                        this.props.molochinfo.projMemberCount > 0 && <h3 className="title-h3">{this.intrl.member.one}</h3>
                     }
                     {
                         this.props.molochinfo.projMemberList.map((item: IProjectMember, index: number) =>
@@ -60,7 +60,7 @@ class MolochMember extends React.Component<IMolochInfoProps> {
 
                 <div className="member-sbox-wrapper">
                     {
-                        this.props.molochinfo.projMemberCount2 > 0 && <h3 className="title-h3 other-bigtitle">无表决权股份持有人</h3>
+                        this.props.molochinfo.projMemberCount2 > 0 && <h3 className="title-h3 other-bigtitle">{this.intrl.member.two}</h3>
                     }
                     {
                         this.props.molochinfo.projMemberList2.map((item: IProjectMember, index: number) =>

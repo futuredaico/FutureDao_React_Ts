@@ -11,6 +11,7 @@ import { Pagination } from 'antd';
 import { IHomeProps, IMolochProjList } from './interface/home.interface';
 // import { ProjType } from '@/store/interface/common.interface';
 
+
 @inject('home')
 @observer
 class Home extends React.Component<IHomeProps, any> {
@@ -108,7 +109,12 @@ class Home extends React.Component<IHomeProps, any> {
             {
               this.props.home.projListCount>12 &&(
                 <div className="home-page-warpper">
-                  <Pagination showQuickJumper={true} defaultCurrent={1} defaultPageSize={this.props.home.projListPageSize} total={this.props.home.projListCount} onChange={this.handleChangePage} />
+                  <Pagination
+                    showQuickJumper={true} 
+                    defaultCurrent={1} 
+                    defaultPageSize={this.props.home.projListPageSize} 
+                    total={this.props.home.projListCount} 
+                    onChange={this.handleChangePage} />
                 </div>
               )
             }

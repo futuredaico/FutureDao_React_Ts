@@ -240,7 +240,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                     />
                                 }
                                 {!item.value ? <span className="err-span">{ this.intrl.edit.error}</span>:
-                                 (item.enter&&item.other ?<span className="err-span">合约地址错误</span>:
+                                 (item.enter&&item.other ?<span className="err-span">{this.intrl.create.error3}</span>:
                                  this.state.approvedTokens.findIndex(pre=>pre.value===item.value)<index && <span className="err-span">代币重复</span>
                                  )}
                                 {
