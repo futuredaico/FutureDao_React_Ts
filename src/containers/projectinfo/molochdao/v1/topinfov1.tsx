@@ -30,26 +30,26 @@ class TopInfoV1 extends React.Component<IMolochInfoProps> {
             <div className="ptop-right">
                 <div className="topright-wrapper">
                     <div className="des-wrapper">
-                        <strong className="title-strong">简介</strong>
+                        <strong className="title-strong">{this.intrl.projinfo.summary}</strong>
                         <p className="gray-content">{this.props.molochinfo.projInfo.projBrief}</p>
                     </div>
                     <div className="other-wrapper">
-                        <strong className="title-strong">版本信息</strong>
+                        <strong className="title-strong">{this.intrl.projinfo.version}</strong>
                         <p className="gray-content">{this.props.molochinfo.projInfo.projType==='moloch'?"MolochDao":"FutureDao"} {this.props.molochinfo.projInfo.projVersion}</p>
                         <div className="address-content">
                             <div className="flex-con">
-                                <strong className="title-strong">合约地址</strong>
+                                <strong className="title-strong">{this.intrl.projinfo.contract}</strong>
                                 <strong className="purple-content">{this.props.molochinfo.projInfo.contractHash.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
                             </div>
                             <div className="flex-con">
-                                <strong className="title-strong">DAO创建者</strong>
+                                <strong className="title-strong">{this.intrl.projinfo.contractaddr}</strong>
                                 <strong className="purple-content">{this.props.molochinfo.projInfo.summonerAddress.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
                             </div>
                         </div>
-                        <strong className="title-strong">官方网站</strong>
+                        <strong className="title-strong">{this.intrl.projinfo.website}</strong>
                             {
                                 this.props.molochinfo.projInfo.officailWeb?<a className="weblink-purple" target="_blank" href={this.props.molochinfo.projInfo.officailWeb}>{this.props.molochinfo.projInfo.officailWeb}</a>
-                                :<p className="gray-content">暂无</p>
+                                :<p className="gray-content">{this.intrl.projinfo.null}</p>
                             }
                     </div>
                </div>

@@ -37,7 +37,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                 {this.intrl.manager.tian}
                             </li>
                             <li className={this.props.molochmanager.proposalMenuNum === '0' ? "title-li active" : "title-li"} onClick={this.handleShowListType.bind(this, '0')}>
-                                预发布提案
+                                {this.intrl.manager.yuproposal}
                                 {/* <span className="sm-graytime">（4小时30分钟后可用）</span> */}
                             </li>
                         </ul>
@@ -61,7 +61,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     {
                                                         item.proposalState === ProposalType.UpComing && (
                                                             <div className="transparent-toupiao gray-willstart">
-                                                                <span className="big-text">即将开始</span>&nbsp;&nbsp;
+                                                                <span className="big-text">{this.intrl.manager.willstart}</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeCanVoteTime(item)}</span>
                                                             </div>
                                                         )
@@ -88,7 +88,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                     {
                                                         item.proposalState === ProposalType.Handling && (
                                                             <div className="transparent-toupiao green-willdo">
-                                                                <span className="big-text">待处理</span>&nbsp;&nbsp;
+                                                                <span className="big-text">{this.intrl.manager.doing}</span>&nbsp;&nbsp;
                                                                 <span className="sm-text">{this.intrl.manager.other} {this.computeProcessTime(item)}</span>
                                                             </div>
                                                         )
@@ -121,7 +121,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                             <div className="mcontent-count">
                                                                 <div>
                                                                     <span>{this.intrl.manager.request} </span>
-                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested} {this.intrl.manager.lootshares}</strong>
                                                                 </div>
                                                                 <span>{this.intrl.manager.gong} </span>
                                                                 <strong>{item.tributeOffered} {item.tributeOfferedSymbol && item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
@@ -133,7 +133,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         item.proposalType === '1' && (
                                                             <div className="mcontent-count">
                                                                 <div>
-                                                                    <span>添加支持代币</span>
+                                                                    <span>{this.intrl.manager.addasset}</span>
                                                                 </div>
                                                                 <strong>{item.tributeToken}</strong>
                                                             </div>
@@ -144,7 +144,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         item.proposalType === '2' && (
                                                             <div className="mcontent-count">
                                                                 <div>
-                                                                    <span>踢出成员</span>
+                                                                    <span>{this.intrl.manager.kick}</span>
                                                                 </div>
                                                                 <strong>{item.applicant}</strong>
                                                             </div>
@@ -195,7 +195,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                             <div className="mcontent-count">
                                                                 <div>
                                                                     <span>{this.intrl.manager.request} </span>
-                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested}无表决权股</strong>
+                                                                    <strong className="count-right">{item.sharesRequested} {this.intrl.manager.gu} {item.lootRequested} {this.intrl.manager.lootshares}</strong>
                                                                 </div>
                                                                 <span>{this.intrl.manager.gong} </span>
                                                                 <strong>{item.tributeOffered} {item.tributeOfferedSymbol && item.tributeOfferedSymbol.toLocaleUpperCase()}</strong>
@@ -208,7 +208,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         item.proposalType === '1' && (
                                                             <div className="mcontent-count">
                                                                 <div>
-                                                                    <span>添加支持代币</span>
+                                                                    <span>{this.intrl.manager.addasset}</span>
                                                                 </div>
                                                                 <strong>{item.tributeToken}</strong>
                                                             </div>
@@ -219,7 +219,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                                         item.proposalType === '2' && (
                                                             <div className="mcontent-count">
                                                                 <div>
-                                                                    <span>踢出成员</span>
+                                                                    <span>{this.intrl.manager.kick}</span>
                                                                 </div>
                                                                 <strong>{item.applicant}</strong>
                                                             </div>

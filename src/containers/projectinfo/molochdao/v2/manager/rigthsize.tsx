@@ -27,7 +27,7 @@ class ManagerRightSizeV2 extends React.Component<IMolochInfoProps, IState> {
     public render() {
         return (
             <div className="manager-right">
-                <Button text="发起预发布提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
+                <Button text={this.intrl.btn.yuproposal} btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                 {
                     this.props.molochmanager.proposalBalance > 0 && (
                         <div className="entrust-btn">

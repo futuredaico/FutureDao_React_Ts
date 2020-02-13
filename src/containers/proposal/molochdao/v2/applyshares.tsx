@@ -97,19 +97,19 @@ class ApplyShares extends React.Component<IMolochProposalProps, IState> {
                     }
                 </div>
                 <div className="inline-title">
-                    <strong>申请资产</strong>&nbsp;
+                    <strong>{this.intrl.proposal.applyasset}</strong>&nbsp;
                     <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
                     <div className="smline-box">
-                        <span className="smline-span">申请股份数:</span>
+                        <span className="smline-span">{this.intrl.proposal.applyshares}:</span>
                         <Input value={this.state.tianRequestShares} onChange={this.handleChangetianRequestShares} onFocus={this.handleOnFous} />
                     </div>
                     <div className="smline-box">
-                        <span className="smline-span">申请无表决权股份数:</span>
+                        <span className="smline-span">{this.intrl.proposal.applyloot}:</span>
                         <Input value={this.state.tianLootRequire} onChange={this.handleChangeTianLootRequire} onFocus={this.handleOnFous} />
                     </div>
-                    <div className="smline-span">申请资产及其数量:</div>
+                    <div className="smline-span">{this.intrl.proposal.applynumber}:</div>
                     <Input className="sort-inputtext" value={this.state.tianRequestNum} onChange={this.handleChangeTianRequestNum} onFocus={this.handleOnFous} />
                     <div className="sort-select">
                         {

@@ -65,9 +65,9 @@ class KickMember extends React.Component<IMolochProposalProps, IState> {
                     <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                 </div>
                 <div className="inline-title">
-                    <strong>踢出成员地址</strong>&nbsp;
+                    <strong>{this.intrl.proposal.kickaddr}</strong>&nbsp;
                             <span className="red-type">*</span>
-                    <span className="tips-text">（ 该成员股份将被全部按比例兑换成资产 ）</span>
+                    <span className="tips-text">{this.intrl.proposal.kicktips}</span>
                 </div>
                 <div className="inline-enter">
                     <Input value={this.state.tianKickAddr} onChange={this.handleChangeTianKickAddr} className={!this.state.tianKickAddrBtn ? "err-active" : ''} />

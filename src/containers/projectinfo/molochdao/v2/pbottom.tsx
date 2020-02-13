@@ -50,7 +50,7 @@ class MolochPbottom extends React.Component<IMolochInfoProps, { fixed: boolean }
                   {this.intrl.projinfo.manager}
                 </li>
                 <li className={this.props.molochinfo.menuNum === 5 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 5)}>
-                  资产
+                  {this.intrl.projinfo.assets}
                 </li>
                 <li className={this.props.molochinfo.menuNum === 4 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 4)}>
                   {this.intrl.projinfo.member} {this.handleNumCount(4)}

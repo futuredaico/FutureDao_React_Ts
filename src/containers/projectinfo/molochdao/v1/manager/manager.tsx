@@ -63,7 +63,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                         {
                                             item.proposalState === ProposalType.UpComing && (
                                                 <div className="transparent-toupiao">
-                                                    <span className="big-text">即将开启</span>&nbsp;&nbsp;
+                                                    <span className="big-text">{this.intrl.manager.willstart}</span>&nbsp;&nbsp;
                                                     <span className="sm-text">{this.intrl.manager.other} {this.computeBeginVoteTime(item)}</span>
                                                 </div>
                                             )

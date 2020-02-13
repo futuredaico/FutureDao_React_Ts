@@ -39,6 +39,9 @@ export default {
     done: "已处理",
     continue: "继续",
     again: "重试",
+    yuproposal:"发起预发布提案",
+    approve:"批准为正式提案",
+    cancelproposal:"取消提案"
   },
   card: {
     game: "游戏",
@@ -68,6 +71,7 @@ export default {
     sign: "注册",
     loginerr: "请先登录",
     error: "操作失败",
+    home:"首页"
   },
   footer: {
     about: "关于",
@@ -175,6 +179,12 @@ export default {
     manager: "治理",
     member: "成员",
     textarea2: "请先登录",
+    summary:"简介",
+    version:"版本信息",
+    contract:"合约地址",
+    contractaddr:"DAO创建者",
+    null:"暂无",
+    assets:"资产"
   },
   update: {
     update: "发布更新",
@@ -305,7 +315,16 @@ export default {
     hours: "小时",
     min: "分钟",
     second: "秒后可用",
-    no: "（无权限）"
+    no: "（无权限）",
+    yuproposal:"预发布提案",
+    kick:"踢出成员",
+    addasset:"添加支持代币",
+    willstart:"即将开始",
+    lootshares:"无表决权股份",
+    shares:"股份",
+    fail:"提案未通过",
+    passed:"提案已通过",
+    canceltips:"确认取消此提案？"
   },
   proposal: {
     title: "发起MolochoDao提案",
@@ -319,7 +338,17 @@ export default {
     gongtips: "（ 如果股份申请人非您本人，则需要提前发送授权交易，否则提案将失败。 ）",
     addrerr:"地址格式不正确。",
     hasherr:"代币hash错误",
-    membererr:"该地址不是Dao成员"    
+    membererr:"该地址不是Dao成员",  
+    apply: "申请股份", 
+    kick:"踢出成员",
+    addasset:"添加支持代币",
+    applyasset:"申请资产",
+    applyshares:"申请股份数",
+    applyloot:"申请无表决权股份数",
+    applynumber:"申请资产及其数量",
+    kickaddr:"踢出成员地址",
+    kicktips:"（ 该成员股份将被全部按比例兑换成资产 ）",
+    token:"添加代币Hash"
   },
   create: {
     bigtitle: "创建新DAO",
@@ -350,5 +379,10 @@ export default {
     error2: "不得大于押金",
     days: "天",
     approvedplaceholder: "请填写代币合约地址"
+  },
+  asset:{
+    shares:"股份",
+    eachprice:"每股价值",
+    balance:"代币余额"
   }
 }

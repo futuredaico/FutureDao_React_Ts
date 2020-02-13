@@ -23,7 +23,7 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
                         <p>创建者：{this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.summonerAddress}</p>
                     </div> */}
                     {
-                        (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">暂无详情</div>
+                        (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
                     }
                 </div>
                 <Message {...this.props} />

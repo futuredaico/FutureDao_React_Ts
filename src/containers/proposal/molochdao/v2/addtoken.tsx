@@ -59,7 +59,7 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
                     <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                 </div>
                 <div className="inline-title">
-                    <strong>添加代币Hash</strong>&nbsp;
+                    <strong>{this.intrl.proposal.token}</strong>&nbsp;
                     <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">

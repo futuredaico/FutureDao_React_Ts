@@ -38,7 +38,10 @@ export default {
     do: "Processing proposal",
     done: "Processed",
     continue: "Continue",
-    again: "Retry"
+    again: "Retry",
+    yuproposal:"New Pre Published Proposal",
+    approve:"Publish this Proposal",
+    cancelproposal:"Cancel Proposal"
   },
   card: {
     game: "Games",
@@ -68,6 +71,7 @@ export default {
     sign: "Sign up",
     loginerr: "Please log in first.",
     error: "Operation failed",
+    home:"Home"
   },
   footer: {
     about: "About",
@@ -174,7 +178,13 @@ export default {
     website: "Website",
     manager: "Proposal",
     member: "Members",
-    textarea2: "Please log in."
+    textarea2: "Please log in.",
+    summary:"Summary",
+    version:"Dao Version",
+    contract:"Contract",
+    contractaddr:"Contract Address",
+    null:"Null",
+    assets:"Assets"
   },
   update: {
     update: "Publish updates",
@@ -304,7 +314,16 @@ export default {
     hours: "h",
     min: "m",
     second: "s later is available",
-    no: "(No permission)"
+    no: "(No permission)",
+    yuproposal:"Pre Published Proposal",
+    kick:"Member Kicked",
+    addasset:"Token Added",
+    willstart:"Upcoming",
+    lootshares:"Non-voting Shares",
+    shares:"Shares",
+    fail:"Proposal Failed",
+    passed:"Proposal Passed",
+    canceltips:"Are you sure you want to cancel this proposal?"
   },
   proposal: {
     title: "New MolochoDao proposal",
@@ -318,7 +337,17 @@ export default {
     gongtips: "（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
     addrerr:"The address format is incorrect.",
     hasherr:"Token hash error.",
-    membererr:"The address is not Dao member"
+    membererr:"The address is not Dao member",
+    apply: "Require Shares", 
+    kick:"Kick Members",
+    addasset:"Add Tokens",
+    applyasset:"Request assets",
+    applyshares:"Shares",
+    applyloot:"Non-voting shares",
+    applynumber:"Token",
+    kickaddr:"Kicked address",
+    kicktips:"（ This member's shares will be fully converted into tokens ）",
+    token:"Hash of added tokens"
   },
   create: {
     bigtitle: "Create new DAO",
@@ -349,5 +378,10 @@ export default {
     error2: "No more than deposit",
     days: " Days",
     approvedplaceholder: "Fill in the address of the token contract"
+  },
+  asset:{
+    shares:"Shares",
+    eachprice:"Value per share",
+    balance:"Token Balance"
   }
 }

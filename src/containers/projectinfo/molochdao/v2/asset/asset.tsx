@@ -22,15 +22,15 @@ class MolochAsset extends React.Component<IMolochInfoProps> {
       <div className="asset-wrapper">
         <div className="asset-left">
           <div className="asset-title-line">
-            <strong className="title-left">股份</strong>
-            <strong className="title-right">每股价值</strong>
+            <strong className="title-left">{this.intrl.asset.shares}</strong>
+            <strong className="title-right">{this.intrl.asset.eachprice}</strong>
           </div>
           <div className="asset-normal-line">
             <span className="normal-left">{this.props.molochinfo.projInfo.shares}</span>
             <span className="normal-right">≈ $ {parseFloat(this.props.molochinfo.projInfo.valuePerShare ? saveDecimal(this.props.molochinfo.projInfo.valuePerShare, 4) : '0')}</span>
           </div>
           <div className="asset-title-line">
-            <strong className="title-left">代币余额</strong>
+            <strong className="title-left">{this.intrl.asset.balance}</strong>
           </div>
           {
             this.props.molochinfo.fundTotalList && (

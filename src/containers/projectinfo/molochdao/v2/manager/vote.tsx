@@ -121,7 +121,7 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                 {
                     this.props.molochmanager.proposalListItem.proposalState === ProposalType.UpComing && (
                         <div className="going-box">
-                            <strong className="left-str">即将开始</strong><br />
+                            <strong className="left-str">{this.intrl.manager.willstart}</strong><br />
                             <span className="small-right-str">{this.intrl.manager.time}：{this.computeCanVoteTime(this.props.molochmanager.proposalListItem)}</span>
                         </div>
                     )
@@ -151,14 +151,14 @@ class MolochManagerVote extends React.Component<IMolochInfoProps, IState> {
                                     {
                                         this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassYes && (
                                             <div className="going-box pass-str">
-                                                <strong>提案已通过</strong>
+                                                <strong>{this.intrl.manager.passed}</strong>
                                             </div>
                                         )
                                     }
                                     {
                                         (this.props.molochmanager.proposalListItem.proposalState === ProposalType.PassNot || this.props.molochmanager.proposalListItem.proposalState === ProposalType.HandleTimeOut) && (
                                             <div className="going-box fail-str">
-                                                <strong>提案未通过</strong>
+                                                <strong>{this.intrl.manager.fail}</strong>
                                             </div>
                                         )
                                     }

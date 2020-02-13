@@ -52,7 +52,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                 <div className="manager-left">
                     <h3 className="title-h3">
                         {this.props.molochmanager.proposalInfo.proposalTitle ? this.props.molochmanager.proposalInfo.proposalTitle : 'null'}
-                        {!this.props.molochmanager.proposalListItem.proposalQueueIndex && this.props.molochmanager.proposalListItem.isMine && <span className="cancel-btn" onClick={this.handleToOpenStop}>取消提案</span>}
+                        {!this.props.molochmanager.proposalListItem.proposalQueueIndex && this.props.molochmanager.proposalListItem.isMine && <span className="cancel-btn" onClick={this.handleToOpenStop}>{this.intrl.btn.cancelproposal}</span>}
                     </h3>
                     <div className="manager-info">
                         {/* 提案人 */}
@@ -77,7 +77,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 <strong>{this.intrl.manager.detail}</strong>
                             </div>
                             {
-                                this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">暂无说明</p>
+                                this.props.molochmanager.proposalInfo.proposalDetail ? <p className="info-des" dangerouslySetInnerHTML={{ '__html': this.props.molochmanager.proposalInfo.proposalDetail }} /> : <p className="info-des">{this.intrl.projinfo.null}</p>
                             }
                             {/* 申请股份类型 */}
                             {
@@ -104,11 +104,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                             </div>
                                             <div className="iline-right ver-top">
                                                 <div className="little-wrapper">
-                                                    <span>股份</span><br />
+                                                    <span>{this.intrl.manager.shares}</span><br />
                                                     <span>{this.props.molochmanager.proposalInfo.sharesRequested}</span>
                                                 </div>
                                                 <div className="little-wrapper">
-                                                    <span>无表决权股</span><br />
+                                                    <span>{this.intrl.manager.lootshares}</span><br />
                                                     <span>{this.props.molochmanager.proposalInfo.lootRequested}</span>
                                                 </div>
                                                 <div className="little-wrapper">
@@ -133,7 +133,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 this.props.molochmanager.proposalInfo.proposalType === '1' && (
                                     <div className="info-line">
                                         <div className="iline-left">
-                                            <strong>添加支持代币</strong>
+                                            <strong>{this.intrl.manager.addasset}</strong>
                                         </div>
                                         <div className="iline-right">
                                             <span>{this.props.molochmanager.proposalInfo.tributeToken}</span>
@@ -146,7 +146,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 this.props.molochmanager.proposalInfo.proposalType === '2' && (
                                     <div className="info-line">
                                         <div className="iline-left">
-                                            <strong>提出成员</strong>
+                                            <strong>{this.intrl.manager.kick}</strong>
                                         </div>
                                         <div className="iline-right">
                                             {
@@ -175,11 +175,11 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                                 {
                                     !this.state.sendTime
                                         ? (
-                                            <Button text="批准为正式提案" btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
+                                            <Button text={this.intrl.btn.approve} btnSize="bg-bg-btn" onClick={this.handleToApproveProposal} />
                                         )
                                         : (
                                             <div className="notallow-wrapper">
-                                                <span>批准为正式提案</span>
+                                                <span>{this.intrl.btn.approve}</span>
                                                 <span className="sm-time">{this.state.sendTime}</span>
                                             </div>
                                         )
@@ -195,7 +195,7 @@ class MolochManagerInfo extends React.Component<IMolochInfoProps, IState> {
                     this.state.showDeletBox && (
                         <div className="delete-info-wrapper">
                             <div className="delete-content">
-                                <div className="delete-text">确认取消此提案？</div>
+                                <div className="delete-text">{this.intrl.manager.canceltips}</div>
                                 <div className="delete-btn">
                                     <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleToCloseStop} />
                                     <Button text={this.intrl.btn.comfirm} onClick={this.handleStopProposal} />

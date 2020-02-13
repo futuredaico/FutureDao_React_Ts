@@ -18,7 +18,7 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     {
-                        (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">暂无详情</div>
+                        (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
                     }
                 </div>
                 <Message {...this.props} />
