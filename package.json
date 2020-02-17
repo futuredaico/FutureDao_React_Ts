@@ -147,10 +147,29 @@
     ]
   },
   "proxy": {
-    "/erp-gateway": {
-      "target": "http://192.168.3.115:8512",
+    "/baseapi": {
+      "target": "https://apidaotest.nel.group",
       "ws": true,
-      "pathRewrite": {}
+      "changeOrigin": true,
+      "pathRewrite": {"/baseapi": "/api"}
+    },
+    "/commonapi": {
+      "target": "https://api.nel.group",
+      "ws": true,
+      "changeOrigin": true,
+      "pathRewrite": {"/commonapi": "/api"}
+    },
+    "/fileapi": {
+      "target": "https://apioss.nel.group/api/file",
+      "ws": true,
+      "changeOrigin": true,
+      "pathRewrite": {"/fileapi": "/api"}
+    },
+    "/videoapi": {
+      "target": "https://apioss.nel.group/api/file",
+      "ws": true,
+      "changeOrigin": true,
+      "pathRewrite": {"/videoapi": "/api"}
     }
   },
   "maintheme": {

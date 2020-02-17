@@ -28,6 +28,7 @@ const baseUrl: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? "https://ap
 const fileUrl: string = "https://apioss.nel.group/api/file/" + network;
 const videoUrl: string = "https://apioss.nel.group/api/file/" + network + 'bi';
 
+
 const makeRpcPostBody = (method: string, params: any): {} => {
 
   const body = {};
@@ -52,6 +53,19 @@ export default function request(opts: IOpts): Promise<any> {
   }
   if (opts.baseUrl === 'video') {
     url = videoUrl;
+  }
+
+  if(process.env.NODE_ENV === 'development') {
+    url = '/baseapi/' + network
+    if (opts.baseUrl === 'common') {
+      url = '/commonapi/' + network
+    }
+    if (opts.baseUrl === 'file') {
+      url = '/fileapi/' + network
+    }
+    if (opts.baseUrl === 'video') {
+      url = '/videoapi/' + network + 'bi';
+    }
   }
   const params = makeRpcPostBody(opts.method, opts.params);
   let args: AxiosRequestConfig = {
