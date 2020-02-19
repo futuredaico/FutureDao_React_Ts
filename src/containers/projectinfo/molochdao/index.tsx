@@ -29,6 +29,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         if (projectId)
         {
             this.props.molochinfo.getMolochProjInfo(projectId);
+            this.props.molochinfo.getLastUpdateInfo(projectId);
         }
     }
     public componentWillUnmount()
@@ -38,6 +39,8 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         this.props.molochinfo.isShowManagerInfo = false;
         this.props.molochinfo.projInfo = null;
         this.props.molochmanager.proposalAddress = '';
+        this.props.molochinfo.updateTime = 0;
+        this.props.molochinfo.updatePeople = '';
     }
     public render()
     {

@@ -163,13 +163,13 @@
       "target": "https://apioss.nel.group/api/file",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/fileapi": "/api"}
+      "pathRewrite": {"/fileapi": ""}
     },
     "/videoapi": {
       "target": "https://apioss.nel.group/api/file",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/videoapi": "/api"}
+      "pathRewrite": {"/videoapi": ""}
     }
   },
   "maintheme": {

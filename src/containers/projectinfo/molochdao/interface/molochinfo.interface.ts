@@ -23,14 +23,17 @@ export interface IMolochInfoStore
   memberPageSize2: number,
   everyFundList: IFundInfo[],
   ethValue:string,
+  updateTime:number,
+  updatePeople:string,
   getMolochProjInfo: (projId: string) => Promise<boolean>,
   getMemberData: (type:string) => Promise<boolean>,
   getMolochDiscussList: () => Promise<boolean>,
   sendMolochDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
   sendMolochZan: (discussId: string) => Promise<boolean>,
-  getMolochDiscussReplyList: (childId: string) => Promise<[]>
+  getMolochDiscussReplyList: (childId: string) => Promise<[]>,
   getMolochFundTotal: (projId: string) => Promise<boolean>,
-  getEthValue:()=>Promise<boolean>
+  getEthValue:()=>Promise<boolean>,
+  getLastUpdateInfo:(projId: string)=>Promise<boolean>
 }
 
 

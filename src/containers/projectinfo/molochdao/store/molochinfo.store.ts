@@ -26,6 +26,8 @@ class MolochInfo
   @observable public memberPageSize2: number = 15; // 成员每页显示个数
   @observable public everyFundList: IFundInfo[] = []; // 每种资产的每股价值
   @observable public ethValue: string = ''; // eth的美元价值
+  @observable public updateTime:number = 0; // 最新更新时间
+  @observable public updatePeople:string = ''; // 最新更新者
 
   /**
    * 获取项目基本详情
@@ -56,6 +58,28 @@ class MolochInfo
     {
       this.getMolochFundTotal(projId);
     }
+    return true;
+  }
+  /**
+   * 查询最新更新信息
+   */
+  @action public getLastUpdateInfo = async (projId: string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.getLastUpdate(projId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.updateTime = result[0].data.lastUpdateTime || 0;
+    this.updatePeople = result[0].data.lastUpdatorAddress || '';
     return true;
   }
   /**
