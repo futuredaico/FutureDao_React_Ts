@@ -41,6 +41,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         this.props.molochmanager.proposalAddress = '';
         this.props.molochinfo.updateTime = 0;
         this.props.molochinfo.updatePeople = '';
+        this.props.molochmanager.proposalBalance = 0;
     }
     public render()
     {

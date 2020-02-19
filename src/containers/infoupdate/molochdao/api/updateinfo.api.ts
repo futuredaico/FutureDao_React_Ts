@@ -16,3 +16,15 @@ export const modifyProjInfo = (projId: string,des:string,detail:string,imgUrl:st
     console.log("params",opts.params)
     return request(opts);
 }
+/**
+ * 获取项目详情基本信息
+ * @param projId 项目ID
+ */
+export const getMolochProjInfo = (projId: string) =>
+{
+    const opts = {
+        method: 'getProjdetailV3',
+        params: [projId]
+    }
+    return request(opts);
+}

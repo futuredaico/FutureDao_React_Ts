@@ -35,8 +35,21 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
         )
     }
     // 修改信息
-    private handleGoUpdate = ()=>{
-        this.props.history.push('/update/' + this.props.molochinfo.projId)
+    private handleGoUpdate = async()=>{
+        // 验证是否登录
+        if (!this.props.common.userInfo) {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+        }
+        else {
+            await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address);
+            console.log(this.props.molochmanager.proposalBalance)
+            if (this.props.molochmanager.proposalBalance <= 0) {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr2);
+            }
+            else {
+                this.props.history.push('/update/' + this.props.molochinfo.projId)
+            }
+        }
     }
 }
 

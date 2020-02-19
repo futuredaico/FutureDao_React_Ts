@@ -12,14 +12,13 @@ import * as formatTime from 'utils/formatTime';
 @observer
 class MolochDetail extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
-    public render()
-    {
+    public render() {
         return (
             <>
                 <div className="projectdetail-wrapper">
                     <h3 className="title-h3">{this.intrl.projinfo.info}</h3>
                     {
-                        (this.props.molochinfo.projInfo&&this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
+                        (this.props.molochinfo.projInfo && this.props.molochinfo.projInfo.projDetail) ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.molochinfo.projInfo.projDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
                     }
                 </div>
                 <div className="updatedetail-wrapper" title="修改DAO信息" onClick={this.handleGoUpdate}>
@@ -30,8 +29,21 @@ class MolochDetail extends React.Component<IMolochInfoProps> {
         )
     }
     // 修改信息
-    private handleGoUpdate = ()=>{
-        this.props.history.push('/update/' + this.props.molochinfo.projId)
+    private handleGoUpdate = async () => {
+        // 验证是否登录
+        if (!this.props.common.userInfo) {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+        }
+        else {
+            await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address);
+            console.log(this.props.molochmanager.proposalBalance)
+            if (this.props.molochmanager.proposalBalance <= 0) {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr2);
+            }
+            else {
+                this.props.history.push('/update/' + this.props.molochinfo.projId)
+            }
+        }
     }
 }
 

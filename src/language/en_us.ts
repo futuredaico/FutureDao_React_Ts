@@ -277,7 +277,8 @@ export default {
     logincheck: "Please set Metamask to mainnet and try again.",
     logouttips: "Wallet has changed. Account is logged out.",
     comfirm: "Comfirm",
-    detailbtn:"View details "
+    detailbtn:"View details ",
+    membererr2: "您还不是成员，不能修改DAO信息",
   },
   manager: {
     tian: "Published proposals",

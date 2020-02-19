@@ -27,7 +27,7 @@ interface IState {
 }
 
 
-@inject('updateinfo', 'common','molochinfo')
+@inject('updateinfo', 'common','molochinfo','molochmanager')
 @observer
 class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
     public intrl = this.props.intl.messages;
@@ -48,13 +48,17 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
         const projectId = this.props.match.params.projectId;
         if (projectId)
         {
-            await this.props.molochinfo.getMolochProjInfo(projectId);
+            if(this.props.common.userInfo){
+                this.props.molochmanager.getTokenBalance(projectId, this.props.common.userInfo.address);
+            }
+            await this.props.updateinfo.getMolochProjInfo(projectId);
             this.initData();
         }
     }
     public componentWillUnmount()
     {
-        this.props.molochinfo.projInfo = null;
+        this.props.updateinfo.projInfo = null;
+        this.props.molochmanager.proposalBalance = 0
     }
 
     public render() {
@@ -180,14 +184,14 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
     }
     // 初始化
     private initData = ()=>{
-        if(this.props.molochinfo.projInfo){
+        if(this.props.updateinfo.projInfo){
             this.setState({
-                projName:this.props.molochinfo.projInfo.projName||'', 
-                updateDes:this.props.molochinfo.projInfo.projBrief||'', 
-                updateDetails:BraftEditor.createEditorState(this.props.molochinfo.projInfo.projDetail), 
+                projName:this.props.updateinfo.projInfo.projName||'', 
+                updateDes:this.props.updateinfo.projInfo.projBrief||'', 
+                updateDetails:BraftEditor.createEditorState(this.props.updateinfo.projInfo.projDetail), 
                 updateDetail:'',
-                imgUrl:this.props.molochinfo.projInfo.projCoverUrl, 
-                updateWebsite:this.props.molochinfo.projInfo.officailWeb, 
+                imgUrl:this.props.updateinfo.projInfo.projCoverUrl, 
+                updateWebsite:this.props.updateinfo.projInfo.officailWeb, 
             })
         }
     }
@@ -291,6 +295,17 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
     private handleToOpenSave = () => {
         if(!this.state.isOkSave){
             return false;
+        }
+        // 验证是否登录
+        if (!this.props.common.userInfo) {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false
+        }
+        else {
+            if (this.props.molochmanager.proposalBalance <= 0) {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.membererr2);
+                return false
+            }
         }
         this.setState({
             showSaveBox:true

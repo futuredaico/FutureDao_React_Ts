@@ -278,7 +278,8 @@ export default {
     logincheck: "请将Metamask切换至主网后重试",
     logouttips: "钱包状态已更改，您已退出登录。",
     comfirm: "确认",
-    detailbtn:"查看详情"
+    detailbtn:"查看详情",
+    membererr2: "您还不是成员，不能修改DAO信息",
   },
   manager: {
     tian: "正式提案",
