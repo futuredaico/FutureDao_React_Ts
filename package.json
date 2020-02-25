@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@trustwallet/walletconnect": "^0.1.37",
     "@types/antd": "^1.0.0",
     "@types/react-router": "^4.0.31",
     "@types/react-router-config": "^1.0.9",
     "@types/react-router-dom": "^4.3.1",
+    "@walletconnect/qrcode-modal": "^1.0.0-beta.47",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-jest": "^22.1.0",
@@ -151,25 +153,33 @@
       "target": "https://apidaotest.nel.group",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/baseapi": "/api"}
+      "pathRewrite": {
+        "/baseapi": "/api"
+      }
     },
     "/commonapi": {
       "target": "https://api.nel.group",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/commonapi": "/api"}
+      "pathRewrite": {
+        "/commonapi": "/api"
+      }
     },
     "/fileapi": {
       "target": "https://apioss.nel.group/api/file",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/fileapi": ""}
+      "pathRewrite": {
+        "/fileapi": ""
+      }
     },
     "/videoapi": {
       "target": "https://apioss.nel.group/api/file",
       "ws": true,
       "changeOrigin": true,
-      "pathRewrite": {"/videoapi": ""}
+      "pathRewrite": {
+        "/videoapi": ""
+      }
     }
   },
   "maintheme": {
