@@ -184,7 +184,10 @@ export default {
     contract:"合约地址",
     contractaddr:"DAO创建者",
     null:"暂无",
-    assets:"资产"
+    assets:"资产",
+    divtips:"修改DAO信息",
+    spantips:"编辑于",
+    you:"由 "
   },
   update: {
     update: "发布更新",
@@ -243,7 +246,7 @@ export default {
     deletetips2: "是否继续？"
   },
   notify: {
-    success: "操作成功",
+    success: "提示",
     error: "操作失败",
     loginerr: "请先登录",
     verifyerr: "请先验证邮箱",
@@ -393,5 +396,12 @@ export default {
   },
   quit:{
     tips:"同时持有普通股份和无表决权股份时，优先退出无表决权股份。"
+  },
+  infoupdate:{
+    title:"修改DAO信息",
+    btn1:"取消修改",
+    btn2:"保存修改信息",
+    tip1:"提示",
+    tip2:"DAO信息修改后无法撤销。确认保存修改？"
   }
 }

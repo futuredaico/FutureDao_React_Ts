@@ -184,7 +184,10 @@ export default {
     contract:"Contract",
     contractaddr:"Contract Address",
     null:"Null",
-    assets:"Assets"
+    assets:"Assets",
+    divtips:"Modify DAO information",
+    spantips:"Time",
+    you:"Editer "
   },
   update: {
     update: "Publish updates",
@@ -242,7 +245,7 @@ export default {
     deletetips2: "Whether to continue?"
   },
   notify: {
-    success: "Operation successful",
+    success: "Tips",
     error: "Operation failed",
     loginerr: "Please log in first.",
     verifyerr: "Please verify your email address first.",
@@ -278,7 +281,7 @@ export default {
     logouttips: "Wallet has changed. Account is logged out.",
     comfirm: "Comfirm",
     detailbtn:"View details ",
-    membererr2: "您还不是成员，不能修改DAO信息",
+    membererr2: "You are not yet a member and cannot modify the DAO information",
   },
   manager: {
     tian: "Published proposals",
@@ -392,5 +395,12 @@ export default {
   },
   quit:{
     tips:"When you hold both ordinary shares and non-voting shares, priority is given to withdrawing from non-voting shares."
+  },
+  infoupdate:{
+    title:"Modify DAO information",
+    btn1:"Cancel",
+    btn2:"Save the changes",
+    tip1:"Prompt ",
+    tip2:"This operation cannot be undone.Are you sure you want to save the changes?"
   }
 }

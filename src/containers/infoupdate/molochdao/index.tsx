@@ -66,7 +66,7 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
             <div className="molochdao-update-wrapper">
                 <div className="update-wrapper">
                     <div className="update-top">
-                        <h2>修改DAO信息</h2>
+                        <h2>{this.intrl.infoupdate.title}</h2>
                     </div>
                     <div className="update-content">
                         {/* 名称 */}
@@ -151,13 +151,13 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
                         {/* 按钮 */}
                         <div className="inline-btn" style={{ textAlign: "center" }}>
                             <Button
-                                text="取消修改"
+                                text={this.intrl.infoupdate.btn1}
                                 btnSize="bg-btn"
                                 btnColor="red-btn"
                                 onClick={this.handleToCancelUpdate}
                             />
                             <Button
-                                text="保存修改信息"
+                                text={this.intrl.infoupdate.btn2}
                                 btnSize="bg-btn"
                                 btnColor={this.state.isOkSave ? "" : "gray-btn"}
                                 onClick={this.handleToOpenSave}
@@ -169,8 +169,8 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
                     this.state.showSaveBox && (
                         <div className="saveupdate-wrapper">
                             <div className="saveupdate-content">
-                                <div className="saveupdate-title"><strong>提示</strong></div>
-                                <div className="saveupdate-text">DAO信息修改后无法撤销。确认保存修改？</div>
+                                <div className="saveupdate-title"><strong>{this.intrl.infoupdate.tip1}</strong></div>
+                                <div className="saveupdate-text">{this.intrl.infoupdate.tip2}</div>
                                 <div className="saveupdate-btn">
                                     <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleToCloseSave} />
                                     <Button text={this.intrl.btn.comfirm} onClick={this.handleToSaveUpdate} />

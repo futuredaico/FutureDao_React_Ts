@@ -218,7 +218,7 @@ class Common implements ICommonStore {
       if (this.language === 'en') {
         this.openNotificationWithIcon('success', 'Operation successful', 'Email sent, please check it.');
       } else {
-        this.openNotificationWithIcon('success', '操作成功', '邮件已发送，请注意查收');
+        this.openNotificationWithIcon('success', '提示', '邮件已发送，请注意查收');
       }
     } else {
       if (this.language === 'en') {
