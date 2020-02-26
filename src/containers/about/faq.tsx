@@ -5,6 +5,7 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 @inject('home')
 @observer
@@ -35,7 +36,7 @@ class IndexHome extends React.Component<any>{
                     </div>
                 </div>
                 <div className="goback-btn">
-                    <a href="/" className="goback-a">返回官网</a>
+                <Link to="/" className="goback-a">返回首页</Link>
                 </div>
             </div>
         );
