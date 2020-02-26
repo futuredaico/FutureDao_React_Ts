@@ -7,6 +7,22 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/about/agreement')),
+    path: '/file/agreement',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/policy')),
+    path: '/file/policy',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/faq')),
+    path: '/file/faq',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/process')),
+    path: '/file/process',
+  },
+  {
     component: asyncComponent(() => import('../containers/infoupdate/molochdao')),
     path: '/update/:projectId',
   },

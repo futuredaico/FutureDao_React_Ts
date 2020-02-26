@@ -12,6 +12,7 @@ import BraftEditor from 'braft-editor';
 import Button from '@/components/Button';
 import TextArea from 'antd/lib/input/TextArea';
 import { IMolochUpdateInfoProps } from './interface/updateinfo.interface';
+import { when } from 'mobx';
 // import metamaskwallet from '@/store/metamaskwallet';
 interface IState {
     projName:string, // 项目名称
@@ -45,16 +46,12 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
     }
     public async componentDidMount()
     {
-        const projectId = this.props.match.params.projectId;
-        if (projectId)
-        {
-            if(this.props.common.userInfo){
-                this.props.molochmanager.getTokenBalance(projectId, this.props.common.userInfo.address);
-            }
-            await this.props.updateinfo.getMolochProjInfo(projectId);
-            this.initData();
-        }
+        when(
+            () => !!this.props.common.userInfo,
+            () => this.initGetData()
+        )
     }
+
     public componentWillUnmount()
     {
         this.props.updateinfo.projInfo = null;
@@ -182,6 +179,17 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
             </div>
         );
     }
+    private initGetData = async ()=>{
+        const projectId = this.props.match.params.projectId;
+        if (projectId)
+        {
+            if(this.props.common.userInfo){
+                this.props.molochmanager.getTokenBalance(projectId, this.props.common.userInfo.address);
+            }
+            await this.props.updateinfo.getMolochProjInfo(projectId);
+            this.initData();
+        }
+    }
     // 初始化
     private initData = ()=>{
         if(this.props.updateinfo.projInfo){
@@ -276,16 +284,12 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
         if (!this.state.projName) {
             isOk = false;
         }
-        console.log("isok1:",isOk)
         if (!this.state.updateDes) {
             isOk = false;
         }
-        console.log("isok2:",isOk)
-        console.log("this.state.updateWebsiteEnter:",this.state.updateWebsiteEnter)
         if (!this.state.updateWebsiteEnter) {
             isOk = false;
         }
-        console.log("isok3:",isOk)
         this.setState({
             isOkSave: isOk
         })
