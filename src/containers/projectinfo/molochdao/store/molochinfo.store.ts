@@ -48,16 +48,14 @@ class MolochInfo
       return false
     }
     this.projInfo = result[0].data || null;
-    if (result[0].data.projVersion.includes('1.0'))
-    {
-      if (this.projInfo)
-      {
-        this.projInfo.valuePerShare = this.projInfo.shares ? toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value) : "0";
-      }
-    } else
-    {
-      this.getMolochFundTotal(projId);
-    }
+    this.getMolochFundTotal(projId);
+    // if (result[0].data.projVersion.includes('1.0'))
+    // {
+    //   if (this.projInfo)
+    //   {
+    //     this.projInfo.valuePerShare = this.projInfo.shares ? toNonExponential(toMyNumber(this.projInfo.fundTotal).div(this.projInfo.shares).value) : "0";
+    //   }
+    // } 
     return true;
   }
   /**
