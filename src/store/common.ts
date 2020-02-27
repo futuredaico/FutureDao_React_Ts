@@ -9,6 +9,7 @@ import { notification } from 'antd';
 import notificationBtn from '../components/notificationbtn';
 import metamaskwallet from './metamaskwallet';
 import { MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
+import trustwallet from './trustwallet';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
@@ -228,6 +229,11 @@ class Common implements ICommonStore {
       }
     }
     return true
+  }
+  // trust的登录
+  @action public loginTrustWallet = async () => {
+    trustwallet.loginTrust();
+    return true;
   }
 }
 

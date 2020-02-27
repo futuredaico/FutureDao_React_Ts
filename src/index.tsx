@@ -12,8 +12,8 @@ import storeCommon from '@/store/common';
 import Intl from 'intl';
 import { observer } from 'mobx-react';
 // import TeemoWallet from '@/store/teemowallet';
-import MetamaskWallet from '@/store/metamaskwallet';
-import common from '@/store/common';
+// import MetamaskWallet from '@/store/metamaskwallet';
+// import common from '@/store/common';
 
 // import Portis from "@portis/web3";
 // import Web3 from "web3";
@@ -39,22 +39,22 @@ window[ 'Intl' ] = Intl;
 //   // common.initAccountBalance();
 // });
 
-if (window[ "ethereum" ]) {
-  ethereum.on("accountsChanged", accounts => {
-    console.log(accounts[ 0 ]);
-    if (common.userInfo && common.userInfo.address) {
-      if (common.userInfo.address.toLocaleLowerCase() !== accounts[ 0 ].toLocaleLowerCase()) {
-        common.isLoginoutFlag = true;
-      }
-    }
-  })
-  ethereum.on("networkChanged", accounts => {
-    console.log(accounts);
-    // common.logoutFutureDao();
-    ethereum.autoRefreshOnNetworkChange = false;
-    MetamaskWallet.changeNetwork();
-  })
-}
+// if (window[ "ethereum" ]) {
+//   ethereum.on("accountsChanged", accounts => {
+//     console.log(accounts[ 0 ]);
+//     if (common.userInfo && common.userInfo.address) {
+//       if (common.userInfo.address.toLocaleLowerCase() !== accounts[ 0 ].toLocaleLowerCase()) {
+//         common.isLoginoutFlag = true;
+//       }
+//     }
+//   })
+//   ethereum.on("networkChanged", accounts => {
+//     console.log(accounts);
+//     // common.logoutFutureDao();
+//     ethereum.autoRefreshOnNetworkChange = false;
+//     MetamaskWallet.changeNetwork();
+//   })
+// }
 
 const ObserverRender = observer(() => {
   return (

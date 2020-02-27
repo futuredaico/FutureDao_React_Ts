@@ -38,6 +38,9 @@ export default class Header extends React.Component<IProps, IState>{
           </div>
           <div className="header-right">
             <ul>
+              <li>
+                    <span className="point-login" onClick={this.handleToLogin2}>trust登录 </span>
+                  </li>
               {
                 (!this.props.common.userInfo) && (
                   <li>
@@ -105,6 +108,9 @@ export default class Header extends React.Component<IProps, IState>{
   private handleToLogout = () => {
     // todo
     this.props.common.logoutFutureDao();
+  }
+  private handleToLogin2 = ()=>{
+    this.props.common.loginTrustWallet();
   }
 }
 // export default injectIntl(Header);
