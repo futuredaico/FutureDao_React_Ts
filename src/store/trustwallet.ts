@@ -7,7 +7,7 @@ import { ITrustWalletStore } from "./interface/trustwallet.interface";
 class TrustWallet implements ITrustWalletStore
 {
     @observable public walletConnector = new WalletConnect({
-        bridge: "https://futuredao_test.nel.group/test/" // Required
+        bridge: "https://futuredaotest.nel.group/test/" // Required
       });
     // @observable public isLoadTeemo: boolean = false; // 检测是否有Teemo钱包
     // @observable public isLoginFlag: number = 0;// 默认不显示,1表示未检查到teemo钱包,2为未登录钱包
