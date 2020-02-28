@@ -12,6 +12,7 @@ class TrustWallet implements ITrustWalletStore {
     @observable public walletConnector = new WalletConnect({
         bridge: "https://bridge.walletconnect.org" // Required
     });
+    @observable public networkId:number = 0;
     @observable public chainId: number = 0;
     @observable public trustAddress: string = '';// 链接地址
 
@@ -74,14 +75,16 @@ class TrustWallet implements ITrustWalletStore {
     @action public onConnect = async (payload: any) => {
         this.chainId = payload.params[0].chainId;
         this.trustAddress = payload.params[0].accounts[0];
+        console.log(this.trustAddress)
         WalletConnectQRCodeModal.close();
-        // this.walletConnector
-        // .getAccounts()
-        // .then(result => {
-        //     // Returns the accounts
-        //     console.log(result);
-        // })
-        this.testSignPersonalMessage();
+        this.networkId = this.walletConnector.networkId;
+        console.log(this.networkId);
+        this.walletConnector
+        .getAccounts()
+        .then(result => {
+            // Returns the accounts
+            console.log(result);
+        })
     };
 
     @action public onSessionUpdate = async (accounts: string[], chainId: number) => {
@@ -102,6 +105,7 @@ class TrustWallet implements ITrustWalletStore {
         //   await this.setState({ fetching: false });
         // }
     };
+    // 发交易
     @action public testSendTransaction = async () => {
         
 
@@ -161,18 +165,11 @@ class TrustWallet implements ITrustWalletStore {
                 value: "0 ETH",
             };
             console.log(formattedResult)
-            // display result
-            // this.setState({
-            //     connector,
-            //     pendingRequest: false,
-            //     result: formattedResult || null,
-            // });
         } catch (error) {
             console.error(error);
-            // this.setState({ connector, pendingRequest: false, result: null });
         }
     };
-
+    // 签名
     @action public testSignPersonalMessage = async () => {
         // const { connector, address } = this.state;
 
@@ -212,15 +209,8 @@ class TrustWallet implements ITrustWalletStore {
                 result,
             };
             console.log(formattedResult)
-            // display result
-            // this.setState({
-            //     connector,
-            //     pendingRequest: false,
-            //     result: formattedResult || null,
-            // });
         } catch (error) {
             console.error(error);
-            // this.setState({ connector, pendingRequest: false, result: null });
         }
     };
 

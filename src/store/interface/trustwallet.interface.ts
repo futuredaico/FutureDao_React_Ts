@@ -3,6 +3,9 @@ import WalletConnect from "@trustwallet/walletconnect";
 export interface ITrustWalletStore
 {
     walletConnector: WalletConnect,
+    networkId:number
+    chainId: number
+    trustAddress: string
     // isLoadTeemo: boolean,
     // isLoginFlag: number,
     loginTrust: () => void,
