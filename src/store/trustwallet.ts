@@ -79,12 +79,12 @@ class TrustWallet implements ITrustWalletStore {
         WalletConnectQRCodeModal.close();
         this.networkId = this.walletConnector.networkId;
         console.log(this.networkId);
-        this.walletConnector
-        .getAccounts()
-        .then(result => {
-            // Returns the accounts
-            console.log(result);
-        })
+        // this.walletConnector
+        // .getAccounts()
+        // .then(result => {
+        //     // Returns the accounts
+        //     console.log(result);
+        // })
     };
 
     @action public onSessionUpdate = async (accounts: string[], chainId: number) => {
