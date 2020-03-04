@@ -4,23 +4,27 @@ import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
 import { observable, action } from 'mobx';
 import { ITrustWalletStore } from "./interface/trustwallet.interface";
 import * as Api from './api/common.api';
-import { sanitizeHex, recoverPersonalSignature } from "@/utils/utilities";
+import { recoverPersonalSignature } from "@/utils/utilities";
 import { convertStringToHex, convertAmountToRawNumber } from "@/utils/bignumber";
-import { convertUtf8ToHex } from "@walletconnect/utils";
+import { convertUtf8ToHex, sanitizeHex } from "@walletconnect/utils";
+import { ITxData } from "@walletconnect/types";
 
-class TrustWallet implements ITrustWalletStore {
+class TrustWallet implements ITrustWalletStore
+{
     @observable public walletConnector = new WalletConnect({
         bridge: "https://bridge.walletconnect.org" // Required
     });
-    @observable public networkId:number = 0;
+    @observable public networkId: number = 0;
     @observable public chainId: number = 0;
     @observable public trustAddress: string = '';// 链接地址
 
     // 获取Teemo钱包上登录的地址
-    @action public loginTrust = async () => {
+    @action public loginTrust = async () =>
+    {
 
         // check if already connected
-        if (!this.walletConnector.connected) {
+        if (!this.walletConnector.connected)
+        {
             // create new session
             await this.walletConnector.createSession();
 
@@ -31,19 +35,25 @@ class TrustWallet implements ITrustWalletStore {
             console.log(uri);
 
             // display QR Code modal
-            WalletConnectQRCodeModal.open(uri, () => {
+            WalletConnectQRCodeModal.open(uri, () =>
+            {
                 console.log("QR Code Modal closed");
             });
         }
+        console.log(this.walletConnector)
         // subscribe to events
         await this.subscribeToEvents();
+        this.testSendTransaction();
     }
 
-    @action public subscribeToEvents = () => {
-        this.walletConnector.on("session_update", async (error, payload) => {
+    @action public subscribeToEvents = () =>
+    {
+        this.walletConnector.on("session_update", async (error, payload) =>
+        {
             console.log(`connector.on("session_update")`);
 
-            if (error) {
+            if (error)
+            {
                 throw error;
             }
 
@@ -51,20 +61,24 @@ class TrustWallet implements ITrustWalletStore {
             this.onSessionUpdate(accounts, chainId);
         });
 
-        this.walletConnector.on("connect", (error, payload) => {
+        this.walletConnector.on("connect", (error, payload) =>
+        {
             console.log(`connector.on("connect")`);
 
-            if (error) {
+            if (error)
+            {
                 throw error;
             }
             console.log(payload.params[0])
             this.onConnect(payload);
         });
 
-        this.walletConnector.on("disconnect", (error, payload) => {
+        this.walletConnector.on("disconnect", (error, payload) =>
+        {
             console.log(`connector.on("disconnect")`);
 
-            if (error) {
+            if (error)
+            {
                 throw error;
             }
             WalletConnectQRCodeModal.close();
@@ -72,7 +86,8 @@ class TrustWallet implements ITrustWalletStore {
             this.trustAddress = '';
         });
     }
-    @action public onConnect = async (payload: any) => {
+    @action public onConnect = async (payload: any) =>
+    {
         this.chainId = payload.params[0].chainId;
         this.trustAddress = payload.params[0].accounts[0];
         console.log(this.trustAddress)
@@ -85,14 +100,17 @@ class TrustWallet implements ITrustWalletStore {
         //     // Returns the accounts
         //     console.log(result);
         // })
+        // this.testSendTransaction();
     };
 
-    @action public onSessionUpdate = async (accounts: string[], chainId: number) => {
+    @action public onSessionUpdate = async (accounts: string[], chainId: number) =>
+    {
         this.chainId = chainId;
         this.trustAddress = accounts[0];
         await this.getAccountAssets();
     };
-    @action public getAccountAssets = async () => {
+    @action public getAccountAssets = async () =>
+    {
         // const { address, chainId } = this.state;
         // this.setState({ fetching: true });
         // try {
@@ -105,38 +123,53 @@ class TrustWallet implements ITrustWalletStore {
         //   await this.setState({ fetching: false });
         // }
     };
-    // 发交易
-    @action public testSendTransaction = async () => {
-        
+    // 0xdEDA8e9ba238179D1d0F1E96B8039239555E1e43
+    // const tx = {
+    //     data: "0x2582bf2a000000000000000000000000deda8e9ba238179d1d0f1e96b8039239555e1e43"
+    // from: "0x2bfb7857ec7238aa84a830342fa53fe0fef7fef5"
+    // gas: undefined
+    // gasPrice: "0x5"
+    // to: "0xda42eac604a5f7a77811dc45d5b5692855433319"
+    // }
 
+    // 发交易
+    @action public testSendTransaction = async () =>
+    {
+        // const { connector, address, chainId } = this.state;
+        console.log("开始了.....")
+        // if (!connector) {
+        //   return;
+        // }
+        const address = '0x2bfb7857ec7238aa84a830342fa53fe0fef7fef5';
+        const chainId = this.walletConnector.chainId;
+        const connector = this.walletConnector;
         // from
-        const from = this.trustAddress;
+        const from = address;
 
         // to
-        const to = this.trustAddress;
+        const to = "0xda42eac604a5f7a77811dc45d5b5692855433319";
 
         // nonce
-        const _nonce = await Api.apiGetAccountNonce(this.trustAddress, this.chainId);
+        const _nonce = await Api.apiGetAccountNonce(address, chainId);
         const nonce = sanitizeHex(convertStringToHex(_nonce));
-
+        console.log("nonce:",nonce)
         // gasPrice
         const gasPrices = await Api.apiGetGasPrices();
         const _gasPrice = gasPrices.slow.price;
         const gasPrice = sanitizeHex(convertStringToHex(convertAmountToRawNumber(_gasPrice, 9)));
-
+        console.log("gasPrice:",gasPrice)
         // gasLimit
         const _gasLimit = 21000;
         const gasLimit = sanitizeHex(convertStringToHex(_gasLimit));
-
+        console.log("gasLimit:",gasLimit)
         // value
         const _value = 0;
         const value = sanitizeHex(convertStringToHex(_value));
-
+        console.log("value:",value)
         // data
-        const data = "0x";
-
+        const data = "0x2582bf2a000000000000000000000000deda8e9ba238179d1d0f1e96b8039239555e1e43"
         // test transaction
-        const tx = {
+        const tx:ITxData = {
             from,
             to,
             nonce,
@@ -146,31 +179,43 @@ class TrustWallet implements ITrustWalletStore {
             data,
         };
 
-        try {
+        console.log(tx)
+        try
+        {
             // open modal
-            // this.toggleModal();
+            //   this.toggleModal();
 
-            // toggle pending request indicator
-            // this.setState({ pendingRequest: true });
+            //   // toggle pending request indicator
+            //   this.setState({ pendingRequest: true });
 
             // send transaction
-            const result = await this.walletConnector.sendTransaction(tx);
+            const result = await connector.sendTransaction(tx);
 
             // format displayed result
             const formattedResult = {
                 method: "eth_sendTransaction",
                 txHash: result,
-                from: from,
-                to: to,
+                from: address,
+                to: address,
                 value: "0 ETH",
             };
             console.log(formattedResult)
-        } catch (error) {
+            // display result
+            //   this.setState({
+            //     connector,
+            //     pendingRequest: false,
+            //     result: formattedResult || null,
+            //   });
+        } catch (error)
+        {
             console.error(error);
+            //   this.setState({ connector, pendingRequest: false, result: null });
         }
     };
+
     // 签名
-    @action public testSignPersonalMessage = async () => {
+    @action public testSignPersonalMessage = async () =>
+    {
         // const { connector, address } = this.state;
 
         // if (!connector) {
@@ -186,7 +231,8 @@ class TrustWallet implements ITrustWalletStore {
         // personal_sign params
         const msgParams = [hexMsg, address];
 
-        try {
+        try
+        {
             // open modal
             // this.toggleModal();
 
@@ -209,7 +255,8 @@ class TrustWallet implements ITrustWalletStore {
                 result,
             };
             console.log(formattedResult)
-        } catch (error) {
+        } catch (error)
+        {
             console.error(error);
         }
     };
