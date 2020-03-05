@@ -43,7 +43,7 @@ class TrustWallet implements ITrustWalletStore
         console.log(this.walletConnector)
         // subscribe to events
         await this.subscribeToEvents();
-        this.testSendTransaction();
+        // this.testSendTransaction();
     }
 
     @action public subscribeToEvents = () =>
@@ -140,7 +140,7 @@ class TrustWallet implements ITrustWalletStore
         // if (!connector) {
         //   return;
         // }
-        const address = '0x2bfb7857ec7238aa84a830342fa53fe0fef7fef5';
+        const address = this.walletConnector.accounts[0];
         const chainId = this.walletConnector.chainId;
         const connector = this.walletConnector;
         // from
@@ -159,7 +159,7 @@ class TrustWallet implements ITrustWalletStore
         const gasPrice = sanitizeHex(convertStringToHex(convertAmountToRawNumber(_gasPrice, 9)));
         console.log("gasPrice:",gasPrice)
         // gasLimit
-        const _gasLimit = 21000;
+        const _gasLimit = 21999;
         const gasLimit = sanitizeHex(convertStringToHex(_gasLimit));
         console.log("gasLimit:",gasLimit)
         // value
@@ -167,15 +167,15 @@ class TrustWallet implements ITrustWalletStore
         const value = sanitizeHex(convertStringToHex(_value));
         console.log("value:",value)
         // data
-        const data = "0x2582bf2a000000000000000000000000deda8e9ba238179d1d0f1e96b8039239555e1e43"
+        const data = "0x2582bf2a0000000000000000000000002bfb7857ec7238aa84a830342fa53fe0fef7fef5"
         // test transaction
         const tx:ITxData = {
             from,
             to,
             nonce,
             gasPrice,
-            gasLimit,
-            value,
+            gasLimit:21999,
+            // value:0,
             data,
         };
 
