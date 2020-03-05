@@ -93,7 +93,7 @@ class MolochInfo
     {
       return false
     }
-    this.ethValue = result[0].data || null;
+    this.ethValue = result[0].data.price || null;
 
     return true;
   }
@@ -115,7 +115,7 @@ class MolochInfo
     {
       return false
     }
-    this.getEthValue();
+    await this.getEthValue();
     this.fundTotalList = result[0].data || null;
     this.computeEachAssetValue();
     return true;
@@ -137,16 +137,16 @@ class MolochInfo
             fundHash: item.fundHash,
             fundSymbol: item.fundSymbol
           }
-          if (item.fundHash === HASH_CONFIG.ID_WETH)
+          if (item.fundHash.toLocaleLowerCase() === HASH_CONFIG.ID_WETH.toLocaleLowerCase())
           {
             dollarTotal = dollarTotal + toMyNumber(item.fundTotal).mul(this.ethValue).value;
-          } else if (item.fundHash === HASH_CONFIG.ID_SAI)
+          } else if (item.fundHash.toLocaleLowerCase() === HASH_CONFIG.ID_SAI.toLocaleLowerCase())
           {
             dollarTotal = dollarTotal + parseFloat(item.fundTotal);
-          } else if (item.fundHash === HASH_CONFIG.ID_DAI)
+          } else if (item.fundHash.toLocaleLowerCase() === HASH_CONFIG.ID_DAI.toLocaleLowerCase())
           {
             dollarTotal = dollarTotal + parseFloat(item.fundTotal);
-          } else if (item.fundHash === HASH_CONFIG.ID_USDF)
+          } else if (item.fundHash.toLocaleLowerCase() === HASH_CONFIG.ID_USDF.toLocaleLowerCase())
           {
             dollarTotal = dollarTotal + parseFloat(item.fundTotal);
           }
