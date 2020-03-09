@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx'
-import { ICreateContent, ICreateProjectStore } from '../interface/createproject.interface';
+import { ICreateContent, ICreateProjectStore, ICreateFuture } from '../interface/createproject.interface';
 // import * as Api from '../api/project.api'
 // import common from '@/store/common';
 import { Web3Contract } from '@/utils/web3Contract';
@@ -32,6 +32,22 @@ class CreateProject implements ICreateProjectStore {
     approvedTokens: [],
     createTime: "",
     approvedTokensHash: []
+  }
+  @observable public createFuture: ICreateFuture = {
+    projId: '',
+    projName: '',
+    projTitle: '',
+    projType: '',
+    projConverUrl: '',
+    projBrief: '',
+    projVideoUrl: '',
+    projDetail: '',
+    connectEmail: '',
+    officialWeb: '',
+    community: '',
+    projState: 'reading',
+    projSubState: 'init',
+    role: ''
   }
   /**
    * 创建项目

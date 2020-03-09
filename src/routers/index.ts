@@ -7,6 +7,20 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/manager')),
+    path: '/project',
+    children: [
+      {
+        path: '/project/team',
+        component: asyncComponent(() => import('../containers/manager/team/team')),
+      },
+      {
+        path: '/project/edit',
+        component: asyncComponent(() => import('../containers/manager/edit/editinfo')),
+      }
+    ]
+  },
+  {
     component: asyncComponent(() => import('../containers/about/agreement')),
     path: '/file/agreement',
   },
@@ -74,6 +88,10 @@ export default [
     component: asyncComponent(() => import('../containers/projectcreate')),
     path: '/create',
     children: [
+      {
+        path: '/create/future',
+        component: asyncComponent(() => import('../containers/projectcreate/info/futuredao')),
+      },
       {
         path: '/create/moloch',
         component: asyncComponent(() => import('../containers/projectcreate/info/molochdao')),

@@ -195,7 +195,7 @@ export default {
     info: "详情"
   },
   edit: {
-    editinfo: "编辑项目资料",
+    editinfo: "项目信息",
     step1: "基础信息",
     step2: "详细信息",
     step3: "团队信息",
