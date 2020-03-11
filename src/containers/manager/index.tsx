@@ -64,7 +64,7 @@ class Project extends React.Component<IProjectProps, IState> {
     public render()
     {
         const createClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/financing|\/order))/i) ? true : false }
+            { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/financing|\/order|\/team))/i) ? true : false }
         );
         const updateClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/update/i) ? true : false },
@@ -140,17 +140,17 @@ class Project extends React.Component<IProjectProps, IState> {
             // }
             this.props.history.push(str + '/' + this.props.project.projId);
         }
-        else if (str === '/project/update')
-        {
-            //
-            if ((this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing))
-            {
-                return false;
-            } else
-            {
-                this.props.history.push(str + '/' + this.props.project.projId);
-            }
-        }
+        // else if (str === '/project/update')
+        // {
+        //     //
+        //     if ((this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing))
+        //     {
+        //         return false;
+        //     } else
+        //     {
+        //         this.props.history.push(str + '/' + this.props.project.projId);
+        //     }
+        // }
         else if (str === '/project/financing')
         {
             if (this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing)

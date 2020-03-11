@@ -36,7 +36,7 @@ interface IState
 }
 
 @observer
-class StepOne extends React.Component<IProjectProps, IState> {
+class EditInfo extends React.Component<IProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         nameValue: '', // 项目名称
@@ -497,4 +497,4 @@ class StepOne extends React.Component<IProjectProps, IState> {
     }
 }
 
-export default injectIntl(StepOne);
+export default injectIntl(EditInfo);

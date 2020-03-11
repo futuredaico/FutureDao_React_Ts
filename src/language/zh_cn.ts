@@ -221,9 +221,9 @@ export default {
     days: "天"
   },
   team: {
-    team: "团队成员",
+    team: "团队管理",
     tips: "（ 暂未接受邀请的成员信息不会对外公示 ）",
-    avatar: "头像/名称",
+    avatar: "昵称",
     verify: "认证状态",
     status: "身份",
     manager: "管理",
@@ -231,7 +231,7 @@ export default {
     noverify: "未认证",
     people: "个人认证",
     company: "企业认证",
-    invitetitle: "邀请成员加入项目",
+    invitetitle: "添加新成员",
     search: "使用E-mail进行搜索",
     notfound: "未找到该用户",
     delete1: "确认将",
