@@ -11,6 +11,10 @@ export default [
     path: '/project',
     children: [
       {
+        path: '/project/financing',
+        component: asyncComponent(() => import('../containers/manager/financing/financing')),
+      },
+      {
         path: '/project/update',
         component: asyncComponent(() => import('../containers/manager/update/update')),
       },
