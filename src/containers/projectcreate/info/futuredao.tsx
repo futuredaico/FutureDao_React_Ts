@@ -13,7 +13,7 @@ import Button from '@/components/Button';
 import { RcFile } from 'antd/lib/upload';
 import commonStore from '@/store/common';
 import { ICreateProjectProps } from '../interface/createproject.interface';
-import { ProjSubState } from '@/store/interface/common.interface';
+// import { ProjSubState } from '@/store/interface/common.interface';
 interface IState
 {
     nameValue: string, // 项目名称
@@ -404,20 +404,13 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         if (!projectId)
         {
             this.props.createproject.createFuture = {
-                projId: '',
-                projName: this.state.nameValue,
-                projTitle: this.state.titleValue,
-                projType: this.state.typeValue,
-                projConverUrl: this.state.imageUrl,
-                projBrief: this.state.textareaValue,
-                projVideoUrl: '',
-                projDetail: '',
-                connectEmail: '',
-                officialWeb: '',
-                community: '',
-                projState: 'reading',
-                projSubState: 'init',
-                role: 'admin'
+                projName: '',     // 项目名称
+                projTitle: '',    // 项目标题  
+                projBrief: '',    // 项目简介
+                officialWeb: '',  // 官网
+                projConverUrl: '', // 项目封面
+                projVideoUrl: '',// 视频介绍
+                projDetail: '',   // 项目详情
             }
             const crestResult = await this.props.createproject.createProject();
             if (crestResult)
@@ -428,18 +421,18 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                 // this.props.createproject.stepThreeStatus = 3;
                 this.props.project.isEdit = true;
                 window.scrollTo(0, 0);
-                this.props.history.push('/project/' + this.props.createproject.createFuture.projId + '?type=create');
+                // this.props.history.push('/project/' + this.props.createproject.createFuture.projId + '?type=create');
             } else
             {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.createerr);
             }
         } else
         {
-            if (this.props.createproject.createFuture.projSubState === ProjSubState.Auditing)
-            {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
-                return false;
-            }
+            // if (this.props.createproject.createFuture.projSubState === ProjSubState.Auditing)
+            // {
+            //     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
+            //     return false;
+            // }
             //   const content: string[] = [
             //     this.props.common.userId,
             //     this.props.common.token,
