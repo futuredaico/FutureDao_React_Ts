@@ -7,6 +7,7 @@ import { AbiItem } from "web3-utils";
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber } from '@/utils/numberTool';
 import { saveContractInfo } from '../api/project.api';
+// import { CodeType } from '@/store/interface/common.interface';
 class CreateProject implements ICreateProjectStore {
   @observable public createStatus = 0; // 创建项目的状态 0 是编辑状态 1是发布中 2是发布成功 3是发布失败
   @observable public projectID = "";     // 创建项目成功后得到的项目ID
@@ -34,23 +35,31 @@ class CreateProject implements ICreateProjectStore {
     approvedTokensHash: []
   }
   @observable public createFuture: ICreateFuture = {
-    projId: '',
-    projName: '',
-    projTitle: '',
-    projType: '',
-    projConverUrl: '',
-    projBrief: '',
-    projVideoUrl: '',
-    projDetail: '',
-    connectEmail: '',
-    officialWeb: '',
-    community: '',
-    projState: 'reading',
-    projSubState: 'init',
-    role: ''
+    projName: '',     // 项目名称
+    projTitle: '',    // 项目标题  
+    projBrief: '',    // 项目简介
+    officialWeb: '',  // 官网
+    projConverUrl: '', // 项目封面
+    projVideoUrl: '',// 视频介绍
+    projDetail: '',   // 项目详情
+  }
+  @action public createFutureProject = async () => {
+    // let result: any = [];
+    //   try
+    //   {
+    //     result = await Api.createProj();
+    //   } catch (e)
+    //   {
+    //     return false;
+    //   }
+    //   if (result[0].resultCode !== CodeType.success)
+    //   {
+    //     return false
+    //   }
+    return true
   }
   /**
-   * 创建项目
+   * 创建项目(Molochdao)
    */
   @action public createProject = async () => {
     try {
