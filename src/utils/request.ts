@@ -23,10 +23,11 @@ interface IOpts {
 const network: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? 'testnet' : 'mainnet';
 const baseCommonUrl: string = "https://api.nel.group/api/" + network;
 // https://apidao.nel.group/api/ V1版的请求地址
-const baseUrl: string =process.env.REACT_APP_SERVER_ENV === 'DEV' ? "https://apidaodev.nel.group/api/" + network : "apidao.nel.group/api/" + network;
+const baseUrl: string = process.env.REACT_APP_SERVER_ENV === 'DEV' ? "https://apidaotest.nel.group/api/" + network : "https://apidao.nel.group/api/" + network;
 // const fileUrl: string = "https://apidao.nel.group/api/file/" + network;
 const fileUrl: string = "https://apioss.nel.group/api/file/" + network;
 const videoUrl: string = "https://apioss.nel.group/api/file/" + network + 'bi';
+
 
 const makeRpcPostBody = (method: string, params: any): {} => {
 
@@ -52,6 +53,19 @@ export default function request(opts: IOpts): Promise<any> {
   }
   if (opts.baseUrl === 'video') {
     url = videoUrl;
+  }
+
+  if(process.env.NODE_ENV === 'development') {
+    url = '/baseapi/' + network
+    if (opts.baseUrl === 'common') {
+      url = '/commonapi/' + network
+    }
+    if (opts.baseUrl === 'file') {
+      url = '/fileapi/' + network
+    }
+    if (opts.baseUrl === 'video') {
+      url = '/videoapi/' + network + 'bi';
+    }
   }
   const params = makeRpcPostBody(opts.method, opts.params);
   let args: AxiosRequestConfig = {

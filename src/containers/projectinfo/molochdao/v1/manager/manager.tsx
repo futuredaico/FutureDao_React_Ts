@@ -19,6 +19,7 @@ class MolochManager extends React.Component<IMolochInfoProps> {
     public intrl = this.props.intl.messages;
     public async componentDidMount()
     {
+        this.props.molochmanager.proposalMenuNum = '1';
         await this.props.molochmanager.getMolochProposalList(this.props.molochinfo.projId);
         this.props.molochmanager.getContractInfo(this.props.molochinfo.projId)
         if (this.props.common.userInfo)
@@ -26,6 +27,11 @@ class MolochManager extends React.Component<IMolochInfoProps> {
             await this.props.molochmanager.getTokenBalance(this.props.molochinfo.projId, this.props.common.userInfo.address)
             await this.props.molochmanager.getUpStreamData(this.props.molochinfo.projId, this.props.common.userInfo.address)
         }
+    }
+    public componentWillUnmount()
+    {
+        this.props.molochmanager.proposalList = [];
+        this.props.molochmanager.proposalCount = 0;
     }
     public render()
     {
@@ -53,6 +59,15 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                                             }
                                             <strong className="mtitle">{item.proposalTitle ? item.proposalTitle : 'null'}</strong>
                                         </div>
+                                        {/* 即将开始期间 */}
+                                        {
+                                            item.proposalState === ProposalType.UpComing && (
+                                                <div className="transparent-toupiao">
+                                                    <span className="big-text">{this.intrl.manager.willstart}</span>&nbsp;&nbsp;
+                                                    <span className="sm-text">{this.intrl.manager.other} {this.computeBeginVoteTime(item)}</span>
+                                                </div>
+                                            )
+                                        }
                                         {/* 投票期 */}
                                         {
                                             item.proposalState === ProposalType.Voting && (
@@ -160,6 +175,23 @@ class MolochManager extends React.Component<IMolochInfoProps> {
                 const percent = item.voteNotCount / total * 100
                 return percent
             }
+        }
+    }
+    // 计算开始投票前的倒计时
+    private computeBeginVoteTime = (item: IMolochProposalList) =>
+    {
+        const nowTime = new Date().getTime() / 1000;
+        const nowTimeInt = parseInt(nowTime.toString(), 10);
+        // 开始的时间-当前时间=倒计时
+        const endTime = item.timestamp - nowTimeInt;
+        console.log(item.timestamp)
+        console.log(endTime)
+        if (endTime < 0)
+        {
+            return 'End'
+        } else
+        {
+            return onCountRemainTime(endTime)
         }
     }
     // 计算投票倒计时

@@ -1,5 +1,5 @@
 /**
- * 一级标题菜单
+ * 底部
  */
 import * as React from 'react';
 import './index.less';
@@ -7,10 +7,11 @@ import zh from '@/img/zh.png';
 import en from '@/img/en.png';
 import { observer } from 'mobx-react';
 import { ICommonStore } from '@/store/interface/common.interface';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   locale: any,
-  common: ICommonStore
+  common: ICommonStore,
   onChangeLanguage: (lang: string) => void;
 }
 @observer
@@ -33,18 +34,27 @@ export default class Footer extends React.Component<IProps, any>
               <ul>
                 <li className="footer-li">
                   <strong>{this.props.locale.about}</strong>
-                  <span>{this.props.locale.aboutus}</span>
+                  <span onClick={this.handleToWebsite}>{this.props.locale.aboutus}</span>
                 </li>
                 <li className="footer-li">
                   <strong>{this.props.locale.support}</strong>
-                  <span>{this.props.locale.process}</span>
-                  <span>{this.props.locale.faq}</span>
-                  <span>{this.props.locale.help}</span>
+                  <Link to="/file/process">
+                    <span>{this.props.locale.process}</span>
+                  </Link>
+                  {/* <span onClick={this.handleToProcess}>{this.props.locale.process}</span> */}
+                  <Link to="/file/faq">
+                    <span>{this.props.locale.faq}</span>
+                  </Link>
+                  {/* <span>{this.props.locale.help}</span> */}
                 </li>
                 <li className="footer-li">
                   <strong>{this.props.locale.terms}</strong>
-                  <span>{this.props.locale.agreement}</span>
-                  <span>{this.props.locale.policy}</span>
+                  <Link to="/file/agreement">
+                    <span>{this.props.locale.agreement}</span>
+                  </Link>
+                  <Link to="/file/policy">
+                    <span>{this.props.locale.policy}</span>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -113,5 +123,13 @@ export default class Footer extends React.Component<IProps, any>
       languageImg: zh,
     })
     this.props.onChangeLanguage('zh');
+  }
+  // 关于我们
+  private handleToWebsite = () => {
+    if (this.state.languageText === 'En') {
+      window.open("https://nel.group/index-En.html")
+    } else {
+      window.open("https://nel.group/")
+    }
   }
 }

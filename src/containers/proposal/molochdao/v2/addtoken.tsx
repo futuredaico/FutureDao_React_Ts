@@ -11,8 +11,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { IMolochProposalProps } from '../interface/index.interface';
 import { IContractHash } from '@/containers/projectinfo/molochdao/interface/molochmanager.interface';
 
-interface IState
-{
+interface IState {
     isDoingSave: boolean,// 是否正在发布
     tianName: string,  // 提案名称
     tianDes: string,  // 提案详情
@@ -36,14 +35,12 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         hashErrMsg: ''
     }
 
-    public componentDidMount()
-    {
+    public componentDidMount() {
         const projectId = this.props.match.params['projectId'];
         this.props.index.getDepositData(projectId);
         this.props.molochmanager.getContractInfo(projectId);
     }
-    public render()
-    {
+    public render() {
         return (
             <div className="proposal-content">
                 <div className="inline-title">
@@ -62,7 +59,7 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
                     <TextArea maxLength={400} className="nosize-textarea" value={this.state.tianDes} onChange={this.handleChangeTianDes} />
                 </div>
                 <div className="inline-title">
-                    <strong>添加代币Hash</strong>&nbsp;
+                    <strong>{this.intrl.proposal.token}</strong>&nbsp;
                     <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
@@ -83,70 +80,56 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         );
     }
     // 提案名称的输入
-    private handleChangeTianName = (ev: React.ChangeEvent<HTMLInputElement>) =>
-    {
+    private handleChangeTianName = (ev: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             tianName: ev.target.value
-        }, () =>
-        {
+        }, () => {
             this.checkAllInput()
         })
     }
     // 提案详情的输入
-    private handleChangeTianDes = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
-    {
+    private handleChangeTianDes = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
         this.setState({
             tianDes: ev.target.value
-        }, () =>
-        {
+        }, () => {
             this.checkAllInput()
         })
     }
     // 代币hash的输入
-    private handleChangeTianTokenHash = (ev: React.ChangeEvent<HTMLInputElement>) =>
-    {
+    private handleChangeTianTokenHash = (ev: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             tianTokenHash: ev.target.value
-        }, () =>
-        {
+        }, () => {
             this.handleChangeHashByMetamask()
         })
     }
     // 代币hash格式验证
-    private handleChangeHashByMetamask = () =>
-    {
-        if (this.state.tianTokenHash === '0x0000000000000000000000000000000000000000')
-        {
+    private handleChangeHashByMetamask = () => {
+        if (this.state.tianTokenHash === '0x0000000000000000000000000000000000000000') {
             this.setState({
                 tianHashBtn: false,
                 hashErrMsg: this.intrl.proposal.hasherr
-            }, () =>
-            {
+            }, () => {
                 this.checkAllInput()
             })
-        } else
-        {
+        } else {
             const res = web3.isAddress(this.state.tianTokenHash);
             this.setState({
                 tianHashBtn: res,
                 hashErrMsg: res ? '' : this.intrl.proposal.hasherr
-            }, () =>
-            {
+            }, () => {
                 this.checkAllInput()
             })
         }
 
     }
     // 发起提案
-    private handleSendProposal = async () =>
-    {
-        if (!this.state.canSendFlag || !this.props.common.userInfo)
-        {
+    private handleSendProposal = async () => {
+        if (!this.state.canSendFlag || !this.props.common.userInfo) {
             return false;
         }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if (!res)
-        {
+        if (!res) {
             return false;
         }
         // 0x2BFb7857eC7238AA84a830342Fa53fE0FEF7FeF5
@@ -157,53 +140,41 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         this.setState({
             isDoingSave: true
         })
-        if (!this.props.molochmanager.contractInfo)
-        {
+        if (!this.props.molochmanager.contractInfo) {
             return false
         }
         let contractHash = '';
-        this.props.molochmanager.contractInfo.contractHashs.map((item: IContractHash) =>
-        {
-            if (item.name === 'moloch')
-            {
+        this.props.molochmanager.contractInfo.contractHashs.map((item: IContractHash) => {
+            if (item.name === 'moloch') {
                 contractHash = item.hash
             }
         })
-        if (!contractHash)
-        {
+        if (!contractHash) {
             return false
         }
         this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
-        await this.props.index.applyProposalToAddToken(contractHash, this.state.tianTokenHash, JSON.stringify(tianStr), this.props.common.userInfo.address, () =>
-        {
+        const res2 = await this.props.index.applyProposalToAddToken(contractHash, this.state.tianTokenHash, JSON.stringify(tianStr), this.props.common.userInfo.address)
+
+        if (res2) {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
             this.initData();
-        }, () =>
-        {
-            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.senddone,this.intrl.notify.detailbtn,()=>{
-                const projectId = this.props.match.params['projectId'];
-                this.props.history.push('/molochinfo/' + projectId);
-            });
-        });
+        } else {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+        }
         return true;
     }
-    private checkAllInput = () =>
-    {
+    private checkAllInput = () => {
         let isOk = true;
-        if (!this.state.tianName)
-        {
+        if (!this.state.tianName) {
             isOk = false;
         }
-        if (!this.state.tianDes)
-        {
+        if (!this.state.tianDes) {
             isOk = false;
         }
-        if (!this.state.tianTokenHash)
-        {
+        if (!this.state.tianTokenHash) {
             isOk = false;
         }
-        if (!this.state.tianHashBtn)
-        {
+        if (!this.state.tianHashBtn) {
             isOk = false;
         }
         this.setState({
@@ -211,8 +182,7 @@ class AddToken extends React.Component<IMolochProposalProps, IState> {
         })
     }
     // 初始化输入框
-    private initData = () =>
-    {
+    private initData = () => {
         this.setState({
             tianName: '',
             tianDes: '',

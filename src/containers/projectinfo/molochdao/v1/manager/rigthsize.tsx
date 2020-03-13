@@ -8,8 +8,8 @@ import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { IMolochInfoProps } from '../../interface/molochinfo.interface';
 import { IMolochProposalList } from '../../interface/molochmanager.interface';
-import QuitProject from './quit';
 import { Input } from 'antd';
+import { when } from 'mobx';
 
 interface IState
 {
@@ -30,7 +30,6 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
     }
     public async componentDidMount()
     {
-        this.handleComputeTimeIndex();
         // 发起提案资格显示(委托人不是自己)
         if (this.props.molochmanager.proposalAddress && this.props.common.userInfo && this.props.common.userInfo.address && this.props.common.userInfo.address.toLocaleLowerCase() !== this.props.molochmanager.proposalAddress)
         {
@@ -38,6 +37,10 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                 sendTime: this.intrl.manager.no
             })
         }
+        when(
+            () => this.props.molochmanager.proposalList.length > 0,
+            () => this.handleComputeTimeIndex()
+        )
     }
     public render()
     {
@@ -63,7 +66,6 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
                         </div>
                     )
                 }
-                <QuitProject {...this.props} />
                 {
                     this.state.showEntrust && (
                         <div className="entrust-wrapper">
@@ -125,7 +127,7 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         }
 
     }
-    
+
     // 委托地址的输入
     private handleChangeAddrInput = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
@@ -152,8 +154,9 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
-       const res = await this.props.metamaskwallet.inintWeb3();
-        if(res){
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (res)
+        {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
             const res2 = await this.props.molochmanager.changeDelegateKey(this.props.common.userInfo.address, this.props.common.userInfo.address);
             if (res2)
@@ -184,9 +187,10 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
-        }        
+        }
         const res = await this.props.metamaskwallet.inintWeb3();
-        if(res){
+        if (res)
+        {
             this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
             // 0x4876164b90e82617fDf71feDaFF317E3ED0194ad
             const res2 = await this.props.molochmanager.changeDelegateKey(this.state.addrInput, this.props.common.userInfo.address);
@@ -212,9 +216,10 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
     // 计算时间区间所在周期    
     private computeIndex = (newTime: number, createTime: number, betweenTime: number) =>
     {
-        // （当前时间-项目创建时间）/4.8*60*60----------向下取整
+        // （当前时间-项目创建时间）/间隔时间段         
+        // （4.8*60*60----------向下取整）
         const agoTime = newTime - createTime;
-        const index = Math.floor(agoTime / betweenTime);
+        const index = Math.ceil(agoTime / betweenTime);
         return index
     }
     // 计算是否可发起提案
@@ -231,56 +236,70 @@ class ManagerRigthSize extends React.Component<IMolochInfoProps, IState> {
         // 项目创建时间
         const startTime = this.props.molochinfo.projInfo.startTime;
         const betweenTime = parseInt(this.props.molochmanager.contractInfo.periodDuration, 10);
-        console.log("betweenTime:" + betweenTime)
+
         const nowIndex = this.computeIndex(nowTimeInt, startTime, betweenTime);
-        console.log("nowIndex:" + nowIndex);
         if (this.props.molochmanager.proposalList.length > 0)
         {
             // 获取最新的一个提案
             const item: IMolochProposalList = this.props.molochmanager.proposalList[0];
-            console.log("最新提案时间")
-            console.log(new Date())
-            console.log(new Date(item.timestamp * 1000))
+            console.log("打印最新提案数据")
+            // console.log(JSON.stringify(this.props.molochmanager.proposalList[0]))
+            console.log(this.props.molochmanager.proposalList[0].proposalTitle)
             const tianIndex = this.computeIndex(item.timestamp, startTime, betweenTime);
+            console.log("nowIndex:" + nowIndex);
             console.log("tianIndex:" + tianIndex)
-            if (nowIndex === tianIndex)
+            console.log("betweenTime:" + betweenTime)
+            if (nowIndex < tianIndex)
+            {
+                // 计算剩余的时间
+                const latestIndexTime = (nowIndex + 2) * betweenTime;
+                const endTime = latestIndexTime + startTime;
+                const remainTime = endTime - nowTime;
+                console.log(remainTime)
+                this.computeCountTime(remainTime);
+            }
+            else if (nowIndex === tianIndex)
             {
                 // 计算剩余的时间
                 const latestIndexTime = (nowIndex + 1) * betweenTime;
                 const endTime = latestIndexTime + startTime;
                 const remainTime = endTime - nowTime;
                 console.log(remainTime)
-                let h = 0;
-                let m = 0;
-                let s = 0;
-                let str = '';
-                if (remainTime >= 0)
-                {
-                    h = Math.floor(remainTime / (60 * 60) % 24);
-                    m = Math.floor(remainTime / 60 % 60);
-                    s = Math.floor(remainTime % 60);
-                    if (h > 0)
-                    {
-                        str = h + this.intrl.manager.hours;
-                    }
-                    if (m > 0)
-                    {
-                        str = str + m + this.intrl.manager.min;
-                    }
-                    console.log(s)
-                    if (s > 0)
-                    {
-                        str = str + s + this.intrl.manager.second;
-                    }
-                }
-                console.log('打印发提案剩余时间')
-                console.log(str)
-                this.setState({
-                    sendTime: str
-                })
+                this.computeCountTime(remainTime);
             }
         }
         return true;
+    }
+    private computeCountTime = (remainTime: number) =>
+    {
+        let h = 0;
+        let m = 0;
+        let s = 0;
+        let str = '';
+        if (remainTime >= 0)
+        {
+            h = Math.floor(remainTime / (60 * 60) % 24);
+            m = Math.floor(remainTime / 60 % 60);
+            s = Math.floor(remainTime % 60);
+            if (h > 0)
+            {
+                str = h + this.intrl.manager.hours;
+            }
+            if (m > 0)
+            {
+                str = str + m + this.intrl.manager.min;
+            }
+            console.log(s)
+            if (s > 0)
+            {
+                str = str + s + this.intrl.manager.second;
+            }
+        }
+        console.log('打印发提案剩余时间')
+        console.log(str)
+        this.setState({
+            sendTime: str
+        })
     }
 }
 

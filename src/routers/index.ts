@@ -7,6 +7,48 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/manager')),
+    path: '/project',
+    children: [
+      {
+        path: '/project/financing',
+        component: asyncComponent(() => import('../containers/manager/financing/financing')),
+      },
+      {
+        path: '/project/update',
+        component: asyncComponent(() => import('../containers/manager/update/update')),
+      },
+      {
+        path: '/project/team',
+        component: asyncComponent(() => import('../containers/manager/team/team')),
+      },
+      {
+        path: '/project/edit',
+        component: asyncComponent(() => import('../containers/manager/edit/editinfo')),
+      }
+    ]
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/agreement')),
+    path: '/file/agreement',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/policy')),
+    path: '/file/policy',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/faq')),
+    path: '/file/faq',
+  },
+  {
+    component: asyncComponent(() => import('../containers/about/process')),
+    path: '/file/process',
+  },
+  {
+    component: asyncComponent(() => import('../containers/infoupdate/molochdao')),
+    path: '/update/:projectId',
+  },
+  {
     component: asyncComponent(() => import('../containers/home/home')),
     path: '/index',
   },
@@ -54,6 +96,10 @@ export default [
     component: asyncComponent(() => import('../containers/projectcreate')),
     path: '/create',
     children: [
+      {
+        path: '/create/future',
+        component: asyncComponent(() => import('../containers/projectcreate/info/futuredao')),
+      },
       {
         path: '/create/moloch',
         component: asyncComponent(() => import('../containers/projectcreate/info/molochdao')),

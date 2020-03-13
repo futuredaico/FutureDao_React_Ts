@@ -29,15 +29,19 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
         if (projectId)
         {
             this.props.molochinfo.getMolochProjInfo(projectId);
+            this.props.molochinfo.getLastUpdateInfo(projectId);
         }
     }
     public componentWillUnmount()
     {
         this.props.molochinfo.projId = '';
         this.props.molochinfo.menuNum = 1;
-        this.props.molochinfo.isShowUpdateInfo = false;
         this.props.molochinfo.isShowManagerInfo = false;
         this.props.molochinfo.projInfo = null;
+        this.props.molochmanager.proposalAddress = '';
+        this.props.molochinfo.updateTime = 0;
+        this.props.molochinfo.updatePeople = '';
+        this.props.molochmanager.proposalBalance = 0;
     }
     public render()
     {
@@ -49,7 +53,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
             <div className="molochinfo-page">                
                 <div className="project-top">
                     <h2>{this.props.molochinfo.projInfo.projName}</h2>
-                    <p className="title-p">{this.props.molochinfo.projInfo.projBrief}</p>
+                    {/* <p className="title-p">{this.props.molochinfo.projInfo.projBrief}</p> */}
                     <div className="img-data">
                         <div className="ptop-left">
                             <div className="ptop-img">
@@ -66,14 +70,14 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                             </div>
                         </div>
                         {
-                            this.props.molochinfo.projInfo.projVersion === '1.0' ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
+                            this.props.molochinfo.projInfo.projVersion.includes('1.0') ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
                         }
                         {/*  */}
 
                     </div>
                 </div>
                 {
-                    this.props.molochinfo.projInfo.projVersion === '1.0' ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
+                    this.props.molochinfo.projInfo.projVersion.includes('1.0') ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
                 }
             </div >
         );

@@ -14,6 +14,7 @@ export interface ICreateProjectStore {
   createStatus: number,
   createContent: ICreateContent,
   projectID: string,
+  createFuture:ICreateFuture,
   createProject: () => Promise<boolean>,
   getTokenInfo: (token: string) => Promise<{
     symbol: string;
@@ -50,6 +51,7 @@ export interface ICreateContent {
   dilutionBound?: number;          // 如果出现大规模混乱，投赞成票的选民将有义务支付最高乘数
   processingReward: number;       // 处理提案的人所得到的奖励
   approvedTokens: IToken[];
+  approvedTokensHash: string[];   // 支持代币的 hash 数组
   createTime?: string;              // 项目创建时间戳
 }
 
@@ -72,4 +74,20 @@ export interface ITeamList {
   headIconUrl: string,
   role: string,// admin或member
   authenticationState: string // not为未认证，person为个人认证，company为企业认证
+}
+export interface ICreateFuture {
+  projId: string,       // 项目ID
+  projName: string,     // 项目名称
+  projTitle: string,    // 项目标题
+  projType: string,     // 项目类型
+  projConverUrl: string, // 项目封面
+  projBrief: string,    // 项目简介
+  projVideoUrl: string,// 视频介绍
+  projDetail: string,   // 项目详情
+  connectEmail: string, // 邮箱
+  officialWeb: string,  // 官网
+  community: string,    // 社区
+  projState: string,    // 项目阶段状态
+  projSubState: string, // 项目提交审核状态
+  role: string          // 项目担任角色
 }

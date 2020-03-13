@@ -26,6 +26,18 @@ export const getMolochFundTotal = (projId: string,page:number,pageSize:number) =
     return request(opts);
 }
 /**
+ * 查询项目最后更新者信息接口
+ * @param projId 项目ID
+ */
+export const getLastUpdate = (projId: string) =>
+{
+    const opts = {
+        method: 'getLastUpdatorInfo',
+        params: [projId]
+    }
+    return request(opts);
+}
+/**
  * 获取eth的价格
  */
 export const getMolochEthPrice = () =>

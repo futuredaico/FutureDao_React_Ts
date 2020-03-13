@@ -29,7 +29,7 @@ export default class Header extends React.Component<IProps, IState>{
           <div className="header-menu">
             <Link to="/"><img src={require('@/img/logo.png')} alt="logo.png" className="logo-icon" /></Link>
             <ul>
-              <li><Link to="/index">首页</Link></li>
+              <li><Link to="/index">{this.props.locale.home}</Link></li>
               <li><Link to="/">{this.props.locale.discover}</Link></li>
               <li>
                 <span className="aclick-span" onClick={this.handleToCreateProject}>{this.props.locale.creat}</span>
@@ -38,6 +38,9 @@ export default class Header extends React.Component<IProps, IState>{
           </div>
           <div className="header-right">
             <ul>
+              <li>
+                    <span className="point-login" onClick={this.handleToLogin2}>trust登录 </span>
+                  </li>
               {
                 (!this.props.common.userInfo) && (
                   <li>
@@ -105,6 +108,9 @@ export default class Header extends React.Component<IProps, IState>{
   private handleToLogout = () => {
     // todo
     this.props.common.logoutFutureDao();
+  }
+  private handleToLogin2 = ()=>{
+    this.props.common.loginTrustWallet();
   }
 }
 // export default injectIntl(Header);

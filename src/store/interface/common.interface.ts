@@ -18,6 +18,7 @@ export interface ICommonStore
   getUserInfo: () => void,
   openNotificationWithIcon: (type: string, message: string, des: string, btnText?: string, callback?: () => void) => void,
   reSendEmail: () => void,
+  loginTrustWallet: () => Promise<boolean>,
   // changeAccount:()=>Promise<boolean>
 }
 export interface ICommonProps

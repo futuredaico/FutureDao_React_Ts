@@ -8,6 +8,14 @@ import en from 'react-intl/locale-data/en';
 import Layout from './containers/layout/index';
 import routes from './routers';
 import store from "./store";
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/es/locale-provider/zh_CN';
+import enCN from 'antd/es/locale-provider/en_US';
+
+const antdLocal = {
+  zh: zhCN,
+  en: enCN
+}
 
 addLocaleData([...en, ...zh]);
 // 初始化请求
@@ -29,9 +37,11 @@ const ObserverRender = observer(() => {
       locale={locale}
       messages={store['common'].message}
     >
-      {
-        renderRoutes(routes)
-      }
+      <LocaleProvider locale={antdLocal[locale]}>
+        {
+          renderRoutes(routes)
+        }
+      </LocaleProvider>
     </IntlProvider>
   )
 });

@@ -38,7 +38,10 @@ export default {
     do: "Processing proposal",
     done: "Processed",
     continue: "Continue",
-    again: "Retry"
+    again: "Retry",
+    yuproposal:"New Pre Published Proposal",
+    approve:"Publish this Proposal",
+    cancelproposal:"Cancel Proposal"
   },
   card: {
     game: "Games",
@@ -68,6 +71,7 @@ export default {
     sign: "Sign up",
     loginerr: "Please log in first.",
     error: "Operation failed",
+    home:"Home"
   },
   footer: {
     about: "About",
@@ -174,7 +178,16 @@ export default {
     website: "Website",
     manager: "Proposal",
     member: "Members",
-    textarea2: "Please log in."
+    textarea2: "Please log in.",
+    summary:"Summary",
+    version:"Dao Version",
+    contract:"Contract Address",
+    contractaddr:"Summoner",
+    null:"Null",
+    assets:"Assets",
+    divtips:"Modify DAO information",
+    spantips:"Time",
+    you:"Editer "
   },
   update: {
     update: "Publish updates",
@@ -232,7 +245,7 @@ export default {
     deletetips2: "Whether to continue?"
   },
   notify: {
-    success: "Operation successful",
+    success: "Tips",
     error: "Operation failed",
     loginerr: "Please log in first.",
     verifyerr: "Please verify your email address first.",
@@ -258,7 +271,7 @@ export default {
     updatetips: "Changed",
     updateerr: "Change failed",
     sendok: "Transaction sent, waiting for confirmation on blockchain.",
-    sendcheck: "Transaction requested, please confirm in wallet.",    
+    sendcheck: "Transaction requested, please confirm in wallet.",
     sendchecktwo:"Two transaction generated. Please confirm in the wallet.",
     sendfail: "Transaction sending failed.",
     senddone: "Your proposal has been sent.",
@@ -267,7 +280,8 @@ export default {
     logincheck: "Please set Metamask to mainnet and try again.",
     logouttips: "Wallet has changed. Account is logged out.",
     comfirm: "Comfirm",
-    detailbtn:"View details "
+    detailbtn:"View details ",
+    membererr2: "You are not yet a member and cannot modify the DAO information",
   },
   manager: {
     tian: "Published proposals",
@@ -304,7 +318,16 @@ export default {
     hours: "h",
     min: "m",
     second: "s later is available",
-    no: "(No permission)"
+    no: "(No permission)",
+    yuproposal:"Pre Published Proposal",
+    kick:"Member Kicked",
+    addasset:"Token Added",
+    willstart:"Upcoming",
+    lootshares:"Non-voting Shares",
+    shares:"Shares",
+    fail:"Proposal Failed",
+    passed:"Proposal Passed",
+    canceltips:"Are you sure you want to cancel this proposal?"
   },
   proposal: {
     title: "New MolochoDao proposal",
@@ -318,7 +341,17 @@ export default {
     gongtips: "（ If the share applicant is not you, you need to send an authorized transaction in advance, otherwise the proposal will fail. ）",
     addrerr:"The address format is incorrect.",
     hasherr:"Token hash error.",
-    membererr:"The address is not Dao member"
+    membererr:"The address is not Dao member",
+    apply: "Require Shares", 
+    kick:"Kick Members",
+    addasset:"Add Tokens",
+    applyasset:"Request assets",
+    applyshares:"Shares",
+    applyloot:"Non-voting shares",
+    applynumber:"Token",
+    kickaddr:"Kicked address",
+    kicktips:"（ This member's shares will be fully converted into tokens ）",
+    token:"Hash of added tokens"
   },
   create: {
     bigtitle: "Create new DAO",
@@ -348,6 +381,26 @@ export default {
     error1: "No more than voting period",
     error2: "No more than deposit",
     days: " Days",
-    approvedplaceholder: "Fill in the address of the token contract"
+    approvedplaceholder: "Fill in the address of the token contract",
+    error3:"Incorrect token address"
+  },
+  asset:{
+    shares:"Shares",
+    eachprice:"Value per share",
+    balance:"Token Balance"
+  },
+  member:{
+    one:"Share holders",
+    two:"Non-voting share holders"
+  },
+  quit:{
+    tips:"When you hold both ordinary shares and non-voting shares, priority is given to withdrawing from non-voting shares."
+  },
+  infoupdate:{
+    title:"Modify DAO information",
+    btn1:"Cancel",
+    btn2:"Save the changes",
+    tip1:"Prompt ",
+    tip2:"This operation cannot be undone.Are you sure you want to save the changes?"
   }
 }

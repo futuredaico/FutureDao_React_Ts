@@ -9,6 +9,7 @@ import { notification } from 'antd';
 import notificationBtn from '../components/notificationbtn';
 import metamaskwallet from './metamaskwallet';
 import { MetaMaskNetworkCode } from './interface/metamaskwallet.interface';
+import trustwallet from './trustwallet';
 
 let lang = navigator.language;
 lang = lang.substr(0, 2);
@@ -218,7 +219,7 @@ class Common implements ICommonStore {
       if (this.language === 'en') {
         this.openNotificationWithIcon('success', 'Operation successful', 'Email sent, please check it.');
       } else {
-        this.openNotificationWithIcon('success', '操作成功', '邮件已发送，请注意查收');
+        this.openNotificationWithIcon('success', '提示', '邮件已发送，请注意查收');
       }
     } else {
       if (this.language === 'en') {
@@ -228,6 +229,11 @@ class Common implements ICommonStore {
       }
     }
     return true
+  }
+  // trust的登录
+  @action public loginTrustWallet = async () => {
+    trustwallet.loginTrust();
+    return true;
   }
 }
 

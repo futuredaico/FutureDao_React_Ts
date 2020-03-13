@@ -6,7 +6,8 @@ import { observer, inject } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import { ICreateProjectProps } from '../interface/createproject.interface';
-interface IState {
+interface IState
+{
     isEdit: boolean
 }
 
@@ -14,15 +15,25 @@ interface IState {
 @observer
 class CreateProject extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
-    public render() {
+    public render()
+    {
         return (
-            <div className="project-module" onClick={this.handleShowCreateProjectInfo}>
-                <div className="module-title"><b>新的<br />MolochoDao</b></div>
-            </div>
+            <>
+                <div className="project-module" onClick={this.handleShowCreateProjectInfo}>
+                    <div className="module-title"><b>{this.intrl.create.new}<br />MolochoDao</b></div>
+                </div>
+                <div className="project-module" onClick={this.handleShowCreateFutureDao}>
+                    <div className="module-title"><b>{this.intrl.create.new}<br />FutureDao</b></div>
+                </div>
+            </>
         );
     }
-    public handleShowCreateProjectInfo = () => {
+    public handleShowCreateProjectInfo = () =>
+    {
         this.props.history.push("/create/moloch")
+    }
+    public handleShowCreateFutureDao = () => {
+        this.props.history.push("/create/future")
     }
 }
 
