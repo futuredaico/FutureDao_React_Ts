@@ -140,7 +140,7 @@ export default {
     shen: "神秘人"
   },
   myproject: {
-    project: "我的DAO",
+    project: "我的项目",
     follow: "关注中",
     manager: "管理中",
     ethereum: "以太坊",
@@ -218,7 +218,8 @@ export default {
     website: "官网",
     community: "社区",
     error: "填写本栏信息",
-    days: "天"
+    days: "天",
+    urlerror: "请填写完整的网站URL",
   },
   team: {
     team: "团队管理",

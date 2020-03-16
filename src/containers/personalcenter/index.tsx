@@ -32,13 +32,13 @@ class PersonalCenter extends React.Component<IProps, any> {
                                 <li className={this.mapChildClick('/personalcenter/userinfo') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/userinfo')}>
                                     {this.intrl.user.info}
                                 </li>
-                                {/* <li className={this.mapChildClick('/personalcenter/myproject') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/myproject')}>
+                                <li className={this.mapChildClick('/personalcenter/myproject') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/myproject')}>
                                     {this.intrl.myproject.project}
-                                </li> */}
+                                </li>
                                 {/* <li className="menu-li">
                                 身份认证
                                 </li> */}
-                                {/* <li className={this.mapChildClick('/personalcenter/myorder') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/myorder')}>我的订单</li> */}
+                                <li className={this.mapChildClick('/personalcenter/myorder') ? "menu-li li-active" : "menu-li"} onClick={this.mapUnderline.bind(this, '/personalcenter/myorder')}>我的订单</li>
                             </ul>
                         </div>
                     </div>

@@ -27,10 +27,11 @@ export interface IHomeProps extends RouteComponentProps {
 // }
 export interface IMolochProjList {
     projId:string,
-    projName:string,
-    projType:string,
-    projBrief:string,
-    projCoverUrl:string,
-    shares:number,
-    members:number 
+    projName:string, // 标题
+    projType:string, // future 或moloch 类型
+    projBrief:string,  // 简介
+    projCoverUrl:string,  // 封面
+    projState:string, // ideapub // 状态 Moloch无
+    shares:number, // 股数
+    members:number // 成员数
 }

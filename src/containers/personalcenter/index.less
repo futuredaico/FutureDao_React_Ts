@@ -88,162 +88,111 @@
             }
         }   
     }
-    .manager-list{
-        .manager-line{
-            border-bottom: 1px solid @bg-e5;
-            padding: 30px 0;
-            .manager-img{
-                width: 247px;
-                height: 160px;
-                vertical-align: top;     
-                margin-right: 20px;
-                border-radius: 5px;    
-            }
-            .manager-right{
-                display: inline-block;
-                max-width: 430px;
-                min-width: 400px;
-                vertical-align: top;
-                position: relative;
-                height: 160px;
-                .project-title{
-                    font-size: 16px;
+    .myproject-list{
+        .myproject-list-li{
+            width: 230px;
+            height: 337px;
+            margin-right: 30px;
+            margin-top: 30px;          
+            box-sizing: border-box;
+            background: #FFFFFF;
+            border-radius: 5px;
+            display: inline-block;
+            vertical-align: top;
+            border:1px solid @bg-e5;
+            .myproject-smallbox{
+                width: 100%;
+                .myproject-img{
+                img{
+                    width: 100%;
+                    height: 159px;
+                    border-radius: 5px 5px 0 0;
                 }
-                .manager-des{
-                    height: 66px;
-                    line-height: 16px;
-                    font-size: 12px;
-                    color:@t-b2;
-                    margin-top: 20px;
+                }
+                .myproject-des{
+                padding: 10px 15px;
+                .sbox-title{
+                    font-weight: 600;
+                    font-size: 16px;                
+                    line-height: 22px;     
+                    height: 44px;
                     overflow: hidden;
                     text-overflow: ellipsis; 
                     display: -webkit-box;
-                    -webkit-line-clamp: 4; // （行数）
+                    -webkit-line-clamp: 2; // （行数）
+                    /* autoprefixer: off */
+                    -webkit-box-orient: vertical; 
+                    margin-bottom: 5px;
+                }
+                .sbox-des{
+                    height: 50px;
+                    line-height: 16px;
+                    font-size: 12px;
+                    color:@t-b2;
+                    margin-top: 10px;
+                    overflow: hidden;
+                    text-overflow: ellipsis; 
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3; // （行数）
                     /* autoprefixer: off */
                     -webkit-box-orient: vertical;
-                }       
-                .munder-line{
-                    margin-top: 25px;
+                }  
+                .sbox-showtype{
+                    .showtype-text{
+                    color: @t-purple;
+                    padding: 13px 0;
+                    border-bottom: 1px solid @bg-e5;
+                    margin-bottom: 10px;
+                    }
+                    .kanhao-count{
+                    font-size: 12px;
+                    color: @t-b2;
+                    }
+                }         
+                .sbox-line{
+                    margin-top: 18px;
                     font-size: 14px;
+                    border-top: 1px solid @bg-e5;
                     padding-top: 12px;
-                    .munder-line-left{
-                        display: inline-block;
-                        color: @t-purple; 
-                        margin-right: 50px                
-                    }
-                    .munder-line-right{
-                        display: inline-block;
-                        font-size: 12px;
-                        color: @t-b2;
-                    }                  
-                }
-                // .project-card{
-                //     margin-top: 20px;
-                //     .normal-card{
-                //         margin-right:10px;
-                //     }
-                // }
-                .project-status{
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    strong{
-                        margin-right: 10px;
-                    }
-                    .green-text{
-                        color: @t-41c;                    
-                    }
-                    .purple-text{
-                        color: @t-purple;
-                    }
-                    .red-text{
-                        color: @t-f13;
-                    }
-                }
-            }
-        }
-        .list-page-warpper{
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-    }
-    .attention-list{
-        .attention-line{
-            display: inline-block;
-            width: 240px;
-            height: 337px;
-            margin-right: 12px;
-            background: #FFFFFF;
-            border: 1px solid #E5E5E5;
-            box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
-            border-radius: 5px;
-            margin-top: 30px;
-            vertical-align: top;
-            &:nth-of-type(3n){
-                margin-right: 0;
-            }
-            .attention-img{
-                width: 100%;
-                height: 160px;
-                margin-bottom: 10px;
-            }
-            .attention-content{
-                padding: 0 15px;
-            }
-            .attention-title{
-                font-size: 16px; 
-                height: 44px;
-                overflow: hidden;
-                text-overflow: ellipsis; 
-                display: -webkit-box;
-                -webkit-line-clamp: 2; // （行数）
-                /* autoprefixer: off */
-                -webkit-box-orient: vertical;           
-            }
-            .attention-des{
-                height: 50px;
-                line-height: 16px;
-                font-size: 12px;
-                color:@t-b2;
-                margin-top: 10px;
-                overflow: hidden;
-                text-overflow: ellipsis; 
-                display: -webkit-box;
-                -webkit-line-clamp: 3; // （行数）
-                /* autoprefixer: off */
-                -webkit-box-orient: vertical;
-            }       
-            .under-line{
-                margin-top: 18px;
-                font-size: 14px;
-                border-top: 1px solid @bg-e5;
-                padding-top: 12px;
-                .under-line-left{
+                    .sbox-line-left{
                     display: inline-block;
                     color: @t-purple;                 
-                }
-                .under-line-right{
+                    }
+                    .sbox-line-right{
                     float: right;
                     font-size: 12px;
                     color: @t-b2;
-                }                  
-            }
-            .project-card{
-                margin: 10px 0 15px 0;
-                .normal-card{
-                    margin-right: 10px;
-                }
-            }
-            .project-status{
-                .time-text{
+                    }                  
+                }            
+                .sbox-doing{
+                    margin-top: 20px;
+                    font-size: 14px;
+                    color: #333333;
+                    .slide-box{
+                    width: 225px !important;
+                    max-width: 225px !important;
+                    }
+                    .sbox-toptext{
+                    font-size: 14px;
+                    color: @t-purple;
+                    display: inline-block;
+                    }
+                    .sbox-topright{
                     font-size: 12px;
-                    display: block;
-                    color: @t-b2;
-                    margin-top: 5px;
+                    float: right;
+                    margin-top: -49px;
+                    }
                 }
             }
         }
+        &:hover{
+            box-shadow: 0 4px 12px 0 rgba(202,202,202,0.50);
+        }
+        &:nth-of-type(3n){
+            margin-right: 0;
+        }
+        }
+           
         .list-page-warpper{
             text-align: center;
             margin-top: 50px;

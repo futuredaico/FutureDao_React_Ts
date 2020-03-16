@@ -150,7 +150,7 @@
   },
   "proxy": {
     "/baseapi": {
-      "target": "https://apidaotest.nel.group",
+      "target": "https://apidaodev.nel.group",
       "ws": true,
       "changeOrigin": true,
       "pathRewrite": {

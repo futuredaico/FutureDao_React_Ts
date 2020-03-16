@@ -1,13 +1,13 @@
 import { observable, action } from 'mobx'
 import { ICreateContent, ICreateProjectStore, ICreateFuture } from '../interface/createproject.interface';
-// import * as Api from '../api/project.api'
+import * as Api from '../api/project.api';
 // import common from '@/store/common';
 import { Web3Contract } from '@/utils/web3Contract';
 import { AbiItem } from "web3-utils";
 import metamaskwallet from '@/store/metamaskwallet';
 import { toMyNumber } from '@/utils/numberTool';
 import { saveContractInfo } from '../api/project.api';
-// import { CodeType } from '@/store/interface/common.interface';
+import { CodeType } from '@/store/interface/common.interface';
 class CreateProject implements ICreateProjectStore {
   @observable public createStatus = 0; // 创建项目的状态 0 是编辑状态 1是发布中 2是发布成功 3是发布失败
   @observable public projectID = "";     // 创建项目成功后得到的项目ID
@@ -35,6 +35,7 @@ class CreateProject implements ICreateProjectStore {
     approvedTokensHash: []
   }
   @observable public createFuture: ICreateFuture = {
+    projId:'', // 项目ID
     projName: '',     // 项目名称
     projTitle: '',    // 项目标题  
     projBrief: '',    // 项目简介
@@ -44,18 +45,28 @@ class CreateProject implements ICreateProjectStore {
     projDetail: '',   // 项目详情
   }
   @action public createFutureProject = async () => {
-    // let result: any = [];
-    //   try
-    //   {
-    //     result = await Api.createProj();
-    //   } catch (e)
-    //   {
-    //     return false;
-    //   }
-    //   if (result[0].resultCode !== CodeType.success)
-    //   {
-    //     return false
-    //   }
+    let result: any = [];
+      const params = [
+        this.createFuture.projName,
+        this.createFuture.projTitle,
+        this.createFuture.projBrief,
+        this.createFuture.officialWeb,
+        this.createFuture.projConverUrl,
+        this.createFuture.projVideoUrl,
+        this.createFuture.projDetail
+      ]
+      try
+      {
+        result = await Api.createProj(params);
+      } catch (e)
+      {
+        return false;
+      }
+      if (result[0].resultCode !== CodeType.success)
+      {
+        return false
+      }
+      this.createFuture.projId = result[0].data.projId;
     return true
   }
   /**

@@ -81,12 +81,24 @@ export default [
   {
     component: asyncComponent(() => import('../containers/personalcenter')),
     path: '/personalcenter',
-    children: [     
+    children: [   
+      {
+        path: '/personalcenter/myorder',
+        component: asyncComponent(() => import('../containers/personalcenter/myorder')),
+      },
+      {
+        path: '/personalcenter/myproject',
+        component: asyncComponent(() => import('../containers/personalcenter/myproject')),
+      },  
       {
         path: '/personalcenter/userinfo',
         component: asyncComponent(() => import('../containers/personalcenter/personedit')),
       }
     ]
+  },
+  {
+    component: asyncComponent(() => import('../containers/projectinfo/futuredao')),
+    path: '/futureinfo/:projectId'
   },
   {
     component: asyncComponent(() => import('../containers/projectinfo/molochdao')),

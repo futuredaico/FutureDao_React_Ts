@@ -84,21 +84,32 @@ export const getMangeProjCount = (userId: string,token:string) =>
     }
     return request(opts);
 }
-
+/**
+ * 查询参与中的项目列表
+ * @param page 分页索引
+ * @param pageSize 分页大小 
+ */
+export const getAtJoinList = (page:number,pageSize:number) =>
+{
+    const opts = {
+        method: 'queryProjListAtJoin',
+        params: [
+            page,
+            pageSize
+        ]
+    }
+    return request(opts);
+}
 /**
  * 获取管理中项目列表
- * @param userId 用户id
- * @param token 访问令牌
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getManagerList = (userId: string,token:string,page:number,pageSize:number) =>
+export const getManagerList = (page:number,pageSize:number) =>
 {
     const opts = {
         method: 'queryProjListAtManage',
         params: [
-            userId,
-            token,
             page,
             pageSize
         ]
@@ -107,18 +118,14 @@ export const getManagerList = (userId: string,token:string,page:number,pageSize:
 }
 /**
  * 获取关注中的项目列表
- * @param userId 用户id
- * @param token 访问令牌
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getAttentionList = (userId: string,token:string,page:number,pageSize:number) =>
+export const getAttentionList = (page:number,pageSize:number) =>
 {
     const opts = {
         method: 'queryProjListAtStar',
         params: [
-            userId,
-            token,
             page,
             pageSize
         ]

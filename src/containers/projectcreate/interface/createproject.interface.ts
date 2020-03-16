@@ -16,6 +16,7 @@ export interface ICreateProjectStore {
   projectID: string,
   createFuture:ICreateFuture,
   createProject: () => Promise<boolean>,
+  createFutureProject:()=>Promise<boolean>,
   getTokenInfo: (token: string) => Promise<{
     symbol: string;
     decimals: string;
@@ -76,6 +77,7 @@ export interface ITeamList {
   authenticationState: string // not为未认证，person为个人认证，company为企业认证
 }
 export interface ICreateFuture {
+  projId:string, // 项目ID
   projName: string,     // 项目名称
   projTitle: string,    // 项目标题  
   projBrief: string,    // 项目简介

@@ -217,7 +217,8 @@ export default {
     email: "Email address",
     website: "Website",
     community: "Community",
-    error: "Please fill in the info in the column."
+    error: "Please fill in the info in the column.",
+    urlerror: "Please complete the website URL.",
   },
   team: {
     team: "Team members",

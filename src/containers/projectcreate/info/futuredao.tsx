@@ -1,8 +1,8 @@
 /**
- * 基础信息
+ * 创建futuredao
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import { Input, Upload, Icon } from 'antd';
@@ -17,66 +17,57 @@ import { ICreateProjectProps } from '../interface/createproject.interface';
 interface IState
 {
     nameValue: string, // 项目名称
-    titleValue: string, // 项目标题
-    typeValue: string, // 项目类型
-    imageUrl: string,  // 封面
-    loading: boolean,  // 上传图片是否正在加载中
-    textareaValue: string, // 项目简介
-    textareaNum: number, // 项目简介统计
     nameEnter: boolean, // 是否输入了名称
+    titleValue: string, // 项目标题
     titleEnter: boolean,// 是否输入了标题
-    imgEnter: boolean, // 是否上传了封面
+    desValue: string, // 项目简介
     textareaEnter: boolean, // 是否输入了项目介绍
     webInput: string, // 官网
+    webInputEnter: boolean, // 官网格式验证
+    imageUrl: string,  // 封面
+    loading: boolean,  // 上传图片是否正在加载中
     videoUrl: string, // 视频
     loadingVideo: boolean // 视频加载
-    projDetail: string, // 文本编辑内容
-    projectDetails: string,// 文本编辑内容
-    detailEnter: boolean,
+    projDetail: string, // 文本编辑内容(传给后端的)
+    projectDetails: string,// 文本编辑内容（显示用的）
+    detailEnter: boolean, // 是否输入了详情
+    isOkCreate: boolean // 是否能提交创建
 }
-
+@inject('createproject','common')
 @observer
 class StepOne extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
-        nameValue: '', // 项目名称
-        titleValue: '', // 项目标题
-        typeValue: '', // 项目类型
-        imageUrl: '',  // 封面
-        loading: false,
-        textareaValue: '', // 项目简介
-        textareaNum: 0, // 项目简介统计
+        nameValue: "",
         nameEnter: false,
+        titleValue: "",
         titleEnter: false,
-        imgEnter: false,
+        desValue: "",
         textareaEnter: false,
         webInput: "",
-        videoUrl: '',
+        webInputEnter: true,
+        imageUrl: "",
+        loading: false,
+        videoUrl: "",
         loadingVideo: false,
-        projDetail: '', // 文本编辑内容
-        projectDetails: '',
+        projDetail: "",
+        projectDetails: "",
         detailEnter: false,
+        isOkCreate: false
     };
-    // 下拉筛选
-    //   private mydeityOptions = [
-    //     {
-    //       id: 'game',
-    //       name: this.intrl.card.game,
-    //     },
-    //     {
-    //       id: 'comic',
-    //       name: this.intrl.card.movies,
-    //     },
-    //     {
-    //       id: 'movie',
-    //       name: this.intrl.card.animation,
-    //     },
-    //     {
-    //       id: 'other',
-    //       name: this.intrl.card.other,
-    //     }
-    //   ]
-
+    public componentDidMount()
+    {
+        this.props.createproject.createFuture = {
+            projId: '',
+            projName: '',
+            projTitle: '',
+            projBrief: '',
+            officialWeb: '',
+            projConverUrl: '',
+            projVideoUrl: '',
+            projDetail: ''
+        }
+    }
     public render()
     {
         const uploadButton = (
@@ -110,37 +101,52 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                 {/* 项目名称 */}
                 <div className="inline-title">
                     <strong>{this.intrl.edit.name}</strong>&nbsp;
-          <span className="red-type">*</span>&nbsp;&nbsp;
-          <span className="tips-text">{this.intrl.edit.nametips}</span>
+                    <span className="red-type">*</span>&nbsp;&nbsp;
+                    <span className="tips-text">{this.intrl.edit.nametips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input maxLength={30} value={this.state.nameValue} onChange={this.handleToChangeName} className={this.state.nameEnter ? "err-active" : ''} />
+                    <Input
+                        maxLength={30}
+                        value={this.state.nameValue}
+                        onChange={this.handleToChangeName}
+                        className={(this.state.nameValue && this.state.nameEnter) ? "err-active" : ''}
+                    />
                     {
-                        this.state.nameEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                        this.state.nameValue && this.state.nameEnter && <span className="err-span">{this.intrl.edit.error}</span>
                     }
                 </div>
                 {/* 项目标题 */}
                 <div className="inline-title">
                     <strong>{this.intrl.edit.title}</strong>&nbsp;
-          <span className="red-type">*</span>&nbsp;&nbsp;
-          <span className="tips-text">{this.intrl.edit.titletips}</span>
+                    <span className="red-type">*</span>&nbsp;&nbsp;
+                    <span className="tips-text">{this.intrl.edit.titletips}</span>
                 </div>
                 <div className="inline-enter">
-                    <Input maxLength={60} value={this.state.titleValue} onChange={this.handleToChangeTitle} className={this.state.titleEnter ? "err-active" : ''} />
+                    <Input
+                        maxLength={60}
+                        value={this.state.titleValue}
+                        onChange={this.handleToChangeTitle}
+                        className={(this.state.titleValue && this.state.titleEnter) ? "err-active" : ''}
+                    />
                     {
-                        this.state.titleEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                        this.state.titleValue && this.state.titleEnter && <span className="err-span">{this.intrl.edit.error}</span>
                     }
                 </div>
                 {/* 项目简介 */}
                 <div className="inline-title">
                     <strong>{this.intrl.edit.intro}</strong>&nbsp;
-          <span className="red-type">*</span>
+                    <span className="red-type">*</span>
                 </div>
                 <div className="inline-enter">
-                    {/* <span className="text-numb">{this.state.textareaNum}/400</span> */}
-                    <textarea className={this.state.textareaEnter ? "textarea-wrapper err-active" : "textarea-wrapper"} maxLength={400} style={{ resize: 'none' }} onChange={this.handleGetLength} value={this.state.textareaValue} />
+                    <textarea
+                        className={(this.state.desValue && this.state.textareaEnter) ? "textarea-wrapper err-active" : "textarea-wrapper"}
+                        maxLength={400}
+                        style={{ resize: 'none' }}
+                        onChange={this.handleGetLength}
+                        value={this.state.desValue}
+                    />
                     {
-                        this.state.textareaEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                        this.state.desValue && this.state.textareaEnter && <span className="err-span">{this.intrl.edit.error}</span>
                     }
                 </div>
                 {/* 官方网站 */}
@@ -148,29 +154,32 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                     <strong>{this.intrl.edit.website}</strong>
                 </div>
                 <div className="inline-enter">
-                    <Input maxLength={40} value={this.state.webInput} onChange={this.handleToWebChange} />
+                    <Input
+                        maxLength={40}
+                        value={this.state.webInput}
+                        onChange={this.handleToWebChange}
+                        className={(this.state.webInput && !this.state.webInputEnter) ? "err-active" : ''}
+                    />
+                    {
+                        (this.state.webInput && !this.state.webInputEnter) && <span className="err-span">{this.intrl.edit.urlerror}</span>
+                    }
                 </div>
                 {/* 项目封面 */}
                 <div className="inline-title">
-                    <strong>{this.intrl.edit.cover}</strong>&nbsp;
-          <span className="red-type">*</span>
+                    <strong>{this.intrl.edit.cover}</strong>
                 </div>
                 <div className="inline-enter">
                     <Upload
                         name="avatar"
                         listType="picture-card"
-                        className={this.state.imgEnter ? "avatar-uploader err-active" : "avatar-uploader"}
+                        className="avatar-uploader"
                         showUploadList={false}
                         accept="image/*,/pdf"
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                         beforeUpload={this.beforeUpload}
-                    // onChange={this.handleChangeImg}
                     >
                         {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton}
                     </Upload>
-                    {
-                        this.state.imgEnter && <span className="err-span">{this.intrl.edit.error}</span>
-                    }
                 </div>
                 {/* 视频介绍 */}
                 <div className="inline-title">
@@ -224,28 +233,19 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                         <Editor
                             onChange={this.onChangeEditorValue}
                             value={this.state.projectDetails}
-                            className={this.state.detailEnter ? "err-active" : ''}
+                            className={(this.state.projectDetails && this.state.detailEnter) ? "err-active" : ''}
                         />
                         {
-                            this.state.detailEnter && <span className="err-span">{this.intrl.edit.error}</span>
+                            this.state.projectDetails && this.state.detailEnter && <span className="err-span">{this.intrl.edit.error}</span>
                         }
                     </div>
                 </div>
-                {/* 项目类型 */}
-                {/* <div className="inline-title">
-                    <strong>{this.intrl.edit.type}</strong>&nbsp;
-                    <span className="red-type">*</span>&nbsp;&nbsp;
-                    <span className="tips-text">{this.intrl.edit.typetips}</span>
-                    </div>
-                    <div className="inline-enter">
-                    <Select options={this.mydeityOptions} text='' onCallback={this.onSelletCallback} defaultValue={this.state.typeValue} />
-                </div> */}
                 <div className="inline-btn">
                     <Button
-                        text={this.intrl.btn.editstep1}
+                        text="创建FutureDAO项目"
                         btnSize="bg-btn"
-                        onClick={this.handleToCreateProject}
-                        btnColor={(!this.state.nameValue || !this.state.titleValue || !this.state.textareaValue || !this.state.imageUrl) ? 'gray-btn' : ''}
+                        onClick={this.handleToCreateFutureProject}
+                        btnColor={!this.state.isOkCreate ? 'gray-btn' : ''}
                     />
                 </div>
             </div >
@@ -254,26 +254,36 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
     // 项目名称
     private handleToChangeName = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        //
         this.setState({
             nameValue: ev.target.value,
             nameEnter: false
+        }, () =>
+        {
+            this.checkInputStatus();
         })
     }
     // 项目标题
     private handleToChangeTitle = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
-        //
         this.setState({
             titleValue: ev.target.value,
             titleEnter: false
+        }, () =>
+        {
+            this.checkInputStatus();
         })
     }
     // 官网的输入
     private handleToWebChange = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
+        const re = new RegExp(/((https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])/gi);
+        const inputStr = ev.target.value.trim();
         this.setState({
-            webInput: ev.target.value.trim()
+            webInput: inputStr,
+            webInputEnter: re.test(inputStr)
+        }, () =>
+        {
+            this.checkInputStatus();
         })
     }
     // 删除视频
@@ -282,16 +292,11 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         this.setState({
             videoUrl: '',
             loading: false
+        }, () =>
+        {
+            this.checkInputStatus();
         })
     }
-    // 下拉框选择
-    //   private onSelletCallback = (item) =>
-    //   {
-    //     // todo
-    //     this.setState({
-    //       typeValue: item.id
-    //     })
-    //   }
     // 限制图片上传大小与格式
     private beforeUpload = (file: RcFile) =>
     {
@@ -303,6 +308,9 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         }
         this.setState({
             loading: true
+        }, () =>
+        {
+            this.checkInputStatus();
         })
         this.handleUploadCoverPicture(file);
         // todo commonStore
@@ -316,16 +324,20 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         {
             this.setState({
                 imageUrl: res,
-                imgEnter: false,
                 loading: false
+            }, () =>
+            {
+                this.checkInputStatus();
             })
         } else
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.imgerr);
             this.setState({
                 imageUrl: '',
-                imgEnter: true,
                 loading: false
+            }, () =>
+            {
+                this.checkInputStatus();
             })
         }
     }
@@ -341,6 +353,9 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         this.setState({
             videoUrl: '',
             loadingVideo: true
+        }, () =>
+        {
+            this.checkInputStatus();
         })
         this.handleUploadVedio(file);
         // todo commonStore
@@ -355,6 +370,9 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
             this.setState({
                 videoUrl: res,
                 loadingVideo: false
+            }, () =>
+            {
+                this.checkInputStatus();
             })
         } else
         {
@@ -362,6 +380,9 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
             this.setState({
                 videoUrl: '',
                 loading: false
+            }, () =>
+            {
+                this.checkInputStatus();
             })
         }
     }
@@ -370,9 +391,11 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
     {
         const str = e.target.value;
         this.setState({
-            textareaValue: str,
-            textareaNum: str.length,
+            desValue: str,
             textareaEnter: false
+        }, () =>
+        {
+            this.checkInputStatus();
         })
     }
     // 项目详情文本框的输入
@@ -387,81 +410,52 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                 projDetail: BraftEditor.createEditorState(value).toHTML().replace(/\s\s/g, '&nbsp;&nbsp;'),
                 projectDetails: BraftEditor.createEditorState(value),
                 detailEnter: false
+            }, () =>
+            {
+                this.checkInputStatus();
             })
         }
     }
     // 创建项目
-    private handleToCreateProject = async () =>
+    private handleToCreateFutureProject = async () =>
     {
-
-        const res = this.checkInputStatus();
-        if (!res)
+        if (!this.state.isOkCreate)
         {
-            return
+            return false
         }
-        // 区分是新建项目还是管理项目
-        const projectId = this.props.match.params.projectId;
-        if (!projectId)
+        this.props.createproject.createFuture = {
+            projId: '', // 项目ID
+            projName: this.state.nameValue,     // 项目名称
+            projTitle: this.state.titleValue,    // 项目标题  
+            projBrief: this.state.desValue,    // 项目简介
+            officialWeb: this.state.webInput,  // 官网
+            projConverUrl: this.state.imageUrl, // 项目封面
+            projVideoUrl: this.state.videoUrl,// 视频视频
+            projDetail: this.state.projDetail,   // 项目详情
+        }
+        console.log(this.props.createproject.createFuture)
+        const crestResult = await this.props.createproject.createFutureProject();
+        if (crestResult)
         {
-            this.props.createproject.createFuture = {
-                projName: '',     // 项目名称
-                projTitle: '',    // 项目标题  
-                projBrief: '',    // 项目简介
-                officialWeb: '',  // 官网
-                projConverUrl: '', // 项目封面
-                projVideoUrl: '',// 视频介绍
-                projDetail: '',   // 项目详情
-            }
-            const crestResult = await this.props.createproject.createProject();
-            if (crestResult)
-            {
-                // this.props.createproject.step = 2;
-                // this.props.createproject.stepOneStatus = 2;
-                // this.props.createproject.stepTwoStatus = 3;
-                // this.props.createproject.stepThreeStatus = 3;
-                this.props.project.isEdit = true;
-                window.scrollTo(0, 0);
-                // this.props.history.push('/project/' + this.props.createproject.createFuture.projId + '?type=create');
-            } else
-            {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.createerr);
-            }
+            this.props.history.push('/futureinfo/' + this.props.createproject.createFuture.projId);
         } else
         {
-            // if (this.props.createproject.createFuture.projSubState === ProjSubState.Auditing)
-            // {
-            //     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.editerr2);
-            //     return false;
-            // }
-            //   const content: string[] = [
-            //     this.props.common.userId,
-            //     this.props.common.token,
-            //     this.props.createproject.createFuture.projId,
-            //     this.state.nameValue,
-            //     this.state.titleValue,
-            //     this.state.typeValue,
-            //     this.state.imageUrl,
-            //     this.state.textareaValue
-            //   ]
-            //   const creatResult = await this.props.createproject.modifyStepOne(content);
-            //   if (creatResult)
-            //   {
-            //     window.scrollTo(0, 0)
-            //   }
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "创建失败");
         }
+
         return true;
     }
     // 检查填写情况
     private checkInputStatus = () =>
     {
+        let isOk = true;
         if (!this.state.nameValue)
         {
             this.setState({
                 nameEnter: true
             })
-            // window.location.hash='#projectname'
             window.scrollTo(0, 0);
-            return false
+            isOk = false;
         }
         if (!this.state.titleValue)
         {
@@ -469,23 +463,30 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                 titleEnter: true
             })
             window.scrollTo(0, 0);
-            return false
+            isOk = false;
         }
-        if (!this.state.imageUrl)
-        {
-            this.setState({
-                imgEnter: true
-            })
-            return false
-        }
-        if (!this.state.textareaValue)
+        if (!this.state.desValue)
         {
             this.setState({
                 textareaEnter: true
             })
-            return false
+            window.scrollTo(0, 0);
+            isOk = false;
         }
-        return true
+        if (this.state.webInput && !this.state.webInputEnter)
+        {
+            isOk = false;
+        }
+        if (!this.state.projectDetails)
+        {
+            this.setState({
+                detailEnter: true
+            })
+            isOk = false;
+        }
+        this.setState({
+            isOkCreate: isOk
+        })
     }
 }
 

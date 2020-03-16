@@ -5,11 +5,8 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-// import Card from '@/components/card';
-// import Slider from '@/components/slider';
 import { Pagination } from 'antd';
 import { IHomeProps, IMolochProjList } from './interface/home.interface';
-// import { ProjType } from '@/store/interface/common.interface';
 
 @inject('home')
 @observer
@@ -33,19 +30,6 @@ class IndexHome extends React.Component<IHomeProps, any> {
           <div className="one-content">
             <img src={require("@/img/banner.png")} alt="" onClick={this.handleToProjectInfo.bind(this, 'tu2')} />
           </div>
-          {/* <div className="swiper-wrapper">
-            <div className="banner-text one-text swiper-slide">
-              <div className="text-content">
-                <img src={require("@/img/banner.png")} alt="" onClick={this.handleToProjectInfo.bind(this,'tu2')} />
-              </div>
-            </div>
-            <div className="banner-text two-text swiper-slide">
-              <div className="text-content">
-                <img src={require("@/img/banner2.png")} alt="" />
-              </div>
-            </div>
-          </div>
-          <div className="swiper-pagination" id="banner-pagination" /> */}
         </div>
         <div className="index-content-wrapper">
           <div className="home-title">
@@ -67,40 +51,30 @@ class IndexHome extends React.Component<IHomeProps, any> {
                         <div className="home-des">
                           <div className="sbox-title">{item.projName}</div>
                           <div className="sbox-des">{item.projBrief ? item.projBrief : '暂无简介'}</div>
-                          <div className="sbox-line">
-                            <div className="sbox-line-left">{item.shares} {this.intrl.home.gu}</div>
-                            <div className="sbox-line-right">{item.members} {this.intrl.home.member}</div>
-                          </div>
-                          {/* {
-                            item.projState === ProjectState.IdeaPub && (
-                              <div className="sbox-line">
-                                <div className="sbox-line-left"><strong>{this.intrl.home.display}</strong></div>
-                                <div className="sbox-line-right">{item.supportCount} 人看好</div>
-                              </div>
-                            )
-                          }
                           {
-                            item.projState === ProjectState.Trading && (
-                              <div className="sbox-line">
-                                <div className="sbox-line-left">321股</div>
-                                <div className="sbox-line-right">123成员</div>
-                              </div>
-                            )
-                          } */}
-
-                          {/* <div className="sbox-card">
-                            <Card text={this.handleDiffType(item.projType)} colortype={this.handleDiffColor(item.projType)} />
-                          </div>
-                          */}
-                          {/* <div className="sbox-line">
-                              <div className="sbox-line-left">5天后开启众筹</div>                             
-                            </div> */}
-                          {/* <div className="sbox-doing"> */}
-                          {/* <div className="sbox-toptext">300 ETH</div> */}
-                          {/* toThousands(parseFloat(parseFloat(item.storePrice).toFixed(4)).toString()) */}
-                          {/* <Slider rate={300} /> */}
-                          {/* <div className="sbox-topright">{item.supportCount} 支持者</div> */}
-                          {/* </div> */}
+                            item.projType === 'future'
+                              ? (
+                                <>
+                                  {
+                                    item.projState === 'ideapub' ? (
+                                      <div className="sbox-line">
+                                        <div className="sbox-line-left">创意展示</div>
+                                      </div>
+                                    ) : (
+                                        <div className="sbox-line">
+                                          <div className="sbox-line-left">{item.shares} 代币</div>
+                                          <div className="sbox-line-right">{item.members} {this.intrl.home.member}</div>
+                                        </div>
+                                      )
+                                  }
+                                </>)
+                              : (
+                                <div className="sbox-line">
+                                  <div className="sbox-line-left">{item.shares} {this.intrl.home.gu}</div>
+                                  <div className="sbox-line-right">{item.members} {this.intrl.home.member}</div>
+                                </div>
+                              )
+                          }
                         </div>
                       </div>
                     </li>
@@ -123,7 +97,11 @@ class IndexHome extends React.Component<IHomeProps, any> {
   // 跳转到项目详情页todo
   private handleToProjectInfo = (item: IMolochProjList) =>
   {
-    this.props.history.push('/molochinfo/' + item.projId);
+    if(item.projType === 'future'){
+      this.props.history.push('/futureinfo/' + item.projId);
+    }else{
+      this.props.history.push('/molochinfo/' + item.projId);
+    } 
   }
   // 分页
   private handleChangePage = (index: number) =>
