@@ -19,7 +19,7 @@ export interface IHomeProps extends RouteComponentProps {
 //     projName:string,
 //     projTitle:string,
 //     projType:string,
-//     projConverUrl:string,
+//     projCoverUrl:string,
 //     supportCount:number,
 //     lastUpdateTime:number,
 //     projState:string,

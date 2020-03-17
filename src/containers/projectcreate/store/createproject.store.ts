@@ -40,7 +40,7 @@ class CreateProject implements ICreateProjectStore {
     projTitle: '',    // 项目标题  
     projBrief: '',    // 项目简介
     officialWeb: '',  // 官网
-    projConverUrl: '', // 项目封面
+    projCoverUrl: '', // 项目封面
     projVideoUrl: '',// 视频介绍
     projDetail: '',   // 项目详情
   }
@@ -51,7 +51,7 @@ class CreateProject implements ICreateProjectStore {
         this.createFuture.projTitle,
         this.createFuture.projBrief,
         this.createFuture.officialWeb,
-        this.createFuture.projConverUrl,
+        this.createFuture.projCoverUrl,
         this.createFuture.projVideoUrl,
         this.createFuture.projDetail
       ]

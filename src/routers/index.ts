@@ -8,22 +8,22 @@ export default [
   // },
   {
     component: asyncComponent(() => import('../containers/manager')),
-    path: '/project',
+    path: '/project/:projectId',
     children: [
       {
-        path: '/project/financing',
+        path: '/project/financing/:projectId',
         component: asyncComponent(() => import('../containers/manager/financing/financing')),
       },
       {
-        path: '/project/update',
+        path: '/project/update/:projectId',
         component: asyncComponent(() => import('../containers/manager/update/update')),
       },
       {
-        path: '/project/team',
+        path: '/project/team/:projectId',
         component: asyncComponent(() => import('../containers/manager/team/team')),
       },
       {
-        path: '/project/edit',
+        path: '/project/edit/:projectId',
         component: asyncComponent(() => import('../containers/manager/edit/editinfo')),
       }
     ]

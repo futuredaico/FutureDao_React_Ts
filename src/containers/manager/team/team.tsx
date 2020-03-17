@@ -2,13 +2,14 @@
  * 团队管理
  */
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
-import { Input } from 'antd';
+import { Input, Pagination } from 'antd';
 // import Select from '@/components/select';
-import { IMemberList } from '../interface/editproject.interface'
+
+import { IMemberList, ITeamList } from '../interface/editproject.interface'
 import { IProjectProps } from '../interface/project.interface';
 
 type Identity = 'admin' | 'member';
@@ -23,7 +24,7 @@ interface IState
     isCanInvite: boolean, // 是否可以邀请成员
     deleteMember: IMemberList | null // 选择要删除的成员
 }
-
+@inject('project', 'editproject', 'common')
 @observer
 class EditMember extends React.Component<IProjectProps, IState> {
     public intrl = this.props.intl.messages;
@@ -50,7 +51,7 @@ class EditMember extends React.Component<IProjectProps, IState> {
     // ]
     public async componentDidMount()
     {
-        // await this.props.editproject.getTeamList();
+        this.getList();
         // this.props.editproject.teamList.forEach((item: ITeamList) =>
         // {
         //     if (item.userId === this.props.common.userId)
@@ -87,72 +88,41 @@ class EditMember extends React.Component<IProjectProps, IState> {
                             <span className="table-th">{this.intrl.team.status}</span>
                             <span className="table-th">{this.intrl.team.manager}</span>
                         </li>
-                        <li className="table-li">
-                            <span className="table-td">
-                                <span className="peo-name">ABC</span>
-                            </span>
-                            <span className="table-td">0x7D1a4fC6Df3B16eB894004A4586A29f39Ba6d205</span>
-                            <span className="table-td admin-color">{this.intrl.team.manager}</span>
-                            <span className="table-td">
-                                <Button text="退出" btnSize="sm-btn" btnColor="red-btn" />
-                            </span>
-                        </li>
-                        {/* {
-                            this.props.editproject.teamList.length>0&&this.props.editproject.teamList.map((item: ITeamList, index) =>
+                        {
+                            this.props.editproject.teamCount > 0 && this.props.editproject.teamList.map((item: ITeamList, index: number) =>
                             {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
-                                            <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                                             <span className="peo-name">{item.username}</span>
                                         </span>
-                                        {
-                                            item.authenticationState === 'not' && <span className="table-td gray-color">{this.intrl.team.noverify}</span>
-                                        }
-                                        {
-                                            item.authenticationState === 'person' && <span className="table-td gray-color">{this.intrl.team.people}</span>
-                                        }
-                                        {
-                                            item.authenticationState === 'company' && <span className="table-td gray-color">{this.intrl.team.company}</span>
-                                        }
-                                        {
-                                            item.role === 'admin' ? (
-                                                <>
-                                                    <span className="table-td admin-color">{this.intrl.team.manager}</span>
-                                                    <span className="table-td" />
-                                                </>
-                                            )
-                                                : (
-                                                    <>
-                                                        <span className="table-td">{this.intrl.team.mermber}</span>
-                                                        <span className="table-td">
-                                                            {
-                                                                this.state.isCanInvite && <Button text={this.intrl.btn.delete} btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this, item)} />
-                                                            }
-                                                        </span>
-                                                    </>
-                                                )
-                                        } */}
-                        {/* <span className="table-td">
-                                            <Select
-                                                defaultValue={item.role}
-                                                options={this.identityOptions}
-                                                text=''
-                                                onCallback={this.onSelletCallback.bind(this, item)}
-                                            />
-                                        </span> */}
-                        {/* </li>
+                                        <span className="table-td">{item.address}</span>
+                                        <span className="table-td admin-color">{item.role==='admin'?this.intrl.team.manager:this.intrl.team.member}</span>
+                                        <span className="table-td">
+                                            {
+                                                !item.isMine && <Button text="退出" btnSize="sm-btn" btnColor="red-btn" />
+                                            }                                            
+                                        </span>
+                                    </li>
                                 )
                             })
-                        } */}
+                        }
+
                     </ul>
+                    {
+                        this.props.editproject.teamCount > 15 && (
+                            <div className="list-page-warpper">
+                                <Pagination showQuickJumper={true} defaultPageSize={this.props.editproject.teamPageSize} defaultCurrent={1} total={this.props.editproject.teamCount} onChange={this.handleChangeTeamPage} />
+                            </div>
+                        )
+                    }
                 </div>
                 {/* {
                     this.state.isCanInvite && ( */}
-                        <div className="inline-enter-btn">
-                            <Button text={this.intrl.btn.invite} btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
-                        </div>
-                    {/* )
+                <div className="inline-enter-btn">
+                    <Button text={this.intrl.btn.invite} btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
+                </div>
+                {/* )
                 } */}
 
                 {
@@ -214,6 +184,16 @@ class EditMember extends React.Component<IProjectProps, IState> {
                 }
             </>
         );
+    }
+    private getList = ()=>{
+        const projectId = this.props.match.params.projectId;
+        this.props.editproject.getTeamList(projectId);
+    }
+    // 翻页
+    private handleChangeTeamPage = (index: number) =>
+    {
+        this.props.editproject.teamPage = index;
+        this.getList();
     }
     // 选中成员
     private handleSelectUser = (item: IMemberList) =>
@@ -306,7 +286,7 @@ class EditMember extends React.Component<IProjectProps, IState> {
         }
         await this.props.editproject.deleteMember(this.state.deleteMember.userId);
         this.handleCancelDelete();
-        this.props.editproject.getTeamList();
+        this.getList();
         return true;
     }
 }

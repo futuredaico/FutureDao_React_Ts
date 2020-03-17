@@ -7,9 +7,10 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import classnames from 'classnames';
-import { ProjectState, ProjSubState } from '@/store/interface/common.interface';
 import { renderRoutes } from 'react-router-config';
 import { IProjectProps } from './interface/project.interface';
+import { ProjectRole } from './interface/editproject.interface';
+// import { when } from 'mobx';
 // import { getQueryString } from '@/utils/function'
 
 
@@ -28,19 +29,17 @@ class Project extends React.Component<IProjectProps, IState> {
 
     public componentDidMount()
     {
-        // const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
-        // if (projectId && projectId !== '/project') {
-        //     this.props.project.isEdit = !!projectId;
-        //     const projId = projectId.split("/");
-        //     if (projId.length > 1) {
-        //         this.props.editproject.getProject(projId[1]);
-        //         this.props.project.projId = projId[1];
-        //     } else {
-        //         this.props.editproject.getProject(projId[0]);
-        //         this.props.project.projId = projId[0];
-        //     }
-        // }
-        // this.props.editproject.getProject(projectId);    
+        const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
+        if (projectId && projectId !== '/project') {
+            const projId = projectId.split("/");
+            if (projId.length > 1) {
+                this.props.editproject.getProject(projId[3]);
+                this.props.project.projId = projId[3];
+            } else {
+                this.props.editproject.getProject(projId[0]);
+                this.props.project.projId = projId[0];
+            }
+        }   
     }
     public componentWillUnmount()
     {
@@ -48,17 +47,13 @@ class Project extends React.Component<IProjectProps, IState> {
             projId: '',
             projName: '',
             projTitle: '',
-            projType: '',
-            projConverUrl: '',
             projBrief: '',
+            officialWeb: '',
+            projCoverUrl: '',
             projVideoUrl: '',
             projDetail: '',
-            connectEmail: '',
-            officialWeb: '',
-            community: '',
-            projState: 'reading',
-            projSubState: 'init',
-            role: ''
+            role:'',
+            startFinanceFlag:0
         }
     }
     public render()
@@ -66,17 +61,17 @@ class Project extends React.Component<IProjectProps, IState> {
         const createClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/\/project(?!(\/update|\/financing|\/order|\/team))/i) ? true : false }
         );
-        const updateClassName = classnames('menu-li',
-            { 'li-active': this.mapChildClick(/project\/update/i) ? true : false },
-            { 'li-notallow': (this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing) ? true : false }
-        );
         const teamClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/team/i) ? true : false },
-            { 'li-notallow': (this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing) ? true : false }
+            { 'li-notallow': (this.props.editproject.editContent.role !== ProjectRole.admin ) ? true : false }
         );
+        const updateClassName = classnames('menu-li',
+            { 'li-active': this.mapChildClick(/project\/update/i) ? true : false },
+            { 'li-notallow': (this.props.editproject.editContent.role !== ProjectRole.admin ) ? true : false }
+        );        
         const financingClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
-            { 'li-notallow': (this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing) ? true : false }
+            { 'li-notallow': (this.props.editproject.editContent.role !== ProjectRole.admin ) ? true : false }
         );
         // const orderClassName = classnames('menu-li',
         //     { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
@@ -143,7 +138,7 @@ class Project extends React.Component<IProjectProps, IState> {
         // else if (str === '/project/update')
         // {
         //     //
-        //     if ((this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing))
+        //     if ((this.props.editproject.editContent.role === ProjectRole.admin || this.props.editproject.editContent.projSubState === ProjSubState.Auditing))
         //     {
         //         return false;
         //     } else
@@ -153,7 +148,7 @@ class Project extends React.Component<IProjectProps, IState> {
         // }
         // else if (str === '/project/financing')
         // {
-        //     if (this.props.editproject.editContent.projState === ProjectState.Readying || this.props.editproject.editContent.projSubState === ProjSubState.Auditing)
+        //     if (this.props.editproject.editContent.role === ProjectRole.admin || this.props.editproject.editContent.projSubState === ProjSubState.Auditing)
         //     {
         //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "此项目现在暂时还不能进行启动融资");
         //         return false;
@@ -170,11 +165,11 @@ class Project extends React.Component<IProjectProps, IState> {
         // }
         else if (str === '/project/delete')
         {
-            if (this.props.editproject.editContent.role !== 'admin')
+            if (this.props.editproject.editContent.role !== ProjectRole.admin)
             {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.adminerr);
             }
-            else if (this.props.editproject.editContent.projState === ProjectState.Trading)
+            else if (this.props.editproject.editContent.startFinanceFlag === 1)
             {
                 this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, '项目已启动融资不可删除');
             }
@@ -223,23 +218,17 @@ class Project extends React.Component<IProjectProps, IState> {
     private handleCheckDelete = async () =>
     {
 
-        const projectId = this.props.location.pathname.replace(this.props.match.path + '/', '');
-        if (projectId)
+        const res = await this.props.project.deleteMember(this.props.project.projId);
+        if (res)
         {
-            const res = await this.props.project.deleteMember(projectId);
-            if (res)
-            {
-                this.handleShowDeleteProject();
-                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.deletesuccess);
-                this.handleGoBackPersonMenager();
-            } else
-            {
-                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.deleteerr);
-            }
+            this.handleShowDeleteProject();
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.deletesuccess);
+            this.handleGoBackPersonMenager();
         } else
         {
-            return false;
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.deleteerr);
         }
+        
         return true;
     }
     // 跳到我的项目-管理中页面

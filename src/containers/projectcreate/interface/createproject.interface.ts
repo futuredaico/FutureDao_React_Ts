@@ -82,7 +82,7 @@ export interface ICreateFuture {
   projTitle: string,    // 项目标题  
   projBrief: string,    // 项目简介
   officialWeb: string,  // 官网
-  projConverUrl: string, // 项目封面
+  projCoverUrl: string, // 项目封面
   projVideoUrl: string,// 视频介绍
   projDetail: string,   // 项目详情
 }

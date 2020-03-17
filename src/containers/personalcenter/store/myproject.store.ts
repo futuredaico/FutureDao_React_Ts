@@ -1,14 +1,13 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/person.api';
 import { CodeType } from '@/store/interface/common.interface';
-import common from '@/store/common';
 import { IMyprojectList } from '../interface/myproject.interface';
 class MyProject
 {
     @observable public manageCount: number = 0;  // 管理列表总数
     @observable public manageList: IMyprojectList[] = []; // 管理列表
     @observable public managerPage: number = 1;// 管理列表当前页
-    @observable public managerPageSize: number = 5; // 管理列表每页条数
+    @observable public managerPageSize: number = 6; // 管理列表每页条数
     @observable public attentionCount: number = 0;// 关注列表总数
     @observable public attentionList: IMyprojectList[] = []; // 关注列表
     @observable public attentionPage: number = 1;// 关注列表当前页
@@ -16,7 +15,7 @@ class MyProject
     @observable public joinCount: number = 0;  // 参与列表总数
     @observable public joinList: IMyprojectList[] = []; // 参与列表
     @observable public joinPage: number = 1;// 参与列表当前页
-    @observable public joinPageSize: number = 5; // 参与列表每页条数
+    @observable public joinPageSize: number = 6; // 参与列表每页条数
 
     /**
      * 参与
@@ -95,11 +94,12 @@ class MyProject
         let result: any = [];
         try
         {
-            result = await Api.getMangeProjCount(common.userId, common.token);
+            result = await Api.getMangeProjCount();
         } catch (e)
         {
             this.attentionCount = 0;
             this.manageCount = 0;
+            this.joinCount = 0;
             return false;
         }
         if (result[0].resultCode !== CodeType.success)
@@ -108,6 +108,7 @@ class MyProject
         }
         this.attentionCount = result[0].data.starCount || 0;
         this.manageCount = result[0].data.manageCount || 0;
+        this.joinCount = result[0].data.joinCount || 0;
         return true;
     }
 }

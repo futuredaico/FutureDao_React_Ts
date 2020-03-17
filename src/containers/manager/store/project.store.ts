@@ -1,6 +1,5 @@
 import {observable, action} from 'mobx';
 import * as Api from '../api/project.api';
-import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 class CreateProject {
   @observable public menuNum = 1;
@@ -17,7 +16,7 @@ class CreateProject {
 
     try
     {
-      result = await Api.deleteProject(common.userId,common.token,projId);
+      result = await Api.deleteProject(projId);
     } catch (e)
     {
       return false;

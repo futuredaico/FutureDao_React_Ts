@@ -35,7 +35,7 @@ interface IState
 }
 @inject('createproject','common')
 @observer
-class StepOne extends React.Component<ICreateProjectProps, IState> {
+class CreateFuture extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
     public state = {
         nameValue: "",
@@ -63,7 +63,7 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
             projTitle: '',
             projBrief: '',
             officialWeb: '',
-            projConverUrl: '',
+            projCoverUrl: '',
             projVideoUrl: '',
             projDetail: ''
         }
@@ -142,7 +142,7 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
                         className={(this.state.desValue && this.state.textareaEnter) ? "textarea-wrapper err-active" : "textarea-wrapper"}
                         maxLength={400}
                         style={{ resize: 'none' }}
-                        onChange={this.handleGetLength}
+                        onChange={this.handleChangeDes}
                         value={this.state.desValue}
                     />
                     {
@@ -387,9 +387,9 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
         }
     }
     // 获取项目简介的输入字数
-    private handleGetLength = (e) =>
+    private handleChangeDes = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
     {
-        const str = e.target.value;
+        const str = ev.target.value;
         this.setState({
             desValue: str,
             textareaEnter: false
@@ -429,7 +429,7 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
             projTitle: this.state.titleValue,    // 项目标题  
             projBrief: this.state.desValue,    // 项目简介
             officialWeb: this.state.webInput,  // 官网
-            projConverUrl: this.state.imageUrl, // 项目封面
+            projCoverUrl: this.state.imageUrl, // 项目封面
             projVideoUrl: this.state.videoUrl,// 视频视频
             projDetail: this.state.projDetail,   // 项目详情
         }
@@ -490,4 +490,4 @@ class StepOne extends React.Component<ICreateProjectProps, IState> {
     }
 }
 
-export default injectIntl(StepOne);
+export default injectIntl(CreateFuture);

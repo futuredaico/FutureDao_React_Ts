@@ -1,50 +1,13 @@
 import request from 'utils/request';
-
 /**
- * 创建项目
- * @param params 
+ * 查询项目信息
+ * @param projId 项目id
  */
-export const createProj = (params:string[]) =>
+export const getProj = (projId:string) =>
 {
     const opts = {
-        method: 'createProj',
-        params: [...params]
-    }
-    return request(opts);
-}
-/**
- * 修改详情信息模块的内容
- * @param params 
- */
-export const modifyProjVideo = (params:string[]) =>
-{
-    const opts = {
-        method: 'modifyProjVideo',
-        params: [...params]
-    }
-    return request(opts);
-}
-/**
- * 修改团队信息模块的内容
- * @param params 
- */
-export const modifyProjEmail = (params:string[]) =>
-{
-    const opts = {
-        method: 'modifyProjEmail',
-        params: [...params]
-    }
-    return request(opts);
-}
-/**
- * 修改基础信息模块的内容
- * @param params 
- */
-export const modifyProjName = (params:string[]) =>
-{
-    const opts = {
-        method: 'modifyProjName',
-        params: [...params]
+        method: 'queryProj',
+        params: [projId]
     }
     return request(opts);
 }
@@ -60,67 +23,63 @@ export const modifyProj = (params:string[]) =>
     }
     return request(opts);
 }
-/**
- * 查询项目信息
- * @param userId 用户id
- * @param token 访问令牌
- * @param projId 项目id
- */
-export const getProj = (userId:string,token:string,projId:string) =>
-{
-    const opts = {
-        method: 'queryProj',
-        params: [userId,token,projId]
-    }
-    return request(opts);
-}
+
 /**
  * 查询成员
- * @param userId 用户ID
- * @param token token
  * @param memberEmail 成员邮箱 
  * @param page 当前页码
  * @param pageSize 每页显示条数
  */
-export const searchMember = (userId:string,token:string,memberEmail:string,page:number,pageSize:number) =>
+// export const searchMember = (page:number,pageSize:number) =>
+// {
+//     const opts = {
+//         method: 'queryMember',
+//         params: [page,pageSize]
+//     }
+//     return request(opts);
+// }
+/**
+ * 获取成员列表
+ * @param projId 项目id
+ * @param page 
+ * @param pageSize 
+ */
+export const getMember = (projId:string,page:number,pageSize:number) =>
 {
     const opts = {
-        method: 'queryMember',
-        params: [userId,token,memberEmail,page,pageSize]
+        method: 'queryMemberList',
+        params: [projId,page,pageSize]
     }
     return request(opts);
 }
 /**
  * 邀请成员
- * @param userId 用户id
- * @param token 
- * @param memberId 成员id
+ * @param memberId 新成员地址
+ * @param type 角色，取值：admin管理员，member成员
  * @param projId 项目id
  */
-export const inviteMember = (userId:string,token:string,memberId:string,projId:string) =>
+export const inviteMember = (memberId:string,type:string,projId:string) =>
 {
     const opts = {
         method: 'inviteMember',
-        params: [userId,token,memberId,projId]
+        params: [memberId,type,projId]
     }
     return request(opts);
 }
 /**
- * 获取成员列表
- * @param userId 用户id
- * @param token 
- * @param projId 项目id
- * @param page 
- * @param pageSize 
+ * 删除成员
+ * @param memberId 被删成员地址
+ * @param projId 项目id 
  */
-export const getMember = (userId:string,token:string,projId:string,page:number,pageSize:number) =>
+export const deleteMember = (memberId:string,projId:string) =>
 {
     const opts = {
-        method: 'queryProjTeam',
-        params: [userId,token,projId,page,pageSize]
+        method: 'deleteMember',
+        params: [memberId,projId]
     }
     return request(opts);
 }
+
 /**
  * 修改成员角色
  * @param userId 用户id
@@ -129,14 +88,14 @@ export const getMember = (userId:string,token:string,projId:string,page:number,p
  * @param userid 成员id
  * @param role 成员角色
  */
-export const modifyRole = (userId:string,token:string,projId:string,memberId:string,role:string) =>
-{
-    const opts = {
-        method: 'modifyUserRole',
-        params: [userId,token,projId,memberId,role]
-    }
-    return request(opts);
-}
+// export const modifyRole = (userId:string,token:string,projId:string,memberId:string,role:string) =>
+// {
+//     const opts = {
+//         method: 'modifyUserRole',
+//         params: [userId,token,projId,memberId,role]
+//     }
+//     return request(opts);
+// }
 /**
  * 发布更新
  * @param userId 用户Id
@@ -185,21 +144,6 @@ export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateI
     }
     return request(opts);
 }
-/**
- * 
- * @param userId 用户id
- * @param token 访问令牌
- * @param projId 项目id
- * @param memberId 成员id
- */
-export const deleteMember = (userId:string,token:string,projId:string,memberId:string) =>
-{
-    const opts = {
-        method: 'deleteProjTeam',
-        params: [userId,token,projId,memberId]
-    }
-    return request(opts);
-}
 
 /**
  * 删除项目
@@ -207,11 +151,11 @@ export const deleteMember = (userId:string,token:string,projId:string,memberId:s
  * @param token 访问令牌
  * @param projId 项目id
  */
-export const deleteProject = (userId:string,token:string,projId:string) =>
+export const deleteProject = (projId:string) =>
 {
     const opts = {
         method: 'deleteProj',
-        params: [userId,token,projId]
+        params: [projId]
     }
     return request(opts);
 }

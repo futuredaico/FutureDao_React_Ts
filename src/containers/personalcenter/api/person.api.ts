@@ -73,14 +73,14 @@ export const modifyEmail = (userId: string,token:string,email:string,pwd:string)
     }
     return request(opts);
 }
-export const getMangeProjCount = (userId: string,token:string) =>
+/**
+ * 获取项目数量，包括：参与中数量/关注中数量/管理中数量
+ */
+export const getMangeProjCount = () =>
 {
     const opts = {
-        method: 'getStarMangeProjCount',
-        params: [
-            userId,
-            token
-        ]
+        method: 'queryProjCount',
+        params: []
     }
     return request(opts);
 }
