@@ -227,7 +227,7 @@ export default {
     verify: "Verification",
     status: "Status",
     manager: "Management",
-    mermber: "Member",
+    member: "Member",
     noverify: "Not verified",
     people: "Personal certification",
     company: "Enterprise certification",

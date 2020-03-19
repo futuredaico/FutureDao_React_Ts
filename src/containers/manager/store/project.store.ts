@@ -10,7 +10,7 @@ class CreateProject {
   /**
    * 删除项目
    */
-  @action public deleteMember = async (projId:string) =>
+  @action public deleteProject = async (projId:string) =>
   {
     let result: any = [];
 

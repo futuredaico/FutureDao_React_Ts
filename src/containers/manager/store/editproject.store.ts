@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IMemberList, ITeamList, IEditProjectInfo } from '../interface/editproject.interface';
+import { ITeamList, IEditProjectInfo } from '../interface/editproject.interface';
 class EditProject
 {
   @observable public editContent: IEditProjectInfo = {
@@ -16,7 +16,7 @@ class EditProject
     role: '',
     startFinanceFlag: 0
   }
-  @observable public searchList: IMemberList[] = []; // 查询成员列表
+  // @observable public searchList: IMemberList[] = []; // 查询成员列表
   @observable public teamList: ITeamList[] = []; // 项目成员列表
   @observable public teamCount:number = 0;
   @observable public teamPage:number = 1;
@@ -95,13 +95,13 @@ class EditProject
   /**
    * 邀请成员
    */
-  @action public inviteMember = async (memberId: string, type: string) =>
+  @action public inviteMember = async (address: string, type: string,projId:string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.inviteMember(memberId, type, this.editContent.projId);
+      result = await Api.inviteMember(address, type, projId);
     } catch (e)
     {
       return false;
@@ -115,12 +115,12 @@ class EditProject
   /**
    * 删除成员
    */
-  @action public deleteMember = async (memberId: string) =>
+  @action public deleteMember = async (address: string,projId:string) =>
   {
     let result: any = [];
     try
     {
-      result = await Api.deleteMember(memberId, this.editContent.projId);
+      result = await Api.deleteMember(address, projId);
     } catch (e)
     {
       return false;

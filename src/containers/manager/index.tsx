@@ -73,10 +73,10 @@ class Project extends React.Component<IProjectProps, IState> {
             { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
             { 'li-notallow': (this.props.editproject.editContent.role !== ProjectRole.admin ) ? true : false }
         );
-        // const orderClassName = classnames('menu-li',
-        //     { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
-        //     { 'li-notallow': false }
-        // );
+        const orderClassName = classnames('menu-li',
+            { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
+            { 'li-notallow': false }
+        );
         const deleteClassName = classnames('menu-li',
             // { 'li-active': this.props.project.menuNum === 4 },
             { 'li-notallow': this.props.editproject.editContent.role !== 'admin' ? true : false }
@@ -94,7 +94,7 @@ class Project extends React.Component<IProjectProps, IState> {
                             <li className={teamClassName} onClick={this.mapUnderline.bind(this, '/project/team')}>团队管理</li>                            
                             <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>{this.intrl.update.update}</li>
                             <li className={financingClassName} onClick={this.mapUnderline.bind(this, '/project/financing')}>融资管理</li>
-                            {/* <li className={orderClassName} onClick={this.mapUnderline.bind(this, '/project/order')}>订单管理</li> */}
+                            <li className={orderClassName} onClick={this.mapUnderline.bind(this, '/project/order')}>订单管理</li>
                             <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>{this.intrl.delete.deletetitle}</li>
                         </ul>
                     </div>
@@ -178,8 +178,8 @@ class Project extends React.Component<IProjectProps, IState> {
                 this.handleShowDeleteProject();
             }
         }
-        else if (str === '/project/order')
-        {
+        // else if (str === '/project/order')
+        // {
             // this.props.orderproject.isShowOprojInfo = false;
             // this.props.orderproject.orderProjPage = 1;
             // console.log(this.props.history.location.pathname);
@@ -194,8 +194,8 @@ class Project extends React.Component<IProjectProps, IState> {
             // }else{
             //     this.props.history.push(str + '/' + this.props.project.projId);
             // }   
-            return false;
-        }
+        //     return false;
+        // }
         else
         {
             this.props.history.push(str + '/' + this.props.project.projId);
@@ -218,7 +218,7 @@ class Project extends React.Component<IProjectProps, IState> {
     private handleCheckDelete = async () =>
     {
 
-        const res = await this.props.project.deleteMember(this.props.project.projId);
+        const res = await this.props.project.deleteProject(this.props.project.projId);
         if (res)
         {
             this.handleShowDeleteProject();

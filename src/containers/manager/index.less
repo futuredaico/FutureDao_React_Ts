@@ -131,6 +131,16 @@
         }
         .big-gray-text{
             color: @t-9b;
+            cursor: pointer;
+        }
+        .trangle-san{
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-left: 6px solid @t-9b;
+            border-radius: 2px;
+            margin: 0 10px 0 15px;
         }
     }
     .title-cut{
@@ -552,7 +562,7 @@
 .invite-people-wrapper{    
     .invite-content{
         width: 750px;
-        height: 347px;
+        height: 413px;
         background: #FFFFFF;
         box-shadow: 0 2px 6px 0 rgba(197,197,197,0.50);
         border-radius: 5px;
@@ -563,63 +573,41 @@
         margin-left: -375px;
         text-align: center;
         clear: both;
-        .close-icon{
-            float: right;
-            width: 20px;
-            height: 20px;
-            margin-right: 15px;
-            margin-top:15px;
-            img{
-                width: 100%;
-            }
-        }
+        
         .invite-title{
             font-size: 16px;
             padding: 32px;
-            font-weight: 600;
-            
+            font-weight: 600;            
             border-bottom: 1px solid @bg-e5;
         }
-        .invite-input{
-            padding: 50px 50px 70px 50px;
+        .invite-form{
+            padding: 50px 50px 0 50px;
             text-align: left;
-            position: relative;
+            display: flex;
             .ant-input{
                 height: 44px;
             }
-            .invite-select-list{
-                position: absolute;
-                top: 94px;
-                left: 50px;
-                background: #FFFFFF;
-                border: 1px solid @bg-e5;
-                border-radius: 3px;
-                width: 650px;
-                ul{
-                    max-height: 196px;
-                    overflow: scroll;
-                    li{
-                        padding: 15px;
-                        img{
-                            width: 30px;
-                            height: 30px;
-                            vertical-align: middle;
-                            border-radius: 50%;
-                        }
-                        .name-text{
-                            display: inline-block;
-                            margin-right: 30px;
-                            margin-left: 10px;
-                        }
-                        span{
-                            vertical-align: middle;
-                        }
-                        .nodata-text{
-                            color: @t-b2;
-                        }
-                    }
+            .invite-text{
+                min-width: 100px;
+                font-size: 18px;
+                line-height: 44px;
+            }
+            .invite-input{
+                width: 100%;
+                .err-active{
+                    border: 1px solid  @t-f13;
+                }
+                .err-span{
+                    color: @t-f13;
+                    font-size: 12px;
                 }
             }
+        }
+        .normal-button{
+            margin-top: 50px;
+        }
+        .red-btn{
+            margin-right: 50px;
         }
     }
 }
@@ -1188,6 +1176,12 @@
 }
 .updateinfo-page{
     margin-top: 60px;
+    .update-listbox{
+        margin-bottom: 30px;  
+        h4{
+            cursor: pointer;
+        }      
+    }
     h4{
         font-size: 16px;
         padding-bottom: 15px;
@@ -1211,7 +1205,7 @@
             }
         }
     }
-    p{
+    .detail-p{
         padding: 15px 0;
     }
     .sm-gray{

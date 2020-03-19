@@ -197,7 +197,7 @@ class MolochUpdateInfo extends React.Component<IMolochUpdateInfoProps, IState> {
                 projName:this.props.updateinfo.projInfo.projName||'', 
                 updateDes:this.props.updateinfo.projInfo.projBrief||'', 
                 updateDetails:BraftEditor.createEditorState(this.props.updateinfo.projInfo.projDetail), 
-                updateDetail:'',
+                updateDetail:this.props.updateinfo.projInfo.projDetail,
                 imgUrl:this.props.updateinfo.projInfo.projCoverUrl, 
                 updateWebsite:this.props.updateinfo.projInfo.officailWeb, 
             })

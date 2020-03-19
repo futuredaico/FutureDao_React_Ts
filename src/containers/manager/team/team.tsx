@@ -7,22 +7,23 @@ import '../index.less';
 import { injectIntl } from 'react-intl';
 import Button from '@/components/Button';
 import { Input, Pagination } from 'antd';
-// import Select from '@/components/select';
+import Select from '@/components/select';
 
-import { IMemberList, ITeamList } from '../interface/editproject.interface'
+import { ITeamList, ProjectRole } from '../interface/editproject.interface'
 import { IProjectProps } from '../interface/project.interface';
 
 type Identity = 'admin' | 'member';
 interface IState
 {
-    identityValue: Identity,
+    identityValue: Identity, // 成员身份
     showAdd: boolean, // 是否显示添加成员弹框
     showDelete: boolean, // 是否显示删除成员弹框
-    inviteStr: string, // 想要邀请人的邮箱
-    isSearching: boolean,// 是否正在搜索
-    selectMember: IMemberList | null // 已经选择的成员
     isCanInvite: boolean, // 是否可以邀请成员
-    deleteMember: IMemberList | null // 选择要删除的成员
+    deleteMember: ITeamList | null // 选择要删除的成员
+    addrValue: string // 成员地址
+    addrFlag: boolean // 地址格式是否正确
+    showQuit: boolean // 是否显示退出弹框
+    quitStr: string // 退出的提示
 }
 @inject('project', 'editproject', 'common')
 @observer
@@ -32,23 +33,24 @@ class EditMember extends React.Component<IProjectProps, IState> {
         identityValue: 'admin',
         showAdd: false,
         showDelete: false,
-        inviteStr: '',
-        isSearching: false,
-        selectMember: null,
         isCanInvite: false,
-        deleteMember: null
+        deleteMember: null,
+        addrValue: '',
+        addrFlag: true,
+        showQuit: false,
+        quitStr: ''
     }
     // 下拉筛选
-    // private identityOptions = [
-    //     {
-    //         id: 'admin',
-    //         name: '管理',
-    //     },
-    //     {
-    //         id: 'member',
-    //         name: '成员',
-    //     }
-    // ]
+    private identityOptions = [
+        {
+            id: 'admin',
+            name: '管理',
+        }
+        // {
+        //     id: 'member',
+        //     name: '团队成员',
+        // }
+    ]
     public async componentDidMount()
     {
         this.getList();
@@ -94,14 +96,24 @@ class EditMember extends React.Component<IProjectProps, IState> {
                                 return (
                                     <li className="table-li" key={index}>
                                         <span className="table-td">
-                                            <span className="peo-name">{item.username}</span>
+                                            <span className="peo-name">{item.username ? item.username : this.intrl.user.shen}</span>
                                         </span>
                                         <span className="table-td">{item.address}</span>
-                                        <span className="table-td admin-color">{item.role==='admin'?this.intrl.team.manager:this.intrl.team.member}</span>
+                                        <span className="table-td admin-color">{item.role === ProjectRole.admin ? this.intrl.team.manager : this.intrl.team.member}</span>
                                         <span className="table-td">
+                                            {/* {
+                                                item.isMine ? <Button text="退出" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowQuit.bind(this,item)}   />
+                                                :(
+                                                    <>
+                                                        {
+                                                            item.role!== ProjectRole.admin && this.props.editproject.editContent.role === ProjectRole.admin && <Button text="踢出" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this,item)} />
+                                                        }
+                                                    </>
+                                                )
+                                            } */}
                                             {
-                                                !item.isMine && <Button text="退出" btnSize="sm-btn" btnColor="red-btn" />
-                                            }                                            
+                                                item.role !== ProjectRole.admin && this.props.editproject.editContent.role === ProjectRole.admin && <Button text="踢出" btnSize="sm-btn" btnColor="red-btn" onClick={this.handleShowDelete.bind(this, item)} />
+                                            }
                                         </span>
                                     </li>
                                 )
@@ -117,54 +129,59 @@ class EditMember extends React.Component<IProjectProps, IState> {
                         )
                     }
                 </div>
-                {/* {
-                    this.state.isCanInvite && ( */}
-                <div className="inline-enter-btn">
-                    <Button text={this.intrl.btn.invite} btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
-                </div>
-                {/* )
-                } */}
+                {
+                    this.props.editproject.editContent.role === ProjectRole.admin && (
+                        <div className="inline-enter-btn">
+                            <Button text={this.intrl.btn.invite} btnSize="bg-btn" btnColor="white-btn" onClick={this.handleShowAddBox} />
+                        </div>
+                    )
+                }
 
                 {
                     this.state.showAdd && (
                         <div className="invite-people-wrapper">
                             <div className="invite-content">
-                                <div className="close-icon" onClick={this.handleShowAddBox}>
-                                    <img src={require("@/img/close.png")} alt="" />
-                                </div>
                                 <div className="invite-title">{this.intrl.team.invitetitle}</div>
-                                <div className="invite-input">
-                                    {/* 补充邮箱 */}
-                                    <Input placeholder={this.intrl.team.search} value={this.state.inviteStr} onChange={this.handleToEmailSearch} />
-                                    {
-                                        this.state.isSearching && (
-                                            <div className="invite-select-list">
-                                                <ul>
-                                                    {
-                                                        this.props.editproject.searchList.length === 0 && (
-                                                            <li>
-                                                                <span className="nodata-text">{this.intrl.team.notfound}</span>
-                                                            </li>
-                                                        )
-                                                    }
-                                                    {
-                                                        this.props.editproject.searchList.length > 0 && this.props.editproject.searchList.map((item: IMemberList, index) =>
-                                                        {
-                                                            return (
-                                                                <li key={index} onClick={this.handleSelectUser.bind(this, item)}>
-                                                                    <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
-                                                                    <span className="name-text">{item.username}</span>
-                                                                    <span>{item.email}</span>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                </ul>
-                                            </div>
-                                        )
-                                    }
+                                <div className="invite-form">
+                                    <div className="invite-text">
+                                        <strong>成员地址</strong>
+                                    </div>
+                                    <div className="invite-input">
+                                        <Input
+                                            value={this.state.addrValue}
+                                            onChange={this.handleChangInviteAddr}
+                                            className={(this.state.addrValue && !this.state.addrFlag) ? "err-active" : ''}
+                                        />
+                                        {
+                                            (this.state.addrValue && !this.state.addrFlag) && <span className="err-span">地址填写错误</span>
+                                        }
+                                    </div>
                                 </div>
-                                <Button text={this.intrl.btn.invite2} btnSize="bg-btn" onClick={this.handleInviteMemeber} btnColor={!this.state.selectMember ? 'gray-btn' : ''} />
+                                <div className="invite-form">
+                                    <div className="invite-text">
+                                        <strong>身份</strong>
+                                    </div>
+                                    <div className="invite-input">
+                                        <Select
+                                            defaultValue={this.identityOptions[1].id}
+                                            options={this.identityOptions}
+                                            text=''
+                                            onCallback={this.onSelletCallback}
+                                        />
+                                    </div>
+                                </div>
+                                <Button
+                                    text={this.intrl.btn.cancel}
+                                    onClick={this.handleShowAddBox}
+                                    btnSize="md-bg-btn"
+                                    btnColor='red-btn'
+                                />
+                                <Button
+                                    text={this.intrl.btn.invite2}
+                                    onClick={this.handleInviteMemeber}
+                                    btnSize="md-bg-btn"
+                                    btnColor={(this.state.addrValue && !this.state.addrFlag) ? 'gray-btn' : ''}
+                                />
                             </div>
                         </div>
                     )
@@ -173,19 +190,33 @@ class EditMember extends React.Component<IProjectProps, IState> {
                     this.state.showDelete && (
                         <div className="delete-people-wrapper">
                             <div className="delete-content">
-                                <div className="delete-text">{this.intrl.team.delete1} {this.state.deleteMember && this.state.deleteMember.username} {this.intrl.team.delete2}</div>
+                                <div className="delete-text">{this.intrl.team.delete1} {(this.state.deleteMember && this.state.deleteMember.username) ? this.state.deleteMember.username : this.intrl.user.shen} {this.intrl.team.delete2}</div>
                                 <div className="delete-btn">
-                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelDelete} />
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelDoSomething} />
                                     <Button text={this.intrl.btn.comfirm} onClick={this.handleCheckDelete} />
                                 </div>
                             </div>
                         </div>
                     )
                 }
+                {/* {
+                    this.state.showQuit && (
+                        <div className="delete-people-wrapper">
+                            <div className="delete-content">
+                                <div className="delete-text">{this.intrl.team.delete1} {(this.state.deleteMember && this.state.deleteMember.username)?this.state.deleteMember.username:this.intrl.user.shen} {this.intrl.team.delete2}</div>
+                                <div className="delete-btn">
+                                    <Button text={this.intrl.btn.cancel} btnColor="red-btn" onClick={this.handleCancelDoSomething} />
+                                    <Button text={this.intrl.btn.comfirm} onClick={this.handleCheckDelete} />
+                                </div>
+                            </div>
+                        </div>
+                    )
+                } */}
             </>
         );
     }
-    private getList = ()=>{
+    private getList = () =>
+    {
         const projectId = this.props.match.params.projectId;
         this.props.editproject.getTeamList(projectId);
     }
@@ -195,85 +226,75 @@ class EditMember extends React.Component<IProjectProps, IState> {
         this.props.editproject.teamPage = index;
         this.getList();
     }
-    // 选中成员
-    private handleSelectUser = (item: IMemberList) =>
+    // 地址的输入
+    private handleChangInviteAddr = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         this.setState({
-            inviteStr: item.email,
-            isSearching: false,
-            selectMember: item
+            addrValue: ev.target.value.trim(),
+        }, () =>
+        {
+            this.handleChangeAddrByMetamask();
+        })
+    }
+    // 地址格式验证
+    private handleChangeAddrByMetamask = () =>
+    {
+        const res = web3.isAddress(this.state.addrValue);
+        console.log(res)
+        this.setState({
+            addrFlag: res
         })
     }
     // 发送邀请
     private handleInviteMemeber = () =>
     {
-        if (!this.state.selectMember)
+        if (this.state.addrValue && !this.state.addrFlag)
         {
             return false;
         }
 
-        this.props.editproject.inviteMember(this.state.selectMember.userId);
+        this.props.editproject.inviteMember(this.state.addrValue, this.state.identityValue,this.props.project.projId);
         this.handleShowAddBox();
-        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendmsg);
+        this.getList();
 
         return true;
     }
-    // 邀请成员输入
-    private handleToEmailSearch = (ev: React.ChangeEvent<HTMLInputElement>) =>
+    // 角色选择
+    private onSelletCallback = (item) =>
     {
-        //
         this.setState({
-            inviteStr: ev.target.value.trim(),
-            isSearching: true,
-            selectMember: null
+            identityValue: item.id
         })
-        if (!ev.target.value)
-        {
-            this.setState({
-                isSearching: false
-            })
-        } else
-        {
-            this.searchMember(ev.target.value.trim());
-        }
     }
-    // 搜索成员
-    private searchMember = (email: string) =>
-    {
-        this.props.editproject.searchMemberList(email)
-    }
-    // 下拉框选择
-    // private onSelletCallback = (item: ITeamList, opt: any) => {
-    //     console.log(item);
-    //     console.log(opt)
-    //     // todo
-    //     // this.setState({
-    //     //     identityValue: item.id
-    //     // })
-    // }
 
     // 打开新增成员弹框
     private handleShowAddBox = () =>
     {
         this.setState({
-            showAdd: !this.state.showAdd,
-            inviteStr: '',
-            isSearching: false,
-            selectMember: null
+            showAdd: !this.state.showAdd
         })
     }
     // 打开删除成员弹框
-    // private handleShowDelete = (item: IMemberList) =>
-    // {
-    //     this.setState({
-    //         showDelete: !this.state.showDelete,
-    //         deleteMember: item
-    //     })
-    // }
-    private handleCancelDelete = () =>
+    private handleShowDelete = (item: ITeamList) =>
     {
         this.setState({
             showDelete: !this.state.showDelete,
+            deleteMember: item
+        })
+    }
+    // 打开退出弹框
+    // private handleShowQuit = (item:ITeamList)=>{
+    //     this.setState({
+    //         showQuit: !this.state.showQuit,
+    //         deleteMember: item
+    //     })
+    // }
+    // 取消删除
+    private handleCancelDoSomething = () =>
+    {
+        this.setState({
+            showQuit: false,
+            showDelete: false,
             deleteMember: null
         })
     }
@@ -284,8 +305,8 @@ class EditMember extends React.Component<IProjectProps, IState> {
         {
             return false;
         }
-        await this.props.editproject.deleteMember(this.state.deleteMember.userId);
-        this.handleCancelDelete();
+        await this.props.editproject.deleteMember(this.state.deleteMember.address,this.props.project.projId);
+        this.handleCancelDoSomething();
         this.getList();
         return true;
     }

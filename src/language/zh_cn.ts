@@ -228,7 +228,7 @@ export default {
     verify: "认证状态",
     status: "身份",
     manager: "管理",
-    mermber: "成员",
+    member: "成员",
     noverify: "未认证",
     people: "个人认证",
     company: "企业认证",

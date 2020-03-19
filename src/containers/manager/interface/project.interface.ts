@@ -3,13 +3,14 @@ import { RouteComponentProps } from "react-router";
 import { ICommonStore } from '@/store/interface/common.interface';
 import { History } from 'history';
 import { IEditProjectStore } from './editproject.interface';
+import { IUpdateProjectStore } from "./updateproject.interface";
 
 export interface IProjectStore {
   isEdit:boolean,
   menuNum: number,
   projId:string,
   updateId:string,
-  deleteMember:(projId:string)=>Promise<boolean>
+  deleteProject:(projId:string)=>Promise<boolean>
 }
 
 
@@ -28,6 +29,7 @@ export interface IProjectProps extends RouteComponentProps<{ projectId: string }
   project: IProjectStore,
   editproject: IEditProjectStore,
   common: ICommonStore,
+  updateproject:IUpdateProjectStore
   // financing: IFinancingStore,
   // orderproject: IOrderProjectStore,
   intl: any

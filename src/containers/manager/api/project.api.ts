@@ -98,32 +98,42 @@ export const deleteMember = (memberId:string,projId:string) =>
 // }
 /**
  * 发布更新
- * @param userId 用户Id
- * @param token 访问令牌
  * @param projId 项目id
  * @param updateTitle 发布更新标题
  * @param updateDetail 发布更新内容
  */
-export const sendUpdate = (userId:string,token:string,projId:string,updateTitle:string,updateDetail:string) =>
+export const sendUpdate = (projId:string,updateTitle:string,updateDetail:string) =>
 {
     const opts = {
         method: 'createUpdate',
-        params: [userId,token,projId,updateTitle,updateDetail]
+        params: [projId,updateTitle,updateDetail]
+    }
+    return request(opts);
+}
+/**
+ * 查询更细列表接口
+ * @param projId 项目id
+ * @param page 分页索引
+ * @param size 分页大小
+ */
+export const getUpdateList = (projId:string,page:number,size:number)=>{
+    const opts= {
+        method:'queryUpdateList',
+        params:[projId,page,size]
     }
     return request(opts);
 }
 /**
  * 根据更新ID查询项目更新日志
- * @param userId 用户ID
  * @param token 访问令牌
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
  */
-export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string) =>
+export const getUpdateInfoById = (projId:string,proUpdateId:string) =>
 {
     const opts = {
         method: 'queryUpdate',
-        params: [projId,proUpdateId,userId]
+        params: [projId,proUpdateId]
     }
     return request(opts);
 }
@@ -136,19 +146,30 @@ export const getUpdateInfoById = (projId:string,proUpdateId:string,userId:string
  * @param title 修改日志的标题
  * @param detail 修改日志的内容
  */
-export const modifyUpdate = (userId:string,token:string,projId:string,proUpdateId:string,title:string,detail:string) =>
+export const modifyUpdate = (projId:string,proUpdateId:string,title:string,detail:string) =>
 {
     const opts = {
         method: 'modifyUpdate',
-        params: [userId,token,projId,proUpdateId,title,detail]
+        params: [projId,proUpdateId,title,detail]
+    }
+    return request(opts);
+}
+/**
+ * 删除更新
+ * @param projId 项目id
+ * @param updateId 更新id
+ */
+export const deleteUpdate = (projId:string,updateId:string) =>
+{
+    const opts = {
+        method: 'deleteUpdate',
+        params: [projId,updateId]
     }
     return request(opts);
 }
 
 /**
  * 删除项目
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目id
  */
 export const deleteProject = (projId:string) =>

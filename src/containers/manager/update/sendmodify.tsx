@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 import { Input } from 'antd';
 import Editor from '@/components/braftEditor';
 import BraftEditor from 'braft-editor';
-import { getQueryString } from '@/utils/function'
+// import { getQueryString } from '@/utils/function'
 import { IProjectProps } from '../interface/project.interface';
 
 interface IState
@@ -18,7 +18,7 @@ interface IState
     detailString: string, // 文本编辑内容
     detailStr: string,  // 传给接口的参数
     isHasEdit: boolean, // 判断详情是否输入了内容
-    updateId: string  // 更新日志的ID
+    // updateId: string  // 更新日志的ID
 }
 
 @observer
@@ -29,27 +29,35 @@ class SendModify extends React.Component<IProjectProps, IState> {
         detailString: '',
         detailStr: '',
         isHasEdit: false,
-        updateId: getQueryString('updateid') || ''
+        // updateId: getQueryString('updateid') || ''
     }
     public async componentDidMount()
     {
-        const projectId = this.props.match.params.projectId;
-        // this.props.project.projId = projectId;
-        if (projectId)
+        // const projectId = this.props.match.params.projectId;
+        // // this.props.project.projId = projectId;
+        if (this.props.project.projId)
         {
-            // this.props.createproject.getProject(projectId);
-            if (this.state.updateId)
+            if (this.props.updateproject.updateType === 3 && this.props.updateproject.updateInfo)
             {
-                //   await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
-                //   if (this.props.updateproject.updateInfo)
-                //   {  
-                //     this.setState({
-                //       updateTitle: this.props.updateproject.updateInfo.updateTitle,
-                //       detailString: BraftEditor.createEditorState(this.props.updateproject.updateInfo.updateDetail),
-                //       detailStr: this.props.updateproject.updateInfo.updateDetail
-                //     })
-                //   }
+                this.setState({
+                    updateTitle: this.props.updateproject.updateInfo.updateTitle,
+                    detailString: BraftEditor.createEditorState(this.props.updateproject.updateInfo.updateDetail),
+                    detailStr: this.props.updateproject.updateInfo.updateDetail,
+                })
             }
+            // this.props.createproject.getProject(projectId);
+            // if (this.state.updateId)
+            // {
+            //   await this.props.updateproject.getUpdateInfo(projectId, this.state.updateId);
+            //   if (this.props.updateproject.updateInfo)
+            //   {  
+            //     this.setState({
+            //       updateTitle: this.props.updateproject.updateInfo.updateTitle,
+            //       detailString: BraftEditor.createEditorState(this.props.updateproject.updateInfo.updateDetail),
+            //       detailStr: this.props.updateproject.updateInfo.updateDetail
+            //     })
+            //   }
+            // }
         }
     }
 
@@ -84,7 +92,7 @@ class SendModify extends React.Component<IProjectProps, IState> {
                         text="取消"
                         btnSize="stop-btn"
                         btnColor={(!this.state.isHasEdit || !this.state.updateTitle) ? 'red-btn' : 'red-btn'}
-                        onClick={this.handleSendUpdate}
+                        onClick={this.handleCancelUpdate}
                     />
                     <Button
                         text="保存"
@@ -132,38 +140,43 @@ class SendModify extends React.Component<IProjectProps, IState> {
         {
             return false;
         }
-        const params = this.props.match.params;
-        const projectId = params["projectId"];
-        if (!projectId)
+
+        if (!this.props.project.projId)
         {
             return false;
         }
-        if (this.state.updateId)
+        if (this.props.updateproject.updateInfo)
         {
-            // const res = await this.props.updateproject.modifyUpdateInfo(projectId, this.state.updateId, this.state.updateTitle, this.state.detailStr);
-            // if (res)
-            // {
-            //     this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
-            // } else
-            // {
-            //     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
-            // }
+            const res = await this.props.updateproject.modifyUpdateInfo(this.props.updateproject.updateInfo.projId, this.props.updateproject.updateInfo.updateId, this.state.updateTitle, this.state.detailStr);
+            if (res)
+            {
+                this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
+            } else
+            {
+                this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
+            }
         }
         else
         {
-            // const res = await this.props.updateproject.sendUpdate(projectId, this.state.updateTitle, this.state.detailStr);
-            // if (res)
-            // {
-            //     this.setState({
-            //         updateTitle: '',
-            //         detailString: BraftEditor.createEditorState(''),
-            //         detailStr: '',
-            //         isHasEdit: false
-            //     })
-            // }
+            const res = await this.props.updateproject.sendUpdate(this.props.project.projId, this.state.updateTitle, this.state.detailStr);
+            if (res)
+            {
+                this.setState({
+                    updateTitle: '',
+                    detailString: BraftEditor.createEditorState(''),
+                    detailStr: '',
+                    isHasEdit: false
+                })
+            }
         }
-
+        this.handleCancelUpdate();
         return true
+    }
+    // 返回列表
+    private handleCancelUpdate = () =>
+    {
+        this.props.updateproject.updateType = 1;
+        this.props.updateproject.updateInfo = null;
     }
 }
 

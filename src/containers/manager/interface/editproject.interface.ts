@@ -2,7 +2,7 @@ import { RouteComponentProps } from "react-router";
 
 export interface IEditProjectStore {
   editContent: IEditProjectInfo,  
-  searchList: IMemberList[],
+  // searchList: IMemberList[],
   teamList: ITeamList[],
   teamCount:number,
   teamPage:number,
@@ -10,9 +10,9 @@ export interface IEditProjectStore {
   modifyProject: () => Promise<boolean>,
   getProject: (projId: string) => Promise<boolean>,
   getTeamList: (projId:string) => Promise<boolean>,
-  searchMemberList: (memberEmail: string) => Promise<boolean>,
-  inviteMember: (memberId: string) => Promise<boolean>,
-  deleteMember: (memberId: string) => Promise<boolean>,
+  // searchMemberList: (memberEmail: string) => Promise<boolean>,
+  inviteMember: (address: string, type: string,projId:string) => Promise<boolean>,
+  deleteMember: (address: string,projId:string) => Promise<boolean>,
 }
 
 
@@ -21,12 +21,12 @@ export interface IEditProjectProps extends RouteComponentProps<{ projectId: stri
   intl: any
 }
 
-export interface IMemberList {
-  userId: string,
-  username: string,
-  email: string,
-  headIconUrl: string
-}
+// export interface IMemberList {
+//   userId: string,
+//   username: string,
+//   email: string,
+//   headIconUrl: string
+// }
 
 export interface ITeamList {
   userId: string,
