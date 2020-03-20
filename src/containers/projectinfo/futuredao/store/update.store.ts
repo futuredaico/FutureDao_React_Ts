@@ -46,7 +46,7 @@ class ProjectUpdate
         let result: any = [];
         try
         {
-            result = await Api.getUpdateInfoById(projectinfoStore.projId, this.updateId, common.userId);
+            result = await Api.getUpdateInfoById(projectinfoStore.projId, this.updateId);
         } catch (e)
         {
             return false;

@@ -5,14 +5,14 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import './index.less';
 import { injectIntl } from 'react-intl';
-import ProjectDetail from './info/detail'
-import UpdateList from './update/updatelist';
-import RightTeam from './v1/detail/rightteam';
-import UpdateInfo from './update/updateinfo';
+import ProjectDetail from '../info/detail'
+import UpdateList from '../update/updatelist';
+import RightTeam from '../v1/detail/rightteam';
+import UpdateInfo from '../update/updateinfo';
 // import Transation from './transation/transation';
-import Manager from './manager/manager';
-import ManagerInfo from './manager/managerinfo';
-import { IProjectInfoProps } from './interface/projectinfo.interface';
+import Manager from '../manager/manager';
+import ManagerInfo from '../manager/managerinfo';
+import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import classnames from 'classnames';
 import { ProjectState } from '@/store/interface/common.interface';
 

@@ -23,7 +23,6 @@ export interface IProjectInfoStore
   getProjInfo: (projId: string) => Promise<boolean>,
   startAttention: () => Promise<boolean>,
   cancelAttention: () => Promise<boolean>,
-  startSupport: () => Promise<boolean>,
   getTeamData: () => Promise<boolean>,
   getProjDiscussList: (discussId: string) => Promise<boolean>,
   sendProjDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
@@ -84,7 +83,7 @@ export interface IProjectTeam
 {
   username: string,
   headIconUrl: string,
-  brief: string
+  address: string
 }
 
 export interface IDiscussInfo

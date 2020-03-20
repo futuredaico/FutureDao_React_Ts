@@ -52,7 +52,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                         <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
                                         <span>{item.username}</span>
                                     </div>
-                                    <p className="team-des">{!!item.brief ? item.brief : this.intrl.projinfo.noprofile}</p>
+                                    <p className="team-des">{!!item.address ? item.address : this.intrl.projinfo.noprofile}</p>
                                 </div>
                             )
                         })

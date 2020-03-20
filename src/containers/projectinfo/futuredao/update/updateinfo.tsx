@@ -54,7 +54,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                     <div className="update-people">
                         <img src={this.props.update.updateInfo.headIconUrl ? this.props.update.updateInfo.headIconUrl : require('@/img/default.png')} alt="" className="people-img" />
                         <strong>{this.props.update.updateInfo.username}</strong>
-                        {
+                        {/* {
                             this.props.update.updateInfo.isMember && (
                                 <div className="right-update">
                                     <span onClick={this.handleToUpdateEdit}>{this.intrl.projinfo.edit}</span>
@@ -62,7 +62,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                                     <span onClick={this.handleShowDelete}>{this.intrl.projinfo.delete}</span>
                                 </div>
                             )
-                        }
+                        } */}
 
                     </div>
                     <div className="updateinfo-p" dangerouslySetInnerHTML={{ '__html': this.props.update.updateInfo.updateDetail }} />
@@ -238,11 +238,11 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
         return true;
     }
     // 到发布更新
-    private handleToUpdateEdit = () =>
-    {
-        // todo
-        this.props.history.push('/project/update/' + this.props.projectinfo.projId + '?updateid=' + this.props.update.updateId)
-    }
+    // private handleToUpdateEdit = () =>
+    // {
+    //     // todo
+    //     this.props.history.push('/project/update/' + this.props.projectinfo.projId + '?updateid=' + this.props.update.updateId)
+    // }
     // 更新日志的点赞
     private handleSendUpdateZanInfo = async () =>
     {

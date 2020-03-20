@@ -27,6 +27,7 @@ export interface IProjectUpdateProps extends RouteComponentProps<{ projectId: st
 
 export interface IProjectUpdate
 {
+    projId:string,
     updateId: string,
     updateTitle: string,
     updateDetail: string,
@@ -36,9 +37,11 @@ export interface IProjectUpdate
 }
 export interface IProjUpdateInfo
 {
+    projId:string,
+    updateId:string,
     updateTitle: string,  // 更新标题
     updateDetail: string, // 更新内容
-    lastUpdatorId: string, // 最近更新者ID
+    // lastUpdatorId: string, // 最近更新者ID
     lastUpdateTime: number,// 最近更新时间
     discussCount: number, // 评论统计
     zanCount: number,  // 点赞统计

@@ -21,7 +21,7 @@ export const getProjInfo = (projId: string) => {
  */
 export const getUpdateList = (projId: string, page: number, pageSize: number) => {
     const opts = {
-        method: 'queryUpdateList',
+        method: 'queryProjUpdateList',
         params: [ projId, page, pageSize ]
     }
     return request(opts);
@@ -42,57 +42,39 @@ export const deleteUpdate = (userId: string, token: string, projId: string, proU
 }
 /**
  * 根据更新ID查询项目更新日志
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  * @param proUpdateId 项目更新ID
  */
-export const getUpdateInfoById = (projId: string, proUpdateId: string, userId: string) => {
+export const getUpdateInfoById = (projId: string, proUpdateId: string) => {
     const opts = {
-        method: 'queryUpdate',
-        params: [ projId, proUpdateId, userId ]
+        method: 'queryProjUpdateDetail',
+        params: [ projId, proUpdateId ]
     }
     return request(opts);
 }
 /**
  * 关注项目
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  */
-export const startAttention = (userId: string, token: string, projId: string) => {
+export const startAttention = (projId: string) => {
     const opts = {
         method: 'startStarProj',
-        params: [ userId, token, projId ]
+        params: [ projId ]
     }
     return request(opts);
 }
 /**
  * 取消关注
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  */
-export const cancelAttention = (userId: string, token: string, projId: string) => {
+export const cancelAttention = (projId: string) => {
     const opts = {
         method: 'cancelStarProj',
-        params: [ userId, token, projId ]
+        params: [ projId ]
     }
     return request(opts);
 }
-/**
- * 看好项目
- * @param userId 用户ID
- * @param token 访问令牌
- * @param projId 项目ID
- */
-export const startSupport = (userId: string, token: string, projId: string) => {
-    const opts = {
-        method: 'startSupportProj',
-        params: [ userId, token, projId ]
-    }
-    return request(opts);
-}
+
 /**
  * 获取项目成员信息
  * @param projId 项目id
@@ -101,7 +83,7 @@ export const startSupport = (userId: string, token: string, projId: string) => {
  */
 export const getTeamList = (projId: string, page: number, pageSize: number) => {
     const opts = {
-        method: 'queryProjTeamBrief',
+        method: 'queryProjTeam',
         params: [ projId, page, pageSize ]
     }
     return request(opts);

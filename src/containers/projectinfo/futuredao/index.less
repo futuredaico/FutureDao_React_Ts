@@ -60,7 +60,6 @@
       width: 300px;
       vertical-align: top;
       display: inline-block;
-      border-top: 1px solid @bg-e5;
       .topright-wrapper{
         font-size: 14px;
         .title-strong{
@@ -101,6 +100,16 @@
         }
         .other-wrapper{
           margin-top: 39px;
+          .version-wrapper{
+            .version-left{
+              display: inline-block;
+            }
+            .dolike-wrapper {
+              float: right;
+              margin-top: 10px;
+            }
+          }
+          
           .address-content{
             margin: 40px 0;
             .flex-con{
@@ -112,6 +121,11 @@
                 margin-top: 10px;
               }
             }
+          }
+          .tips-content{
+            font-size: 12px;
+            margin-top: 55px;
+            margin-bottom: 55px;
           }
         }
       }
@@ -221,42 +235,7 @@
           }
         }
 
-        .dolike-wrapper {
-          float: right;
-          font-size: 14px;
-          color: @t-9b;
-          cursor: pointer;
-          margin-top: 10px;
-          img {
-            width: 15px;
-            margin-right: 10px;
-            margin-bottom: 3px;
-            vertical-align: middle;
-          }
-
-          .dolike-text {
-            color: @t-f3;
-          }
-
-          .no-dolike {
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            vertical-align: middle;
-            background: url('../../../img/guanzhu-un.png') no-repeat;
-            background-size: cover;
-            display: inline-block;
-          }
-
-          &:hover {
-            color: @t-f3;
-
-            .no-dolike {
-              background: url('../../../img/guanzhu.png') no-repeat;
-              background-size: cover;
-            }
-          }
-        }
+        
       }
 
       .sm-gray-text {
@@ -716,6 +695,10 @@
         vertical-align: middle;
         margin-right: 10px;
         border-radius: 50%;
+      }
+      .team-name{
+        display: inline-block;
+        vertical-align: middle;
       }
     }
 

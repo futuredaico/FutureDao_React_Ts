@@ -75,7 +75,7 @@ class ProjectInfo
 
     try
     {
-      result = await Api.startAttention(common.userId, common.token, this.projId);
+      result = await Api.startAttention(this.projId);
     } catch (e)
     {
       return false;
@@ -95,27 +95,7 @@ class ProjectInfo
 
     try
     {
-      result = await Api.cancelAttention(common.userId, common.token, this.projId);
-    } catch (e)
-    {
-      return false;
-    }
-    if (result[0].resultCode !== CodeType.success)
-    {
-      return false
-    }
-    return true;
-  }
-  /**
-   * 看好
-   */
-  @action public startSupport = async () =>
-  {
-    let result: any = [];
-
-    try
-    {
-      result = await Api.startSupport(common.userId, common.token, this.projId);
+      result = await Api.cancelAttention(this.projId);
     } catch (e)
     {
       return false;

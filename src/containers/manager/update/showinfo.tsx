@@ -47,7 +47,7 @@ class UpdateInfo extends React.Component<IProjectProps, IState> {
                                             {
                                                 item.updateDetail ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': item.updateDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
                                             }
-                                            <span className="sm-gray">{formatTime.format('MM-dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
+                                            <span className="sm-gray">{formatTime.format('MM/dd', item.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                                         </div>
                                     )
                                 })
@@ -70,7 +70,7 @@ class UpdateInfo extends React.Component<IProjectProps, IState> {
                             {
                                 this.props.updateproject.updateInfo.updateDetail ? <div className="detail-p" dangerouslySetInnerHTML={{ '__html': this.props.updateproject.updateInfo.updateDetail }} /> : <div className="detail-p">{this.intrl.projinfo.null}</div>
                             }
-                            <span className="sm-gray">{formatTime.format('MM-dd', this.props.updateproject.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
+                            <span className="sm-gray">{formatTime.format('MM/dd', this.props.updateproject.updateInfo.lastUpdateTime.toString(), this.props.intl.locale)}</span>
                         </>
                     )
                 }
