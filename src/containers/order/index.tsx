@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
 import { IOrderProps } from './interface/order.interface';
 import Button from '@/components/Button';
 import { getQueryString } from '@/utils/function';
-import { saveDecimal, toMyNumber } from '../../utils/numberTool';
+import {toMyNumber } from '../../utils/numberTool';
 import * as Cookie from '@/utils/cookie';
 
 // import * as formatTime from '@/utils/formatTime';
@@ -190,37 +190,37 @@ class Order extends React.Component<IOrderProps, IState> {
         if (user)
         {
             // 检测是否连接钱包
-            if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
-            {
-                // 获取MetaMask钱包上登陆的地址
-                await this.props.metamaskwallet.inintWeb3();
-                const checkRes = await this.props.metamaskwallet.checkIsCurrendBindAddress();
-                // 若与绑定的地址不一致
-                if (!checkRes)
-                {
-                    this.setState({
-                        isCanBuyBtn: false
-                    })
-                    return false
-                }
-                if (!this.props.metamaskwallet.metamaskAddress)
-                {
-                    this.setState({
-                        isCanBuyBtn: false
-                    })
-                    return false;
-                }
-                // 如果存在（现在只获取了eth的余额）
-                const ethBalance = await this.props.metamaskwallet.getMetamaskBalance();
-                this.setState({
-                    isCanBuyBtn: true,
-                    myBalance: saveDecimal(ethBalance, 18)
-                })
-            }
-            else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
-            {
-                // 获取Teemo钱包上登陆的地址                
-            }
+            // if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
+            // {
+            //     // 获取MetaMask钱包上登陆的地址
+            //     await this.props.metamaskwallet.inintWeb3();
+            //     const checkRes = await this.props.metamaskwallet.checkIsCurrendBindAddress();
+            //     // 若与绑定的地址不一致
+            //     if (!checkRes)
+            //     {
+            //         this.setState({
+            //             isCanBuyBtn: false
+            //         })
+            //         return false
+            //     }
+            //     if (!this.props.metamaskwallet.metamaskAddress)
+            //     {
+            //         this.setState({
+            //             isCanBuyBtn: false
+            //         })
+            //         return false;
+            //     }
+            //     // 如果存在（现在只获取了eth的余额）
+            //     const ethBalance = await this.props.metamaskwallet.getMetamaskBalance();
+            //     this.setState({
+            //         isCanBuyBtn: true,
+            //         myBalance: saveDecimal(ethBalance, 18)
+            //     })
+            // }
+            // else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
+            // {
+            //     // 获取Teemo钱包上登陆的地址                
+            // }
         }
         else
         {

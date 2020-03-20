@@ -45,7 +45,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                 <div className="message-wrapper" id="message">
                     <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                     {
-                        (this.props.common.userInfo && this.props.projectinfo.projInfo.isSupport) || (this.props.common.userInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
+                        (this.props.common.userInfo ) || (this.props.common.userInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
                             ? (
                                 <div className="textarea-wrapper">
                                     <textarea
@@ -106,7 +106,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                                     <span>{item.zanCount ? item.zanCount : ''}</span>
                                                 </div>
                                                 {
-                                                    (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                    (item.isShowReply && (this.props.projectinfo.projInfo && ( this.props.projectinfo.projInfo.isStar))) && (
                                                         <div className="comment-input">
                                                             <textarea
                                                                 maxLength={500}
@@ -142,7 +142,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
                                                                                 <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
                                                                             </div>
                                                                             {
-                                                                                (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                                                (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isStar))) && (
                                                                                     <div className="reply-input">
                                                                                         <textarea
                                                                                             maxLength={500}
@@ -237,7 +237,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
             return false
         }
         // 验证是否支持了项目
-        if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
+        if (this.props.projectinfo.projInfo )
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
             return false

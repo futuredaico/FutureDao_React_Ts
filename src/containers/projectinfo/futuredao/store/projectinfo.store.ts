@@ -2,9 +2,9 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
-import { saveDecimal,toMyNumber,toNonExponential } from "@/utils/numberTool";
+// import { saveDecimal,toMyNumber,toNonExponential } from "@/utils/numberTool";
 import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/projectinfo.interface';
-import transationStore from './transation.store';
+// import transationStore from './transation.store';
 
 class ProjectInfo
 {
@@ -286,14 +286,14 @@ class ProjectInfo
       this.rewardList = [];
       return false
     }
-    const list:IProjReward[] = result[0].data.list.map((item)=>{
-      const num = transationStore.computeSpendPriceBuyCount(item.price);
-      return {
-        ...item,
-        rewardPrice:parseInt(num,10).toString()
-      }
-    });
-    this.rewardList = list
+    // const list:IProjReward[] = result[0].data.list.map((item)=>{
+    //   const num = transationStore.computeSpendPriceBuyCount(item.price);
+    //   return {
+    //     ...item,
+    //     rewardPrice:parseInt(num,10).toString()
+    //   }
+    // });
+    // this.rewardList = list
     return true;
   }
   /**
@@ -329,46 +329,46 @@ class ProjectInfo
    */
   @action public computeCurrentBuyPrice = async () =>
   {
-    if (this.projInfo)
-    {
-      // 10^-9*（发行代币数量+0.5）
-      const mycount = toMyNumber(this.projInfo.hasIssueAmt).add(0.5);
-      const slope = Math.pow(10, -9);  // 斜率
-      const price =toNonExponential(mycount.mul(slope).value);
-      const endNum = saveDecimal(price.toString(), 6);
-      if(parseFloat(endNum)===0){
-        this.buyPrice = '0'
-      }else{
-        this.buyPrice = endNum;
-      }
-    } else
-    {
-      this.buyPrice = '0'
-    }
+    // if (this.projInfo)
+    // {
+    //   // 10^-9*（发行代币数量+0.5）
+    //   const mycount = toMyNumber(this.projInfo.hasIssueAmt).add(0.5);
+    //   const slope = Math.pow(10, -9);  // 斜率
+    //   const price =toNonExponential(mycount.mul(slope).value);
+    //   const endNum = saveDecimal(price.toString(), 6);
+    //   if(parseFloat(endNum)===0){
+    //     this.buyPrice = '0'
+    //   }else{
+    //     this.buyPrice = endNum;
+    //   }
+    // } else
+    // {
+    //   this.buyPrice = '0'
+    // }
   }
   /**
    * 计算项目代币当前出售价格
    */
   @action public computeCurrentSellPrice = async () =>
   {
-    if (this.projInfo && parseFloat(this.projInfo.hasIssueAmt) !== 0)
-    {
-      // （2*储备金余额）/发行代币数量*（1-1/（2*发行代币数量））
-      // 1.（2*储备金余额）/发行代币数量
-      const num1 = toMyNumber(this.projInfo.fundReservePoolTotal).mul(2).div(this.projInfo.hasIssueAmt) 
-      // 2.（1-1/（2*发行代币数量）
-      const num2 = toMyNumber(1).sub(toMyNumber(1).div(toMyNumber(this.projInfo.hasIssueAmt).mul(2)));
-      const price =toNonExponential(num1.mul(num2).value) ;
-      const endNum = saveDecimal(price.toString(), 6);
-      if(parseFloat(endNum)===0){
-        this.sellPrice = '0'
-      }else{
-        this.sellPrice = endNum;
-      }
-    } else
-    {
-      this.sellPrice = '0'
-    }
+    // if (this.projInfo && parseFloat(this.projInfo.hasIssueAmt) !== 0)
+    // {
+    //   // （2*储备金余额）/发行代币数量*（1-1/（2*发行代币数量））
+    //   // 1.（2*储备金余额）/发行代币数量
+    //   const num1 = toMyNumber(this.projInfo.fundReservePoolTotal).mul(2).div(this.projInfo.hasIssueAmt) 
+    //   // 2.（1-1/（2*发行代币数量）
+    //   const num2 = toMyNumber(1).sub(toMyNumber(1).div(toMyNumber(this.projInfo.hasIssueAmt).mul(2)));
+    //   const price =toNonExponential(num1.mul(num2).value) ;
+    //   const endNum = saveDecimal(price.toString(), 6);
+    //   if(parseFloat(endNum)===0){
+    //     this.sellPrice = '0'
+    //   }else{
+    //     this.sellPrice = endNum;
+    //   }
+    // } else
+    // {
+    //   this.sellPrice = '0'
+    // }
   }
 }
 

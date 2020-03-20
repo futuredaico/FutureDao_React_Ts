@@ -69,10 +69,10 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                     <Button text="出售价格" btnSize="md-btn" btnColor={this.state.priceType === 2 ? "white-btn" : "gray-black2"} onClick={this.handleShowPriceType.bind(this, 2)} />
                                 </div>
                                 <div className="line-picture">
-                                    <span className="gray-str set-one">当前价格（{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/币）</span>
+                                    {/* <span className="gray-str set-one">当前价格（{this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/币）</span> */}
                                     <span className="gray-str set-two">代币数量</span>
                                     <span className="set-three">{this.state.priceType === 1 ? this.props.projectinfo.buyPrice : this.props.projectinfo.sellPrice}</span>
-                                    <span className="set-four">{this.props.projectinfo.projInfo.hasIssueAmt}</span>
+                                    {/* <span className="set-four">{this.props.projectinfo.projInfo.hasIssueAmt}</span> */}
                                 </div>
                                 <p className="price-tips">项目代币由智能合约管理，会在投资者买入时增发，卖出时销毁。代币价格由智能合约自动计算给出，会随着代币发行数量的增加不断变高。因此购买越早，买入价格越低，后期涨的越多。</p>
                             </div>

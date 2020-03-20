@@ -140,48 +140,48 @@ class Order extends React.Component<IOrderProps, IState> {
         if (user)
         {
             // 检测是否连接钱包
-            if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
-            {
-                // 获取MetaMask钱包上登陆的地址
-                await this.props.metamaskwallet.inintWeb3();
-                await this.props.metamaskwallet.checkIsCurrendBindAddress();
+            // if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
+            // {
+            //     // 获取MetaMask钱包上登陆的地址
+            //     await this.props.metamaskwallet.inintWeb3();
+            //     await this.props.metamaskwallet.checkIsCurrendBindAddress();
 
-                if (this.props.metamaskwallet.metamaskAddress)
-                {
-                    if(!this.props.order.orderInfo)
-                    {
-                        return false
-                    }
-                    // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
-                    try
-                    {
-                        const intOrderId = parseInt(this.props.order.orderInfo.orderId,10);
-                        const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,intOrderId,this.props.order.hash)     
-                        console.log(txid);
-                        if(!!txid){
-                            this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
-                            this.props.order.orderMenu=3;
-                            this.props.order.confirmBuyOrder(txid);
-                            if(this.props.order.timeTen){
-                                clearInterval(this.props.order.timeTen);
-                                this.props.order.timeTen = null;
-                            }  
-                        }else{
-                            this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
-                        }            
-                    } catch (error)
-                    {
-                        console.log("err",error)
-                        this.handleToCancelOrder();
-                        this.props.common.openNotificationWithIcon('error', "操作失败", "订单已取消");
-                    }                    
-                }
+            //     if (this.props.metamaskwallet.metamaskAddress)
+            //     {
+            //         if(!this.props.order.orderInfo)
+            //         {
+            //             return false
+            //         }
+            //         // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
+            //         try
+            //         {
+            //             const intOrderId = parseInt(this.props.order.orderInfo.orderId,10);
+            //             const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.order.orderInfo.totalCost,intOrderId,this.props.order.hash)     
+            //             console.log(txid);
+            //             if(!!txid){
+            //                 this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");
+            //                 this.props.order.orderMenu=3;
+            //                 this.props.order.confirmBuyOrder(txid);
+            //                 if(this.props.order.timeTen){
+            //                     clearInterval(this.props.order.timeTen);
+            //                     this.props.order.timeTen = null;
+            //                 }  
+            //             }else{
+            //                 this.props.common.openNotificationWithIcon('error', "操作失败", "买入操作失败");
+            //             }            
+            //         } catch (error)
+            //         {
+            //             console.log("err",error)
+            //             this.handleToCancelOrder();
+            //             this.props.common.openNotificationWithIcon('error', "操作失败", "订单已取消");
+            //         }                    
+            //     }
                 
-            }
-            else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
-            {
-                // 获取Teemo钱包上登陆的地址                
-            }
+            // }
+            // else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
+            // {
+            //     // 获取Teemo钱包上登陆的地址                
+            // }
         }
         else
         {

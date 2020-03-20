@@ -101,7 +101,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                     <div className="message-wrapper">
                         <h3 className="title-h3">{this.intrl.projinfo.comment}</h3>
                         {
-                            (this.props.common.userInfo && this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.isSupport)
+                            (this.props.common.userInfo && this.props.projectinfo.projInfo)
                                 ? (
                                     <div className="textarea-wrapper">
                                         <textarea
@@ -162,7 +162,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                                                 <span>{item.zanCount ? item.zanCount : ''}</span>
                                             </div>
                                             {
-                                                (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                (item.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isStar))) && (
                                                     <div className="comment-input">
                                                         <textarea
                                                             maxLength={500}
@@ -198,7 +198,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
                                                                             <span>{replyItem.zanCount ? replyItem.zanCount : ''}</span>
                                                                         </div>
                                                                         {
-                                                                            (replyItem.isShowReply && (this.props.projectinfo.projInfo && (this.props.projectinfo.projInfo.isSupport || this.props.projectinfo.projInfo.isStar))) && (
+                                                                            (replyItem.isShowReply && (this.props.projectinfo.projInfo && ( this.props.projectinfo.projInfo.isStar))) && (
                                                                                 <div className="reply-input">
                                                                                     <textarea
                                                                                         className="reply-textarea"
@@ -394,7 +394,7 @@ class ManagerInfo extends React.Component<IProjectInfoProps, any> {
             return false
         }        
         // 验证是否支持了项目
-        if (this.props.projectinfo.projInfo && !this.props.projectinfo.projInfo.isSupport)
+        if (this.props.projectinfo.projInfo)
         {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
             return false

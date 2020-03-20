@@ -7,10 +7,10 @@ import './index.less';
 import { injectIntl } from 'react-intl';
 import Pbottom from './pbottom';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
-import * as formatTime from '@/utils/formatTime';
-import QRCode from 'qrcode.react';
-import { ProjectState } from '@/store/interface/common.interface';
-import { saveDecimal } from '../../../utils/numberTool';
+// import * as formatTime from '@/utils/formatTime';
+// import QRCode from 'qrcode.react';
+// import { ProjectState } from '@/store/interface/common.interface';
+// import { saveDecimal } from '../../../utils/numberTool';
 
 interface IState
 {
@@ -55,7 +55,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         <div className="ptop-img">
                             {
                                 this.state.isShowVideo ? <video src={this.props.projectinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
-                                    : <img src={this.props.projectinfo.projInfo.projCoverUrl} alt="" />
+                                    : <img src={this.props.projectinfo.projInfo.projCoverUrl?this.props.projectinfo.projInfo.projCoverUrl:require("@/img/projdefault.png")} alt="" />
                             }
                             {
                                 (this.props.projectinfo.projInfo.projVideoUrl && !this.state.isShowVideo) && <div className="play-btn" onClick={this.handlePlayVideo} />
@@ -64,7 +64,48 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                     </div>
                     <div className="ptop-right">
                         {/* 创意发布 */}
-                        {
+                        <div className="topright-wrapper">
+                            <div className="des-wrapper">
+                                <strong className="title-strong">{this.intrl.projinfo.summary}</strong>
+                                <p className="gray-content">{this.props.projectinfo.projInfo.projBrief}</p>
+                            </div>
+                            <div className="other-wrapper">
+                                <strong className="title-strong">{this.intrl.projinfo.version}</strong>
+                                <p className="gray-content">{this.props.projectinfo.projInfo.projType === 'moloch' ? "MolochDao" : "FutureDao"} {this.props.projectinfo.projInfo.projVersion}</p>
+                                <div className="dolike-wrapper" onClick={this.handleToAttention}>
+                                    {
+                                        this.props.projectinfo.projInfo.isStar ? (
+                                            <>
+                                                <img src={require("@/img/guanzhu.png")} alt="" />
+                                                <span className="dolike-text">{this.intrl.projinfo.followed}</span>
+                                            </>
+                                        )
+                                            : (
+                                                <>
+                                                    <div className="no-dolike" />
+                                                    <span>{this.intrl.projinfo.follow}</span>
+                                                </>
+                                            )
+                                    }
+                                </div>
+                                {/* <div className="address-content">
+                                    <div className="flex-con">
+                                        <strong className="title-strong">{this.intrl.projinfo.contract}</strong>
+                                        <strong className="purple-content">{this.props.projectinfo.projInfo.contractAddress.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
+                                    </div>
+                                    <div className="flex-con">
+                                        <strong className="title-strong">{this.intrl.projinfo.contractaddr}</strong>
+                                        <strong className="purple-content">{this.props.projectinfo.projInfo.creatorAddress.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
+                                    </div>
+                                </div> */}
+                                <strong className="title-strong">{this.intrl.projinfo.website}</strong>
+                                {
+                                    this.props.projectinfo.projInfo.officialWeb ? <a className="weblink-purple" target="_blank" href={this.props.projectinfo.projInfo.officialWeb}>{this.props.projectinfo.projInfo.officialWeb}</a>
+                                        : <p className="gray-content">{this.intrl.projinfo.null}</p>
+                                }
+                            </div>
+                        </div>
+                        {/* {
                             this.props.projectinfo.projInfo.projState === ProjectState.IdeaPub && (
                                 <>
                                     <div className="right-big-text">
@@ -101,9 +142,9 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                     <p className="sm-gray-text">{this.intrl.projinfo.begintime} {formatTime.format('yyyy-MM-dd ', this.props.projectinfo.projInfo.time.toString(), this.props.intl.locale)}</p>
                                 </>
                             )
-                        }
+                        } */}
                         {/* 交易中 */}
-                        {
+                        {/* {
                             this.props.projectinfo.projInfo.projState === ProjectState.Trading && (
                                 <>
                                     <div className="going-wrapper">
@@ -150,8 +191,8 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                     <p className="sm-gray-text">本项目已在{this.props.projectinfo.projInfo.platform === 'eth' ? '以太坊' : 'Neo'}上发起代币融资</p>
                                 </>
                             )
-                        }
-                        <div className="ptop-share">
+                        } */}
+                        {/* <div className="ptop-share">
                             <span>{this.intrl.projinfo.share}</span>
                             <div className="share-icon">
                                 <a href={`https://twitter.com/intent/tweet?text=${this.props.projectinfo.projInfo.projName}&url=https://apidao.nel.group/api/share/${this.props.projectinfo.projId}/${this.props.common.network === "TestNet" ? 0 : 1}/0`} target="_blank"><div className="img-div twitter-icon" /></a>
@@ -165,7 +206,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                                 </a>
                                 <a href={`https://www.facebook.com/sharer.php?title=${this.props.projectinfo.projInfo.projName}&u=https://apidao.nel.group/api/share/${this.props.projectinfo.projId}/${this.props.common.network === "TestNet" ? 0 : 1}/1`} target="_blank"><div className="img-div fb-icon" /></a>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Pbottom {...this.props} />
@@ -195,22 +236,22 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         return true;
     }
     // 看好
-    private handleToStartSupport = async () =>
-    {
-        if (!this.props.common.userInfo)
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-            return false
-        }
-        if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport)
-        {
-            return false;
-        }
-        const res = await this.props.projectinfo.startSupport();
-        this.props.projectinfo.projInfo.isSupport = res;
-        this.handleToAttention();
-        return true;
-    }
+    // private handleToStartSupport = async () =>
+    // {
+    //     if (!this.props.common.userInfo)
+    //     {
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+    //         return false
+    //     }
+    //     if (!this.props.projectinfo.projId || !this.props.projectinfo.projInfo || this.props.projectinfo.projInfo.isSupport)
+    //     {
+    //         return false;
+    //     }
+    //     const res = await this.props.projectinfo.startSupport();
+    //     this.props.projectinfo.projInfo.isSupport = res;
+    //     this.handleToAttention();
+    //     return true;
+    // }
     private handlePlayVideo = () =>
     {
         if (!this.state.isShowVideo)
@@ -221,21 +262,21 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
         }
     }
     // 支持众筹详情产品预售页
-    private handleToOtherSupport = () =>
-    {
-        // 跳转前检测下有木有礼包
-        if (this.props.projectinfo.rewardList.length > 0)
-        {
-            const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
-            window.open(url + '/support/' + this.props.projectinfo.projId)
-        } else
-        {
-            this.props.projectinfo.menuNum = 4;
-            window.scrollTo(0, 800);
-            this.props.transation.tradeMenu = 2;
-        }
+    // private handleToOtherSupport = () =>
+    // {
+    //     // 跳转前检测下有木有礼包
+    //     if (this.props.projectinfo.rewardList.length > 0)
+    //     {
+    //         const url = process.env.REACT_APP_SERVER_ENV === 'DEV' ? '/test' : '';
+    //         window.open(url + '/support/' + this.props.projectinfo.projId)
+    //     } else
+    //     {
+    //         this.props.projectinfo.menuNum = 4;
+    //         window.scrollTo(0, 800);
+    //         this.props.transation.tradeMenu = 2;
+    //     }
 
 
-    }
+    // }
 }
 export default injectIntl(ProjectInfo)

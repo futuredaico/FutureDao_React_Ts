@@ -8,7 +8,7 @@ import common from "@/store/common";
  */
 export const getProjInfo = (projId: string) => {
     const opts = {
-        method: 'queryProj',
+        method: 'queryProjDetail',
         params: [ projId ]
     }
     return request(opts);

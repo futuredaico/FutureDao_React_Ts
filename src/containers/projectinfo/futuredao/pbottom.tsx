@@ -9,7 +9,7 @@ import ProjectDetail from './info/detail'
 import UpdateList from './update/updatelist';
 import RightTeam from './info/rightteam';
 import UpdateInfo from './update/updateinfo';
-import Transation from './transation/transation';
+// import Transation from './transation/transation';
 import Manager from './manager/manager';
 import ManagerInfo from './manager/managerinfo';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
@@ -64,7 +64,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                   )
                 }
                 {
-                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.Trading && this.props.projectinfo.projInfo.type === 'daico' && (
+                  this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState === ProjectState.Trading  && (
                     <li className={this.props.projectinfo.menuNum === 5 ? "title-li active" : "title-li"} onClick={this.mapUnderline.bind(this, 5)}>
                       治理
                     </li>
@@ -101,7 +101,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                     )
                   }
                   {
-                    this.props.projectinfo.menuNum === 4 && <Transation {...this.props} />
+                    // this.props.projectinfo.menuNum === 4 && <Transation {...this.props} />
                   }
                   {
                     this.props.projectinfo.menuNum === 5 && <Manager {...this.props} />

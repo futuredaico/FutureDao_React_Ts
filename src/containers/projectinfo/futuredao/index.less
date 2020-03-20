@@ -61,7 +61,60 @@
       vertical-align: top;
       display: inline-block;
       border-top: 1px solid @bg-e5;
+      .topright-wrapper{
+        font-size: 14px;
+        .title-strong{
+          display: block;
+        }
+        .gray-content{
+          color: @t-a0;
+          margin-top: 8px;
+        }
+        .weblink-purple {
+          color: @t-purple  !important;
+          margin-top: 8px;
+          width: 300px;
+          display: block;
+          cursor: pointer;
+          white-space:nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
 
+          &:hover {
+            color: #9E94F5 !important;
+          }
+        }
+        .des-wrapper{
+          height: 225px;
+          border-bottom: 1px solid @bg-e5;
+          .gray-content{
+            height: 180px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            display: -webkit-box;
+            -webkit-line-clamp: 9; // （行数）
+            /* autoprefixer: off */
+            -webkit-box-orient: vertical; 
+            word-break: break-word;
+          }
+        }
+        .other-wrapper{
+          margin-top: 39px;
+          .address-content{
+            margin: 40px 0;
+            .flex-con{
+              display: inline-block;
+              width: 150px;
+              .purple-content{
+                color: @t-purple;
+                display: block;
+                margin-top: 10px;
+              }
+            }
+          }
+        }
+      }
       .right-big-text {
         // margin: 47px 0;
         margin: 30px 0 47px 0;

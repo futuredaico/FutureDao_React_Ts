@@ -6,7 +6,7 @@ import * as formatTime from '@/utils/formatTime';
 import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
-import { toMyNumber, saveDecimal,toNonExponential } from "@/utils/numberTool";
+import { saveDecimal } from "@/utils/numberTool";
 // import { IContractHash } from '../interface/projectinfo.interface';
 // import { CONTRACT_CONFIG } from '@/config';
 // import { AbiItem } from 'web3-utils';
@@ -239,21 +239,21 @@ class ProjectTransation
    */
   @action public computeBuyCountSpendPrice = (count: string) =>
   {
-    if (!projectinfoStore.projInfo)
-    {
-      return '0'
-    }
-    // （ ( Y + 已发行代币数 )^2 - 已发行代币数^2）*0.0000000005
-    const mycount = toMyNumber(count);
-    const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    const num3 = num1.sub(num2).mul(0.0000000005).add(0.000001);
-    // console.log(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005))
-    // console.log(web3.toBigNumber(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005)).toString(10))
-    console.log(num3) 
-    console.log(count)
-    return toNonExponential(num3.value);
-    // web3.toBigNumber(num3).toString(10);
+    // if (!projectinfoStore.projInfo)
+    // {
+    //   return '0'
+    // }
+    // // （ ( Y + 已发行代币数 )^2 - 已发行代币数^2）*0.0000000005
+    // const mycount = toMyNumber(count);
+    // const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    // const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    // const num3 = num1.sub(num2).mul(0.0000000005).add(0.000001);
+    // // console.log(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005))
+    // // console.log(web3.toBigNumber(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005)).toString(10))
+    // console.log(num3) 
+    // console.log(count)
+    // return toNonExponential(num3.value);
+    // // web3.toBigNumber(num3).toString(10);
   }
   /**
    * 计算花费eth可以购买多少个代币
@@ -261,21 +261,21 @@ class ProjectTransation
    */
   @action public computeSpendPriceBuyCount = (amount: string) =>
   {
-    if (!projectinfoStore.projInfo)
-    {
-      return '0'
-    }
-    // (2x / 0.000000001 + 已发行代币数^2 )^0.5 - 已发行代币数
-    const myamount = toMyNumber(amount);
-    const num1 = myamount.mul(2).div(0.000000001);
-    const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    const num3 = parseFloat(num1.add(num2).toString());
-    const num4 = Math.pow(num3, 0.5)
-    const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
-    // 130601.60406562978
-    // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
-    return toNonExponential(num5.value);
-    // web3.toBigNumber(num5).toString(10);
+    // if (!projectinfoStore.projInfo)
+    // {
+    //   return '0'
+    // }
+    // // (2x / 0.000000001 + 已发行代币数^2 )^0.5 - 已发行代币数
+    // const myamount = toMyNumber(amount);
+    // const num1 = myamount.mul(2).div(0.000000001);
+    // const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    // const num3 = parseFloat(num1.add(num2).toString());
+    // const num4 = Math.pow(num3, 0.5)
+    // const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
+    // // 130601.60406562978
+    // // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
+    // return toNonExponential(num5.value);
+    // // web3.toBigNumber(num5).toString(10);
   }
   /**
    * 已知要获得X个ETH，求需要出售多少个代币
@@ -283,26 +283,26 @@ class ProjectTransation
    */
   @action public computeGetPriceSellCount = (amount: string) =>
   {
-    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
-    {
-      return '0'
-    }
-    // 已发行代币数-已发行代币数*（1-x/储备池资金数)^0.5
-    const myamount = toMyNumber(amount);
-    const num1 = myamount.div(projectinfoStore.projInfo.fundReservePoolTotal);
-    let num2 = parseFloat(web3.toBigNumber(toMyNumber(1).sub(num1)).toString(10));
-    let fuhao = ''
-    if (num2 < 0)
-    {
-      fuhao = '-';
-      num2 = Math.abs(num2);
-    }
-    const num3 = fuhao + Math.pow(num2, 0.5);
-    const num4 = toMyNumber(num3).mul(projectinfoStore.projInfo.hasIssueAmt);
-    const num5 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sub(num4);
-    // console.log(toMyNumber(500).sub(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(1).sub(toMyNumber(3.6).div(10))).toString(10)), 0.5)).mul(500)))    
-    return toNonExponential(num5.value);
-    // web3.toBigNumber(num5).toString(10);
+    // if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.fundReservePoolTotal) === 0)
+    // {
+    //   return '0'
+    // }
+    // // 已发行代币数-已发行代币数*（1-x/储备池资金数)^0.5
+    // const myamount = toMyNumber(amount);
+    // const num1 = myamount.div(projectinfoStore.projInfo.fundReservePoolTotal);
+    // let num2 = parseFloat(web3.toBigNumber(toMyNumber(1).sub(num1)).toString(10));
+    // let fuhao = ''
+    // if (num2 < 0)
+    // {
+    //   fuhao = '-';
+    //   num2 = Math.abs(num2);
+    // }
+    // const num3 = fuhao + Math.pow(num2, 0.5);
+    // const num4 = toMyNumber(num3).mul(projectinfoStore.projInfo.hasIssueAmt);
+    // const num5 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sub(num4);
+    // // console.log(toMyNumber(500).sub(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(1).sub(toMyNumber(3.6).div(10))).toString(10)), 0.5)).mul(500)))    
+    // return toNonExponential(num5.value);
+    // // web3.toBigNumber(num5).toString(10);
   }
   /**
    * 已知要出售Y个代币，求能够获得多少ETH
@@ -310,19 +310,19 @@ class ProjectTransation
    */
   @action public computeSellCountGetPriace = (count: string) =>
   {
-    if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
-    {
-      return '0'
-    }
-    // 2*储备池资金数*Y *（1-Y/（2*已发行代币数））/ 已发行代币数
-    const myamount = toMyNumber(count);
-    const num1 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).mul(2);
-    const num2 = toMyNumber(1).sub(myamount.div(num1));
-    const num3 = num2.mul(myamount).mul(projectinfoStore.projInfo.fundReservePoolTotal).mul(2).div(projectinfoStore.projInfo.hasIssueAmt);
+    // if (!projectinfoStore.projInfo || parseFloat(projectinfoStore.projInfo.hasIssueAmt) === 0)
+    // {
+    //   return '0'
+    // }
+    // // 2*储备池资金数*Y *（1-Y/（2*已发行代币数））/ 已发行代币数
+    // const myamount = toMyNumber(count);
+    // const num1 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).mul(2);
+    // const num2 = toMyNumber(1).sub(myamount.div(num1));
+    // const num3 = num2.mul(myamount).mul(projectinfoStore.projInfo.fundReservePoolTotal).mul(2).div(projectinfoStore.projInfo.hasIssueAmt);
 
-    console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))
-    return toNonExponential(num3.value);
-    // web3.toBigNumber(num3).toString(10);
+    // console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))
+    // return toNonExponential(num3.value);
+    // // web3.toBigNumber(num3).toString(10);
   }
 }
 

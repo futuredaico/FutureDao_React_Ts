@@ -55,25 +55,29 @@ export interface IProjectInfo
   projName: string, // 项目名称
   projTitle: string, // 项目标题
   projType: string, // 项目类型
+  projVersion:string, // 版本
   projCoverUrl: string, // 项目封面
   projBrief: string, // 项目简介
   projDetail: string, // 项目详情
-  supportCount: number, // 看好人数
-  isSupport: boolean, // 是否看好
+  officialWeb:string, // 官网
+  // supportCount: number, // 看好人数
+  // isSupport: boolean, // 是否看好
   isStar: boolean, // 是否关注
+  contractAddress:string, // 合约地址
+  creatorAddress:string, // 创始人地址
   projVideoUrl: string, // 视频
   discussCount: number, // 留言人数
   updateCount: number, // 更新条数
-  time: number // 创建时间
-  hasIssueAmt: string, // 已发行
-  hasSellAmt: string // 已出售
+  // time: number // 创建时间
+  // hasIssueAmt: string, // 已发行
+  // hasSellAmt: string // 已出售
   projState: string, // 一级状态
-  projSubState: string, // 二级状态
-  hasSupport: string, // 支持人数
-  type:string, // 众筹类型
-  platform:string, // 上链类型
-  fundName:string, // 单位
-  fundReservePoolTotal:string // 储备池资金
+  // projSubState: string, // 二级状态
+  // hasSupport: string, // 支持人数
+  // type:string, // 众筹类型
+  // platform:string, // 上链类型
+  // fundName:string, // 单位
+  // fundReservePoolTotal:string // 储备池资金
 }
 
 export interface IProjectTeam
