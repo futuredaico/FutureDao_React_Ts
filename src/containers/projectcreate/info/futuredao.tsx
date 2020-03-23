@@ -33,7 +33,7 @@ interface IState
     detailEnter: boolean, // 是否输入了详情
     isOkCreate: boolean // 是否能提交创建
 }
-@inject('createproject','common')
+@inject('createproject', 'common')
 @observer
 class CreateFuture extends React.Component<ICreateProjectProps, IState> {
     public intrl = this.props.intl.messages;
@@ -169,7 +169,40 @@ class CreateFuture extends React.Component<ICreateProjectProps, IState> {
                     <strong>{this.intrl.edit.cover}</strong>
                 </div>
                 <div className="inline-enter">
-                    <Upload
+                    {
+                        this.state.imageUrl
+                            ? <div className="video-wrapper">
+                                <div className="coverurl-icon">
+                                    <img src={this.state.imageUrl} alt="avatar" /> 
+                                </div>                                
+                                <div className="video-btn-wrapper">
+                                    <Button text={this.intrl.btn.delete} onClick={this.handleToDeleteCoverUrl} btnColor='gray-red' btnSize="video-btn" />
+                                    <Upload
+                                        name="avatar"
+                                        // listType="picture-card"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
+                                        accept="image/*,/pdf"
+                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        beforeUpload={this.beforeUpload}
+                                    >
+                                        <Button text="更换图片" btnColor='gray-black' btnSize="video-btn" />
+                                    </Upload>
+                                </div>
+                            </div>
+                            : <Upload
+                                name="avatar"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={false}
+                                accept="image/*,/pdf"
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                beforeUpload={this.beforeUpload}
+                            >
+                                {uploadButton}
+                            </Upload>
+                    }
+                    {/* <Upload
                         name="avatar"
                         listType="picture-card"
                         className="avatar-uploader"
@@ -179,10 +212,10 @@ class CreateFuture extends React.Component<ICreateProjectProps, IState> {
                         beforeUpload={this.beforeUpload}
                     >
                         {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton}
-                    </Upload>
+                    </Upload> */}
                 </div>
                 {/* 视频介绍 */}
-                <div className="inline-title">
+                <div className="inline-title big-htitle">
                     <strong>{this.intrl.edit.videotitle}</strong>
                 </div>
                 <div className="inline-enter">
@@ -224,7 +257,7 @@ class CreateFuture extends React.Component<ICreateProjectProps, IState> {
 
                 </div>
                 {/* 项目详情 */}
-                <div className="inline-title">
+                <div className="inline-title big-htitle">
                     <strong>{this.intrl.edit.detail}</strong>&nbsp;
                     <span className="red-type">*</span>
                 </div>
@@ -300,6 +333,7 @@ class CreateFuture extends React.Component<ICreateProjectProps, IState> {
     // 限制图片上传大小与格式
     private beforeUpload = (file: RcFile) =>
     {
+        console.log(1111)
         // 限制大小3M以下
         if (file.size / 1024 / 1024 > 3)
         {
@@ -315,6 +349,17 @@ class CreateFuture extends React.Component<ICreateProjectProps, IState> {
         this.handleUploadCoverPicture(file);
         // todo commonStore
         return true;
+    }
+    // 删除封面
+    private handleToDeleteCoverUrl = () =>
+    {
+        this.setState({
+            imageUrl: '',
+            loading: false
+        }, () =>
+        {
+            this.checkInputStatus();
+        })
     }
     // 上传封面
     private handleUploadCoverPicture = async (file: RcFile) =>

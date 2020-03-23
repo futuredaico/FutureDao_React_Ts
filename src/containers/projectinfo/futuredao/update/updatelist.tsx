@@ -1,5 +1,5 @@
 /**
- * 项目详情页
+ * 更新列表
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';

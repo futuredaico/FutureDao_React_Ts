@@ -116,6 +116,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                         <Input maxLength={30} suffix="ETH" />
                     </div>
                 </div>
+                <div className="inline-title" />
             </>
         );
     }

@@ -4,6 +4,7 @@ import { ICommonStore } from '@/store/interface/common.interface';
 import { History } from 'history';
 import { IEditProjectStore } from './editproject.interface';
 import { IUpdateProjectStore } from "./updateproject.interface";
+import { IFinancingStore } from "./financing.interface";
 
 export interface IProjectStore {
   isEdit:boolean,
@@ -30,7 +31,7 @@ export interface IProjectProps extends RouteComponentProps<{ projectId: string }
   editproject: IEditProjectStore,
   common: ICommonStore,
   updateproject:IUpdateProjectStore
-  // financing: IFinancingStore,
+  financing: IFinancingStore,
   // orderproject: IOrderProjectStore,
   intl: any
 }

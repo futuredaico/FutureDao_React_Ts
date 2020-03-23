@@ -367,3 +367,15 @@ export const exportOrderFile = (userId:string,token:string,projId:string)=>{
     }
     return request(opts);
 }
+/**
+ * 项目融资时查询参与中的项目组织信息
+ * @param page 分页索引
+ * @param size 分页大小
+ */
+export const getReserverAddress = (page:number,size:number)=>{
+    const opts = {
+        method: 'queryJoinOrgAddressList',
+        params: [page,size]
+    }
+    return request(opts);
+}

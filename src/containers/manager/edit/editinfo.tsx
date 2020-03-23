@@ -148,20 +148,42 @@ class EditInfo extends React.Component<IProjectProps, IState> {
                     <strong>{this.intrl.edit.cover}</strong>
                 </div>
                 <div className="inline-enter">
-                    <Upload
-                        name="avatar"
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        accept="image/*,/pdf"
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        beforeUpload={this.beforeUpload}
-                    >
-                        {this.state.imageUrl ? <img src={this.state.imageUrl} alt="avatar" /> : uploadButton}
-                    </Upload>
+                {
+                        this.state.imageUrl
+                            ? <div className="video-wrapper">
+                                <div className="coverurl-icon">
+                                    <img src={this.state.imageUrl} alt="avatar" /> 
+                                </div>                                
+                                <div className="video-btn-wrapper">
+                                    <Button text={this.intrl.btn.delete} onClick={this.handleToDeleteCoverUrl} btnColor='gray-red' btnSize="video-btn" />
+                                    <Upload
+                                        name="avatar"
+                                        // listType="picture-card"
+                                        className="avatar-uploader"
+                                        showUploadList={false}
+                                        accept="image/*,/pdf"
+                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        beforeUpload={this.beforeUpload}
+                                    >
+                                        <Button text="更换图片" btnColor='gray-black' btnSize="video-btn" />
+                                    </Upload>
+                                </div>
+                            </div>
+                            : <Upload
+                                name="avatar"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={false}
+                                accept="image/*,/pdf"
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                beforeUpload={this.beforeUpload}
+                            >
+                                {uploadButton}
+                            </Upload>
+                    }
                 </div>
                 {/* 视频介绍 */}
-                <div className="inline-title">
+                <div className="inline-title big-htitle">
                     <strong>{this.intrl.edit.videotitle}</strong>
                 </div>
                 <div className="inline-enter">
@@ -203,7 +225,7 @@ class EditInfo extends React.Component<IProjectProps, IState> {
 
                 </div>
                 {/* 项目详情 */}
-                <div className="inline-title">
+                <div className="inline-title big-htitle">
                     <strong>{this.intrl.edit.detail}</strong>&nbsp;
                     <span className="red-type">*</span>
                 </div>
@@ -283,6 +305,17 @@ class EditInfo extends React.Component<IProjectProps, IState> {
         this.handleUploadCoverPicture(file);
         // todo commonStore
         return true;
+    }
+    // 删除封面
+    private handleToDeleteCoverUrl = () =>
+    {
+        this.setState({
+            imageUrl: '',
+            loading: false
+        }, () =>
+        {
+            this.checkInputStatus();
+        })
     }
     // 上传封面
     private handleUploadCoverPicture = async (file: RcFile) =>
@@ -402,7 +435,7 @@ class EditInfo extends React.Component<IProjectProps, IState> {
         if (saveResult)
         {
             this.initProjectData(this.props.editproject.editContent.projId)
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, "保存成功");
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, "保存成功");
             
         } else
         {
