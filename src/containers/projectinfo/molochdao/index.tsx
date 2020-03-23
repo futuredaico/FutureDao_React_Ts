@@ -58,7 +58,7 @@ class MolochInfo extends React.Component<IMolochInfoProps, IState> {
                         <div className="ptop-left">
                             <div className="ptop-img">
                                 {
-                                    this.props.molochinfo.projInfo.projCoverUrl ? <img src={this.props.molochinfo.projInfo.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
+                                    this.props.molochinfo.projInfo.projCoverUrl ? <img src={this.props.molochinfo.projInfo.projCoverUrl} alt="" /> : <img src="https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault.png" alt="" />
                                 }
                                 {/* {
                                     this.state.isShowVideo ? <video src={this.props.molochinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
