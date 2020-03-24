@@ -69,7 +69,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                       <div className="myproject-smallbox">
                         <div className="myproject-img">
                           {
-                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
+                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src="https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault_s.png" alt="" />
                           }
                         </div>
                         <div className="myproject-des">
@@ -127,7 +127,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                       <div className="myproject-smallbox">
                         <div className="myproject-img">
                           {
-                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
+                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src="https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault_s.png" alt="" />
                           }
                         </div>
                         <div className="myproject-des">
@@ -185,7 +185,7 @@ class MyProject extends React.Component<IMyProjectProps, IState> {
                       <div className="myproject-smallbox">
                         <div className="myproject-img">
                           {
-                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
+                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src="https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault_s.png" alt="" />
                           }
                         </div>
                         <div className="myproject-des">

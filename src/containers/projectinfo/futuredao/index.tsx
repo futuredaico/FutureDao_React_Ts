@@ -54,7 +54,7 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                         <div className="ptop-img">
                             {
                                 this.state.isShowVideo ? <video src={this.props.projectinfo.projInfo.projVideoUrl} controls={true} autoPlay={true} />
-                                    : <img src={this.props.projectinfo.projInfo.projCoverUrl ? this.props.projectinfo.projInfo.projCoverUrl : require("@/img/projdefault.png")} alt="" />
+                                    : <img src={this.props.projectinfo.projInfo.projCoverUrl ? this.props.projectinfo.projInfo.projCoverUrl : "https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault.png"} alt="" />
                             }
                             {
                                 (this.props.projectinfo.projInfo.projVideoUrl && !this.state.isShowVideo) && <div className="play-btn" onClick={this.handlePlayVideo} />
