@@ -61,7 +61,7 @@ class IndexHome extends React.Component<IHomeProps, any> {
                       <div className="home-smallbox">
                         <div className="home-img">
                           {
-                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src={require("@/img/projdefault.png")} alt="" />
+                            item.projCoverUrl ? <img src={item.projCoverUrl} alt="" /> : <img src="https://futuredao-mainnet.oss-cn-hangzhou.aliyuncs.com/projdefault_s.png" alt="" />
                           }
                         </div>
                         <div className="home-des">
