@@ -87,7 +87,8 @@ export default class Select extends React.Component<IProps, IState> {
 			>
 				{this.props.text !== '' && <div className="select-type">{this.props.text}</div>}
 				<div className="selected-text" style={this.props.style}>
-					<span>{showName}</span>
+					{/* <span>{showName}</span> */}
+					<span dangerouslySetInnerHTML={{ '__html': showName }} />
 					<span className="triangle" />
 				</div>
 				<div className={selectBox} style={this.props.style}>
