@@ -1,11 +1,12 @@
 
 import { RouteComponentProps } from "react-router";
-import { IFundList } from "@/containers/proposal/molochdao/interface/index.interface";
+import { IFundList } from "@/containers/projectinfo/molochdao/interface/molochinfo.interface";
 
 export interface IFinancingStore {
   isStartContract:boolean, 
   contractList:IContractAddress[],
   molochId:string,
+  assetOption:IOptionList[],
   assetList:IFundList|null,
   getContractList:()=>Promise<boolean>,
   getMolochAsset:(projId:string)=>Promise<boolean>
@@ -23,8 +24,10 @@ export interface IFinancingProps extends RouteComponentProps<{ projectId: string
   financing: IFinancingStore,
   intl: any
 }
-export interface IContractAddress{
-    id:string,
-    name:string,
+export interface IContractAddress extends IOptionList{
     projId:string,
+}
+export interface IOptionList{
+  id:string,
+  name:string,
 }

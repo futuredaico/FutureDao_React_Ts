@@ -2,8 +2,8 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import * as MolochApi from '@/containers/projectinfo/molochdao/api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IContractAddress } from '../interface/financing.interface';
-import { IFundList } from '@/containers/proposal/molochdao/interface/index.interface';
+import { IContractAddress, IOptionList } from '../interface/financing.interface';
+import { IFundList } from '@/containers/projectinfo/molochdao/interface/molochinfo.interface';
 class FinancingManager
 {
   @observable public isStartContract: boolean = false;
@@ -11,11 +11,12 @@ class FinancingManager
     {
       id: '1',
       name: '其他',
-      projId:''
+      projId: ''
     }
   ];
-  @observable public molochId:string ='';
-  @observable public assetList:IFundList|null = null;
+  @observable public molochId: string = '';
+  @observable public assetList: IFundList | null = null;
+  @observable public assetOption:IOptionList[] = [];
 
   /**
    * 项目融资时查询参与中的项目组织信息
@@ -40,11 +41,11 @@ class FinancingManager
     {
       return {
         id: item.molochHash,
-        name: item.projName + ' (' + item.molochHash+')',
-        projId:item.projId
+        name: item.projName + ' (' + item.molochHash + ')',
+        projId: item.projId
       }
     })
-    this.contractList = [ ...arrList, ...this.contractList];
+    this.contractList = [...arrList, ...this.contractList];
     return true;
   }
   /**
@@ -53,7 +54,7 @@ class FinancingManager
   @action public getMolochAsset = async (projId: string) =>
   {
     let result: any = [];
-
+    this.assetList = null;
     try
     {
       result = await MolochApi.getMolochFundTotal(projId, 1, 10);
@@ -66,6 +67,18 @@ class FinancingManager
       return false
     }
     this.assetList = result[0].data || null;
+    if(result[0].data.count>0){
+      const list = result[0].data.list;
+      const arrList = list.map((item) =>
+      {
+        return {
+          id: item.fundHash,
+          name: item.fundSymbol.toLocaleUpperCase() + ' (' + item.fundHash + ')'          
+        }
+      })
+      this.assetOption = [...arrList];
+      console.log(JSON.stringify(this.assetOption))
+    }
     return true;
   }
 }
