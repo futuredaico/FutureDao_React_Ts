@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
 import * as MolochApi from '@/containers/projectinfo/molochdao/api/moloch.api';
 import { CodeType } from '@/store/interface/common.interface';
-import { IContractAddress, IOptionList } from '../interface/financing.interface';
+import { IContractAddress, IFinancingOption } from '../interface/financing.interface';
 import { IFundList } from '@/containers/projectinfo/molochdao/interface/molochinfo.interface';
 class FinancingManager
 {
@@ -16,7 +16,7 @@ class FinancingManager
   ];
   @observable public molochId: string = '';
   @observable public assetList: IFundList | null = null;
-  @observable public assetOption:IOptionList[] = [];
+  @observable public assetOption:IFinancingOption[] = [];
 
   /**
    * 项目融资时查询参与中的项目组织信息
@@ -73,7 +73,8 @@ class FinancingManager
       {
         return {
           id: item.fundHash,
-          name: item.fundSymbol.toLocaleUpperCase() + ' (' + item.fundHash + ')'          
+          name: item.fundSymbol.toLocaleUpperCase() + ' (' + item.fundHash + ')',
+          simplename:item.fundSymbol.toLocaleUpperCase()     
         }
       })
       this.assetOption = [...arrList];

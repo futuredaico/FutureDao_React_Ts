@@ -5,11 +5,12 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
-// import Button from '@/components/Button';
+import Button from '@/components/Button';
 import { Input } from 'antd';
 import Select from '@/components/select';
 import { IProjectProps } from '../interface/project.interface';
 import Hint from '@/components/hint';
+import { saveDecimal } from '@/utils/numberTool';
 
 
 interface IState
@@ -27,6 +28,8 @@ interface IState
     everyMonthRatio: string // 每月转入比例
     mixPrice: string, // 最小转入金额
     maxPrice: string // 最大转入金额
+    assetSimple:string, // 金额的单位
+    isOkGoing:boolean, // 是否可启动融资
 }
 
 @observer
@@ -45,7 +48,9 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         reserveRatio: '',
         everyMonthRatio: '',
         mixPrice: '',
-        maxPrice: ''
+        maxPrice: '',
+        assetSimple:'其他',
+        isOkGoing:false
     }
     public async componentDidMount()
     {
@@ -172,7 +177,13 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                         </div>
                     </div>
                 </div>
-                <div className="inline-title" />
+                <div className="inline-btn">
+                    <Button
+                        text="启动融资"
+                        btnSize="bg-btn"
+                        btnColor={!this.state.isOkGoing ? 'gray-btn' : ''}
+                    />
+                </div>
             </>
         );
     }
@@ -200,6 +211,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                 this.setState({
                     tokenShow: this.props.financing.assetOption[0].name,
                     tokenAddress: this.props.financing.assetOption[0].id,
+                    assetSimple:this.props.financing.assetOption[0].simplename,
                     tokenFlag: true
                 })
             }
@@ -210,6 +222,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
             this.setState({
                 tokenShow: '',
                 tokenAddress: '',
+                assetSimple:'其他',
                 tokenFlag: true
             })
         }
@@ -300,7 +313,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
             return false;
         }
         
-        if (value <0 || value>99) {
+        if (value <0 || value>100) {
             return false
         }
         this.setState({
@@ -315,12 +328,8 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         if (isNaN(value)) {
             return false;
         }
-        
-        if (value <0 || value>99) {
-            return false
-        }
         this.setState({
-            reserveRatio:parseInt(ev.target.value,10).toString()
+            reserveRatio:saveDecimal(value.toString(), 2)
         })
         return true
     }
@@ -330,13 +339,9 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         const value = ev.target.value as unknown as number;
         if (isNaN(value)) {
             return false;
-        }
-        
-        if (value <0 || value>99) {
-            return false
-        }
+        }        
         this.setState({
-            reserveRatio:parseInt(ev.target.value,10).toString()
+            reserveRatio:saveDecimal(value.toString(), 2)
         })
         return true
     }

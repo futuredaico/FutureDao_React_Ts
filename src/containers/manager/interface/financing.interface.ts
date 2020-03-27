@@ -6,7 +6,7 @@ export interface IFinancingStore {
   isStartContract:boolean, 
   contractList:IContractAddress[],
   molochId:string,
-  assetOption:IOptionList[],
+  assetOption:IFinancingOption[],
   assetList:IFundList|null,
   getContractList:()=>Promise<boolean>,
   getMolochAsset:(projId:string)=>Promise<boolean>
@@ -29,5 +29,8 @@ export interface IContractAddress extends IOptionList{
 }
 export interface IOptionList{
   id:string,
-  name:string,
+  name:string,  
+}
+export interface IFinancingOption extends IOptionList{
+  simplename:string
 }
