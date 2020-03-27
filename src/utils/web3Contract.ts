@@ -48,6 +48,21 @@ export class Web3Contract {
             throw error;
         }
     }
+    public static async deployContractOthers(abi: AbiItem[], contractBytecode: string, from: string, ...args: any[]) {
+        const contract = new MetaMask.web3.eth.Contract(abi);
+        const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
+        console.log('data', data);
+
+        const deploy = contract.deploy(data)
+        try {
+            const gas = 5500000;
+            console.log('gas', gas);
+            const newContractInstance = deploy.send({ from, gas });
+            return new PromiseEvent(newContractInstance);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     public hash: string;
     public abiItems: AbiItem[];

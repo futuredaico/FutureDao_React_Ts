@@ -182,6 +182,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                         text="启动融资"
                         btnSize="bg-btn"
                         btnColor={!this.state.isOkGoing ? 'gray-btn' : ''}
+                        onClick={this.handelToStartFinancing}
                     />
                 </div>
             </>
@@ -344,6 +345,15 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
             reserveRatio:saveDecimal(value.toString(), 2)
         })
         return true
+    }
+    private handelToStartFinancing =async ()=>{
+        // todo
+        console.log("start")
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if(res){
+            this.props.financing.startFanincingProject();
+        }
+        
     }
 }
 

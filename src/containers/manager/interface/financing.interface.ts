@@ -9,7 +9,8 @@ export interface IFinancingStore {
   assetOption:IFinancingOption[],
   assetList:IFundList|null,
   getContractList:()=>Promise<boolean>,
-  getMolochAsset:(projId:string)=>Promise<boolean>
+  getMolochAsset:(projId:string)=>Promise<boolean>,
+  startFanincingProject:()=>Promise<boolean>
 }
 
 

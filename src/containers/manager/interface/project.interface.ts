@@ -5,6 +5,7 @@ import { History } from 'history';
 import { IEditProjectStore } from './editproject.interface';
 import { IUpdateProjectStore } from "./updateproject.interface";
 import { IFinancingStore } from "./financing.interface";
+import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 
 export interface IProjectStore {
   isEdit:boolean,
@@ -27,6 +28,7 @@ export interface IProjectProps extends RouteComponentProps<{ projectId: string }
       [key: string]: any
   };
   history: History,
+  metamaskwallet:IMetaMaskWalletStore,
   project: IProjectStore,
   editproject: IEditProjectStore,
   common: ICommonStore,

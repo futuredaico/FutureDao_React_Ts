@@ -9,7 +9,7 @@ import { IProjectProps } from '../interface/project.interface';
 import StartFinancing from './start';
 // import Settlement from './settlement';
 
-@inject('project', 'financing', 'common')
+@inject('project', 'financing', 'common','metamaskwallet')
 @observer
 class FinancingManager extends React.Component<IProjectProps> {
     public intrl = this.props.intl.messages;

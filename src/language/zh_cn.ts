@@ -384,7 +384,11 @@ export default {
     error2: "不得大于押金",
     days: "天",
     approvedplaceholder: "请填写代币合约地址",
-    error3:"合约地址错误"
+    error3:"合约地址错误",
+    tip1:"提案处理期限",
+    tip2:"踢出成员执行宽限期",
+    btn:"继续添加",
+    err:"代币重复"
   },
   asset:{
     shares:"股份",
