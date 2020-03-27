@@ -382,7 +382,11 @@ export default {
     error2: "No more than deposit",
     days: " Days",
     approvedplaceholder: "Fill in the address of the token contract",
-    error3:"Incorrect token address"
+    error3:"Incorrect token address",
+    tip1:"Proposal processing period",
+    tip2:"Kick out member grace period",
+    btn:"Add",
+    err:"The token have been added"
   },
   asset:{
     shares:"Shares",

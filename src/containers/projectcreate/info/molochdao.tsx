@@ -241,7 +241,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                                 }
                                 {!item.value ? <span className="err-span">{ this.intrl.edit.error}</span>:
                                  (item.enter&&item.other ?<span className="err-span">{this.intrl.create.error3}</span>:
-                                 this.state.approvedTokens.findIndex(pre=>pre.value===item.value)<index && <span className="err-span">代币重复</span>
+                                 this.state.approvedTokens.findIndex(pre=>pre.value===item.value)<index && <span className="err-span">{this.intrl.create.err}</span>
                                  )}
                                 {
                                     index > 0 && <img src={require("@/img/remove.png")} onClick={this.hadleRemoveApprovedToke.bind(this, index)} />
@@ -253,7 +253,7 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     {
                         this.state.version === "2.0" &&
                         <Button
-                            text="继续添加"
+                            text={this.intrl.create.btn}
                             btnSize="md-bg-btn"
                             onClick={this.hadleAddApprovedToken}
                         />
@@ -303,11 +303,11 @@ class CreateProject extends React.Component<ICreateProjectProps, IState> {
                     this.state.version === "2.0" &&
                     <div className="info-group">
                         <div className="inline-box left">
-                            <div className="group-name"><b>提案处理期限</b><span className="red-type"> *</span></div>
+                            <div className="group-name"><b>{this.intrl.create.tip1}</b><span className="red-type"> *</span></div>
                             <Select text="" defaultValue={7} options={this.dayOptions} onCallback={this.handleSelectEmergencyExitWait} />
                         </div>
                         <div className="inline-box">
-                            <div className="group-name"><b>踢出成员执行宽限期</b><span className="red-type"> *</span></div>
+                            <div className="group-name"><b>{this.intrl.create.tip2}</b><span className="red-type"> *</span></div>
                             <Select text="" defaultValue={this.bailoutWaitOptions[0].id} options={this.bailoutWaitOptions} onCallback={this.handleSelectBailoutWait} />
                         </div>
                         {
