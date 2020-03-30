@@ -10,7 +10,7 @@ import { Input } from 'antd';
 import Select from '@/components/select';
 import { IProjectProps } from '../interface/project.interface';
 import Hint from '@/components/hint';
-import { saveDecimal } from '@/utils/numberTool';
+import { saveDecimal, toMyNumber } from '@/utils/numberTool';
 
 
 interface IState
@@ -27,9 +27,10 @@ interface IState
     reserveRatio: string // 储存比例
     everyMonthRatio: string // 每月转入比例
     mixPrice: string, // 最小转入金额
-    maxPrice: string // 最大转入金额
-    assetSimple:string, // 金额的单位
-    isOkGoing:boolean, // 是否可启动融资
+    maxPrice: string // 最大转入金额    
+    assetSimple: string, // 金额的单位
+    priceDecimals: number,  // 单位的精度
+    isOkGoing: boolean, // 是否可启动融资
 }
 
 @observer
@@ -49,8 +50,9 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         everyMonthRatio: '',
         mixPrice: '',
         maxPrice: '',
-        assetSimple:'其他',
-        isOkGoing:false
+        priceDecimals: 0,
+        assetSimple: '其他',
+        isOkGoing: false
     }
     public async componentDidMount()
     {
@@ -88,7 +90,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                     this.props.financing.assetList ? (
                         <>
                             {
-                                this.props.financing.assetList.count > 1 ? (
+                                (this.props.financing.assetList.count > 1 && this.props.financing.assetOption.length > 0) ? (
                                     <>
                                         <Select
                                             options={this.props.financing.assetOption}
@@ -107,7 +109,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                     )
                         : (
                             <div className="inline-enter">
-                                <Input value={this.state.tokenShow} onChange={this.handleToChangeToken} />
+                                <Input value={this.state.tokenAddress} onChange={this.handleToChangeToken} />
                                 {
                                     (this.state.tokenAddress && !this.state.tokenFlag) && <span className="err-span">输入正确的代币哈希</span>
                                 }
@@ -147,7 +149,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                     <span className="tips-text">（ 投资资金进入储备池的比例。储备比例越高，代币买入、卖出价差越小，对投资者吸引力变大，但项目组可调用的资金将变少。 ）</span>
                 </div>
                 <div className="inline-enter">
-                    <Input maxLength={30} suffix="%" className="ss-input" value={this.state.reserveRatio} onChange={this.handleToChangeReserveRatio} />
+                    <Input suffix="%" className="ss-input" value={this.state.reserveRatio} onChange={this.handleToChangeReserveRatio} />
                 </div>
                 <div className="inline-title">
                     <strong>水龙头设置</strong>
@@ -159,21 +161,21 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                         <span className="tips-text">（ 每月从募集资金池中转入当前资金池余额百分比的资金到项目组 ）</span>
                         </div>
                         <div className="inline-enter">
-                            <Input maxLength={30} suffix="%" className="ss-input" onChange={this.handleToChangeEveryRatio} />
+                            <Input suffix="%" className="ss-input" value={this.state.everyMonthRatio} onChange={this.handleToChangeEveryRatio} />
                         </div>
                         <div className="inline-title">
                             <strong>最少转入金额</strong>&nbsp;&nbsp;
                         <span className="tips-text">（ 每月最少从募集资金池中转入多少资金。每月转入量小于最少转入量时，按最小转入量计算。 ）</span>
                         </div>
                         <div className="inline-enter">
-                            <Input maxLength={30} suffix="ETH" onChange={this.handleToChangeMixPrice} />
+                            <Input suffix={this.state.assetSimple} value={this.state.mixPrice} onChange={this.handleToChangeMixPrice} />
                         </div>
                         <div className="inline-title">
                             <strong>最大转入金额</strong>&nbsp;&nbsp;
                         <span className="tips-text">（ 每月最多从募集资金池中转入多少资金。每月转入量大于最大转入量时，按最大转入量计算。 ）</span>
                         </div>
                         <div className="inline-enter">
-                            <Input maxLength={30} suffix="ETH" onChange={this.handleToChangeMaxPrice} />
+                            <Input suffix={this.state.assetSimple} value={this.state.maxPrice} onChange={this.handleToChangeMaxPrice} />
                         </div>
                     </div>
                 </div>
@@ -196,7 +198,14 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         // todo
         this.setState({
             selectAddress: item.id,
-            receiveAddress: item.id === '1' ? '' : item.id
+            receiveAddress: item.id === '1' ? '' : item.id,
+            tokenShow: '',
+            tokenAddress: '',
+            assetSimple: '其他',
+            tokenFlag: true
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
         if (item.id !== '1')
         {
@@ -212,8 +221,15 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
                 this.setState({
                     tokenShow: this.props.financing.assetOption[0].name,
                     tokenAddress: this.props.financing.assetOption[0].id,
-                    assetSimple:this.props.financing.assetOption[0].simplename,
+                    assetSimple: this.props.financing.assetOption[0].simplename,
                     tokenFlag: true
+                }, () =>
+                {
+                    this.handleToCheckFinanceInput();
+                })
+                const asset = await this.props.financing.getTokenInfo(this.props.financing.assetOption[0].id);
+                this.setState({
+                    priceDecimals: parseInt(asset.decimals, 10)
                 })
             }
         } else
@@ -223,8 +239,11 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
             this.setState({
                 tokenShow: '',
                 tokenAddress: '',
-                assetSimple:'其他',
+                assetSimple: '其他',
                 tokenFlag: true
+            }, () =>
+            {
+                this.handleToCheckFinanceInput();
             })
         }
     }
@@ -240,6 +259,9 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
             const res = this.handleChangeHashByMetamask(this.state.receiveAddress);
             this.setState({
                 reAddressFlag: res
+            }, () =>
+            {
+                this.handleToCheckFinanceInput();
             })
         })
     }
@@ -257,29 +279,56 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         }, () =>
         {
             const res = this.handleChangeHashByMetamask(this.state.tokenAddress);
+            if (res)
+            {
+                this.props.financing.getTokenInfo(inputStr).then(asset =>
+                {
+                    this.setState({
+                        assetSimple: asset.symbol.toLocaleUpperCase(),
+                        priceDecimals: parseInt(asset.decimals, 10)
+                    })
+                })
+            } else
+            {
+                this.setState({
+                    assetSimple: '其他'
+                })
+            }
             this.setState({
-                tokenFlag: res
+                tokenFlag: res,
+            }, () =>
+            {
+                this.handleToCheckFinanceInput();
             })
         })
     }
     // 融资代币的选择
-    private onSelletFinanceAsset = (item) =>
+    private onSelletFinanceAsset = async (item) =>
     {
         console.log(item);
         // console.log(opt)
         // todo
         this.setState({
-            tokenAddress: item.id
+            tokenAddress: item.id,
+            assetSimple: item.simplename
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
-
+        const asset = await this.props.financing.getTokenInfo(item.id);
+        this.setState({
+            priceDecimals: parseInt(asset.decimals, 10)
+        })
     }
     // 代币名称的输入
     private handleToChangeTokenName = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
         const inputStr = ev.target.value.trim().replace(/[\u4e00-\u9fa5]/ig, '').replace(/[^\w\.\/]/ig, '');
-        console.log(inputStr.length)
         this.setState({
             tokenName: inputStr.length > 21 ? inputStr.substring(0, 19) : inputStr
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
     }
     // 代币简称的输入
@@ -288,72 +337,186 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         const inputStr = ev.target.value.trim().replace(/[\u4e00-\u9fa5]/ig, '').replace(/[^\w\.\/]/ig, '');
         this.setState({
             tokenSimpleName: inputStr
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
     }
     // 储备池比例的输入
     private handleToChangeReserveRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
+        // 只能输入数字，整数
         const value = ev.target.value as unknown as number;
-        if (isNaN(value)) {
-            return false;
+        const reg = /^[0-9]*[1-9][0-9]*$/;
+        if (value.toString().length > 0)
+        {
+            if (isNaN(value))
+            {
+                return false;
+            }
+            if (!reg.test(ev.target.value))
+            {
+                return false;
+            }
+            if (value < 0 || value > 99)
+            {
+                return false
+            }
         }
-        
-        if (value <0 || value>99) {
-            return false
-        }
+
         this.setState({
-            reserveRatio:parseInt(ev.target.value,10).toString()
+            reserveRatio: value.toString()
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
         return true
     }
     // 每月转入比例
     private handleToChangeEveryRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
+        // 只能输入数字，整数
         const value = ev.target.value as unknown as number;
-        if (isNaN(value)) {
-            return false;
+        const reg = /^[0-9]*[1-9][0-9]*$/;
+        if (value.toString().length > 0)
+        {
+            if (isNaN(value))
+            {
+                return false;
+            }
+            if (!reg.test(ev.target.value))
+            {
+                return false;
+            }
+            if (value < 0 || value > 100)
+            {
+                return false
+            }
         }
-        
-        if (value <0 || value>100) {
-            return false
-        }
+
         this.setState({
-            reserveRatio:parseInt(ev.target.value,10).toString()
+            everyMonthRatio: value.toString()
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
         return true
     }
     // 最少转入金额
     private handleToChangeMixPrice = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
+        // 只能输入数字,小数点后2位
         const value = ev.target.value as unknown as number;
-        if (isNaN(value)) {
+        if (isNaN(value))
+        {
             return false;
         }
         this.setState({
-            reserveRatio:saveDecimal(value.toString(), 2)
+            mixPrice: saveDecimal(value.toString(), 2)
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
         return true
     }
     // 最大转入金额
     private handleToChangeMaxPrice = (ev: React.ChangeEvent<HTMLInputElement>) =>
     {
+        // 只能输入数字,小数点后2位
         const value = ev.target.value as unknown as number;
-        if (isNaN(value)) {
+        if (isNaN(value))
+        {
             return false;
-        }        
+        }
         this.setState({
-            reserveRatio:saveDecimal(value.toString(), 2)
+            maxPrice: saveDecimal(value.toString(), 2)
+        }, () =>
+        {
+            this.handleToCheckFinanceInput();
         })
         return true
     }
-    private handelToStartFinancing =async ()=>{
+    private handelToStartFinancing = async () =>
+    {
         // todo
         console.log("start")
-        const res = await this.props.metamaskwallet.inintWeb3();
-        if(res){
-            this.props.financing.startFanincingProject();
+        // if (!this.state.isOkGoing)
+        // {
+        //     return false
+        // }
+        // const res = await this.props.metamaskwallet.inintWeb3();
+        // if (res)
+        // {
+            this.props.financing.startStatus = 1;
+            const ratio = parseInt(this.state.reserveRatio, 10);
+            const everyRatio = parseInt(this.state.everyMonthRatio, 10);
+            const decimals = Math.pow(10, (this.state.priceDecimals));  // 单位 
+            const mixPrice = toMyNumber(this.state.mixPrice).mul(decimals).value;
+            const maxPrice = toMyNumber(this.state.maxPrice).mul(decimals).value;
+
+        //     console.log(this.state.tokenAddress, ratio, this.state.tokenName, this.state.tokenSimpleName, everyRatio, mixPrice, maxPrice)
+            // ratio:number,tokenName:string,tokenSimpleName:string,everyRatio:number,mixPrice:number,maxPrice:number
+            const startResult = await this.props.financing.startFanincingProject(this.state.tokenAddress, ratio, this.state.tokenName, this.state.tokenSimpleName, everyRatio, mixPrice, maxPrice);
+            if (startResult)
+            {
+                this.props.financing.startStatus = 2;
+            } else
+            {
+                this.props.financing.startStatus = 3;
+            }
+        // }
+        return true
+    }
+    private handleToCheckFinanceInput = () =>
+    {
+        let isOk = true;
+        if (!this.state.receiveAddress)
+        {
+            isOk = false;
         }
-        
+        if (!this.state.reAddressFlag)
+        {
+            isOk = false;
+        }
+        if (!this.state.tokenAddress)
+        {
+            isOk = false;
+        }
+        if (!this.state.tokenFlag)
+        {
+            isOk = false;
+        }
+        if (!this.state.tokenName)
+        {
+            isOk = false;
+        }
+        if (!this.state.tokenSimpleName)
+        {
+            isOk = false;
+        }
+        if (!this.state.reserveRatio)
+        {
+            isOk = false;
+        }
+        if (!this.state.everyMonthRatio)
+        {
+            isOk = false;
+        }
+        if (!this.state.mixPrice)
+        {
+            isOk = false;
+        }
+        if (!this.state.maxPrice)
+        {
+            isOk = false;
+        }
+        if (parseFloat(this.state.maxPrice) < parseFloat(this.state.mixPrice))
+        {
+            isOk = false;
+        }
+        this.setState({
+            isOkGoing: isOk
+        })
     }
 }
 

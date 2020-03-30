@@ -379,3 +379,18 @@ export const getReserverAddress = (page:number,size:number)=>{
     }
     return request(opts);
 }
+export const saveFContractInfo = (page:number,size:number)=>{
+    const opts = {
+        method: 'saveFContractInfo',
+        params: [page,size]
+    }
+    return request(opts);
+}
+
+// export const getReserverAddress = (page:number,size:number)=>{
+//     const opts = {
+//         method: 'queryJoinOrgAddressList',
+//         params: [page,size]
+//     }
+//     return request(opts);
+// }
