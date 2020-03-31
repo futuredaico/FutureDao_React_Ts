@@ -10,7 +10,8 @@ import { Input } from 'antd';
 import Select from '@/components/select';
 import { IProjectProps } from '../interface/project.interface';
 import Hint from '@/components/hint';
-import { saveDecimal, toMyNumber } from '@/utils/numberTool';
+import { saveDecimal } from '@/utils/numberTool';
+import { ProjectRole } from '../interface/editproject.interface';
 
 
 interface IState
@@ -438,33 +439,45 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
     }
     private handelToStartFinancing = async () =>
     {
-        // todo
         console.log("start")
-        // if (!this.state.isOkGoing)
-        // {
-        //     return false
-        // }
-        // const res = await this.props.metamaskwallet.inintWeb3();
-        // if (res)
-        // {
+        if (!this.state.isOkGoing)
+        {
+            return false
+        }
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (res)
+        {
             this.props.financing.startStatus = 1;
-            const ratio = parseInt(this.state.reserveRatio, 10);
-            const everyRatio = parseInt(this.state.everyMonthRatio, 10);
-            const decimals = Math.pow(10, (this.state.priceDecimals));  // 单位 
-            const mixPrice = toMyNumber(this.state.mixPrice).mul(decimals).value;
-            const maxPrice = toMyNumber(this.state.maxPrice).mul(decimals).value;
+            // const ratio = parseInt(this.state.reserveRatio, 10);
+            // const everyRatio = parseInt(this.state.everyMonthRatio, 10);
+            // const decimals = Math.pow(10, (this.state.priceDecimals));  // 单位 
+            // const mixPrice = toMyNumber(this.state.mixPrice).mul(decimals).value;
+            // const maxPrice = toMyNumber(this.state.maxPrice).mul(decimals).value;
 
-        //     console.log(this.state.tokenAddress, ratio, this.state.tokenName, this.state.tokenSimpleName, everyRatio, mixPrice, maxPrice)
+            console.log(this.state.tokenAddress, this.state.reserveRatio, this.state.tokenName, this.state.tokenSimpleName, this.state.everyMonthRatio, this.state.mixPrice, this.state.maxPrice)
             // ratio:number,tokenName:string,tokenSimpleName:string,everyRatio:number,mixPrice:number,maxPrice:number
-            const startResult = await this.props.financing.startFanincingProject(this.state.tokenAddress, ratio, this.state.tokenName, this.state.tokenSimpleName, everyRatio, mixPrice, maxPrice);
+            const startResult = await this.props.financing.startFanincingProject(
+                this.state.receiveAddress,
+                this.state.tokenAddress,
+                this.state.assetSimple, 
+                this.state.reserveRatio, 
+                this.state.tokenName, 
+                this.state.tokenSimpleName, 
+                this.state.everyMonthRatio, 
+                this.state.mixPrice, 
+                this.state.maxPrice,
+                this.state.priceDecimals
+                );
             if (startResult)
             {
+                // 成功
                 this.props.financing.startStatus = 2;
             } else
             {
+                // 失败
                 this.props.financing.startStatus = 3;
             }
-        // }
+        }
         return true
     }
     private handleToCheckFinanceInput = () =>
@@ -512,6 +525,9 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         }
         if (parseFloat(this.state.maxPrice) < parseFloat(this.state.mixPrice))
         {
+            isOk = false;
+        }
+        if(this.props.editproject.editContent.role !== ProjectRole.admin){
             isOk = false;
         }
         this.setState({

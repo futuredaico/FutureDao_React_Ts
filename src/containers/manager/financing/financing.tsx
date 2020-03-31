@@ -15,6 +15,15 @@ import Button from '@/components/Button';
 @observer
 class FinancingManager extends React.Component<IProjectProps> {
     public intrl = this.props.intl.messages;
+    public componentDidMount()
+    {
+        const projectId = this.props.match.params.projectId;
+        if (projectId)
+        {
+            this.props.financing.currentProjId = projectId;
+            this.props.financing.getFContractData(projectId)
+        }
+    }
     public componentWillUnmount()
     {
         this.props.financing.contractList = [
@@ -38,8 +47,6 @@ class FinancingManager extends React.Component<IProjectProps> {
                 {
                     this.props.financing.isStartContract ? <Settlement {...this.props} /> : <StartFinancing {...this.props} />
                 }
-                {/* <StartFinancing {...this.props} /> */}
-                {/* <Settlement {...this.props} /> */}
                 {
                     this.props.financing.startStatus > 0 &&
                     <div className="going-on-wrapper">
@@ -96,6 +103,7 @@ class FinancingManager extends React.Component<IProjectProps> {
     private handleGoRetry = () =>
     {
         this.props.financing.startStatus = 0;
+        this.props.financing.tradeStep = 0;
     }
 
     // 项目创建成功跳转到对应的项目详情页
@@ -103,6 +111,8 @@ class FinancingManager extends React.Component<IProjectProps> {
     {
         this.props.financing.isStartContract = true;
         this.props.financing.startStatus = 0;
+        this.props.financing.tradeStep = 0;
+        this.props.financing.getFContractData(this.props.financing.currentProjId)
     }
 }
 

@@ -73,13 +73,17 @@ class Project extends React.Component<IProjectProps, IState> {
             { 'li-active': this.mapChildClick(/project\/financing/i) ? true : false },
             { 'li-notallow': (this.props.editproject.editContent.role !== ProjectRole.admin ) ? true : false }
         );
+        const rewardClassName = classnames('menu-li',
+            { 'li-active': this.mapChildClick(/project\/reward/i) ? true : false },
+            { 'li-notallow': false }
+        );
         const orderClassName = classnames('menu-li',
             { 'li-active': this.mapChildClick(/project\/order/i) ? true : false },
             { 'li-notallow': false }
         );
         const deleteClassName = classnames('menu-li',
             // { 'li-active': this.props.project.menuNum === 4 },
-            { 'li-notallow': this.props.editproject.editContent.role !== 'admin' ? true : false }
+            { 'li-notallow': (this.props.editproject.editContent.role !== 'admin'||this.props.editproject.editContent.startFinanceFlag===1) ? true : false }
         );
         return (
             <div className="create-page">
@@ -94,6 +98,7 @@ class Project extends React.Component<IProjectProps, IState> {
                             <li className={teamClassName} onClick={this.mapUnderline.bind(this, '/project/team')}>团队管理</li>                            
                             <li className={updateClassName} onClick={this.mapUnderline.bind(this, '/project/update')}>{this.intrl.update.update}</li>
                             <li className={financingClassName} onClick={this.mapUnderline.bind(this, '/project/financing')}>融资管理</li>
+                            <li className={rewardClassName} onClick={this.mapUnderline.bind(this, '/project/reward')}>设置回报</li>
                             <li className={orderClassName} onClick={this.mapUnderline.bind(this, '/project/order')}>订单管理</li>
                             <li className={deleteClassName} onClick={this.mapUnderline.bind(this, '/project/delete')}>{this.intrl.delete.deletetitle}</li>
                         </ul>

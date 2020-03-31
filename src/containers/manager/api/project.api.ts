@@ -222,18 +222,16 @@ export const getContractData = (userId:string,token:string,projId:string) =>
 }
 /**
  * 设置回报
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目id 
  * @param name 联系人姓名
  * @param tel 联系人方式
  * @param backinfo 回报信息
  */
-export const setReward = (userId:string,token:string,projId:string,name:string,tel:string,backinfo:string) =>
+export const setReward = (projId:string,name:string,tel:string,backinfo:string) =>
 {
     const opts = {
-        method: 'saveReward',
-        params: [userId,token,projId,name,tel,backinfo]
+        method: 'saveRewardInfo',
+        params: [projId,name,tel,backinfo]
     }
     return request(opts);
 }
@@ -243,11 +241,11 @@ export const setReward = (userId:string,token:string,projId:string,name:string,t
  * @param token 访问令牌
  * @param projId 项目id
  */
-export const getRewardData = (userId:string,token:string,projId:string) =>
+export const getRewardData = (projId:string) =>
 {
     const opts = {
-        method: 'queryReward',
-        params: [userId,token,projId]
+        method: 'getRewardInfo',
+        params: [projId]
     }
     return request(opts);
 }
@@ -379,18 +377,33 @@ export const getReserverAddress = (page:number,size:number)=>{
     }
     return request(opts);
 }
-export const saveFContractInfo = (page:number,size:number)=>{
+/**
+ * 融资后存储融资合约信息
+ * @param projId 项目id
+ * @param receiveAddress 接收地址
+ * @param assetHash 融资资金哈希
+ * @param assetSimple 融资资金Symbol
+ * @param tokenName 项目代币名称
+ * @param tokenSimple 项目代币Symbol
+ * @param ratio 存储金比例
+ * @param arrList 水龙头列表：【{百分比/最小转入/最大转入},{...}】
+ * @param contractList 发布合约列表
+ */
+export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,contractList:string)=>{
     const opts = {
         method: 'saveFContractInfo',
-        params: [page,size]
+        params: [projId,receiveAddress,assetHash,assetSimple,tokenName,tokenSimple,ratio,arrList,contractList]
     }
     return request(opts);
 }
-
-// export const getReserverAddress = (page:number,size:number)=>{
-//     const opts = {
-//         method: 'queryJoinOrgAddressList',
-//         params: [page,size]
-//     }
-//     return request(opts);
-// }
+/**
+ * 查询融资合约信息
+ * @param projId 项目id
+ */
+export const getFContractInfo = (projId:string)=>{
+    const opts = {
+        method: 'getFContractInfo',
+        params: [projId]
+    }
+    return request(opts);
+}

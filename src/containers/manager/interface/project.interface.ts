@@ -6,6 +6,7 @@ import { IEditProjectStore } from './editproject.interface';
 import { IUpdateProjectStore } from "./updateproject.interface";
 import { IFinancingStore } from "./financing.interface";
 import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
+import { IRewardStore } from "./reward.interface";
 
 export interface IProjectStore {
   isEdit:boolean,
@@ -34,6 +35,7 @@ export interface IProjectProps extends RouteComponentProps<{ projectId: string }
   common: ICommonStore,
   updateproject:IUpdateProjectStore
   financing: IFinancingStore,
+  reward: IRewardStore,
   // orderproject: IOrderProjectStore,
   intl: any
 }

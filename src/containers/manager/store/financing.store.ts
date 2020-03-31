@@ -3,18 +3,20 @@ import * as Api from '../api/project.api';
 import * as MolochApi from '@/containers/projectinfo/molochdao/api/moloch.api';
 import { Web3Contract } from '@/utils/web3Contract';
 import { CodeType } from '@/store/interface/common.interface';
-import { IContractAddress, IFinancingOption } from '../interface/financing.interface';
+import { IContractAddress, IFinancingOption, IFContractInfo } from '../interface/financing.interface';
 import { IFundList } from '@/containers/projectinfo/molochdao/interface/molochinfo.interface';
 import { AbiItem } from 'web3-utils';
 import metamaskwallet from '@/store/metamaskwallet';
+import { toMyNumber } from '@/utils/numberTool';
 
 // import metamaskwallet from '@/store/metamaskwallet';
 class FinancingManager
 {
-  @observable public tradeTotal:number = 5; // 一共需要发几次合约
-  @observable public tradeStep:number = 0; // 正在发送第几个合约
-  @observable public startStatus:number = 0; // 融资状态，默认0，未启动融资，1正在启动融资，2启动融资成功状态，3启动融资失败
-  @observable public isStartContract: boolean = false; // 是否启动融资了
+  @observable public currentProjId: string = '';// 当前项目ID
+  @observable public tradeTotal: number = 8; // 一共需要发几次交易
+  @observable public tradeStep: number = 0; // 正在发送第几个合约
+  @observable public startStatus: number = 0; // 融资状态，默认0，未启动融资，1正在启动融资，2启动融资成功状态，3启动融资失败
+  @observable public isStartContract: boolean = true; // 是否启动融资了
   @observable public contractList: IContractAddress[] = [   // 可融资代币接收地址列表
     {
       id: '1',
@@ -25,11 +27,11 @@ class FinancingManager
   @observable public molochId: string = ''; // 选择融资地址的项目Id
   @observable public assetList: IFundList | null = null; // 融资代币的选择
   @observable public assetOption: IFinancingOption[] = []; // 融资代币的选择（下拉框）
-
+  @observable public fContractInfo: IFContractInfo | null = null;
   /**
    * 项目融资时查询参与中的项目组织信息
    */
-  @action public getContractList = async (projId: string) =>
+  @action public getContractList = async () =>
   {
     let result: any = [];
 
@@ -91,8 +93,59 @@ class FinancingManager
     }
     return true;
   }
+  /**
+   * 融资后存储融资合约信息
+   */
+  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string, contractList: string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList, contractList);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+
+    return true;
+  }
+  /**
+   * 查询融资合约信息
+   */
+  @action public getFContractData = async (projId: string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.getFContractInfo(projId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    if (Object.keys(result[0].data).length === 0)
+    {
+      this.fContractInfo = null;
+      this.isStartContract = false;
+    } else
+    {
+      this.fContractInfo = result[0].data;
+      this.isStartContract = true;
+    }
+    return true;
+  }
   // 获取代币简称
-  @action public getTokenInfo = async (token: string): Promise<{ symbol: string, decimals: string }> => {
+  @action public getTokenInfo = async (token: string): Promise<{ symbol: string, decimals: string }> =>
+  {
     await metamaskwallet.inintWeb3(); // 初始化 web3
     const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
     const contract = new Web3Contract(abi, token);
@@ -102,8 +155,13 @@ class FinancingManager
   }
   // 启动融资
   // ratio为存储比例
-  @action public startFanincingProject = async (assetHash:string,ratio: number, tokenName: string, tokenSimpleName: string, everyRatio: number, mixPrice: number, maxPrice: number) =>
+  @action public startFanincingProject = async (receiveAddress: string, assetHash: string, assetSimple: string, reserveRatio: string, tokenName: string, tokenSimpleName: string, everyMonthRatio: string, mixPrice1: string, maxPrice1: string, priceDecimals: number) =>
   {
+    const ratio = parseInt(reserveRatio, 10);
+    const everyRatio = parseInt(everyMonthRatio, 10);
+    const decimals = Math.pow(10, (priceDecimals));  // 单位 
+    const mixPrice = toMyNumber(mixPrice1).mul(decimals).value;
+    const maxPrice = toMyNumber(maxPrice1).mul(decimals).value;
     try
     {
       // 0xa86B705E7A2BF21845bCF8e0ee18a4E03532f7CE
@@ -135,10 +193,11 @@ class FinancingManager
         metamaskwallet.metamaskAddress,
         assetHash
       )
+      const appManagerTxid = await appManagerResult.onTransactionHash();
       const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
       const appManagerAddress = ins1.options.address;
       this.tradeStep = 1;
-      console.log("appManagerAddress",appManagerAddress)
+      console.log("appManagerAddress", appManagerAddress)
       console.log("发送第二个合约co")
       const coResult = await Web3Contract.deployContractOthers(
         coAbi,
@@ -148,10 +207,11 @@ class FinancingManager
         1000 * Math.pow(10, 4),
         ratio * 10
       )
+      const coTxid = await coResult.onTransactionHash();
       const ins2 = await coResult.promise;  // 合约部署成功后获得新的合约对象
       const coAddress = ins2.options.address;
       this.tradeStep = 2;
-      console.log("coAddress",coAddress)
+      console.log("coAddress", coAddress)
       console.log("发送第三个合约share")
       const shareResult = await Web3Contract.deployContractOthers(
         sharesBAbi,
@@ -162,10 +222,11 @@ class FinancingManager
         8,
         tokenSimpleName
       )
+      const sharesBTxid = await shareResult.onTransactionHash();
       const ins3 = await shareResult.promise;  // 合约部署成功后获得新的合约对象
       const sharesAddress = ins3.options.address;
       this.tradeStep = 3;
-      console.log("sharesAddress",sharesAddress)
+      console.log("sharesAddress", sharesAddress)
       console.log("发送第四个合约tradeFund")
       const tradeResult = await Web3Contract.deployContractOthers(
         tradeFundPoolAbi,
@@ -178,17 +239,127 @@ class FinancingManager
         maxPrice,
         mixPrice
       )
+      const tradeTxid = await tradeResult.onTransactionHash();
       const ins4 = await tradeResult.promise;
       const tradeAddress = ins4.options.address;
       this.tradeStep = 4;
-      
-      console.log("tradeAddress",tradeAddress)
+      console.log("tradeAddress", tradeAddress)
+      // 以下配置数据
+      const tradeContract = new Web3Contract(tradeFundPoolAbi, tradeAddress);
+      const bytes32_EMPTY_PARAM_HASH = await tradeContract.contractCall("EMPTY_PARAM_HASH");
+      const bytes32_FundPool_Start = await tradeContract.contractCall("FundPool_Start");
+      const bytes32_FundPool_ChangeRatio = await tradeContract.contractCall("FundPool_ChangeRatio");
+
+      const sharesContract = new Web3Contract(sharesBAbi, sharesAddress);
+      const byte32_SharesB_Burn = await sharesContract.contractCall("SharesB_Burn");
+      const byte32_SharesB_Mint = await sharesContract.contractCall("SharesB_Mint");
+      console.log("bytes32_EMPTY_PARAM_HASH", bytes32_EMPTY_PARAM_HASH)
+      console.log("bytes32_FundPool_Start", bytes32_FundPool_Start)
+      console.log("bytes32_FundPool_ChangeRatio", bytes32_FundPool_ChangeRatio)
+      console.log("byte32_SharesB_Burn", byte32_SharesB_Burn)
+      console.log("byte32_SharesB_Mint", byte32_SharesB_Mint);
+      const appManagerContract = new Web3Contract(appManagerAbi, appManagerAddress);
+      const dateTime = '0xdD47A2A48774bdf1a1809163b0bf291326338619'
+      const batch = new metamaskwallet.web3.BatchRequest();
+      const tx = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['initialize'](tradeAddress, receiveAddress, dateTime).encodeABI()
+        }, (err, txid) =>
+      {
+        console.log(" 第一笔交易")
+        console.log(err);
+        console.log(txid);
+      }
+      )
+      const tx2 = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['addPermission'](metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start).encodeABI()
+        }, (err, txid) =>
+      {
+        console.log(" 第二笔交易")
+        console.log(err);
+        console.log(txid);
+      }
+      )
+      const tx3 = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Burn).encodeABI()
+        }, (err, txid) =>
+      {
+        console.log(" 第三笔交易")
+        console.log(err);
+        console.log(txid);
+      }
+      )
+      const tx4 = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Mint).encodeABI()
+        }, (err, txid) =>
+      {
+        console.log(" 第四笔交易")
+        console.log(err);
+        console.log(txid);
+      }
+      )
+      console.log(tx);
+      console.log(tx2);
+      console.log(tx3);
+      console.log(tx4);
+      batch.add(tx)
+      batch.add(tx2);
+      batch.add(tx3)
+      batch.add(tx4);
+      await batch.execute();
+      this.tradeStep = 5;
+      const arrList = [{
+        percent: everyMonthRatio,
+        max: maxPrice1,
+        min: mixPrice1
+      }]
+      const fcontractList = [
+        {
+          hash: appManagerAddress,
+          name: "AppManager",
+          txid: appManagerTxid
+        },
+        {
+          hash: coAddress,
+          name: "Co",
+          txid: coTxid
+        },
+        {
+          hash: sharesAddress,
+          name: "sharesB",
+          txid: sharesBTxid
+        },
+        {
+          hash: tradeAddress,
+          name: "TradeFundPool",
+          txid: tradeTxid
+        }
+      ]
+      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), JSON.stringify(fcontractList))
+
     } catch (e)
     {
       return false;
     }
     return true
   }
+
+  // 只是发一下
   @action public sendDateTime = async () =>
   {
     try
@@ -204,16 +375,16 @@ class FinancingManager
       )
       const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
       const datetimeAddress = ins1.options.address;
-      
+
       // datetimeAddress 0xdD47A2A48774bdf1a1809163b0bf291326338619
-      console.log("datetimeAddress",datetimeAddress)
+      console.log("datetimeAddress", datetimeAddress)
     } catch (e)
     {
       return false;
     }
     return true
   }
-  
+
 }
 
 export default new FinancingManager();
