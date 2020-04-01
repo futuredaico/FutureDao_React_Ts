@@ -5,7 +5,8 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
-import ProjectDetail from '../info/detail'
+// import ProjectDetail from '../info/detail';
+import ProjectDetail from './detail/detail';
 import UpdateList from '../update/updatelist';
 import RightTeam from './detail/rightteam';
 import UpdateInfo from '../update/updateinfo';

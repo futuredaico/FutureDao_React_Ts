@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/project.api';
-import common from '@/store/common';
+// import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 // import { saveDecimal,toMyNumber,toNonExponential } from "@/utils/numberTool";
 import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/projectinfo.interface';
@@ -130,12 +130,12 @@ class ProjectInfo
   /**
    * 获取项目评论列表
    */
-  @action public getProjDiscussList = async (discussId: string) =>
+  @action public getProjDiscussList = async () =>
   {
     let result: any = [];
     try
     {
-      result = await Api.getProjDiscussList(this.projId, discussId, common.userId, this.projDiscussPage, this.projDiscussPageSize);
+      result = await Api.getProjDiscussList(this.projId, this.projDiscussPage, this.projDiscussPageSize);
     } catch (e)
     {
       return false;
@@ -164,7 +164,7 @@ class ProjectInfo
     let result: any = [];
     try
     {
-      result = await Api.getProjDiscussChildList(childId, common.userId, this.projDiscussPage, this.projDiscussPageSize);
+      result = await Api.getProjDiscussChildList(childId, this.projDiscussPage, this.projDiscussPageSize);
     } catch (e)
     {
       return [];
@@ -190,7 +190,7 @@ class ProjectInfo
     let result: any = [];
     try
     {
-      result = await Api.sendDiscussToProj(common.userId, common.token, this.projId, prevousId, discussStr);
+      result = await Api.sendDiscussToProj(this.projId, prevousId, discussStr);
     } catch (e)
     {
       return false;
@@ -209,7 +209,7 @@ class ProjectInfo
     let result: any = [];
     try
     {
-      result = await Api.sendZanProj(common.userId, common.token, this.projId, discussId);
+      result = await Api.sendZanProj(this.projId, discussId);
     } catch (e)
     {
       return false;
@@ -266,14 +266,14 @@ class ProjectInfo
       this.rewardList = [];
       return false
     }
-    // const list:IProjReward[] = result[0].data.list.map((item)=>{
-    //   const num = transationStore.computeSpendPriceBuyCount(item.price);
-    //   return {
-    //     ...item,
-    //     rewardPrice:parseInt(num,10).toString()
-    //   }
-    // });
-    // this.rewardList = list
+    const list:IProjReward[] = result[0].data.list.map((item)=>{
+      // const num = transationStore.computeSpendPriceBuyCount(item.price);
+      return {
+        ...item,
+        rewardPrice:parseInt(item.price,10).toString()
+      }
+    });
+    this.rewardList = list
     return true;
   }
   /**

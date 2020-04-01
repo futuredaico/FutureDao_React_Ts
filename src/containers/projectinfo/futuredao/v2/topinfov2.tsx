@@ -11,7 +11,7 @@ import Button from '@/components/Button';
 @observer
 class TopInfoV1 extends React.Component<IProjectInfoProps> {
     public intrl = this.props.intl.messages;
-    
+
     public render()
     {
         if (!this.props.projectinfo.projInfo)
@@ -26,32 +26,42 @@ class TopInfoV1 extends React.Component<IProjectInfoProps> {
                         <p className="gray-content">{this.props.projectinfo.projInfo.projBrief}</p>
                     </div>
                     <div className="other-wrapper">
-                        <div className="version-left">
-                            <strong className="title-strong">{this.intrl.projinfo.version}</strong>
-                            <p className="gray-content">{this.props.projectinfo.projInfo.projType === 'moloch' ? "MolochDao" : "FutureDao"} {this.props.projectinfo.projInfo.projVersion}</p>
-                        </div>
-                        <div className="dolike-wrapper" onClick={this.handleToAttention}>
-                            {
-                                this.props.projectinfo.projInfo.isStar ? (
-                                    <>
-                                        <Button
-                                            text={this.intrl.projinfo.followed}
-                                            onClick={this.handleToAttention}
-                                        />
-                                    </>
-                                )
-                                    : (
+                        <div className="version-wrapper">
+                            <div className="version-left">
+                                <strong className="title-strong">{this.intrl.projinfo.version}</strong>
+                                <p className="gray-content">{this.props.projectinfo.projInfo.projType === 'moloch' ? "MolochDao" : "FutureDao"} {this.props.projectinfo.projInfo.projVersion}</p>
+                            </div>
+                            <div className="dolike-wrapper">
+                                {
+                                    this.props.projectinfo.projInfo.isStar ? (
                                         <>
                                             <Button
-                                                text={this.intrl.projinfo.follow}
+                                                text={this.intrl.projinfo.followed}
+                                                btnColor="gray-btn2"
                                                 onClick={this.handleToAttention}
                                             />
                                         </>
                                     )
-                            }
+                                        : (
+                                            <>
+                                                <Button
+                                                    text={this.intrl.projinfo.follow}
+                                                    onClick={this.handleToAttention}
+                                                />
+                                            </>
+                                        )
+                                }
+                            </div>
                         </div>
-                        <div className="tips-content">
-                            <span className="sm-gray-content">该项目仅展示了创意，暂未发布合约</span>
+                        <div className="address-content">
+                            <div className="flex-con">
+                                <strong className="title-strong">{this.intrl.projinfo.contract}</strong>
+                                <strong className="purple-content">{this.props.projectinfo.projInfo.contractAddress.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
+                            </div>
+                            <div className="flex-con">
+                                <strong className="title-strong">{this.intrl.projinfo.contractaddr}</strong>
+                                <strong className="purple-content">{this.props.projectinfo.projInfo.creatorAddress.replace(/^(.{4})(.*)(.{4})$/, '$1...$3')}</strong>
+                            </div>
                         </div>
                         <strong className="title-strong">{this.intrl.projinfo.website}</strong>
                         {
@@ -63,7 +73,7 @@ class TopInfoV1 extends React.Component<IProjectInfoProps> {
             </div>
         );
     }
-    
+
     // 关注
     private handleToAttention = () =>
     {

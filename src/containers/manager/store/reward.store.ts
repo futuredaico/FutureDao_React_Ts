@@ -5,6 +5,7 @@ import { IRewardContent, IRewardInfo } from '../interface/reward.interface';
 import { CodeType } from '@/store/interface/common.interface';
 
 class Financing {
+    @observable public priceSimple:string ='';
   @observable public rewardContent: IRewardContent = {
     connectorName: '',
     connectorTel: '',
@@ -22,9 +23,28 @@ class Financing {
         distributeTimeFixNot: '',
         distributeWay: '',
         note: '',
-        tokenSymbol: ''
       }
     ]
+  }
+  /**
+   * 查询价格的单位
+   */
+  @action public getProjectAsset = async () =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.getProjFundAndTokenInfo(project.projId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+        this.priceSimple = result[0].data.fundSymbol || '';
+    return true;
   }
   /**
    * 查询回报信息
@@ -54,13 +74,15 @@ class Financing {
     let result: any = [];
     this.rewardContent.info.map((item: IRewardInfo) => {
       item.price = parseFloat(item.price).toString();
-    })
+      item.priceUnits = this.priceSimple;
+    })    
     const list = this.rewardContent.info.map((item:IRewardInfo)=>{
       return {
         rewardId: item.rewardId,
         rewardName: item.rewardName,
         rewardDesc: item.rewardDesc,
         price: item.price,
+        priceUnits:item.priceUnits,
         limitFlag: item.limitFlag,
         limitMax: item.limitMax,
         distributeTimeFlag: item.distributeTimeFlag,
@@ -68,7 +90,6 @@ class Financing {
         distributeTimeFixNot: item.distributeTimeFixNot,
         distributeWay: item.distributeWay,
         note: item.note,
-        fundName: item.tokenSymbol
       }
     })
     const info = {

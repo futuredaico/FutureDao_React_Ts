@@ -172,24 +172,24 @@ class DetailMessage extends React.Component<IProjectInfoProps, IState> {
     // 获取留言列表
     private handleGetDataList = async () =>
     {
-        // await this.props.projectinfo.getMolochDiscussList();
-        // if (this.props.projectinfo.projDiscussList.length > 0)
-        // {
-        //     this.props.projectinfo.projDiscussList.map((item: IDiscussList) =>
-        //     {
-        //         if (item.subSize > 0)
-        //         {
-        //             this.handleGetReplayList(item)
-        //         }
-        //     })
-        // }
+        await this.props.projectinfo.getProjDiscussList();
+        if (this.props.projectinfo.projDiscussList.length > 0)
+        {
+            this.props.projectinfo.projDiscussList.map((item: IDiscussList) =>
+            {
+                if (item.subSize > 0)
+                {
+                    this.handleGetReplayList(item)
+                }
+            })
+        }
     }
     // 获取回复列表
-    // private handleGetReplayList = async (item: IDiscussList) =>
-    // {
-    //     const replyList = await this.props.projectinfo.getMolochDiscussReplyList(item.rootId);
-    //     item.childredList = [...replyList]
-    // }
+    private handleGetReplayList = async (item: IDiscussList) =>
+    {
+        const replyList = await this.props.projectinfo.getProjDiscussReplyList(item.discussId);
+        item.childredList = [...replyList]
+    }
     // 留言输入
     private handleChangeDiscuss = (ev: React.ChangeEvent<HTMLTextAreaElement>) =>
     {
@@ -209,17 +209,17 @@ class DetailMessage extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        // const res = await this.props.projectinfo.sendMolochDiscuss('', this.state.discussInput);
-        // if (res)
-        // {
-        //     this.setState({
-        //         discussInput: ''
-        //     })
-        //     setTimeout(() =>
-        //     {
-        //         this.handleGetDataList();
-        //     }, 2000)
-        // }
+        const res = await this.props.projectinfo.sendProjDiscuss('', this.state.discussInput);
+        if (res)
+        {
+            this.setState({
+                discussInput: ''
+            })
+            setTimeout(() =>
+            {
+                this.handleGetDataList();
+            }, 2000)
+        }
         return true;
     }
     // 一切操作之前的验证 
@@ -241,12 +241,12 @@ class DetailMessage extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        // const res = await this.props.projectinfo.sendMolochZan(item.discussId);
-        // if (res)
-        // {
-        //     item.isZan = true;
-        //     item.zanCount++;
-        // }
+        const res = await this.props.projectinfo.sendProZan(item.discussId);
+        if (res)
+        {
+            item.isZan = true;
+            item.zanCount++;
+        }
         return true
     }
     // 打开回复
@@ -325,12 +325,12 @@ class DetailMessage extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        // this.props.projectinfo.sendMolochDiscuss(item.discussId, this.state.replyInput);
-        // item.isShowReply = false;
-        // setTimeout(() =>
-        // {
-        //     this.handleGetReplayList(item);
-        // }, 2000);
+        this.props.projectinfo.sendProjDiscuss(item.discussId, this.state.replyInput);
+        item.isShowReply = false;
+        setTimeout(() =>
+        {
+            this.handleGetReplayList(item);
+        }, 2000);
         return true;
     }
     // 回复评论二级
@@ -340,12 +340,12 @@ class DetailMessage extends React.Component<IProjectInfoProps, IState> {
         {
             return false;
         }
-        // this.props.projectinfo.sendMolochDiscuss(replyItem.discussId, this.state.replyInputOther);
-        // replyItem.isShowReply = false;
-        // setTimeout(() =>
-        // {
-        //     this.handleGetReplayList(item);
-        // }, 2000)
+        this.props.projectinfo.sendProjDiscuss(replyItem.discussId, this.state.replyInputOther);
+        replyItem.isShowReply = false;
+        setTimeout(() =>
+        {
+            this.handleGetReplayList(item);
+        }, 2000)
         return true;
     }
 }

@@ -9,7 +9,7 @@ import { IOrderProps } from './interface/order.interface';
 import Button from '@/components/Button';
 import { getQueryString } from '@/utils/function';
 import { toMyNumber } from '../../utils/numberTool';
-import * as Cookie from '@/utils/cookie';
+// import * as Cookie from '@/utils/cookie';
 import { OrderCode } from '@/store/interface/common.interface';
 // import * as format from '@/utils/formatTime';
 
@@ -50,7 +50,7 @@ class Order extends React.Component<IOrderProps, IState> {
             else if(this.props.order.orderInfo ){
                 this.handleComputePriceDiff(this.props.order.orderInfo.totalCost)
                 this.mathTime(this.props.order.orderInfo.time);
-                this.handleCheckLinkWallet();
+                // this.handleCheckLinkWallet();
             }
             
         }
@@ -134,11 +134,11 @@ class Order extends React.Component<IOrderProps, IState> {
         );
     }
     // 检验是否连接了钱包，并付款
-    private handleCheckLinkWallet = async () =>
-    {
-        const user = Cookie.getCookie("user");
-        if (user)
-        {
+    // private handleCheckLinkWallet = async () =>
+    // {
+    //     const user = Cookie.getCookie("user");
+    //     if (user)
+    //     {
             // 检测是否连接钱包
             // if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             // {
@@ -182,19 +182,19 @@ class Order extends React.Component<IOrderProps, IState> {
             // {
             //     // 获取Teemo钱包上登陆的地址                
             // }
-        }
-        else
-        {
-            // 假如没有登陆
-            this.setState({
-                isCanBuyBtn: false,
-                address: ''
-            })
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-            return false
-        }
-        return true;
-    }
+    //     }
+    //     else
+    //     {
+    //         // 假如没有登陆
+    //         this.setState({
+    //             isCanBuyBtn: false,
+    //             address: ''
+    //         })
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+    //         return false
+    //     }
+    //     return true;
+    // }
     // 10分钟倒计时
     private mathTime = (createTime: number) =>
     {

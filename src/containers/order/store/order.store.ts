@@ -4,7 +4,7 @@ import {getProjectContractHash} from '../../projectinfo/futuredao/api/project.ap
 // import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 import { IRewardDetail, ICreateOrderInfo } from '../interface/order.interface';
-import common from '@/store/common';
+
 class Order
 {
   @observable public orderMenu = 1; // 订单菜单切换 1为订单信息，2为订单创建，3为订单取消，4为订单确认付款
@@ -36,7 +36,7 @@ class Order
       this.rewardDetail = null;
       return false
     }
-    this.rewardDetail = result[0].data[0]
+    this.rewardDetail = result[0].data
     return true;
   }
   /**
@@ -48,7 +48,7 @@ class Order
 
     try
     {
-      result = await Api.createOrder(common.userId,common.token,this.projId,this.rewardId,buyCount,getCount,name,tel,addr,email,msg);
+      result = await Api.createOrder(this.projId,this.rewardId,buyCount,getCount,name,tel,addr,email,msg);
     } catch (e)
     {
       this.orderId = '';
@@ -71,7 +71,7 @@ class Order
 
     try
     {
-      result = await Api.confirmBuyOrder(common.userId,common.token,this.orderId,txid);
+      result = await Api.confirmBuyOrder(this.orderId,txid);
     } catch (e)
     {
       return false;
@@ -91,7 +91,7 @@ class Order
 
     try
     {
-      result = await Api.cancelBuyOrder(common.userId,common.token,orderId);
+      result = await Api.cancelBuyOrder(orderId);
     } catch (e)
     {
       return false;
@@ -111,7 +111,7 @@ class Order
 
     try
     {
-      result = await Api.getOrderInfo(common.userId,common.token,projId,orderId);
+      result = await Api.getOrderInfo(projId,orderId);
     } catch (e)
     {
       return false;
@@ -141,11 +141,15 @@ class Order
     {
       return false
     }
-    for (const item of result[0].data)
+    if(Object.keys(result[0].data).length === 0){
+      this.hash = '';
+      return false
+    }
+    for (const item of result[0].data.hashArr)
     {
       if (item.contractName === 'TradeFundPool')
       {
-        this.hash = item.contractHash
+        this.hash = item.hash
       }
     }
     return true;

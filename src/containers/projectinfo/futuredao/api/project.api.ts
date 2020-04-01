@@ -90,31 +90,27 @@ export const getTeamList = (projId: string, page: number, pageSize: number) => {
 }
 /**
  * 发送项目的评论
- * @param userId 用户id
- * @param token 
  * @param projId 项目ID
  * @param prevousId 上一条评论ID（可为空，表示一级评论）
  * @param discussStr 评论内容
  */
-export const sendDiscussToProj = (userId: string, token: string, projId: string, prevousId: string, discussStr: string) => {
+export const sendDiscussToProj = ( projId: string, prevousId: string, discussStr: string) => {
     const opts = {
-        method: 'addProjDiscuss',
-        params: [ userId, token, projId, prevousId, discussStr ]
+        method: 'addMoloDiscuss',
+        params: [ projId, prevousId, discussStr ]
     }
     return request(opts);
 }
 /**
  * 查询项目评论列表
  * @param projId 项目ID
- * @param discussId 评论ID（为空表示查询一级评论）
- * @param userId 用户id
  * @param page 当前页码
  * @param pageSize 每页条数
  */
-export const getProjDiscussList = (projId: string, discussId: string, userId: string, page: number, pageSize: number) => {
+export const getProjDiscussList = (projId: string, page: number, pageSize: number) => {
     const opts = {
-        method: 'getProjSubDiscussList',
-        params: [ projId, discussId, userId, page, pageSize ]
+        method: 'getMoloDiscussList',
+        params: [ projId, page, pageSize ]
     }
     return request(opts);
 }
@@ -125,10 +121,10 @@ export const getProjDiscussList = (projId: string, discussId: string, userId: st
  * @param page 分页索引
  * @param pageSize 分页大小
  */
-export const getProjDiscussChildList = (childId: string, userId: string, page: number, pageSize: number) => {
+export const getProjDiscussChildList = (childId: string, page: number, pageSize: number) => {
     const opts = {
-        method: 'getProjSubChildDiscussList',
-        params: [ childId, userId, page, pageSize ]
+        method: 'getMoloSubDiscussList',
+        params: [ childId, page, pageSize ]
     }
     return request(opts);
 }
@@ -179,30 +175,26 @@ export const getUpdateDiscussChildList = (childId: string, userId: string, page:
 }
 /**
  * 点赞项目评论
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  * @param discussId 评论ID
  */
-export const sendZanProj = (userId: string, token: string, projId: string, discussId: string) => {
+export const sendZanProj = (projId: string, discussId: string) => {
     const opts = {
-        method: 'zanProjDiscuss',
-        params: [ userId, token, projId, discussId ]
+        method: 'zanMoloDiscuss',
+        params: [ projId, discussId ]
     }
     return request(opts);
 }
 /**
  * 点赞更新评论
- * @param userId 用户ID
- * @param token 访问令牌
  * @param projId 项目ID
  * @param updateId 更新ID
  * @param discussId 评论ID
  */
-export const sendZanUpdate = (userId: string, token: string, projId: string, updateId: string, discussId: string) => {
+export const sendZanUpdate = ( projId: string, updateId: string, discussId: string) => {
     const opts = {
         method: 'zanUpdateDiscuss',
-        params: [ userId, token, projId, updateId, discussId ]
+        params: [ projId, updateId, discussId ]
     }
     return request(opts);
 }
@@ -261,7 +253,7 @@ export const getTokenPrice = (projId: string) => {
 export const getRewardList = (projId: string) => {
     const opts = {
         method: 'queryRewardList',
-        params: [ projId ]
+        params: [ projId, 1,100]
     }
     return request(opts);
 }
@@ -340,7 +332,7 @@ export const sell = (addr: string, hash: string, count: number, minAmount: strin
  */
 export const getProjectContractHash = (projId: string) => {
     const opts = {
-        method: 'queryContractHash',
+        method: 'getFContractHash',
         params: [ projId ]
     }
     return request(opts);

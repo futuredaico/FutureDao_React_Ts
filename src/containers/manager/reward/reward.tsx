@@ -23,11 +23,10 @@ class StepTwo extends React.Component<IRewardProps, IState> {
     connectorTel: this.props.reward.rewardContent.connectorTel,
     isCanSave: false
   }
-//   public componentDidMount() {
-//     if (this.props.reward.rewardContent && this.props.reward.rewardContent.rewardSetFlag !== '3') {
-//       this.props.reward.getRewardData();
-//     }
-//   }
+  public componentDidMount() {
+    this.props.reward.getProjectAsset();
+    this.props.reward.getRewardData();
+  }
 
   public render() {
     if (!this.props.reward.rewardContent) {
@@ -35,7 +34,8 @@ class StepTwo extends React.Component<IRewardProps, IState> {
     }
     const { MonthPicker } = DatePicker;
     return (
-      <div className="steptwo-page">
+      <div className="reward-page">
+          <div className="big-title"><strong>设置回报</strong></div>
         {
           this.props.reward.rewardContent.info.length === 0
             ? (
@@ -116,7 +116,7 @@ class StepTwo extends React.Component<IRewardProps, IState> {
                             </div>
                             <div className="inline-enter">
                               <Input
-                                suffix={this.props.reward.rewardContent.info[0].tokenSymbol.toLocaleUpperCase()}
+                                suffix={this.props.reward.priceSimple.toLocaleUpperCase()}
                                 value={item.price}
                                 onChange={this.handleChangePrice.bind(this, index)}
                               />
@@ -335,7 +335,7 @@ class StepTwo extends React.Component<IRewardProps, IState> {
         rewardName: '',
         rewardDesc: '',
         price: '',
-        priceUnits:'',
+        priceUnits:this.props.reward.priceSimple,
         limitFlag: '',
         limitMax: '',
         distributeTimeFlag: '',
@@ -343,7 +343,6 @@ class StepTwo extends React.Component<IRewardProps, IState> {
         distributeTimeFixNot: '',
         distributeWay: '',
         note: '',
-        tokenSymbol: this.props.reward.rewardContent.info[0].tokenSymbol
       })
     }    
     this.setState({
@@ -364,17 +363,12 @@ class StepTwo extends React.Component<IRewardProps, IState> {
     if (this.props.reward.rewardContent.info.length !== 0 && !this.state.isCanSave) {
       return false
     }
-    // const res = await this.props.reward.setReward();
-    // if (res && this.props.reward.rewardContent && this.props.reward.rewardContent.rewardSetFlag === '5') {
-    //   this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.updatetips);
-    // } else if (res && this.props.reward.rewardContent && this.props.reward.rewardContent.rewardSetFlag === '3') {
-    //   this.props.reward.step = 3;
-    //   this.props.reward.stepTwoStatus = 2;
-    //   this.props.reward.rewardContent.rewardSetFlag = '5';
-    // }
-    // else if (!res) {
-    //   this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.updateerr);
-    // }
+    const res = await this.props.reward.setReward();
+    if (res ) {
+      this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.savesuccess);
+    } else {
+      this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.error);
+    }
     this.props.reward.getRewardData();
     return true;
   }

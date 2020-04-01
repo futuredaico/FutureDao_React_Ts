@@ -24,7 +24,7 @@ export interface IProjectInfoStore
   startAttention: () => Promise<boolean>,
   cancelAttention: () => Promise<boolean>,
   getTeamData: () => Promise<boolean>,
-  getProjDiscussList: (discussId: string) => Promise<boolean>,
+  getProjDiscussList: () => Promise<boolean>,
   sendProjDiscuss: (prevousId: string, discussStr: string) => Promise<boolean>,
   sendProZan: (discussId: string) => Promise<boolean>,
   getProjDiscussReplyList: (childId: string) => Promise<[]>,
@@ -133,6 +133,7 @@ export interface IProjReward
   rewardName: string,  // 回报名称
   rewardDesc: string, // 回报详情
   price: string,    // 价格
+  priceUnits:string, // 价格单位
   limitFlag: string,  // 是否限量 0为不限量，1为限量
   limitMax: string, // 限量数量
   distributeTimeFlag: string, // 预计发放时间 0为不定期，1为定期
@@ -140,8 +141,8 @@ export interface IProjReward
   distributeTimeFixNot: string, // 不定期
   distributeWay: string, // 发放方式，0为虚拟发放，1为实物发放
   note: string, // 特殊说明
-  projId: string, // 项目ID
-  fundName: string, // 单位
+  // projId: string, // 项目ID
+  // fundName: string, // 单位
   hasSellCount: number // 已出售数量
   rewardPrice:string  // 计算出可获得的礼包
 }

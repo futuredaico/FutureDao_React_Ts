@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { injectIntl } from 'react-intl';
-import '../index.less';
+import '../../index.less';
 import Button from '@/components/Button';
-import { IProjectInfoProps, IProjectTeam, IProjReward, IProjReserveList } from '../interface/projectinfo.interface';
+import { IProjectInfoProps, IProjectTeam, IProjReward } from '../../interface/projectinfo.interface';
 import Hint from '@/components/hint';
 import { ProjectState } from '@/store/interface/common.interface';
-import * as formatTime from '@/utils/formatTime';
+// import * as formatTime from '@/utils/formatTime';
 
 interface IState
 {
@@ -27,7 +27,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
         if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.projState !== ProjectState.IdeaPub)
         {
             this.props.projectinfo.getRewardData();
-            this.props.projectinfo.getReserveTokenData();
+            // this.props.projectinfo.getReserveTokenData();
             this.props.projectinfo.computeCurrentBuyPrice();
             this.props.projectinfo.computeCurrentSellPrice();
         }
@@ -39,25 +39,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
             return null
         }
         return (
-            <>
-                {/* 团队模块 */}
-                <div className="team-wrapper">
-                    <h3 className="title-h3">{this.intrl.projinfo.team}</h3>
-                    {
-                        this.props.projectinfo.projTeamList.length > 0 && this.props.projectinfo.projTeamList.map((item: IProjectTeam, index: number) =>
-                        {
-                            return (
-                                <div className="team-smallbox" key={index}>
-                                    <div className="team-people">
-                                        <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
-                                        <span>{item.username}</span>
-                                    </div>
-                                    <p className="team-des">{!!item.address ? item.address : this.intrl.projinfo.noprofile}</p>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
+            <>                
                 {
                     this.props.projectinfo.projInfo.projState === ProjectState.Trading  && (
                         <>
@@ -120,7 +102,7 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                 )
                             }
                             {/* 团队预留代币信息模块 */}
-                            {
+                            {/* {
                                 this.props.projectinfo.reserveData && (
                                     <div className="team-price-wrapper">
                                         <h3 className="title-h3">团队预留代币信息</h3>
@@ -146,11 +128,31 @@ class RightTeam extends React.Component<IProjectInfoProps, IState> {
                                         }
                                     </div>
                                 )
-                            }
+                            } */}
 
                         </>
                     )
                 }
+                {/* 团队模块 */}
+                <div className="team-wrapper">
+                    <h3 className="title-h3">{this.intrl.projinfo.team}</h3>
+                    {
+                        this.props.projectinfo.projTeamList.length > 0 && this.props.projectinfo.projTeamList.map((item: IProjectTeam, index: number) =>
+                        {
+                            return (
+                                <div className="team-smallbox" key={index}>
+                                    <div className="team-people">
+                                        <img src={item.headIconUrl ? item.headIconUrl : require('@/img/default.png')} alt="" />
+                                        <div className="team-name">
+                                            <span>{item.username}</span><br />
+                                            <span>{item.address.replace(/^(.{5})(.*)(.{5})$/, '$1...$3')}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             </>
         )
     }

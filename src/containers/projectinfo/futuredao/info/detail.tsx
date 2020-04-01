@@ -28,7 +28,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
         const projectId = this.props.match.params.projectId;
         this.props.projectinfo.projId = projectId;
         // 获取留言列表
-        this.handleGetDataList('');
+        this.handleGetDataList();
     }
     public render()
     {
@@ -175,9 +175,9 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
         )
     }
     // 获取留言列表
-    private handleGetDataList = async (discussId: string) =>
+    private handleGetDataList = async () =>
     {
-        await this.props.projectinfo.getProjDiscussList(discussId);
+        await this.props.projectinfo.getProjDiscussList();
         if (this.props.projectinfo.projDiscussList.length > 0)
         {
             this.props.projectinfo.projDiscussList.map((item: IDiscussList) =>
@@ -222,7 +222,7 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
             })
             setTimeout(() =>
             {
-                this.handleGetDataList('');
+                this.handleGetDataList();
             }, 2000)
         }
         return true;
@@ -236,12 +236,12 @@ class ProjectDetail extends React.Component<IProjectInfoProps, IState> {
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
             return false
         }
-        // 验证是否支持了项目
-        if (this.props.projectinfo.projInfo )
-        {
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
-            return false
-        }
+        // // 验证是否支持了项目
+        // if (this.props.projectinfo.projInfo )
+        // {
+        //     this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.supporterr);
+        //     return false
+        // }
         return true
     }
     // 点赞

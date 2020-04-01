@@ -8,9 +8,9 @@ import { injectIntl } from 'react-intl';
 // import Pbottom from './pbottom';
 import { IProjectInfoProps } from './interface/projectinfo.interface';
 import TopRightV1 from './v1/topinfov1';
-// import TopRightV2 from './v2/topinfov2';
+import TopRightV2 from './v2/topinfov2';
 import PbottomV1 from './v1/pbottom';
-// import PbottomV2 from './v2/pbottom';
+import PbottomV2 from './v2/pbottom';
 
 interface IState
 {
@@ -61,9 +61,13 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                             }
                         </div>
                     </div>
-                    <TopRightV1 {...this.props} />
-                </div> 
-                <PbottomV1 {...this.props} />
+                    {
+                        this.props.projectinfo.projInfo.projState === 'ideapub' ? <TopRightV1 {...this.props} /> : <TopRightV2 {...this.props} />
+                    }
+                </div>
+                {
+                    this.props.projectinfo.projInfo.projState === 'ideapub' ? <PbottomV1 {...this.props} /> : <PbottomV2 {...this.props} />
+                }
             </div >
         );
     }
@@ -75,6 +79,6 @@ class ProjectInfo extends React.Component<IProjectInfoProps, IState> {
                 isShowVideo: true
             })
         }
-    }    
+    }
 }
 export default injectIntl(ProjectInfo)

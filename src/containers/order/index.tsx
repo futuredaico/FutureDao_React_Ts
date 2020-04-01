@@ -9,7 +9,7 @@ import { IOrderProps } from './interface/order.interface';
 import Button from '@/components/Button';
 import { getQueryString } from '@/utils/function';
 import {toMyNumber } from '../../utils/numberTool';
-import * as Cookie from '@/utils/cookie';
+// import * as Cookie from '@/utils/cookie';
 
 // import * as formatTime from '@/utils/formatTime';
 interface IState
@@ -60,7 +60,7 @@ class Order extends React.Component<IOrderProps, IState> {
             this.props.order.rewardId = rewardId;
             await this.props.projectinfo.getProjInfo(projectId);
             await this.props.order.getRewardInfo(rewardId);
-            this.handleCheckLinkWallet();
+            // this.handleCheckLinkWallet();
             this.handleComputeGetData();
         }
 
@@ -86,7 +86,7 @@ class Order extends React.Component<IOrderProps, IState> {
                         </div>
                         <div className="order-line">
                             <div className="oline-left">价格</div>
-                            <div className="oline-right">{this.props.order.rewardDetail.price} {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
+                            <div className="oline-right">{this.props.order.rewardDetail.price} {this.props.order.rewardDetail.priceUnits.toLocaleUpperCase()}</div>
                         </div>
                         <div className="order-line">
                             <div className="oline-left">购买数量</div>
@@ -108,7 +108,7 @@ class Order extends React.Component<IOrderProps, IState> {
                         </div>
                         <div className="order-big-line">
                             <div className="oline-left">总价</div>
-                            <div className="oline-right">{this.state.spendPrice}  {this.props.order.rewardDetail.fundName.toLocaleUpperCase()}</div>
+                            <div className="oline-right">{this.state.spendPrice}  {this.props.order.rewardDetail.priceUnits.toLocaleUpperCase()}</div>
                         </div>
                     </div>
                     {
@@ -174,9 +174,9 @@ class Order extends React.Component<IOrderProps, IState> {
                 </div>
                 <div className="order-footer">
                     <Button
-                        text={"立即付款  " + this.state.spendPrice + " " + this.props.order.rewardDetail.fundName.toLocaleUpperCase()}
+                        text={"立即付款  " + this.state.spendPrice + " " + this.props.order.rewardDetail.priceUnits.toLocaleUpperCase()}
                         btnSize="bg-btn"
-                        btnColor={(this.state.isCanBuyBtn && this.state.isCheckOk) ? '' : 'gray-btn'}
+                        btnColor={(this.state.isCheckOk) ? '' : 'gray-btn'}
                         onClick={this.handleToCreateOrder}
                     />
                 </div>
@@ -184,11 +184,12 @@ class Order extends React.Component<IOrderProps, IState> {
         );
     }
     // 检验是否连接了钱包
-    private handleCheckLinkWallet = async () =>
-    {
-        const user = Cookie.getCookie("user")
-        if (user)
-        {
+    // private handleCheckLinkWallet = async () =>
+    // {
+
+    //     const user = Cookie.getCookie("user")
+    //     if (user)
+    //     {
             // 检测是否连接钱包
             // if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'eth')
             // {
@@ -221,18 +222,18 @@ class Order extends React.Component<IOrderProps, IState> {
             // {
             //     // 获取Teemo钱包上登陆的地址                
             // }
-        }
-        else
-        {
-            // 假如没有登陆
-            this.setState({
-                isCanBuyBtn: false
-            })
-            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
-            return false
-        }
-        return true;
-    }
+    //     }
+    //     else
+    //     {
+    //         // 假如没有登陆
+    //         this.setState({
+    //             isCanBuyBtn: false
+    //         })
+    //         this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+    //         return false
+    //     }
+    //     return true;
+    // }
     // 减数量
     private handleToMinusCount = () =>
     {
@@ -417,10 +418,11 @@ class Order extends React.Component<IOrderProps, IState> {
     // 创建订单
     private handleToCreateOrder = async () =>
     {
-        if (!this.state.isCanBuyBtn || !this.state.isCheckOk)
+        if (!this.state.isCheckOk)
         {
             return false;
         }
+        
         const beforeRes = await this.handleBeforeCreateOrder();
         if (!beforeRes)
         {

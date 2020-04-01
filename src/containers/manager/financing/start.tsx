@@ -437,6 +437,7 @@ class StartFinancing extends React.Component<IProjectProps, IState> {
         })
         return true
     }
+    // 启动融资开始
     private handelToStartFinancing = async () =>
     {
         console.log("start")

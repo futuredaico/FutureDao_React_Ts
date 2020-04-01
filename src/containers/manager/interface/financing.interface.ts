@@ -20,7 +20,7 @@ export interface IFinancingStore {
     decimals: string;
   }>
   startFanincingProject:(receiveAddress:string,assetHash:string,assetSimple:string,ratio:string,tokenName:string,tokenSimpleName:string,everyRatio:string,mixPrice:string,maxPrice:string,priceDecimals:number)=>Promise<boolean>
-  setDataToSave:(projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,contractList:string)=>Promise<boolean>,
+  setDataToSave:(projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,startAddr:string,contractList:string)=>Promise<boolean>,
   getFContractData:(projId:string)=>Promise<boolean>
 }
 

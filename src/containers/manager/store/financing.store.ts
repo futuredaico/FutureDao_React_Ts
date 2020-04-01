@@ -96,13 +96,13 @@ class FinancingManager
   /**
    * 融资后存储融资合约信息
    */
-  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string, contractList: string) =>
+  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string,startAddr:string, contractList: string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList, contractList);
+      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList,startAddr, contractList);
     } catch (e)
     {
       return false;
@@ -350,7 +350,7 @@ class FinancingManager
           txid: tradeTxid
         }
       ]
-      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), JSON.stringify(fcontractList))
+      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress,JSON.stringify(fcontractList))
 
     } catch (e)
     {

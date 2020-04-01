@@ -111,7 +111,7 @@ export enum ProjectState
   Readying = "reading",  // 准备中
   IdeaPub = "ideapub",   // 创意发布
   CrowdFunding = "crowdfunding",  // 众筹中
-  Trading = "trading",       // 交易中
+  Trading = "daico",       // 交易中
   ClearUp = "clearup",       // 清退
 }
 

@@ -387,9 +387,10 @@ export const getReserverAddress = (page:number,size:number)=>{
  * @param tokenSimple 项目代币Symbol
  * @param ratio 存储金比例
  * @param arrList 水龙头列表：【{百分比/最小转入/最大转入},{...}】
+ * @param satrtAddress 启动者
  * @param contractList 发布合约列表
  */
-export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,contractList:string)=>{
+export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,satrtAddress:string,contractList:string)=>{
     const opts = {
         method: 'saveFContractInfo',
         params: [projId,receiveAddress,assetHash,assetSimple,tokenName,tokenSimple,ratio,arrList,contractList]
@@ -403,6 +404,17 @@ export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:
 export const getFContractInfo = (projId:string)=>{
     const opts = {
         method: 'getFContractInfo',
+        params: [projId]
+    }
+    return request(opts);
+}
+/**
+ * 查询futuredao的支持代币信息
+ * @param projId 项目id
+ */
+export const getProjFundAndTokenInfo = (projId:string)=>{
+    const opts = {
+        method: 'getProjFundAndTokenInfo',
         params: [projId]
     }
     return request(opts);

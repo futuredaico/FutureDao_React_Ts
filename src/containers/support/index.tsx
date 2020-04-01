@@ -45,7 +45,7 @@ class Support extends React.Component<IProjectInfoProps, IState> {
                         {
                             return (
                                 <div className={(item.limitFlag === '1' && parseInt(item.limitMax, 10) - parseInt(item.hasSellCount.toString(), 10)===0)?"support-gift-smallbox gray-smallbox":"support-gift-smallbox"} key={index} onClick={this.handleToOrderPage.bind(this, item)}>
-                                    <strong className="b-block">{item.price} {item.fundName.toLocaleUpperCase()}</strong>
+                                    <strong className="b-block">{item.price} {item.priceUnits.toLocaleUpperCase()}</strong>
                                     <span className="s-gray">获得约{item.rewardPrice}代币</span>
                                     <strong className="m-block">{item.rewardName}</strong>
                                     <p className="m-gray">{item.rewardDesc}</p>

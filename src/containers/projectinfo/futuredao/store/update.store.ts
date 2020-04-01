@@ -160,7 +160,7 @@ class ProjectUpdate
         let result: any = [];
         try
         {
-            result = await Api.sendZanUpdate(common.userId, common.token, projectinfoStore.projId, this.updateId, discussId);
+            result = await Api.sendZanUpdate( projectinfoStore.projId, this.updateId, discussId);
         } catch (e)
         {
             return false;

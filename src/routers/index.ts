@@ -7,9 +7,25 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/order/order')),
+    path: '/order/:projectId'
+  },
+  {
+    component: asyncComponent(() => import('../containers/order')),
+    path: '/giftorder/:projectId'
+  },
+  {
     component: asyncComponent(() => import('../containers/manager')),
     path: '/project/:projectId',
     children: [
+      {
+        path: '/project/order/:projectId',
+        component: asyncComponent(() => import('../containers/manager/order/order')),
+      },
+      {
+        path: '/project/reward/:projectId',
+        component: asyncComponent(() => import('../containers/manager/reward/reward')),
+      },
       {
         path: '/project/financing/:projectId',
         component: asyncComponent(() => import('../containers/manager/financing/financing')),

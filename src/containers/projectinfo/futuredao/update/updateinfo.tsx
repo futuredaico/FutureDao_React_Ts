@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import '../index.less';
 import { injectIntl } from 'react-intl';
 import { IProjectInfoProps, IDiscussList } from '../interface/projectinfo.interface';
-import UpdateMessage from './message';
+// import UpdateMessage from './message';
 import * as formatTime from '@/utils/formatTime';
 interface IState
 {
@@ -72,7 +72,7 @@ class UpdateInfo extends React.Component<IProjectInfoProps, IState> {
                     }
                     <span className="zan-span">{this.props.update.updateInfo.zanCount}</span>
                 </div>
-                <UpdateMessage {...this.props} />
+                {/* <UpdateMessage {...this.props} /> */}
             </div>
         );
     }
