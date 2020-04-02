@@ -12,12 +12,12 @@ import { renderRoutes } from 'react-router-config';
 @observer
 class MolochProposal extends React.Component<IMolochProposalProps> {
     public intrl = this.props.intl.messages;
-    public componentDidMount()
-    {
-        const projectId = this.props.match.params['projectId'];
-        this.props.index.getDepositData(projectId);
-        this.props.molochmanager.getContractInfo(projectId);
-    }
+    // public componentDidMount()
+    // {
+    //     const projectId = this.props.match.params['projectId'];
+    //     this.props.index.getDepositData(projectId);
+    //     this.props.molochmanager.getContractInfo(projectId);
+    // }
     public componentWillUnmount(){
         this.props.index.depositHash = ''; 
         this.props.index.depositSymbol = ''; 

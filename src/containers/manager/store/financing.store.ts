@@ -96,13 +96,13 @@ class FinancingManager
   /**
    * 融资后存储融资合约信息
    */
-  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string,startAddr:string, contractList: string) =>
+  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string, startAddr: string, contractList: string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList,startAddr, contractList);
+      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList, startAddr, contractList);
     } catch (e)
     {
       return false;
@@ -186,6 +186,15 @@ class FinancingManager
       const tradeFundPool = require("utils/contractFiles/TradeFundPool.json");
       const tradeFundPoolAbi = tradeFundPool.abi as AbiItem[];
       const tradeFundPoolBytecode = tradeFundPool.bytecode;
+
+      const voteChangeMonth = require("utils/contractFiles/Vote_ChangeMonthlyAllocation.json");
+      const voteChangeMonthAbi = voteChangeMonth.abi as AbiItem[];
+      const voteChangeMonthBytecode = voteChangeMonth.bytecode;
+      // 30%
+      const voteClear = require("utils/contractFiles/Vote_Clearing.json");
+      const voteClearAbi = voteClear.abi as AbiItem[];
+      const voteClearBytecode = voteClear.bytecode;
+
       console.log("发送第一个合约appManager")
       const appManagerResult = await Web3Contract.deployContractOthers(
         appManagerAbi,
@@ -244,6 +253,39 @@ class FinancingManager
       const tradeAddress = ins4.options.address;
       this.tradeStep = 4;
       console.log("tradeAddress", tradeAddress)
+      console.log("发送第五个合约voteChangeMonth");
+      const voteMonthResult = await Web3Contract.deployContractOthers(
+        voteChangeMonthAbi,
+        voteChangeMonthBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        sharesAddress,
+        tradeAddress,
+        5*24*3600,
+        9*24*3600
+      )
+      const voteMonthTxid = await voteMonthResult.onTransactionHash();
+      const ins5 = await voteMonthResult.promise;
+      const voteMonthAddress = ins5.options.address;
+      this.tradeStep = 5;
+      console.log("voteMonthAddress", voteMonthAddress)
+      console.log("发送第六个合约Vote_Clearing");
+      const voteClearResult = await Web3Contract.deployContractOthers(
+        voteClearAbi,
+        voteClearBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        sharesAddress,
+        tradeAddress,
+        300,
+        5*24*3600,
+        0
+      )
+      const voteClearTxid = await voteClearResult.onTransactionHash();
+      const ins6 = await voteClearResult.promise;
+      const voteClearAddress = ins6.options.address;
+      this.tradeStep = 6;
+      console.log("voteClearAddress", voteClearAddress)
       // 以下配置数据
       const tradeContract = new Web3Contract(tradeFundPoolAbi, tradeAddress);
       const bytes32_EMPTY_PARAM_HASH = await tradeContract.contractCall("EMPTY_PARAM_HASH");
@@ -268,11 +310,11 @@ class FinancingManager
           value: '0x0',
           data: appManagerContract.contract.methods['initialize'](tradeAddress, receiveAddress, dateTime).encodeABI()
         }, (err, txid) =>
-      {
-        console.log(" 第一笔交易")
-        console.log(err);
-        console.log(txid);
-      }
+        {
+          console.log(" 第一笔交易")
+          console.log(err);
+          console.log(txid);
+        }
       )
       const tx2 = web3.eth.sendTransaction.request(
         {
@@ -281,11 +323,11 @@ class FinancingManager
           value: '0x0',
           data: appManagerContract.contract.methods['addPermission'](metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start).encodeABI()
         }, (err, txid) =>
-      {
-        console.log(" 第二笔交易")
-        console.log(err);
-        console.log(txid);
-      }
+        {
+          console.log(" 第二笔交易")
+          console.log(err);
+          console.log(txid);
+        }
       )
       const tx3 = web3.eth.sendTransaction.request(
         {
@@ -294,11 +336,11 @@ class FinancingManager
           value: '0x0',
           data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Burn).encodeABI()
         }, (err, txid) =>
-      {
-        console.log(" 第三笔交易")
-        console.log(err);
-        console.log(txid);
-      }
+        {
+          console.log(" 第三笔交易")
+          console.log(err);
+          console.log(txid);
+        }
       )
       const tx4 = web3.eth.sendTransaction.request(
         {
@@ -307,22 +349,37 @@ class FinancingManager
           value: '0x0',
           data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Mint).encodeABI()
         }, (err, txid) =>
-      {
-        console.log(" 第四笔交易")
-        console.log(err);
-        console.log(txid);
-      }
+        {
+          console.log(" 第四笔交易")
+          console.log(err);
+          console.log(txid);
+        }
+      )
+      const tx5 = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['addPermission'](voteMonthAddress, tradeAddress, bytes32_FundPool_ChangeRatio).encodeABI()
+        }, (err, txid) =>
+        {
+          console.log(" 第五笔交易")
+          console.log(err);
+          console.log(txid);
+        }
       )
       console.log(tx);
       console.log(tx2);
       console.log(tx3);
       console.log(tx4);
-      batch.add(tx)
+      console.log(tx5);
+      batch.add(tx);
       batch.add(tx2);
-      batch.add(tx3)
+      batch.add(tx3);
       batch.add(tx4);
+      batch.add(tx5);
       await batch.execute();
-      this.tradeStep = 5;
+      this.tradeStep = 7;
       const arrList = [{
         percent: everyMonthRatio,
         max: maxPrice1,
@@ -348,9 +405,19 @@ class FinancingManager
           hash: tradeAddress,
           name: "TradeFundPool",
           txid: tradeTxid
+        },
+        {
+          hash: voteMonthAddress,
+          name: "Vote_ChangeMonthlyAllocation",
+          txid: voteMonthTxid
+        },
+        {
+          hash:voteClearAddress,
+          name:"Vote_Clearing",
+          txid:voteClearTxid
         }
       ]
-      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress,JSON.stringify(fcontractList))
+      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress, JSON.stringify(fcontractList))
 
     } catch (e)
     {

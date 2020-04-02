@@ -68,14 +68,14 @@ export interface IProjectInfo
   discussCount: number, // 留言人数
   updateCount: number, // 更新条数
   // time: number // 创建时间
-  // hasIssueAmt: string, // 已发行
+  hasIssueAmt: string, // 已发行
   // hasSellAmt: string // 已出售
   projState: string, // 一级状态
   // projSubState: string, // 二级状态
   // hasSupport: string, // 支持人数
   // type:string, // 众筹类型
   // platform:string, // 上链类型
-  // fundName:string, // 单位
+  fundName:string, // 单位
   // fundReservePoolTotal:string // 储备池资金
 }
 
@@ -161,7 +161,7 @@ export interface IProjReserveList
   unlockFlag: string,  // 解锁标识，true为已解锁，false为未解锁
 }
 export interface IContractHash {
-  contractHash:string,   // 合约hash
-  contractName:string,   // 合约作用名
-  projId:string
+  hash:string,   // 合约hash
+  name:string,   // 合约作用名
+  // projId:string
 }

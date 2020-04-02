@@ -7,6 +7,24 @@ export default [
   //   path: '/address/:address',
   // },
   {
+    component: asyncComponent(() => import('../containers/proposal/futuredao/index')),
+    path: '/fproposal/:projectId',
+    children: [
+      {
+        path: '/fproposal/quit/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/futuredao/quit')),
+      },
+      {
+        path: '/fproposal/month/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/futuredao/month')),
+      },
+      {
+        path: '/fproposal/menu/:projectId',
+        component: asyncComponent(() => import('../containers/proposal/futuredao/menu')),
+      }
+    ]
+  },
+  {
     component: asyncComponent(() => import('../containers/order/order')),
     path: '/order/:projectId'
   },

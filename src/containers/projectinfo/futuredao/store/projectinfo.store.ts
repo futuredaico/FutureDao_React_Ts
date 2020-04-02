@@ -43,6 +43,29 @@ class ProjectInfo
       return false
     }
     this.projInfo = result[0].data;
+    this.getProjectAsset(projId);
+    return true;
+  }
+  /**
+   * 项目的单位
+   */
+  @action public getProjectAsset = async (projId:string) =>
+  {
+    let result: any = [];
+    try
+    {
+      result = await Api.getProjFundAndTokenInfo(projId);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    if(this.projInfo){
+      this.projInfo.fundName = result[0].data.fundSymbol || '';
+    }    
     return true;
   }
   /**
@@ -63,7 +86,11 @@ class ProjectInfo
     {
       return false
     }
-    this.hashList = result[0].data
+    if(Object.keys(result[0].data).length === 0){
+      this.hashList = [];
+      return false
+    }
+    this.hashList = result[0].data.hashArr
     return true;
   }
   /**

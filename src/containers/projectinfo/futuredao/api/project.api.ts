@@ -304,12 +304,12 @@ export const getTokenBalanceInfo = (projId: string, addr: string) => {
  * @param token 标识
  * @param amount 金额
  */
-export const buy = (addr: string, hash: string, minMount: number, token: number, amount: string) => {
-    if (!common.userInfo) {
-        return
-    }
-    // return web3Tool.contractSend('fundPool', hash, 'buy', [minMount,token], { from: addr, to: hash, value: amount,gas: 5500000})
-}
+// export const buy = (addr: string, hash: string, minMount: number, token: number, amount: string) => {
+//     if (!common.userInfo) {
+//         return
+//     }
+//     return web3Tool.contractSend('fundPool', hash, 'buy', [minMount,token], { from: addr, to: hash, value: amount,gas: 5500000})
+// }
 
 /**
  * 卖出方法
@@ -334,6 +334,17 @@ export const getProjectContractHash = (projId: string) => {
     const opts = {
         method: 'getFContractHash',
         params: [ projId ]
+    }
+    return request(opts);
+}
+/**
+ * 查询futuredao的支持代币信息
+ * @param projId 项目id
+ */
+export const getProjFundAndTokenInfo = (projId:string)=>{
+    const opts = {
+        method: 'getProjFundAndTokenInfo',
+        params: [projId]
     }
     return request(opts);
 }

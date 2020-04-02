@@ -6,10 +6,11 @@ import * as formatTime from '@/utils/formatTime';
 import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
-import { saveDecimal } from "@/utils/numberTool";
+import { saveDecimal, toMyNumber, toNonExponential } from "@/utils/numberTool";
 // import { IContractHash } from '../interface/projectinfo.interface';
 // import { CONTRACT_CONFIG } from '@/config';
-// import { AbiItem } from 'web3-utils';
+import { AbiItem } from 'web3-utils';
+import { Web3Contract } from '@/utils/web3Contract';
 // import { IContractHash } from '../interface/projectinfo.interface';
 
 
@@ -179,11 +180,12 @@ class ProjectTransation
       hashStr = hash;
     } else
     {
+
       for (const item of projectinfoStore.hashList)
       {
-        if (item.contractName === 'TradeFundPool')
+        if (item.name === 'TradeFundPool')
         {
-          hashStr = item.contractHash
+          hashStr = item.hash
         }
       }
     }
@@ -194,9 +196,22 @@ class ProjectTransation
     }
     try
     {
-      const txid = await Api.buy(addr, hashStr, parseInt(minCount, 10), orderId, metamaskwallet.web3.utils.toWei(amount, "ether"));
-      console.log(txid)
-      return txid;
+      const futuredaoAbi = require('@/utils/contractFiles/TradeFundPool.json').abi as AbiItem[];
+      const futureContract = new Web3Contract(futuredaoAbi, hashStr);
+      const minMount = parseInt(minCount, 10);
+      const value = metamaskwallet.web3.utils.toWei(amount, "ether");
+      const submitRes = futureContract.contractSend("buy", [value,minMount, orderId], { from: addr });
+      const subtxid = await submitRes.onTransactionHash();
+      // export const buy = (addr: string, hash: string, minMount: number, token: number, amount: string) => {
+        //     if (!common.userInfo) {
+        //         return
+        //     }
+        //     return web3Tool.contractSend('fundPool', hash, 'buy', [minMount,token], { from: addr, to: hash, value: amount,gas: 5500000})
+        // }
+      // web3Tool.contractSend('fundPool', hash, 'buy', [minMount,token], { from: addr, to: hash, value: amount,gas: 5500000})
+      // const txid = await Api.buy(addr, hashStr, parseInt(minCount, 10), orderId, metamaskwallet.web3.utils.toWei(amount, "ether"));
+      // console.log(submitRes)
+      return subtxid;
     } catch (error)
     {
       console.log(error);
@@ -214,9 +229,9 @@ class ProjectTransation
     let hashStr = '';
     for (const item of projectinfoStore.hashList)
     {
-      if (item.contractName === 'TradeFundPool')
+      if (item.name === 'TradeFundPool')
       {
-        hashStr = item.contractHash
+        hashStr = item.hash
       }
     }
     if (!hashStr)
@@ -225,8 +240,23 @@ class ProjectTransation
     }
     try
     {
-      const txid = await Api.sell(addr, hashStr, parseInt(count, 10), metamaskwallet.web3.utils.toWei(minAmount, "ether"));
-      return txid
+      const futuredaoAbi = require('@/utils/contractFiles/TradeFundPool.json').abi as AbiItem[];
+      const futureContract = new Web3Contract(futuredaoAbi, hashStr);
+      const amount = parseInt(count, 10);
+      const minGasValue = metamaskwallet.web3.utils.toWei(minAmount, "ether");
+      const submitRes = futureContract.contractSend("sell", [amount,minGasValue], { from: addr });
+      const subtxid = await submitRes.onTransactionHash();
+
+
+      // export const sell = (addr: string, hash: string, count: number, minAmount: string) => {
+      //   if (!common.userInfo) {
+      //       return
+      //   }
+        // const minAmountNum = parseFloat(minAmount)
+        // return web3Tool.contractSend('fundPool', hash, "sell", [count,minAmountNum], { from: addr ,gas: 5500000});
+    // }
+      // const txid = await Api.sell(addr, hashStr, parseInt(count, 10), metamaskwallet.web3.utils.toWei(minAmount, "ether"));
+      return subtxid
     } catch (error)
     {
       console.log(error);
@@ -261,21 +291,21 @@ class ProjectTransation
    */
   @action public computeSpendPriceBuyCount = (amount: string) =>
   {
-    // if (!projectinfoStore.projInfo)
-    // {
-    //   return '0'
-    // }
-    // // (2x / 0.000000001 + 已发行代币数^2 )^0.5 - 已发行代币数
-    // const myamount = toMyNumber(amount);
-    // const num1 = myamount.mul(2).div(0.000000001);
-    // const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    // const num3 = parseFloat(num1.add(num2).toString());
-    // const num4 = Math.pow(num3, 0.5)
-    // const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
-    // // 130601.60406562978
-    // // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
-    // return toNonExponential(num5.value);
-    // // web3.toBigNumber(num5).toString(10);
+    if (!projectinfoStore.projInfo)
+    {
+      return '0'
+    }
+    // (2x / 0.000000001 + 已发行代币数^2 )^0.5 - 已发行代币数
+    const myamount = toMyNumber(amount);
+    const num1 = myamount.mul(2).div(0.000000001);
+    const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    const num3 = parseFloat(num1.add(num2).toString());
+    const num4 = Math.pow(num3, 0.5)
+    const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
+    // 130601.60406562978
+    // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
+    return toNonExponential(num5.value);
+    // web3.toBigNumber(num5).toString(10);
   }
   /**
    * 已知要获得X个ETH，求需要出售多少个代币

@@ -69,7 +69,7 @@ class Manager extends React.Component<IProjectInfoProps, any> {
         );
     }
     private handleToProposal = () => {
-        this.props.history.push('/proposal/'+this.props.projectinfo.projId)
+        this.props.history.push('/fproposal/menu/'+this.props.projectinfo.projId)
     }
     private handleToInfo = () => {
         this.props.projectinfo.isShowManagerInfo = true;

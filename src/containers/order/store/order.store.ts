@@ -147,11 +147,12 @@ class Order
     }
     for (const item of result[0].data.hashArr)
     {
-      if (item.contractName === 'TradeFundPool')
+      if (item.name === 'TradeFundPool')
       {
         this.hash = item.hash
       }
     }
+    console.log("hash:",this.hash)
     return true;
   }
 }
