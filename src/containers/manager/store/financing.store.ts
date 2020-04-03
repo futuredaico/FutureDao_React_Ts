@@ -111,7 +111,7 @@ class FinancingManager
     {
       return false
     }
-
+    console.log("存数据了")
     return true;
   }
   /**
@@ -402,7 +402,7 @@ class FinancingManager
       batch.add(tx5);
       batch.add(tx6);
       await batch.execute();
-      this.tradeStep = 7;
+      
       const arrList = [{
         percent: everyMonthRatio,
         max: maxPrice1,
@@ -440,7 +440,7 @@ class FinancingManager
           txid:voteClearTxid
         }
       ]
-      this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress, JSON.stringify(fcontractList))
+      await this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress, JSON.stringify(fcontractList))
 
     } catch (e)
     {
