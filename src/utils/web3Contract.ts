@@ -52,6 +52,7 @@ export class Web3Contract {
         const contract = new MetaMask.web3.eth.Contract(abi);
         const data = args ? { data: contractBytecode, arguments: args } : { data: contractBytecode }
         console.log('data', data);
+        console.log("from:",from)
 
         const deploy = contract.deploy(data)
         try {

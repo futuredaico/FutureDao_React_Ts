@@ -1,12 +1,13 @@
 import { observable, action } from 'mobx';
 import * as Api from '../api/future.api';
 import { CodeType } from '@/store/interface/common.interface';
-// import { AbiItem } from 'web3-utils';
-// import { Web3Contract } from '@/utils/web3Contract';
-// import { toMyNumber } from '@/utils/numberTool';
+import { AbiItem } from 'web3-utils';
+import { Web3Contract } from '@/utils/web3Contract';
+import { toMyNumber } from '@/utils/numberTool';
 // import metamaskwallet from '@/store/metamaskwallet';
 import { IFContractInfo } from '@/containers/manager/interface/financing.interface';
 import { IFutureProposalStore } from '../interface/future.interface';
+import metamaskwallet from '@/store/metamaskwallet';
 
 class FutureProposal implements IFutureProposalStore
 {
@@ -66,20 +67,40 @@ class FutureProposal implements IFutureProposalStore
     /**
      * 发起提案修改月供
      * @param contractHash 合约的hash
-     * @param addr 踢掉人的地址（address)
-     * @param details 附带信息（提案标题，提案详情）(string)
-     * @param myaddr 当前钱包地址(address)
      */
-    @action public applyProposalToKick = async (contractHash: string, addr: string, details: string, myaddr: string) =>
+    @action public applyProposalToChangeMonth = async (contractHash: string, monthRatio: string, min: string, max: string, explain: string) =>
+    {
+        try
+        {
+            const ratio = parseInt(monthRatio, 10) * 10;
+            const minPrice = toMyNumber(min).mul(this.assetDecimals).value;
+            const maxPrice = toMyNumber(max).mul(this.assetDecimals).value;
+            // 调用合约      
+            const voteChangeAbi = require('@/utils/contractFiles/Vote_ChangeMonthlyAllocation.json').abi as AbiItem[];
+            const voteChangeContract = new Web3Contract(voteChangeAbi, contractHash);
+            const submitRes = voteChangeContract.contractSend("applyProposal", [ratio, minPrice, maxPrice, explain], { from: metamaskwallet.metamaskAddress });
+            const subtxid = await submitRes.onTransactionHash();
+            console.log(subtxid)
+            return true
+        } catch (e)
+        {
+            console.log(e);
+            return false;
+        }
+    }
+    /**
+     * 发起清退提案
+     */
+    @action public applyProposalToClearing = async (contractHash: string, explain: string) =>
     {
         try
         {
             // 调用合约      
-            // const molochv2Abi = require('@/utils/contractFiles/Future2.json').abi as AbiItem[];
-            // const molochContract = new Web3Contract(molochv2Abi, contractHash);
-            // const submitRes = molochContract.contractSend("submitGuildKickProposal", [addr, details], { from: myaddr });
-            // const subtxid = await submitRes.onTransactionHash();
-            // console.log(subtxid)
+            const voteChangeAbi = require('@/utils/contractFiles/Vote_Clearing.json').abi as AbiItem[];
+            const voteChangeContract = new Web3Contract(voteChangeAbi, contractHash);
+            const submitRes = voteChangeContract.contractSend("applyClearingProposal", [explain], { from: metamaskwallet.metamaskAddress });
+            const subtxid = await submitRes.onTransactionHash();
+            console.log(subtxid)
             return true
         } catch (e)
         {

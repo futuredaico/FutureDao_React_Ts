@@ -13,7 +13,7 @@ import { toMyNumber } from '@/utils/numberTool';
 class FinancingManager
 {
   @observable public currentProjId: string = '';// 当前项目ID
-  @observable public tradeTotal: number = 8; // 一共需要发几次交易
+  @observable public tradeTotal: number = 12; // 一共需要发几次交易
   @observable public tradeStep: number = 0; // 正在发送第几个合约
   @observable public startStatus: number = 0; // 融资状态，默认0，未启动融资，1正在启动融资，2启动融资成功状态，3启动融资失败
   @observable public isStartContract: boolean = true; // 是否启动融资了
@@ -171,6 +171,7 @@ class FinancingManager
       // const daiResult = await Web3Contract.deployContractOthers(
       //   abi, bytecode, metamaskwallet.metamaskAddress,"DAI",8,"dai"
       // );
+      console.log("metamaskwallet.metamaskAddress:",metamaskwallet.metamaskAddress)
       const appManager = require("utils/contractFiles/AppManager.json");
       const appManagerAbi = appManager.abi as AbiItem[];
       const appManagerBytecode = appManager.bytecode;
@@ -194,7 +195,7 @@ class FinancingManager
       const voteClear = require("utils/contractFiles/Vote_Clearing.json");
       const voteClearAbi = voteClear.abi as AbiItem[];
       const voteClearBytecode = voteClear.bytecode;
-
+      this.tradeStep = 1;
       console.log("发送第一个合约appManager")
       const appManagerResult = await Web3Contract.deployContractOthers(
         appManagerAbi,
@@ -204,10 +205,10 @@ class FinancingManager
       )
       const appManagerTxid = await appManagerResult.onTransactionHash();
       const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
-      const appManagerAddress = ins1.options.address;
-      this.tradeStep = 1;
+      const appManagerAddress = ins1.options.address;     
       console.log("appManagerAddress", appManagerAddress)
       console.log("发送第二个合约co")
+      this.tradeStep = 2;
       const coResult = await Web3Contract.deployContractOthers(
         coAbi,
         coBytecode,
@@ -219,7 +220,7 @@ class FinancingManager
       const coTxid = await coResult.onTransactionHash();
       const ins2 = await coResult.promise;  // 合约部署成功后获得新的合约对象
       const coAddress = ins2.options.address;
-      this.tradeStep = 2;
+      this.tradeStep = 3;
       console.log("coAddress", coAddress)
       console.log("发送第三个合约share")
       const shareResult = await Web3Contract.deployContractOthers(
@@ -234,7 +235,7 @@ class FinancingManager
       const sharesBTxid = await shareResult.onTransactionHash();
       const ins3 = await shareResult.promise;  // 合约部署成功后获得新的合约对象
       const sharesAddress = ins3.options.address;
-      this.tradeStep = 3;
+      this.tradeStep = 4;
       console.log("sharesAddress", sharesAddress)
       console.log("发送第四个合约tradeFund")
       const tradeResult = await Web3Contract.deployContractOthers(
@@ -251,7 +252,7 @@ class FinancingManager
       const tradeTxid = await tradeResult.onTransactionHash();
       const ins4 = await tradeResult.promise;
       const tradeAddress = ins4.options.address;
-      this.tradeStep = 4;
+      this.tradeStep = 5;
       console.log("tradeAddress", tradeAddress)
       console.log("发送第五个合约voteChangeMonth");
       const voteMonthResult = await Web3Contract.deployContractOthers(
@@ -267,7 +268,7 @@ class FinancingManager
       const voteMonthTxid = await voteMonthResult.onTransactionHash();
       const ins5 = await voteMonthResult.promise;
       const voteMonthAddress = ins5.options.address;
-      this.tradeStep = 5;
+      this.tradeStep = 6;
       console.log("voteMonthAddress", voteMonthAddress)
       console.log("发送第六个合约Vote_Clearing");
       const voteClearResult = await Web3Contract.deployContractOthers(
@@ -283,14 +284,15 @@ class FinancingManager
       )
       const voteClearTxid = await voteClearResult.onTransactionHash();
       const ins6 = await voteClearResult.promise;
-      const voteClearAddress = ins6.options.address;
-      this.tradeStep = 6;
+      const voteClearAddress = ins6.options.address;      
       console.log("voteClearAddress", voteClearAddress)
+
       // 以下配置数据
       const tradeContract = new Web3Contract(tradeFundPoolAbi, tradeAddress);
       const bytes32_EMPTY_PARAM_HASH = await tradeContract.contractCall("EMPTY_PARAM_HASH");
       const bytes32_FundPool_Start = await tradeContract.contractCall("FundPool_Start");
       const bytes32_FundPool_ChangeRatio = await tradeContract.contractCall("FundPool_ChangeRatio");
+      const bytes32_FundPool_Clearing = await tradeContract.contractCall("FundPool_Clearing");
 
       const sharesContract = new Web3Contract(sharesBAbi, sharesAddress);
       const byte32_SharesB_Burn = await sharesContract.contractCall("SharesB_Burn");
@@ -312,6 +314,7 @@ class FinancingManager
         }, (err, txid) =>
         {
           console.log(" 第一笔交易")
+          this.tradeStep = 7;
           console.log(err);
           console.log(txid);
         }
@@ -325,6 +328,7 @@ class FinancingManager
         }, (err, txid) =>
         {
           console.log(" 第二笔交易")
+          this.tradeStep = 8;
           console.log(err);
           console.log(txid);
         }
@@ -338,6 +342,7 @@ class FinancingManager
         }, (err, txid) =>
         {
           console.log(" 第三笔交易")
+          this.tradeStep = 9;
           console.log(err);
           console.log(txid);
         }
@@ -351,6 +356,7 @@ class FinancingManager
         }, (err, txid) =>
         {
           console.log(" 第四笔交易")
+          this.tradeStep = 10;
           console.log(err);
           console.log(txid);
         }
@@ -366,6 +372,21 @@ class FinancingManager
           console.log(" 第五笔交易")
           console.log(err);
           console.log(txid);
+          this.tradeStep = 11;
+        }
+      )
+      const tx6 = web3.eth.sendTransaction.request(
+        {
+          from: metamaskwallet.metamaskAddress,
+          to: appManagerAddress,
+          value: '0x0',
+          data: appManagerContract.contract.methods['addPermission'](voteClearAddress, tradeAddress, bytes32_FundPool_Clearing).encodeABI()
+        }, (err, txid) =>
+        {
+          console.log(" 第六笔交易")
+          console.log(err);
+          console.log(txid);
+          this.tradeStep = 12;
         }
       )
       console.log(tx);
@@ -373,11 +394,13 @@ class FinancingManager
       console.log(tx3);
       console.log(tx4);
       console.log(tx5);
+      console.log(tx6);
       batch.add(tx);
       batch.add(tx2);
       batch.add(tx3);
       batch.add(tx4);
       batch.add(tx5);
+      batch.add(tx6);
       await batch.execute();
       this.tradeStep = 7;
       const arrList = [{

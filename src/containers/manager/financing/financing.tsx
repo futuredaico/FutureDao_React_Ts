@@ -11,7 +11,7 @@ import Settlement from './settlement';
 import { Spin, Icon } from 'antd';
 import Button from '@/components/Button';
 
-@inject('project', 'financing', 'common', 'metamaskwallet')
+@inject('project', 'financing', 'common', 'metamaskwallet','editproject')
 @observer
 class FinancingManager extends React.Component<IProjectProps> {
     public intrl = this.props.intl.messages;
