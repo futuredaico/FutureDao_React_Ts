@@ -3,18 +3,38 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
-import { IProjectInfoProps } from '../interface/projectinfo.interface';
+import { IProjectInfoProps } from '../../interface/projectinfo.interface';
 
 @observer
 class Manager extends React.Component<IProjectInfoProps, any> {
+    public componentDidMount()
+    {        
+        this.props.manager.getContractShowData(this.props.projectinfo.projId);           
+    }
     public render()
     {
         return (
             <div className="manager-wrapper">
+                {
+                    this.props.manager.contractShow && (
+                        <div className="contract-info">
+                            <div className="three-row">
+                                <span className="block-span"><span title="">代币发行储备金：</span><strong>{this.props.manager.contractShow.fundPoolTotal} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">投资储备比例：</span><strong>{this.props.manager.contractShow.reserveRundRatio}%</strong></span>
+                                <span className="block-span"><span title="">已募集资金：</span><strong>{this.props.manager.contractShow.fundReservePoolTota} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">项目月供：</span><strong>{this.props.manager.contractShow.percent}% 已募集资金</strong></span>
+                                <span className="block-span"><span title="">最小月供：</span><strong>{this.props.manager.contractShow.min} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">最大月供：</span><strong>{this.props.manager.contractShow.max} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">项目资金接收地址： </span><strong className="purple-strong">{this.props.manager.contractShow.recvAddress}   ({this.props.manager.contractShow.recvAddressName})</strong></span>
+                            </div>
+                        </div>
+                    )
+                }
+               
                 <div className="manager-left">
                     <div className="manager-list" onClick={this.handleToInfo}>
                         <div className="mcontent-top">
@@ -23,16 +43,20 @@ class Manager extends React.Component<IProjectInfoProps, any> {
                                 <strong className="mtitle">FableWood Returns - The 5 New Magnetic  Woo--den Animals!FableWood Returns - The 5 New Magnetic  Woo--den Animals!</strong>
                             </div>
                             {/* <Card text="已通过" colortype="transparent-green" cardsize="md-sm-card" /> */}
+                            {/* <div className="transparent-toupiao">
+                                <span className="big-text">投票中</span>&nbsp;&nbsp;
+                                <span className="sm-text">剩余 8d12h12m12s</span>
+                            </div> */}
+                        </div>
+                        <div className="mcontent-down">
                             <div className="transparent-toupiao">
                                 <span className="big-text">投票中</span>&nbsp;&nbsp;
                                 <span className="sm-text">剩余 8d12h12m12s</span>
                             </div>
-                        </div>
-                        <div className="mcontent-down">
-                            <div className="mcontent-people">
+                            {/* <div className="mcontent-people">
                                 <img src={require("@/img/default.png")} className="mpeople-img" alt="" />
                                 <span>某某某某</span>
-                            </div>
+                            </div> */}
                             {/* <div className="start-time">
                                 <span className="time-text">2019-08-08 12:12:12 开始执行</span>
                                 <br/>                              
@@ -48,15 +72,15 @@ class Manager extends React.Component<IProjectInfoProps, any> {
                     </div>
                 </div>
                 <div className="manager-right">
-                    <div className="govern-price">
+                    {/* <div className="govern-price">
                         <span>治理池资金</span>
                         <span className="purple-price">145 ETH</span>
-                    </div>
+                    </div> */}
                     <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="manager-des">
-                        <strong>提案是什么</strong>
+                    <strong>提案是什么</strong>
                         <p>提案是社区成员进行自治的方式。</p>
-                        <p>提案内容包括对项目资金的使用，以及清退项目资金。</p>
+                        <p>社区成员可以使用提案决定对项目的资助力度。</p>
                         <p>所有代币持有者都可以通过投票的方式同意或拒绝一项提案。最终结果由多数票决定。</p>
                         <p>提案会在智能合约上运行，以保证投票的公正性。</p>
                         <strong className="top-mar">谁可以发起提案</strong>

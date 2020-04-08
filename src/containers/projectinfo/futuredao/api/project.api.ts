@@ -348,3 +348,14 @@ export const getProjFundAndTokenInfo = (projId:string)=>{
     }
     return request(opts);
 }
+/**
+ * 查询项目融资信息
+ * @param projId 项目id
+ */
+export const queryProjFinanceInfo = (projId:string)=>{
+    const opts = {
+        method: 'queryProjFinanceInfo',
+        params: [projId]
+    }
+    return request(opts);
+}

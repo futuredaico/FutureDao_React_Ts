@@ -3,7 +3,6 @@ import { ICommonStore } from "@/store/interface/common.interface";
 export interface IProjectTransationStore
 {
   tradeMenu:number, // 1为资金池，2为买入，3为卖出
-  projContractInfo: IProjectContractInfo | null, // 合约详情
   historyPrice:IHistoryPrice, // 历史价格的数据
   transList:ITransationList[],// 交易列表
   transCount:number,// 交易总数
@@ -14,7 +13,6 @@ export interface IProjectTransationStore
   storeEth:string,
   fndBalances:string,      // fnd的余额
   tokenBalanceInfo:ITokenBanlance,
-  getProjContractInfoData: () => Promise<boolean>, // 获取合约详情数据
   getHistoryData:(type:string)=>Promise<boolean>, // 获取历史价格的数据
   getTxListData:(addr:string)=>Promise<boolean>,  // 获取交易记录
   getTokenBalance:(addr:string)=>Promise<boolean>, // 获取奖金池的数据  

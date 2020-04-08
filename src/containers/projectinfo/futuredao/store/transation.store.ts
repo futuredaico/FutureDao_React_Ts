@@ -3,7 +3,7 @@ import * as Api from '../api/project.api';
 import { CodeType } from '@/store/interface/common.interface';
 import projectinfoStore from './projectinfo.store';
 import * as formatTime from '@/utils/formatTime';
-import { IProjectContractInfo, IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
+import { IHistoryPrice, ITransationList, ITokenBanlance } from '../interface/transation.interface';
 import common from '@/store/common';
 import metamaskwallet from '@/store/metamaskwallet';
 import { saveDecimal, toMyNumber, toNonExponential } from "@/utils/numberTool";
@@ -13,22 +13,9 @@ import { AbiItem } from 'web3-utils';
 import { Web3Contract } from '@/utils/web3Contract';
 // import { IContractHash } from '../interface/projectinfo.interface';
 
-
-const defaultContract = {
-  projId: "",
-  tokenSymbol: "",    // 项目代币名称
-  tokenIssueTotal: "0",  // 发行总额
-  tokenUnlockNotAmount: "0",  // 未解锁总额
-  tokenUnlockYesAmount: "0",  // 已解锁总额
-  fundManagePoolTotal: "0",  // 治理池金额
-  fundReservePoolTotal: "0",  // 储备池总额
-  fundReserveRatio: "0",  // 存储金比例
-  priceRaiseSpeed: "0"  // 价格增速
-}
 class ProjectTransation
 {
   @observable public tradeMenu: number = 1;
-  @observable public projContractInfo: IProjectContractInfo | null = null;
   @observable public historyPrice: IHistoryPrice = {
     buyInfo: [],
     sellInfo: [],
@@ -50,33 +37,12 @@ class ProjectTransation
     lastBuyPrice: "0",
     lastSellPrice: "0"
   };
+
   /**
-   * 获取项目合约详情
+   * 获取资产余额
    */
-  @action public getProjContractInfoData = async () =>
-  {
-    let result: any = [];
-    try
-    {
-      result = await Api.getProjContract(projectinfoStore.projId);
-    } catch (e)
-    {
-      this.projContractInfo = defaultContract;
-      return false;
-    }
-    if (result[0].resultCode !== CodeType.success)
-    {
-      this.projContractInfo = defaultContract;
-      return false
-    }
-    if (Object.keys(result[0].data).length === 0)
-    {
-      this.projContractInfo = defaultContract;
-      return false
-    }
-    this.projContractInfo = result[0].data;
-    return true;
-  }
+  
+
   /**
    * 获取历史价格
    */

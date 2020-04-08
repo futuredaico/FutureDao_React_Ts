@@ -96,13 +96,13 @@ class FinancingManager
   /**
    * 融资后存储融资合约信息
    */
-  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string, tokenName: string, tokenSimple: string, ratio: string, arrList: string, startAddr: string, contractList: string) =>
+  @action public setDataToSave = async (projId: string, receiveAddress: string, assetHash: string, assetSimple: string,decimals:number, tokenName: string, tokenSimple: string, ratio: string, arrList: string, startAddr: string, contractList: string) =>
   {
     let result: any = [];
 
     try
     {
-      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimple, ratio, arrList, startAddr, contractList);
+      result = await Api.saveFContractInfo(projId, receiveAddress, assetHash, assetSimple,decimals, tokenName, tokenSimple, ratio, arrList, startAddr, contractList);
     } catch (e)
     {
       return false;
@@ -205,7 +205,8 @@ class FinancingManager
       )
       const appManagerTxid = await appManagerResult.onTransactionHash();
       const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
-      const appManagerAddress = ins1.options.address;     
+      const appManagerAddress = ins1.options.address;   
+      console.log("appManagerTxid", appManagerTxid)  
       console.log("appManagerAddress", appManagerAddress)
       console.log("发送第二个合约co")
       this.tradeStep = 2;
@@ -221,6 +222,7 @@ class FinancingManager
       const ins2 = await coResult.promise;  // 合约部署成功后获得新的合约对象
       const coAddress = ins2.options.address;
       this.tradeStep = 3;
+      console.log("coTxid", coTxid)  
       console.log("coAddress", coAddress)
       console.log("发送第三个合约share")
       const shareResult = await Web3Contract.deployContractOthers(
@@ -236,6 +238,7 @@ class FinancingManager
       const ins3 = await shareResult.promise;  // 合约部署成功后获得新的合约对象
       const sharesAddress = ins3.options.address;
       this.tradeStep = 4;
+      console.log("sharesBTxid", sharesBTxid)  
       console.log("sharesAddress", sharesAddress)
       console.log("发送第四个合约tradeFund")
       const tradeResult = await Web3Contract.deployContractOthers(
@@ -253,6 +256,7 @@ class FinancingManager
       const ins4 = await tradeResult.promise;
       const tradeAddress = ins4.options.address;
       this.tradeStep = 5;
+      console.log("tradeTxid", tradeTxid)  
       console.log("tradeAddress", tradeAddress)
       console.log("发送第五个合约voteChangeMonth");
       const voteMonthResult = await Web3Contract.deployContractOthers(
@@ -269,6 +273,7 @@ class FinancingManager
       const ins5 = await voteMonthResult.promise;
       const voteMonthAddress = ins5.options.address;
       this.tradeStep = 6;
+      console.log("voteMonthTxid", voteMonthTxid)  
       console.log("voteMonthAddress", voteMonthAddress)
       console.log("发送第六个合约Vote_Clearing");
       const voteClearResult = await Web3Contract.deployContractOthers(
@@ -284,7 +289,8 @@ class FinancingManager
       )
       const voteClearTxid = await voteClearResult.onTransactionHash();
       const ins6 = await voteClearResult.promise;
-      const voteClearAddress = ins6.options.address;      
+      const voteClearAddress = ins6.options.address;    
+      console.log("voteClearTxid", voteClearTxid)    
       console.log("voteClearAddress", voteClearAddress)
 
       // 以下配置数据
@@ -303,105 +309,149 @@ class FinancingManager
       console.log("byte32_SharesB_Burn", byte32_SharesB_Burn)
       console.log("byte32_SharesB_Mint", byte32_SharesB_Mint);
       const appManagerContract = new Web3Contract(appManagerAbi, appManagerAddress);
-      const dateTime = '0xdD47A2A48774bdf1a1809163b0bf291326338619'
-      const batch = new metamaskwallet.web3.BatchRequest();
-      const tx = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['initialize'](tradeAddress, receiveAddress, dateTime).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第一笔交易")
-          this.tradeStep = 7;
-          console.log(err);
-          console.log(txid);
-        }
-      )
-      const tx2 = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['addPermission'](metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第二笔交易")
-          this.tradeStep = 8;
-          console.log(err);
-          console.log(txid);
-        }
-      )
-      const tx3 = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Burn).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第三笔交易")
-          this.tradeStep = 9;
-          console.log(err);
-          console.log(txid);
-        }
-      )
-      const tx4 = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Mint).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第四笔交易")
-          this.tradeStep = 10;
-          console.log(err);
-          console.log(txid);
-        }
-      )
-      const tx5 = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['addPermission'](voteMonthAddress, tradeAddress, bytes32_FundPool_ChangeRatio).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第五笔交易")
-          console.log(err);
-          console.log(txid);
-          this.tradeStep = 11;
-        }
-      )
-      const tx6 = web3.eth.sendTransaction.request(
-        {
-          from: metamaskwallet.metamaskAddress,
-          to: appManagerAddress,
-          value: '0x0',
-          data: appManagerContract.contract.methods['addPermission'](voteClearAddress, tradeAddress, bytes32_FundPool_Clearing).encodeABI()
-        }, (err, txid) =>
-        {
-          console.log(" 第六笔交易")
-          console.log(err);
-          console.log(txid);
-          this.tradeStep = 12;
-        }
-      )
-      console.log(tx);
-      console.log(tx2);
-      console.log(tx3);
-      console.log(tx4);
-      console.log(tx5);
-      console.log(tx6);
-      batch.add(tx);
-      batch.add(tx2);
-      batch.add(tx3);
-      batch.add(tx4);
-      batch.add(tx5);
-      batch.add(tx6);
-      await batch.execute();
+      const dateTime = '0xdD47A2A48774bdf1a1809163b0bf291326338619';
+
+      this.tradeStep = 7;
+      const submitRes1 = appManagerContract.contractSend("initialize", [tradeAddress, receiveAddress, dateTime], { from: metamaskwallet.metamaskAddress });
+      const subtxid1 = await submitRes1.onConfrim();
+      console.log(" 第一笔交易")
+      console.log(subtxid1);
+      this.tradeStep = 8;
+      const submitRes2 = appManagerContract.contractSend("addPermission", [metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start], { from: metamaskwallet.metamaskAddress });
+      const subtxid2 = await submitRes2.onConfrim();
+      console.log(" 第2笔交易")
+      console.log(subtxid2);
+      this.tradeStep = 9;
+      const submitRes3 = appManagerContract.contractSend("addPermission", [tradeAddress, sharesAddress, byte32_SharesB_Burn], { from: metamaskwallet.metamaskAddress });
+      const subtxid3 = await submitRes3.onConfrim();
+      console.log(" 第3笔交易")
+      console.log(subtxid3);
+      this.tradeStep = 10;
+      const submitRes4 = appManagerContract.contractSend("addPermission", [tradeAddress, sharesAddress, byte32_SharesB_Mint], { from: metamaskwallet.metamaskAddress });
+      const subtxid4 = await submitRes4.onConfrim();
+      console.log(" 第4笔交易")
+      console.log(subtxid4);
+      this.tradeStep = 11;
+      const submitRes5 = appManagerContract.contractSend("addPermission", [voteMonthAddress, tradeAddress, bytes32_FundPool_ChangeRatio], { from: metamaskwallet.metamaskAddress });
+      const subtxid5 = await submitRes5.onConfrim();
+      console.log(" 第5笔交易")
+      console.log(subtxid5);
+      this.tradeStep = 12;
+      const submitRes6 = appManagerContract.contractSend("addPermission", [voteClearAddress, tradeAddress, bytes32_FundPool_Clearing], { from: metamaskwallet.metamaskAddress });
+      const subtxid6 = await submitRes6.onConfrim();
+      console.log(" 第6笔交易")
+      console.log(subtxid6);
+      
+      // const batch = new metamaskwallet.web3.BatchRequest();
+      // const tx = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['initialize'](tradeAddress, receiveAddress, dateTime).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第一笔交易")          
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第一笔交易完成")
+      //     this.tradeStep = 7;
+      //   }
+      // )
+      // const tx2 = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['addPermission'](metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第二笔交易")
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第二笔交易完成")
+      //     this.tradeStep = 8;
+      //   }
+      // )
+      // const tx3 = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Burn).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第三笔交易")
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第三笔交易完成")
+      //     this.tradeStep = 9;
+      //   }
+      // )
+      // const tx4 = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Mint).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第四笔交易")
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第四笔交易完成")
+      //     this.tradeStep = 10;
+      //   }
+      // )
+      // const tx5 = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['addPermission'](voteMonthAddress, tradeAddress, bytes32_FundPool_ChangeRatio).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第五笔交易")
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第五笔交易完成")
+      //     this.tradeStep = 11;
+      //   }
+      // )
+      // const tx6 = web3.eth.sendTransaction.request(
+      //   {
+      //     from: metamaskwallet.metamaskAddress,
+      //     to: appManagerAddress,
+      //     value: '0x0',
+      //     data: appManagerContract.contract.methods['addPermission'](voteClearAddress, tradeAddress, bytes32_FundPool_Clearing).encodeABI()
+      //   }, (err, txid) =>
+      //   {
+      //     console.log(" 第六笔交易")
+      //     console.log(err);
+      //     console.log(txid);
+      //   },()=>{
+      //     console.log("第六笔交易完成")
+      //     this.tradeStep = 12;
+      //   }
+      // )
+      // console.log(tx);
+      // console.log(tx2);
+      // console.log(tx3);
+      // console.log(tx4);
+      // console.log(tx5);
+      // console.log(tx6);
+      // batch.add(tx);
+      // batch.add(tx2);
+      // batch.add(tx3);
+      // batch.add(tx4);
+      // batch.add(tx5);
+      // batch.add(tx6);
+      // await batch.execute();
       
       const arrList = [{
         percent: everyMonthRatio,
@@ -440,7 +490,7 @@ class FinancingManager
           txid:voteClearTxid
         }
       ]
-      await this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress, JSON.stringify(fcontractList))
+      await this.setDataToSave(this.currentProjId, receiveAddress, assetHash, assetSimple,priceDecimals, tokenName, tokenSimpleName, reserveRatio, JSON.stringify(arrList), metamaskwallet.metamaskAddress, JSON.stringify(fcontractList))
 
     } catch (e)
     {

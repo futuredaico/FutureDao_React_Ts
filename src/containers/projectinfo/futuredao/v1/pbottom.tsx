@@ -10,7 +10,7 @@ import ProjectDetail from './detail/detail';
 import UpdateList from '../update/updatelist';
 import RightTeam from './detail/rightteam';
 import UpdateInfo from '../update/updateinfo';
-import ManagerInfo from '../manager/managerinfo';
+import ManagerInfo from '../v2/manager/managerinfo';
 import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import classnames from 'classnames';
 

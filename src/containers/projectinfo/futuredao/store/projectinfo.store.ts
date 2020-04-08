@@ -65,6 +65,7 @@ class ProjectInfo
     }
     if(this.projInfo){
       this.projInfo.fundName = result[0].data.fundSymbol || '';
+      this.projInfo.tokenSymbol = result[0].data.tokenSymbol||'';
     }    
     return true;
   }

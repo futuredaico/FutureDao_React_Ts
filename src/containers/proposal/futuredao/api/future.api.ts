@@ -21,3 +21,14 @@ export const getFContractInfo = (projId:string)=>{
     }
     return request(opts);
 }
+/**
+ * 获取项目的所有合约hash
+ * @param projId 项目ID
+ */
+export const getProjectContractHash = (projId: string) => {
+    const opts = {
+        method: 'getFContractHash',
+        params: [ projId ]
+    }
+    return request(opts);
+}

@@ -8,7 +8,7 @@ import { injectIntl } from 'react-intl';
 import { renderRoutes } from 'react-router-config';
 import { IFutureProposalProps } from './interface/future.interface';
 
-@inject('future')
+@inject('future','common','metamaskwallet')
 @observer
 class FutureProposal extends React.Component<IFutureProposalProps> {
     public intrl = this.props.intl.messages;

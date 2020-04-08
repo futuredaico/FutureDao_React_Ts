@@ -1,14 +1,27 @@
 import { RouteComponentProps } from "react-router";
 import { ICommonStore } from "@/store/interface/common.interface";
-export interface IIProjectManagerStore
+export interface IProjectManagerStore
 {
-  menuNum: number,
+  contractShow:IProjectContractInfo|null,
+  getContractShowData:(projectId:string)=>Promise<boolean>
 }
 
 
-export interface IIProjectManagerProps extends RouteComponentProps<{ projectId: string }>
+export interface IProjectManagerProps extends RouteComponentProps<{ projectId: string }>
 {
-  manager: IIProjectManagerStore,
+  manager: IProjectManagerStore,
   common: ICommonStore,
   intl: any
+}
+
+export interface IProjectContractInfo {
+  recvAddress:string,
+  recvAddressName:string,
+  fundSymbol:string,
+  percent:string,
+  min:string,
+  max:string,
+  reserveRundRatio:string,
+  fundPoolTotal:string,
+  fundReservePoolTota:string
 }

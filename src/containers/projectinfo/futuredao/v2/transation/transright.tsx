@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
-import { IProjectInfoProps } from '../interface/projectinfo.interface';
+import '../../index.less';
+import { IProjectInfoProps } from '../../interface/projectinfo.interface';
 import { saveDecimal } from '@/utils/numberTool';
 import Buy from './buy';
 import Sell from './sell';

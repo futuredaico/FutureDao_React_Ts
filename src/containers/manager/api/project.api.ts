@@ -390,10 +390,10 @@ export const getReserverAddress = (page:number,size:number)=>{
  * @param satrtAddress 启动者
  * @param contractList 发布合约列表
  */
-export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:string,assetSimple:string,tokenName:string,tokenSimple:string,ratio:string,arrList:string,satrtAddress:string,contractList:string)=>{
+export const saveFContractInfo = (projId:string,receiveAddress:string,assetHash:string,assetSimple:string,decimals:number,tokenName:string,tokenSimple:string,ratio:string,arrList:string,satrtAddress:string,contractList:string)=>{
     const opts = {
         method: 'saveFContractInfo',
-        params: [projId,receiveAddress,assetHash,assetSimple,tokenName,tokenSimple,ratio,arrList,contractList]
+        params: [projId,receiveAddress,assetHash,assetSimple,decimals,tokenName,tokenSimple,ratio,arrList,satrtAddress,contractList]
     }
     return request(opts);
 }

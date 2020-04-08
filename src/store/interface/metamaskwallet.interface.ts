@@ -7,6 +7,7 @@ export interface IMetaMaskWalletStore
     inintWeb3: () => Promise<boolean>,
     initAccount: () => Promise<string>,
     getMetamaskBalance: () => Promise<string>,
+    // getMetamaskOtherBalance: (hash:string) => Promise<string>
     checkIsCurrendBindAddress: () => Promise<boolean>,
     getMetamaskNetwork:()=>void,
     changeNetwork:()=>void

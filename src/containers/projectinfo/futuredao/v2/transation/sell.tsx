@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import Button from '@/components/Button';
-import { IProjectInfoProps } from '../interface/projectinfo.interface';
+import { IProjectInfoProps } from '../../interface/projectinfo.interface';
 import { saveDecimal, toMyNumber,toNonExponential } from '@/utils/numberTool';
 import Hint from '@/components/hint';
 
@@ -81,7 +81,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                         type='2'
                     />
                     <div className="attention-textdiv">
-                        <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount ? this.state.sellCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
+                        <p className="sm-p">您将出售 <span className="purple-text">{this.state.sellCount ? this.state.sellCount : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
                         <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.sellPrice ? this.state.minSellPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
                     </div>
                 </div>

@@ -99,6 +99,11 @@ class MetaMaskWallet implements IMetaMaskWalletStore {
     const num = toMyNumber(balance).mul(Math.pow(10, -18))
     return web3.toBigNumber(num).toString(10)
   }
+  // @action public getMetamaskOtherBalance = async (hash:string) => {
+  //   const balance = await this.web3.eth.getBalance(this.metamaskAddress,hash);
+  //   const num = toMyNumber(balance).mul(Math.pow(10, -18))
+  //   return web3.toBigNumber(num).toString(10)
+  // }
   /**
    * 校验是否与当前绑定地址一致，若不一致则提示重新绑定
    * 若从未绑定过地址则自动绑定，

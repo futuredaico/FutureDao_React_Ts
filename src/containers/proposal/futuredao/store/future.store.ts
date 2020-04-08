@@ -6,7 +6,7 @@ import { Web3Contract } from '@/utils/web3Contract';
 import { toMyNumber } from '@/utils/numberTool';
 // import metamaskwallet from '@/store/metamaskwallet';
 import { IFContractInfo } from '@/containers/manager/interface/financing.interface';
-import { IFutureProposalStore } from '../interface/future.interface';
+import { IFutureProposalStore, IFContractList } from '../interface/future.interface';
 import metamaskwallet from '@/store/metamaskwallet';
 
 class FutureProposal implements IFutureProposalStore
@@ -16,16 +16,17 @@ class FutureProposal implements IFutureProposalStore
     @observable public assetHash: string = ''; // 融资资金的hash
     @observable public assetDecimals: number = 0; // 融资资金的精度
     @observable public fContractInfo: IFContractInfo | null = null; // 融资详情信息
+    @observable public fContractList: IFContractList[] = [];
 
     /**
-     * 查询价格的单位
+     * 查询所有合约hash
      */
-    @action public getAssetData = async (projId: string) =>
+    @action public getAllContractData = async (projId: string) =>
     {
         let result: any = [];
         try
         {
-            result = await Api.getProjFundAndTokenInfo(projId);
+            result = await Api.getProjectContractHash(projId);
         } catch (e)
         {
             return false;
@@ -34,7 +35,12 @@ class FutureProposal implements IFutureProposalStore
         {
             return false
         }
-        // this.priceSimple = result[0].data.fundSymbol || '';
+        if (Object.keys(result[0].data).length === 0)
+        {
+            this.fContractList = [];
+            return false
+        }
+        this.fContractList = result[0].data.hashArr || []
         return true;
     }
     /**
@@ -61,6 +67,7 @@ class FutureProposal implements IFutureProposalStore
         } else
         {
             this.fContractInfo = result[0].data;
+            this.assetDecimals = result[0].data.fundDecimals
         }
         return true;
     }
@@ -68,13 +75,26 @@ class FutureProposal implements IFutureProposalStore
      * 发起提案修改月供
      * @param contractHash 合约的hash
      */
-    @action public applyProposalToChangeMonth = async (contractHash: string, monthRatio: string, min: string, max: string, explain: string) =>
+    @action public applyProposalToChangeMonth = async (monthRatio: string, min: string, max: string, explain: string) =>
     {
+        let contractHash = '';
+        this.fContractList.map((item: IFContractList) =>
+        {
+            if (item.name === 'Vote_ChangeMonthlyAllocation')
+            {
+                contractHash = item.hash
+            }
+        })
+        if (!contractHash)
+        {
+            return false
+        }
         try
         {
             const ratio = parseInt(monthRatio, 10) * 10;
-            const minPrice = toMyNumber(min).mul(this.assetDecimals).value;
-            const maxPrice = toMyNumber(max).mul(this.assetDecimals).value;
+            const decimals = Math.pow(10, (this.assetDecimals));  // 单位 
+            const minPrice = toMyNumber(min).mul(decimals).value;
+            const maxPrice = toMyNumber(max).mul(decimals).value;
             // 调用合约      
             const voteChangeAbi = require('@/utils/contractFiles/Vote_ChangeMonthlyAllocation.json').abi as AbiItem[];
             const voteChangeContract = new Web3Contract(voteChangeAbi, contractHash);
@@ -91,8 +111,20 @@ class FutureProposal implements IFutureProposalStore
     /**
      * 发起清退提案
      */
-    @action public applyProposalToClearing = async (contractHash: string, explain: string) =>
+    @action public applyProposalToClearing = async (explain: string) =>
     {
+        let contractHash = '';
+        this.fContractList.map((item: IFContractList) =>
+        {
+            if (item.name === 'Vote_Clearing')
+            {
+                contractHash = item.hash
+            }
+        })
+        if (!contractHash)
+        {
+            return false
+        }
         try
         {
             // 调用合约      

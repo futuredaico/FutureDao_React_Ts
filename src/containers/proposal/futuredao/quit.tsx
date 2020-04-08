@@ -12,9 +12,10 @@ export interface IState
     projId: string,
     explain:string
 }
-@inject('future')
+@inject('future','common','metamaskwallet')
 @observer
 class FQuitProposal extends React.Component<IFutureProposalProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         projId: '',
         explain:""

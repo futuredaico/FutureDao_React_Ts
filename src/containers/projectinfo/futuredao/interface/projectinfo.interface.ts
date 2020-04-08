@@ -4,6 +4,7 @@ import { IProjectUpdateStore } from "./update.interface";
 import { IProjectTransationStore } from "./transation.interface";
 import { IMetaMaskWalletStore } from "@/store/interface/metamaskwallet.interface";
 import { ITeemoWalletStore } from "@/store/interface/teemowallet.interface";
+import { IProjectManagerStore } from "./manager.interface";
 export interface IProjectInfoStore
 {
   menuNum: number,
@@ -45,6 +46,7 @@ export interface IProjectInfoProps extends RouteComponentProps<{ projectId: stri
   common: ICommonStore,
   teemowallet:ITeemoWalletStore,
   metamaskwallet:IMetaMaskWalletStore,
+  manager:IProjectManagerStore,
   intl: any
 }
 
@@ -76,6 +78,7 @@ export interface IProjectInfo
   // type:string, // 众筹类型
   // platform:string, // 上链类型
   fundName:string, // 单位
+  tokenSymbol:string, // 代币名称
   // fundReservePoolTotal:string // 储备池资金
 }
 

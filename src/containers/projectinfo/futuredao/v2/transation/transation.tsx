@@ -3,26 +3,27 @@
  */
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import { injectIntl } from 'react-intl';
 // import Toast from '@/components/Toast';
 import RightTable from './transright';
 import * as formatTime from '@/utils/formatTime';
-import { IProjectInfoProps } from '../interface/projectinfo.interface';
+import { IProjectInfoProps } from '../../interface/projectinfo.interface';
 import Hint from '@/components/hint';
 import chartsOptions from './historyechart';
 import Echarts from 'echarts';
 import { Pagination } from 'antd';
-import { ITransationList } from '../interface/transation.interface';
+import { ITransationList } from '../../interface/transation.interface';
 import { saveDecimal } from '@/utils/numberTool';
 
-interface IState {
-    underBottom:number, // 交易列表的菜单
-    timeType:string, // 历史价格的时间选择
+interface IState
+{
+    underBottom: number, // 交易列表的菜单
+    timeType: string, // 历史价格的时间选择
 }
 @observer
 class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
-    public state:IState = {
+    public state: IState = {
         underBottom: 1,
         timeType: "w"
     }
@@ -50,7 +51,6 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
     public async componentDidMount()
     {
         this.handleGetPriceData();
-        this.props.transation.getProjContractInfoData();
         this.handleGetData();
     }
     public componentWillUnmount()
@@ -68,24 +68,6 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
         }
         return (
             <div className="transation-wrapper">
-                {/* {
-                    this.props.transation.projContractInfo && (
-                        <div className="contract-info">
-                            <h3 className="title-h3">合约详情</h3>
-                            <div className="three-row">
-                                <span className="block-span"><span title="">项目代币简称：</span><strong>{this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="智能合约已发行的可流通代币数量，不包含锁仓中的团队预留代币。购买代币会增加已发行数量，出售代币会减少已发行数量。"> 已发行数量：</span><strong>{this.props.transation.projContractInfo.tokenIssueTotal}</strong></span>
-                                <span className="block-span"><span title="已锁仓的，项目团队在代币发售之前预先生成的代币。锁仓代币无法出售，但可以进行提案投票。">团队预留代币（锁仓）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockNotAmount}</strong></span>
-                                <span className="block-span"><span title="已解锁的，项目团队在代币发售之前预先生成的代币。已解锁代币可以出售，可以提案投票。">团队预留代币（已解锁）：</span><strong>{this.props.transation.projContractInfo.tokenUnlockYesAmount}</strong></span>
-                                <span className="block-span"><span title="用来支持项目发展的资金，代币持有人可以通过提案投票决定资金用途。">治理池资金：</span><strong>{saveDecimal(this.props.transation.projContractInfo.fundManagePoolTotal,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="智能合约用来回购已发行代币的可用资金总量">储备池资金：</span><strong>{saveDecimal(this.props.transation.projContractInfo.fundReservePoolTotal,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
-                                <span className="block-span"><span title="购买代币所花费的资金，其中一定比例会被智能合约储存起来当作回购代币的储备金。">储备比例：</span><strong>{this.props.transation.projContractInfo.fundReserveRatio}%</strong></span>
-                                <span className="block-span"><span title="智能合约每多发行一个代币，发行下一个代币的价格会增涨一些。">价格增速：</span><strong>{saveDecimal(this.props.transation.projContractInfo.priceRaiseSpeed,6)} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</strong></span>
-                            </div>
-                        </div>
-                    )
-                } */}
-
                 <div className="trans-top">
                     <div className="trans-price">
                         <h3 className="title-h3">历史价格</h3>
@@ -177,7 +159,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                                                     </span>
                                                 )
                                             }
-                                            <span className="li-td">{saveDecimal(item.fundAmt,6)} {this.props.projectinfo.projInfo&&this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
+                                            <span className="li-td">{saveDecimal(item.fundAmt, 6)} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span>
                                             {
                                                 item.event === 'OnBuy' && <span className="li-td green-text">+{item.tokenAmt}</span>
                                             }
@@ -187,7 +169,7 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
                                         </li>
                                     )
                                 })
-                            }                            
+                            }
                         </ul>
                     </div>
                     {
@@ -203,7 +185,8 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
         );
     }
     // 获取历史价格数据
-    private handleGetPriceData = async () => {
+    private handleGetPriceData = async () =>
+    {
         this.myCahrt = null;
         await this.props.transation.getHistoryData(this.state.timeType)
         const echartsEl = document.getElementById('transEcharts') as HTMLDivElement;
@@ -213,12 +196,12 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
             chartsOptions.xAxis.data = this.props.transation.historyPrice.timeInfo;
             chartsOptions.series[0].data = this.props.transation.historyPrice.buyInfo;
             chartsOptions.series[1].data = this.props.transation.historyPrice.sellInfo;
-            chartsOptions.yAxis.name = this.props.projectinfo.projInfo?this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()+'/单位':'';
+            chartsOptions.yAxis.name = this.props.projectinfo.projInfo ? this.props.projectinfo.projInfo.fundName.toLocaleUpperCase() + '/单位' : '';
             myChart.setOption(chartsOptions as any)
             this.myCahrt = myChart;
         }
     }
-   
+
     // 获取交易列表数据
     private handleGetData = () =>
     {
@@ -234,10 +217,10 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
             //     }
             // } else if (this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.platform === 'neo')
             // {
-                if (this.props.common.userInfo)
-                {
-                    addr = this.props.common.userInfo.address;
-                }
+            if (this.props.common.userInfo)
+            {
+                addr = this.props.common.userInfo.address;
+            }
             // }
         }
         this.props.transation.getTxListData(addr);
@@ -249,20 +232,21 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
         this.setState({
             underBottom: item.id
         }, () =>
-            {
-                this.props.transation.transPage = 1;
-                this.props.transation.transCount = 0;
-                this.handleGetData();
-            })
+        {
+            this.props.transation.transPage = 1;
+            this.props.transation.transCount = 0;
+            this.handleGetData();
+        })
     }
     // 选择查看历史价格时间段
     private handleTimeChoice = (item) =>
     {
         this.setState({
             timeType: item.id
-        },()=>{
+        }, () =>
+        {
             //
-            this.handleGetPriceData();            
+            this.handleGetPriceData();
         })
     }
     // 交易列表的分页

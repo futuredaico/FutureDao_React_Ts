@@ -20,9 +20,10 @@ export interface IState
     explain: string,
     isOkSend: boolean
 }
-@inject('future')
+@inject('future', 'common', 'metamaskwallet')
 @observer
 class MonthProposal extends React.Component<IFutureProposalProps, IState> {
+    public intrl = this.props.intl.messages;
     public state: IState = {
         projId: '',
         ratio: '',
@@ -37,11 +38,12 @@ class MonthProposal extends React.Component<IFutureProposalProps, IState> {
         const projectId = this.props.match.params['projectId'];
         console.log(projectId)
         await this.props.future.getFContractInfoData(projectId);
+        this.props.future.getAllContractData(projectId);
         this.setState({
             projId: projectId || '',
             ratio: this.props.future.fContractInfo ? this.props.future.fContractInfo.faucetJA[0].percent : '',
-            minPrice:  this.props.future.fContractInfo ? this.props.future.fContractInfo.faucetJA[0].min.toString() : '',
-            maxPrice:  this.props.future.fContractInfo ? this.props.future.fContractInfo.faucetJA[0].max.toString() : ''
+            minPrice: this.props.future.fContractInfo ? this.props.future.fContractInfo.faucetJA[0].min.toString() : '',
+            maxPrice: this.props.future.fContractInfo ? this.props.future.fContractInfo.faucetJA[0].max.toString() : ''
         })
     }
     public render()
@@ -104,7 +106,7 @@ class MonthProposal extends React.Component<IFutureProposalProps, IState> {
                         <Button
                             text="发起提案"
                             btnSize="bg-btn"
-                            btnColor="gray-btn"
+                            btnColor={this.state.isOkSend ? "" : "gray-btn"}
                             onClick={this.handleToSendMonthProposal}
                         />
                     </div>
@@ -113,8 +115,35 @@ class MonthProposal extends React.Component<IFutureProposalProps, IState> {
             </>
         );
     }
-    private handleToSendMonthProposal = ()=>{
-        //
+    // 发起提案
+    private handleToSendMonthProposal = async () =>
+    {
+        // 未登录
+        if (!this.props.common.userInfo)
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
+            return false;
+        }
+        if (!this.state.isOkSend)
+        {
+            return false
+        }
+        const res = await this.props.metamaskwallet.inintWeb3();
+        if (!res)
+        {
+            return false
+        }
+        this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendcheck);
+        const res2 = await this.props.future.applyProposalToChangeMonth(this.state.ratio, this.state.minPrice, this.state.maxPrice, this.state.explain);
+
+        if (res2)
+        {
+            this.props.common.openNotificationWithIcon('success', this.intrl.notify.success, this.intrl.notify.sendok);
+        } else
+        {
+            this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.sendfail);
+        }
+        return true
     }
     // 每月转入比例
     private handleToChangeEveryMonthRatio = (ev: React.ChangeEvent<HTMLInputElement>) =>

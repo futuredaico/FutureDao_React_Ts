@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import '../index.less';
+import '../../index.less';
 import Button from '@/components/Button';
-import { IProjectInfoProps } from '../interface/projectinfo.interface';
+import { IProjectInfoProps } from '../../interface/projectinfo.interface';
 import { saveDecimal, toMyNumber,toNonExponential } from '@/utils/numberTool';
 import Hint from '@/components/hint';
 
@@ -90,7 +90,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     />
                     <div className="attention-textdiv">
                         <p className="sm-p">您将花费 <span className="purple-text">{this.state.buyPrice ? this.state.buyPrice : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}</span></p>
-                        <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount ? this.state.minBuyCount : '0'} {this.props.transation.projContractInfo && this.props.transation.projContractInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
+                        <p className="sm-p">将至少会获得 <span className="purple-text">{this.state.buyCount ? this.state.minBuyCount : '0'} {this.props.projectinfo.projInfo && this.props.projectinfo.projInfo.tokenSymbol.toLocaleUpperCase()}</span></p>
                     </div>
                 </div>
                 <div className="doing-btn">
@@ -111,15 +111,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             {
                 // 获取MetaMask钱包上登陆的地址
                 await this.props.metamaskwallet.inintWeb3();
-                const checkRes = await this.props.metamaskwallet.checkIsCurrendBindAddress();
-                // 若与绑定的地址不一致
-                if(!checkRes){
-                    this.setState({
-                        isCanBuyBtn: false,
-                        isShowBalance: false
-                    })
-                    return false
-                }
+                
                 if (!this.props.metamaskwallet.metamaskAddress)
                 {
                     this.setState({

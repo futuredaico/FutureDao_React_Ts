@@ -10,9 +10,9 @@ import ProjectDetail from './detail/detail';
 import UpdateList from '../update/updatelist';
 import RightTeam from './detail/rightteam';
 import UpdateInfo from '../update/updateinfo';
-// import Transation from './transation/transation';
-import Manager from '../manager/manager';
-import ManagerInfo from '../manager/managerinfo';
+import Transation from './transation/transation';
+import Manager from './manager/manager';
+import ManagerInfo from './manager/managerinfo';
 import { IProjectInfoProps } from '../interface/projectinfo.interface';
 import classnames from 'classnames';
 import { ProjectState } from '@/store/interface/common.interface';
@@ -102,7 +102,7 @@ class Pbottom extends React.Component<IProjectInfoProps, { fixed: boolean }> {
                     )
                   }
                   {
-                    // this.props.projectinfo.menuNum === 4 && <Transation {...this.props} />
+                    this.props.projectinfo.menuNum === 4 && <Transation {...this.props} />
                   }
                   {
                     this.props.projectinfo.menuNum === 5 && <Manager {...this.props} />
