@@ -26,7 +26,8 @@ export default class RightTable extends React.Component<IProjectInfoProps> {
     ]
     public async componentDidMount()
     {
-        this.handleGetTokenData();
+        this.props.transation.tradeMenu = 1;
+        this.handleGetTokenData();               
     }
     public render()
     {
@@ -57,21 +58,21 @@ export default class RightTable extends React.Component<IProjectInfoProps> {
                         <div className="tran-des">
                             <div className="tran-line">
                                 <div className="line-left">
-                                    <div className="small-gray">最近买入价</div>
+                                    <div className="small-gray">买入价</div>
                                     <div className="strong-text">{parseFloat(buyNum) === 0 ? '0' : buyNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
                                 </div>
                                 <div className="line-right">
-                                    <div className="small-gray">最近卖出价</div>
+                                    <div className="small-gray">卖出价</div>
                                     <div className="strong-text">{parseFloat(sellNum) === 0 ? '0' : sellNum} {this.props.projectinfo.projInfo.fundName.toLocaleUpperCase()}/股</div>
                                 </div>
                             </div>
                             <div className="tran-line">
                                 <div className="line-left">
-                                    <div className="small-gray">已发行代币数</div>
+                                    <div className="small-gray">当前代币数</div>
                                     <div className="strong-text">{this.props.projectinfo.projInfo.hasIssueAmt}</div>
                                 </div>
                                 <div className="line-right">
-                                    <div className="small-gray">24h涨跌幅</div>
+                                    <div className="small-gray">涨跌幅</div>
                                     {
                                         parseFloat(this.props.transation.tokenBalanceInfo.chg24h) > 0
                                             ? <div className="strong-text big-green">+ {parseFloat(this.props.transation.tokenBalanceInfo.chg24h)}%</div>
@@ -81,11 +82,11 @@ export default class RightTable extends React.Component<IProjectInfoProps> {
                             </div>
                             <div className="tran-line">
                                 <div className="line-left">
-                                    <div className="small-gray">可用股数</div>
+                                    <div className="small-gray">可用代币</div>
                                     <div className="strong-text">{this.props.transation.tokenBalanceInfo.availableAmt}</div>
                                 </div>
                                 <div className="line-right">
-                                    <div className="small-gray">锁定股数</div>
+                                    <div className="small-gray">锁定代币</div>
                                     <div className="strong-text">{this.props.transation.tokenBalanceInfo.lockAmt}</div>
                                 </div>
                             </div>

@@ -120,13 +120,17 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     })
                     return false;
                 }
-                // 如果存在（现在只获取了eth的余额）
-                const ethBalance = await this.props.metamaskwallet.getMetamaskBalance();
+                let balance = '';
+                if(this.props.projectinfo.projInfo){                   
+                    balance = await this.props.transation.getCanUseBalance(this.props.metamaskwallet.metamaskAddress,this.props.projectinfo.projInfo.fundHash);
+                    this.props.transation.getSlopeData();
+                } 
+                console.log(balance)
                 this.setState({
                     isCanBuyBtn: true,
                     isShowBalance: true,
-                    balance: saveDecimal(ethBalance, 6),
-                    wholeBalance: saveDecimal(ethBalance, 18),
+                    balance: balance?saveDecimal(balance, 6):"0",
+                    wholeBalance: saveDecimal(balance, 18),
                     address:this.props.metamaskwallet.metamaskAddress
                 })
             }
@@ -138,6 +142,8 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             this.setState({
                 isCanBuyBtn: false,
                 isShowBalance: false,
+                balance:"0",
+                wholeBalance:"0",
                 address:''
             })
             this.props.common.openNotificationWithIcon('error', this.intrl.notify.error, this.intrl.notify.loginerr);
@@ -302,7 +308,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             this.setState({
                 idDoingBuy:true
             })
-            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice,0);
+            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice,"0");
             console.log(txid);
             this.setState({
                 idDoingBuy:false

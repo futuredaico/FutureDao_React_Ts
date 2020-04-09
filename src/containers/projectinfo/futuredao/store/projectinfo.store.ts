@@ -66,6 +66,9 @@ class ProjectInfo
     if(this.projInfo){
       this.projInfo.fundName = result[0].data.fundSymbol || '';
       this.projInfo.tokenSymbol = result[0].data.tokenSymbol||'';
+      this.projInfo.fundHash = result[0].data.fundHash||'';
+      this.projInfo.hasIssueAmt = "0";
+      this.projInfo.fundReservePoolTotal = '0';
     }    
     return true;
   }

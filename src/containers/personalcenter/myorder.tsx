@@ -427,8 +427,8 @@ class MyOrder extends React.Component<IMyOrderProps, IState> {
                     // 如果用户拒绝了交易，弹出气泡：您已拒绝交易。并自动取消订单，进入【订单已取消】页面。
                     try
                     {
-                        const intOrderId = parseInt(this.props.myorder.orderDetail.orderId,10);
-                        const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.myorder.orderDetail.totalCost,intOrderId,this.props.order.hash)     
+                        // const intOrderId = parseInt(this.props.myorder.orderDetail.orderId,10);
+                        const txid = await this.props.transation.buy(this.props.metamaskwallet.metamaskAddress,this.state.minBuyCount,this.props.myorder.orderDetail.totalCost,this.props.myorder.orderDetail.orderId,this.props.order.hash)     
                         console.log(txid);
                         if(!!txid){
                             this.props.common.openNotificationWithIcon('success', "操作成功", "买入操作已发送，请等待确认");

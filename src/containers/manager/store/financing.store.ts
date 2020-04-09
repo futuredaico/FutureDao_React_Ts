@@ -162,6 +162,7 @@ class FinancingManager
     const decimals = Math.pow(10, (priceDecimals));  // 单位 
     const mixPrice = toMyNumber(mixPrice1).mul(decimals).value;
     const maxPrice = toMyNumber(maxPrice1).mul(decimals).value;
+    const slope = toMyNumber(priceDecimals).div(2).value;
     try
     {
       // 0xa86B705E7A2BF21845bCF8e0ee18a4E03532f7CE
@@ -215,7 +216,7 @@ class FinancingManager
         coBytecode,
         metamaskwallet.metamaskAddress,
         appManagerAddress,
-        1000 * Math.pow(10, 4),
+        1000 * Math.pow(10, slope),
         ratio * 10
       )
       const coTxid = await coResult.onTransactionHash();
@@ -341,7 +342,7 @@ class FinancingManager
       const subtxid6 = await submitRes6.onConfrim();
       console.log(" 第6笔交易")
       console.log(subtxid6);
-      
+      tradeContract.contractSend("start");
       // const batch = new metamaskwallet.web3.BatchRequest();
       // const tx = web3.eth.sendTransaction.request(
       //   {

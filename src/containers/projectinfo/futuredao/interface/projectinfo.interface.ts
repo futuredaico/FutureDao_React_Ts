@@ -79,7 +79,8 @@ export interface IProjectInfo
   // platform:string, // 上链类型
   fundName:string, // 单位
   tokenSymbol:string, // 代币名称
-  // fundReservePoolTotal:string // 储备池资金
+  fundHash:string, // 资产hash
+  fundReservePoolTotal:string // 储备池资金
 }
 
 export interface IProjectTeam
