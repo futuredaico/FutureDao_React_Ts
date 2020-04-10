@@ -13,6 +13,8 @@ export interface IFinancingStore {
   assetOption:IFinancingOption[],
   assetList:IFundList|null,
   fContractInfo:IFContractInfo|null,
+  deposit:number,
+  proposalFee:number,
   getContractList:()=>Promise<boolean>,
   getMolochAsset:(projId:string)=>Promise<boolean>,
   getTokenInfo: (token: string) => Promise<{

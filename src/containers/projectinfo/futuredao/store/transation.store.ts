@@ -231,9 +231,9 @@ class ProjectTransation
       const futuredaoAbi = require('@/utils/contractFiles/TradeFundPool.json').abi as AbiItem[];
       const futureContract = new Web3Contract(futuredaoAbi, hashStr);
       // futureContract.contractSend("start",[], { from: metamaskwallet.metamaskAddress });
-      const minMount = parseInt(minCount, 10);
+      const minMount = parseInt(minCount,10);
       const value = toMyNumber(amount).mul(Math.pow(10, this.assetDecimals)).value;
-
+      
       const assetRes = erc20Contract.contractSend("approve", [hashStr, value], { from: addr });
       const assetTxid = await assetRes.onTransactionHash();
       console.log('assetTxid:',assetTxid)
@@ -317,15 +317,12 @@ class ProjectTransation
     const mycount = toMyNumber(count);
     const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
-    const num3 = toMyNumber(1).div(this.slopeNum).div(2);
+    const num3 = toMyNumber(1).div(this.slopeNum).div(2).mul(1000);
     console.log(num3)
     const num4 = num1.sub(num2).mul(num3).add(0.000001);
-    // console.log(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005))
-    // console.log(web3.toBigNumber(toMyNumber(10).add(0).sqr().sub(toMyNumber(0).sqr()).mul(0.0000000005)).toString(10))
     console.log(num4) 
     console.log(count)
     return toNonExponential(num4.value);
-    // web3.toBigNumber(num3).toString(10);
   }
   /**
    * 计算花费eth可以购买多少个代币
@@ -339,16 +336,13 @@ class ProjectTransation
     }
     // (2x / （1/斜率） + 已发行代币数^2 )^0.5 - 已发行代币数
     const myamount = toMyNumber(amount);
-    const num = toMyNumber(1).div(this.slopeNum)
+    const num = toMyNumber(1).div(this.slopeNum).mul(1000)
     const num1 = myamount.mul(2).div(num);
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
     const num3 = parseFloat(num1.add(num2).toString());
     const num4 = Math.pow(num3, 0.5)
     const num5 = toMyNumber(num4).sub(projectinfoStore.projInfo.hasIssueAmt);
-    // 130601.60406562978
-    // console.log(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(8.7).mul(2).div(0.000000001).add(toMyNumber(1314).sqr())).toString(10)),0.5)).sub(1314))
     return toNonExponential(num5.value);
-    // web3.toBigNumber(num5).toString(10);
   }
   /**
    * 已知要获得X个ETH，求需要出售多少个代币
@@ -373,9 +367,7 @@ class ProjectTransation
     const num3 = fuhao + Math.pow(num2, 0.5);
     const num4 = toMyNumber(num3).mul(projectinfoStore.projInfo.hasIssueAmt);
     const num5 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sub(num4);
-    // console.log(toMyNumber(500).sub(toMyNumber(Math.pow(parseFloat(web3.toBigNumber(toMyNumber(1).sub(toMyNumber(3.6).div(10))).toString(10)), 0.5)).mul(500)))    
     return toNonExponential(num5.value);
-    // web3.toBigNumber(num5).toString(10);
   }
   /**
    * 已知要出售Y个代币，求能够获得多少ETH
@@ -395,7 +387,6 @@ class ProjectTransation
 
     console.log(toMyNumber(1).sub(toMyNumber(100).div(toMyNumber(500).mul(2))).mul(toMyNumber(100)).mul(10).mul(2).div(500))
     return toNonExponential(num3.value);
-    // web3.toBigNumber(num3).toString(10);
   }
 }
 

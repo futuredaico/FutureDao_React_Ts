@@ -130,7 +130,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     isCanBuyBtn: true,
                     isShowBalance: true,
                     balance: balance?saveDecimal(balance, 6):"0",
-                    wholeBalance: saveDecimal(balance, 18),
+                    wholeBalance: saveDecimal(balance, 8),
                     address:this.props.metamaskwallet.metamaskAddress
                 })
             }
@@ -186,7 +186,7 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     const res = this.props.transation.computeBuyCountSpendPrice(this.state.buyCount);
                     this.setState({
                         buyPrice: saveDecimal(res, 6),
-                        wholeBuyPrice: saveDecimal(res, 18),
+                        wholeBuyPrice: saveDecimal(res, 8),
                         isError: false
                     }, () =>
                         {

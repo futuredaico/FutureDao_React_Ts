@@ -67,7 +67,8 @@ class FutureProposal implements IFutureProposalStore
         } else
         {
             this.fContractInfo = result[0].data;
-            this.assetDecimals = result[0].data.fundDecimals
+            this.assetDecimals = result[0].data.fundDecimals;
+            this.assetHash = result[0].data.fundHash;
         }
         return true;
     }
@@ -96,6 +97,12 @@ class FutureProposal implements IFutureProposalStore
             const minPrice = toMyNumber(min).mul(decimals).value;
             const maxPrice = toMyNumber(max).mul(decimals).value;
             // 调用合约      
+            const abi = require("utils/contractFiles/ERC20.json") as AbiItem[];
+            const erc20Contract = new Web3Contract(abi, this.assetHash);
+            const assetRes = erc20Contract.contractSend("approve", [contractHash, 0], { from: metamaskwallet.metamaskAddress });
+            const assetTxid = await assetRes.onTransactionHash();
+            console.log('assetTxid:',assetTxid)
+
             const voteChangeAbi = require('@/utils/contractFiles/Vote_ChangeMonthlyAllocation.json').abi as AbiItem[];
             const voteChangeContract = new Web3Contract(voteChangeAbi, contractHash);
             const submitRes = voteChangeContract.contractSend("applyProposal", [ratio, minPrice, maxPrice, explain], { from: metamaskwallet.metamaskAddress });
