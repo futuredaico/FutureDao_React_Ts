@@ -7,7 +7,7 @@ import { IContractAddress, IFinancingOption, IFContractInfo } from '../interface
 import { IFundList } from '@/containers/projectinfo/molochdao/interface/molochinfo.interface';
 import { AbiItem } from 'web3-utils';
 import metamaskwallet from '@/store/metamaskwallet';
-// import { toMyNumber } from '@/utils/numberTool';
+import { toMyNumber } from '@/utils/numberTool';
 
 // import metamaskwallet from '@/store/metamaskwallet';
 class FinancingManager
@@ -159,12 +159,12 @@ class FinancingManager
   // ratio为存储比例
   @action public startFanincingProject = async (receiveAddress: string, assetHash: string, assetSimple: string, reserveRatio: string, tokenName: string, tokenSimpleName: string, everyMonthRatio: string, mixPrice1: string, maxPrice1: string, priceDecimals: number) =>
   {
-    // const ratio = parseInt(reserveRatio, 10);
-    // const everyRatio = parseInt(everyMonthRatio, 10);
-    // const decimals = Math.pow(10, (priceDecimals));  // 单位 
-    // const mixPrice = toMyNumber(mixPrice1).mul(decimals).value;
-    // const maxPrice = toMyNumber(maxPrice1).mul(decimals).value;
-    // const slope = toMyNumber(priceDecimals).div(2).value;
+    const ratio = parseInt(reserveRatio, 10);
+    const everyRatio = parseInt(everyMonthRatio, 10);
+    const decimals = Math.pow(10, (priceDecimals));  // 单位 
+    const mixPrice = toMyNumber(mixPrice1).mul(decimals).value;
+    const maxPrice = toMyNumber(maxPrice1).mul(decimals).value;
+    const slope = toMyNumber(priceDecimals).div(2).value;
     try
     {
       // 0xa86B705E7A2BF21845bCF8e0ee18a4E03532f7CE
@@ -174,122 +174,123 @@ class FinancingManager
       // const daiResult = await Web3Contract.deployContractOthers(
       //   abi, bytecode, metamaskwallet.metamaskAddress,"DAI",8,"dai"
       // );
+//       const appManagerAddress = "0x5fD8b883F5ce824E35FF263E277182ab097546C4";
+// const appManagerTxid = "0xf6c19d6ea9cdc9cf6e9f48a49b5f0732a8fcb01cdbd300ca601a42c431203365";
+// const coAddress = "0xFAA95A622F463C638eb74fB46dA6a417ac06e9fD";
+// const coTxid = "0xfe3b56f1c08f013077b518f62c8b7bea5fc6d7db44ad5f5b8ff508f3bea5c5d2";
+// const sharesAddress ="0x8bD16ab2E9Fc3e9902ECF0Df543bb6463277304f";
+// const sharesBTxid= "0xbbcec6e6aff2d991a252ae0ee3372f9935458e7cad637825f79c09b477d10e84";
+// const tradeAddress="0xaa4437c46e18a2b5ef3cdE4AB93E08797570d676";
+// const tradeTxid ="0xe475e55455f0b0b1c6dce40da7b7d568b4fc715764633ddcbf42b8f522a50bd8";
+// const voteMonthAddress="0x1F1223bA52f9Ab17F80550479c6F3A77E147D44c";
+// const voteMonthTxid ="0xf08939ce5c787b3ec3601de24d4db1129a264021b7090d17857a3777a732338d";
       console.log("metamaskwallet.metamaskAddress:",metamaskwallet.metamaskAddress)
       const appManager = require("utils/contractFiles/AppManager.json");
       const appManagerAbi = appManager.abi as AbiItem[];
-      // const appManagerBytecode = appManager.bytecode;
+      const appManagerBytecode = appManager.bytecode;
 
-      // const co = require("utils/contractFiles/Co.json");
-      // const coAbi = co.abi as AbiItem[];
-      // const coBytecode = co.bytecode;
+      const co = require("utils/contractFiles/Co.json");
+      const coAbi = co.abi as AbiItem[];
+      const coBytecode = co.bytecode;
 
       const sharesB = require("utils/contractFiles/sharesB.json");
       const sharesBAbi = sharesB.abi as AbiItem[];
-      // const sharesBBytecode = sharesB.bytecode;
+      const sharesBBytecode = sharesB.bytecode;
 
       const tradeFundPool = require("utils/contractFiles/TradeFundPool.json");
       const tradeFundPoolAbi = tradeFundPool.abi as AbiItem[];
-      // const tradeFundPoolBytecode = tradeFundPool.bytecode;
+      const tradeFundPoolBytecode = tradeFundPool.bytecode;
 
-      // const voteChangeMonth = require("utils/contractFiles/Vote_ChangeMonthlyAllocation.json");
-      // const voteChangeMonthAbi = voteChangeMonth.abi as AbiItem[];
-      // const voteChangeMonthBytecode = voteChangeMonth.bytecode;
+      const voteChangeMonth = require("utils/contractFiles/Vote_ChangeMonthlyAllocation.json");
+      const voteChangeMonthAbi = voteChangeMonth.abi as AbiItem[];
+      const voteChangeMonthBytecode = voteChangeMonth.bytecode;
       // 30%
       const voteClear = require("utils/contractFiles/Vote_Clearing.json");
       const voteClearAbi = voteClear.abi as AbiItem[];
       const voteClearBytecode = voteClear.bytecode;
-      // this.tradeStep = 1;
-      // console.log("发送第一个合约appManager")
-      // const appManagerResult = await Web3Contract.deployContractOthers(
-      //   appManagerAbi,
-      //   appManagerBytecode,
-      //   metamaskwallet.metamaskAddress,
-      //   assetHash
-      // )
-      // const appManagerTxid = await appManagerResult.onTransactionHash();
-      // const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
-      // const appManagerAddress = ins1.options.address;   
-      // console.log("appManagerTxid", appManagerTxid)  
-      // console.log("appManagerAddress", appManagerAddress)
-      // console.log("发送第二个合约co")
-      // this.tradeStep = 2;
-      // const coResult = await Web3Contract.deployContractOthers(
-      //   coAbi,
-      //   coBytecode,
-      //   metamaskwallet.metamaskAddress,
-      //   appManagerAddress,
-      //   1000 * Math.pow(10, slope),
-      //   ratio * 10
-      // )
-      // const coTxid = await coResult.onTransactionHash();
-      // const ins2 = await coResult.promise;  // 合约部署成功后获得新的合约对象
-      // const coAddress = ins2.options.address;
-      // this.tradeStep = 3;
-      // console.log("coTxid", coTxid)  
-      // console.log("coAddress", coAddress)
-      // console.log("发送第三个合约share")
-      // const shareResult = await Web3Contract.deployContractOthers(
-      //   sharesBAbi,
-      //   sharesBBytecode,
-      //   metamaskwallet.metamaskAddress,
-      //   appManagerAddress,
-      //   tokenName,
-      //   8,
-      //   tokenSimpleName
-      // )
-      // const sharesBTxid = await shareResult.onTransactionHash();
-      // const ins3 = await shareResult.promise;  // 合约部署成功后获得新的合约对象
-      // const sharesAddress = ins3.options.address;
-      // this.tradeStep = 4;
-      // console.log("sharesBTxid", sharesBTxid)  
-      // console.log("sharesAddress", sharesAddress)
-      // console.log("发送第四个合约tradeFund")
-      // const tradeResult = await Web3Contract.deployContractOthers(
-      //   tradeFundPoolAbi,
-      //   tradeFundPoolBytecode,
-      //   metamaskwallet.metamaskAddress,
-      //   appManagerAddress,
-      //   sharesAddress,
-      //   coAddress,
-      //   everyRatio * 10,
-      //   maxPrice,
-      //   mixPrice
-      // )
-      // const tradeTxid = await tradeResult.onTransactionHash();
-      // const ins4 = await tradeResult.promise;
-      // const tradeAddress = ins4.options.address;
-      // this.tradeStep = 5;
-      // console.log("tradeTxid", tradeTxid)  
-      // console.log("tradeAddress", tradeAddress)
-      // console.log("发送第五个合约voteChangeMonth");
-      // const voteMonthResult = await Web3Contract.deployContractOthers(
-      //   voteChangeMonthAbi,
-      //   voteChangeMonthBytecode,
-      //   metamaskwallet.metamaskAddress,
-      //   appManagerAddress,
-      //   sharesAddress,
-      //   tradeAddress,
-      //   5*24*3600,
-      //   9*24*3600,
-      //   this.deposit,
-      //   this.proposalFee
-      // )
-      // const voteMonthTxid = await voteMonthResult.onTransactionHash();
-      // const ins5 = await voteMonthResult.promise;
-      // const voteMonthAddress = ins5.options.address;
-      // this.tradeStep = 6;
-      // console.log("voteMonthTxid", voteMonthTxid)  
-      // console.log("voteMonthAddress", voteMonthAddress)
-      const appManagerAddress = "0x5fD8b883F5ce824E35FF263E277182ab097546C4";
-const appManagerTxid = "0xf6c19d6ea9cdc9cf6e9f48a49b5f0732a8fcb01cdbd300ca601a42c431203365";
-const coAddress = "0xFAA95A622F463C638eb74fB46dA6a417ac06e9fD";
-const coTxid = "0xfe3b56f1c08f013077b518f62c8b7bea5fc6d7db44ad5f5b8ff508f3bea5c5d2";
-const sharesAddress ="0x8bD16ab2E9Fc3e9902ECF0Df543bb6463277304f";
-const sharesBTxid= "0xbbcec6e6aff2d991a252ae0ee3372f9935458e7cad637825f79c09b477d10e84";
-const tradeAddress="0xaa4437c46e18a2b5ef3cdE4AB93E08797570d676";
-const tradeTxid ="0xe475e55455f0b0b1c6dce40da7b7d568b4fc715764633ddcbf42b8f522a50bd8";
-const voteMonthAddress="0x1F1223bA52f9Ab17F80550479c6F3A77E147D44c";
-const voteMonthTxid ="0xf08939ce5c787b3ec3601de24d4db1129a264021b7090d17857a3777a732338d";
+      this.tradeStep = 1;
+      console.log("发送第一个合约appManager")
+      const appManagerResult = await Web3Contract.deployContractOthers(
+        appManagerAbi,
+        appManagerBytecode,
+        metamaskwallet.metamaskAddress,
+        assetHash
+      )
+      const appManagerTxid = await appManagerResult.onTransactionHash();
+      const ins1 = await appManagerResult.promise;  // 合约部署成功后获得新的合约对象
+      const appManagerAddress = ins1.options.address;   
+      console.log("appManagerTxid", appManagerTxid)  
+      console.log("appManagerAddress", appManagerAddress)
+      console.log("发送第二个合约co")
+      this.tradeStep = 2;
+      const coResult = await Web3Contract.deployContractOthers(
+        coAbi,
+        coBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        1000 * Math.pow(10, slope),
+        ratio * 10
+      )
+      const coTxid = await coResult.onTransactionHash();
+      const ins2 = await coResult.promise;  // 合约部署成功后获得新的合约对象
+      const coAddress = ins2.options.address;
+      this.tradeStep = 3;
+      console.log("coTxid", coTxid)  
+      console.log("coAddress", coAddress)
+      console.log("发送第三个合约share")
+      const shareResult = await Web3Contract.deployContractOthers(
+        sharesBAbi,
+        sharesBBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        tokenName,
+        8,
+        tokenSimpleName
+      )
+      const sharesBTxid = await shareResult.onTransactionHash();
+      const ins3 = await shareResult.promise;  // 合约部署成功后获得新的合约对象
+      const sharesAddress = ins3.options.address;
+      this.tradeStep = 4;
+      console.log("sharesBTxid", sharesBTxid)  
+      console.log("sharesAddress", sharesAddress)
+      console.log("发送第四个合约tradeFund")
+      const tradeResult = await Web3Contract.deployContractOthers(
+        tradeFundPoolAbi,
+        tradeFundPoolBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        sharesAddress,
+        coAddress,
+        everyRatio * 10,
+        maxPrice,
+        mixPrice
+      )
+      const tradeTxid = await tradeResult.onTransactionHash();
+      const ins4 = await tradeResult.promise;
+      const tradeAddress = ins4.options.address;
+      this.tradeStep = 5;
+      console.log("tradeTxid", tradeTxid)  
+      console.log("tradeAddress", tradeAddress)
+      console.log("发送第五个合约voteChangeMonth");
+      const voteMonthResult = await Web3Contract.deployContractOthers(
+        voteChangeMonthAbi,
+        voteChangeMonthBytecode,
+        metamaskwallet.metamaskAddress,
+        appManagerAddress,
+        sharesAddress,
+        tradeAddress,
+        5*24*3600,
+        9*24*3600,
+        this.deposit,
+        this.proposalFee
+      )
+      const voteMonthTxid = await voteMonthResult.onTransactionHash();
+      const ins5 = await voteMonthResult.promise;
+      const voteMonthAddress = ins5.options.address;
+      this.tradeStep = 6;
+      console.log("voteMonthTxid", voteMonthTxid)  
+      console.log("voteMonthAddress", voteMonthAddress)
+      
       console.log("发送第六个合约Vote_Clearing");
       const voteClearResult = await Web3Contract.deployContractOthers(
         voteClearAbi,
@@ -363,116 +364,7 @@ const voteMonthTxid ="0xf08939ce5c787b3ec3601de24d4db1129a264021b7090d17857a3777
       const subtxid7 = await submitRes7.onConfrim();
       console.log(" 第7笔交易")
       console.log(subtxid7)
-      // const batch = new metamaskwallet.web3.BatchRequest();
-      // const tx = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['initialize'](tradeAddress, receiveAddress, dateTime).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第一笔交易")          
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第一笔交易完成")
-      //     this.tradeStep = 7;
-      //   }
-      // )
-      // const tx2 = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['addPermission'](metamaskwallet.metamaskAddress, tradeAddress, bytes32_FundPool_Start).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第二笔交易")
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第二笔交易完成")
-      //     this.tradeStep = 8;
-      //   }
-      // )
-      // const tx3 = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Burn).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第三笔交易")
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第三笔交易完成")
-      //     this.tradeStep = 9;
-      //   }
-      // )
-      // const tx4 = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['addPermission'](tradeAddress, sharesAddress, byte32_SharesB_Mint).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第四笔交易")
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第四笔交易完成")
-      //     this.tradeStep = 10;
-      //   }
-      // )
-      // const tx5 = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['addPermission'](voteMonthAddress, tradeAddress, bytes32_FundPool_ChangeRatio).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第五笔交易")
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第五笔交易完成")
-      //     this.tradeStep = 11;
-      //   }
-      // )
-      // const tx6 = web3.eth.sendTransaction.request(
-      //   {
-      //     from: metamaskwallet.metamaskAddress,
-      //     to: appManagerAddress,
-      //     value: '0x0',
-      //     data: appManagerContract.contract.methods['addPermission'](voteClearAddress, tradeAddress, bytes32_FundPool_Clearing).encodeABI()
-      //   }, (err, txid) =>
-      //   {
-      //     console.log(" 第六笔交易")
-      //     console.log(err);
-      //     console.log(txid);
-      //   },()=>{
-      //     console.log("第六笔交易完成")
-      //     this.tradeStep = 12;
-      //   }
-      // )
-      // console.log(tx);
-      // console.log(tx2);
-      // console.log(tx3);
-      // console.log(tx4);
-      // console.log(tx5);
-      // console.log(tx6);
-      // batch.add(tx);
-      // batch.add(tx2);
-      // batch.add(tx3);
-      // batch.add(tx4);
-      // batch.add(tx5);
-      // batch.add(tx6);
-      // await batch.execute();
+      
       
       const arrList = [{
         percent: everyMonthRatio,
