@@ -308,7 +308,9 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
             this.setState({
                 idDoingBuy:true
             })
-            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice,"0");
+            const orderId = Math.floor(Math.random() * 9999 + 1000);
+            console.log("orderId:",orderId)
+            const txid = await this.props.transation.buy(this.state.address,this.state.minBuyCount, this.state.wholeBuyPrice,orderId.toString());
             console.log(txid);
             this.setState({
                 idDoingBuy:false

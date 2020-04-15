@@ -231,7 +231,7 @@ class ProjectTransation
       const futuredaoAbi = require('@/utils/contractFiles/TradeFundPool.json').abi as AbiItem[];
       const futureContract = new Web3Contract(futuredaoAbi, hashStr);
       // futureContract.contractSend("start",[], { from: metamaskwallet.metamaskAddress });
-      const minMount = parseInt(minCount,10);
+      const minMount = 0
       const value = toMyNumber(amount).mul(Math.pow(10, this.assetDecimals)).value;
       
       const assetRes = erc20Contract.contractSend("approve", [hashStr, value], { from: addr });
@@ -313,11 +313,16 @@ class ProjectTransation
       return '0'
     }
     // （ ( Y + 已发行代币数 )^2 - 已发行代币数^2）*( 1/斜率/2)
-
+    if(!this.slopeNum){
+      return '0'
+    }
     const mycount = toMyNumber(count);
     const num1 = mycount.add(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    console.log(num1)
     const num2 = toMyNumber(projectinfoStore.projInfo.hasIssueAmt).sqr();
+    console.log(num2)
     const num3 = toMyNumber(1).div(this.slopeNum).div(2).mul(1000);
+    console.log(this.slopeNum)
     console.log(num3)
     const num4 = num1.sub(num2).mul(num3).add(0.000001);
     console.log(num4) 
@@ -332,6 +337,9 @@ class ProjectTransation
   {
     if (!projectinfoStore.projInfo)
     {
+      return '0'
+    }
+    if(!this.slopeNum){
       return '0'
     }
     // (2x / （1/斜率） + 已发行代币数^2 )^0.5 - 已发行代币数

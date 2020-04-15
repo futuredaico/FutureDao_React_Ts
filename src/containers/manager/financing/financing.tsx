@@ -67,7 +67,7 @@ class FinancingManager extends React.Component<IProjectProps> {
                             }
                             {/* 合约部署成功 */}
                             {
-                                (this.props.financing.startStatus === 2&&this.props.financing.tradeStep === 13) && (
+                                (this.props.financing.startStatus === 2&&this.props.financing.tradeStep === 15) && (
                                     <>
                                         <div className="done-going">
                                             <img src={require("@/img/done.png")} width={14} alt="" />
