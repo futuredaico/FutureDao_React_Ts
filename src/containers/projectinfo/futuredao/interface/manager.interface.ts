@@ -3,7 +3,12 @@ import { ICommonStore } from "@/store/interface/common.interface";
 export interface IProjectManagerStore
 {
   contractShow:IProjectContractInfo|null,
-  getContractShowData:(projectId:string)=>Promise<boolean>
+  proposalList:IProjProposalList[],
+  proposalCount:number,
+  proposalPage:number,
+  proposalSize:number,
+  getContractShowData:(projectId:string)=>Promise<boolean>,
+  getProposalList:(projId:string)=>Promise<boolean>
 }
 
 
@@ -23,5 +28,17 @@ export interface IProjectContractInfo {
   max:string,
   reserveRundRatio:string,
   fundPoolTotal:string,
-  fundReservePoolTota:string
+  fundReservePoolTotal:string
+}
+export interface IProjProposalList{
+  index:string,
+  proposalType:string,
+  ratio:string,
+  minValue:string,
+  maxValue:string,
+  startTime:string,
+  proposalState:string,
+  voteYesCount:number,
+  voteNotCount:number,
+  hasVote:boolean
 }

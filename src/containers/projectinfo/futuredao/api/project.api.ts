@@ -355,7 +355,33 @@ export const getProjFundAndTokenInfo = (projId:string)=>{
 export const queryProjFinanceInfo = (projId:string)=>{
     const opts = {
         method: 'queryProjFinanceInfo',
-        params: [projId]
+        params: [projId] 
+    }
+    return request(opts);
+}
+
+/**
+ * 获取该项目拥有的代币
+ * @param projId 项目ID
+ * @param addr 当前地址
+ */
+export const queryBalanceInfo = (projId:string,addr:string)=>{
+    const opts = {
+        method: 'queryShareBalance',
+        params: [projId,addr]
+    }
+    return request(opts);
+}
+/**
+ * 查询提案列表
+ * @param projId 
+ * @param page 
+ * @param size 
+ */
+export const queryProjProposalList = (projId:string,page:number,size:number)=>{
+    const opts = {
+        method: 'queryProjProposalList',
+        params: [projId,page,size]
     }
     return request(opts);
 }

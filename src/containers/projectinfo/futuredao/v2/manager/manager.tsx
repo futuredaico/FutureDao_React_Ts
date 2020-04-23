@@ -8,12 +8,18 @@ import { injectIntl } from 'react-intl';
 import Card from '@/components/card';
 import Button from '@/components/Button';
 import { IProjectInfoProps } from '../../interface/projectinfo.interface';
+import { IProjProposalList } from '../../interface/manager.interface';
 
 @observer
 class Manager extends React.Component<IProjectInfoProps, any> {
     public componentDidMount()
-    {        
-        this.props.manager.getContractShowData(this.props.projectinfo.projId);           
+    {
+        this.props.manager.getContractShowData(this.props.projectinfo.projId);
+        this.props.manager.getProposalList(this.props.projectinfo.projId);
+        if (this.props.common.userInfo)
+        {
+            this.props.projectinfo.getMyBalanceData(this.props.projectinfo.projId, this.props.common.userInfo.address)
+        }
     }
     public render()
     {
@@ -25,7 +31,7 @@ class Manager extends React.Component<IProjectInfoProps, any> {
                             <div className="three-row">
                                 <span className="block-span"><span title="">代币发行储备金：</span><strong>{this.props.manager.contractShow.fundPoolTotal} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
                                 <span className="block-span"><span title="">投资储备比例：</span><strong>{this.props.manager.contractShow.reserveRundRatio}%</strong></span>
-                                <span className="block-span"><span title="">已募集资金：</span><strong>{this.props.manager.contractShow.fundReservePoolTota} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
+                                <span className="block-span"><span title="">已募集资金：</span><strong>{this.props.manager.contractShow.fundReservePoolTotal} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
                                 <span className="block-span"><span title="">项目月供：</span><strong>{this.props.manager.contractShow.percent}% 已募集资金</strong></span>
                                 <span className="block-span"><span title="">最小月供：</span><strong>{this.props.manager.contractShow.min} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
                                 <span className="block-span"><span title="">最大月供：</span><strong>{this.props.manager.contractShow.max} {this.props.manager.contractShow.fundSymbol.toLocaleUpperCase()}</strong></span>
@@ -34,13 +40,63 @@ class Manager extends React.Component<IProjectInfoProps, any> {
                         </div>
                     )
                 }
-               
+
                 <div className="manager-left">
+                    {
+                        this.props.manager.proposalCount > 0 && this.props.manager.proposalList.map((item: IProjProposalList, index: number) =>
+                        {
+                            return (
+                                <div className="manager-list" onClick={this.handleToInfo} key={index}>
+                                    <div className="mcontent-top">
+                                        <div className="mcontent-title">
+                                            {
+                                                this.props.projectinfo.myBalanceList.balance > 0 && (
+                                                    <>
+                                                        {
+                                                            item.hasVote ? <Card text="已投票" colortype="block-gray" cardsize="sm-card" /> : <Card text="未投票" colortype="block-gray" cardsize="sm-card" />
+                                                        }
+                                                    </>
+                                                )
+                                            }
+                                            {/* <Card text="已投票" colortype="block-gray" cardsize="sm-card" /> */}
+                                            <strong className="mtitle">更改项目月供资金至6%，300-500DAI</strong>
+                                        </div>
+                                        {/* <Card text="已通过" colortype="transparent-green" cardsize="md-sm-card" /> */}
+                                        {/* <div className="transparent-toupiao">
+                                            <span className="big-text">投票中</span>&nbsp;&nbsp;
+                                            <span className="sm-text">剩余 8d12h12m12s</span>
+                                        </div> */}
+                                    </div>
+                                    <div className="mcontent-down">
+                                        <div className="transparent-toupiao">
+                                            <span className="big-text">投票中</span>&nbsp;&nbsp;
+                                            <span className="sm-text">剩余 8d12h12m12s</span>
+                                        </div>
+                                        {/* <div className="mcontent-people">
+                                            <img src={require("@/img/default.png")} className="mpeople-img" alt="" />
+                                            <span>某某某某</span>
+                                        </div> */}
+                                        {/* <div className="start-time">
+                                            <span className="time-text">2019-08-08 12:12:12 开始执行</span>
+                                            <br/>                              
+                                            <span className="sm-complete">（ 1/30已完成 ）</span>
+                                        </div> */}
+                                        <div className="manager-votebox">
+                                            <div className="green-sai" style={{ "width": 60 + "%" }} />
+                                            <div className="red-sai" style={{ "width": 40 + "%" }} />
+                                            <span className="left-top">赞同：1135</span>
+                                            <span className="right-top">反对：447</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
                     <div className="manager-list" onClick={this.handleToInfo}>
                         <div className="mcontent-top">
                             <div className="mcontent-title">
                                 <Card text="已投票" colortype="block-gray" cardsize="sm-card" />
-                                <strong className="mtitle">FableWood Returns - The 5 New Magnetic  Woo--den Animals!FableWood Returns - The 5 New Magnetic  Woo--den Animals!</strong>
+                                <strong className="mtitle">更改项目月供资金至6%，300-500DAI</strong>
                             </div>
                             {/* <Card text="已通过" colortype="transparent-green" cardsize="md-sm-card" /> */}
                             {/* <div className="transparent-toupiao">
@@ -78,7 +134,7 @@ class Manager extends React.Component<IProjectInfoProps, any> {
                     </div> */}
                     <Button text="发起提案" btnSize="bg-bg-btn" onClick={this.handleToProposal} />
                     <div className="manager-des">
-                    <strong>提案是什么</strong>
+                        <strong>提案是什么</strong>
                         <p>提案是社区成员进行自治的方式。</p>
                         <p>社区成员可以使用提案决定对项目的资助力度。</p>
                         <p>所有代币持有者都可以通过投票的方式同意或拒绝一项提案。最终结果由多数票决定。</p>
@@ -92,10 +148,12 @@ class Manager extends React.Component<IProjectInfoProps, any> {
             </div>
         );
     }
-    private handleToProposal = () => {
-        this.props.history.push('/fproposal/menu/'+this.props.projectinfo.projId)
+    private handleToProposal = () =>
+    {
+        this.props.history.push('/fproposal/menu/' + this.props.projectinfo.projId)
     }
-    private handleToInfo = () => {
+    private handleToInfo = () =>
+    {
         this.props.projectinfo.isShowManagerInfo = true;
     }
     /**

@@ -52,6 +52,9 @@ class ProjectTransation extends React.Component<IProjectInfoProps, IState> {
     {
         this.handleGetPriceData();
         this.handleGetData();
+        if(this.props.common.userInfo){
+            this.props.projectinfo.getMyBalanceData(this.props.projectinfo.projId,this.props.common.userInfo.address)
+        } 
     }
     public componentWillUnmount()
     {

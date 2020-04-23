@@ -3,7 +3,7 @@ import * as Api from '../api/project.api';
 // import common from '@/store/common';
 import { CodeType } from '@/store/interface/common.interface';
 // import { saveDecimal,toMyNumber,toNonExponential } from "@/utils/numberTool";
-import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash } from '../interface/projectinfo.interface';
+import { IProjectInfo, IProjectTeam, IDiscussList, IDiscussReplyList, IProjAssetPrice, IProjReward, IProjReserveToken, IContractHash, IProjectBalance } from '../interface/projectinfo.interface';
 // import transationStore from './transation.store';
 
 class ProjectInfo
@@ -24,6 +24,11 @@ class ProjectInfo
   @observable public buyPrice: string = '0'; // 项目代币当前购买价格
   @observable public sellPrice: string = '0'; // 项目代币当前出售价格
   @observable public hashList:IContractHash[] = [];
+  @observable public myBalanceList:IProjectBalance = {
+    balance:0,
+    balanceCanUse:0,
+    balanceLock:0
+  }
   /**
    * 获取项目基本详情
    */
@@ -380,6 +385,24 @@ class ProjectInfo
     // {
     //   this.sellPrice = '0'
     // }
+  }
+  @action public getMyBalanceData = async (projId: string,addr:string) =>
+  {
+    let result: any = [];
+
+    try
+    {
+      result = await Api.queryBalanceInfo(projId,addr);
+    } catch (e)
+    {
+      return false;
+    }
+    if (result[0].resultCode !== CodeType.success)
+    {
+      return false
+    }
+    this.myBalanceList = result[0].data;
+    return true;
   }
 }
 

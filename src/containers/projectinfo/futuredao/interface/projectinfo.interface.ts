@@ -21,6 +21,7 @@ export interface IProjectInfoStore
   buyPrice:string,
   sellPrice:string,
   hashList:IContractHash[],
+  myBalanceList:IProjectBalance,
   getProjInfo: (projId: string) => Promise<boolean>,
   startAttention: () => Promise<boolean>,
   cancelAttention: () => Promise<boolean>,
@@ -34,7 +35,8 @@ export interface IProjectInfoStore
   getReserveTokenData:()=>Promise<boolean>,
   computeCurrentBuyPrice:()=>void,
   computeCurrentSellPrice:()=>void,
-  getContractHash:()=>Promise<boolean>
+  getContractHash:()=>Promise<boolean>,
+  getMyBalanceData:(projId:string,addr:string)=>Promise<boolean>
 }
 
 
@@ -81,6 +83,11 @@ export interface IProjectInfo
   tokenSymbol:string, // 代币名称
   fundHash:string, // 资产hash
   fundReservePoolTotal:string // 储备池资金
+}
+export interface IProjectBalance{
+  balance:number,
+  balanceCanUse:number,
+  balanceLock:number
 }
 
 export interface IProjectTeam

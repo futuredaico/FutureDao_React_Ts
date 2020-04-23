@@ -120,12 +120,15 @@ export default class RightTable extends React.Component<IProjectInfoProps, IStat
                     return false;
                 }
                 // 获取可出售的持有余额
-                await this.props.transation.getTokenBalance(this.props.metamaskwallet.metamaskAddress);
+                // await this.props.transation.getTokenBalance(this.props.metamaskwallet.metamaskAddress);
 
+                if(this.props.common.userInfo){
+                    this.props.projectinfo.getMyBalanceData(this.props.projectinfo.projId,this.props.common.userInfo.address)
+                } 
                 this.setState({
                     isCanSellBtn: true,
                     isShowBalance: true,
-                    balance: this.props.transation.tokenBalanceInfo.availableAmt,
+                    balance: this.props.projectinfo.myBalanceList.balanceCanUse.toString(),
                     address: this.props.metamaskwallet.metamaskAddress
                 })
             }
